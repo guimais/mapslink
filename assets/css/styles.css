@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.titulo-principal {
+    font-size: 42px;
+    line-height: 72px;
+    text-align: left;
+    margin-left: 120px;
+    margin-top: 120px;
+}
+
+.subtitulo-principal {
+    color: #4E4E4E;
+    font-size: 24px;
+    line-height: 42px;
+    text-align: left;
+    margin-left: 120px;
+    margin-top: -15px;
+}
+
+/* ========= ESTILO DOS BOTÕES ========= */
+
+.botoes {
+    margin-left: 120px;
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.botao {
+    background-color: #b3b3b3;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.botao:hover {
+    background-color: #999;
+}
+
+
