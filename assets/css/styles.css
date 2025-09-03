@@ -8,7 +8,6 @@ body {
 
 
 
-
 .titulo-principal {
     font-size: 42px;
     line-height: 72px;
@@ -132,7 +131,6 @@ body {
   gap: 26px;
   flex-wrap: wrap;
 }
-
 
 .card-sobre {
   background-color: #102569;
