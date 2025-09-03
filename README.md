@@ -24,3 +24,14 @@ This project is being built using only fundamental web technologies:
 
 ---
 
+### Team Members
+
+* **Guilherme Carvalho Mais.**
+* **Gabriel Duarte Frias.**
+* **João Gabriel Breganon Ferreira.**
+* **Gabriel Senatore Costa.**
+* **Luide Lima.**
+
+---
+
+
