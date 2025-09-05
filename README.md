@@ -30,7 +30,7 @@ This project is being built using only fundamental web technologies:
 * **Gabriel Duarte Frias.**
 * **João Gabriel Breganon Ferreira.**
 * **Gabriel Senatore Costa.**
-* **Luide Lima.**
+* **Luigi Lima.**
 
 ---
 
