@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Maps Link - Seleção de Perfil" />
+    <title>Maps Link — Seleção de Perfil</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
+  </head>
+
+  <body>
+    <header class="nav-container">
+      <nav class="nav-pilula">
+        <a href="index.html" class="nav-logo-link" aria-label="Ir para a página inicial">
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" />
+        </a>
+
+        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+          <i class="ri-menu-line"></i>
+        </button>
+
+        <ul class="nav-links" id="navMenu">
+          <li><a class="nav-link" href="index.html#home">Home</a></li>
+          <li><a class="nav-link" href="planos.html">Planos</a></li>
+          <li><a class="nav-link" href="maps.html">Maps</a></li>
+          <li><a class="nav-link active" href="profile.html">Profile</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
+          <li><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="profile" class="profile-selecao">
+      <section class="opcoes-perfil">
+        <article class="perfil-card" data-perfil="empresarial">
+          <div class="perfil-avatar circulo">
+            <i class="ri-briefcase-line" aria-hidden="true"></i>
+          </div>
+
+          <h2 class="perfil-titulo">Empresarial</h2>
+
+          <button class="perfil-cta" type="button" data-action="escolher-empresarial">
+            Empresarial
+          </button>
+        </article>
+
+        <article class="perfil-card" data-perfil="pessoal">
+          <div class="perfil-avatar circulo">
+            <img src="assets/images/avatar-pessoal.png" alt="Perfil pessoal (ilustração)" />
+          </div>
+
+          <h2 class="perfil-titulo">Pessoal</h2>
+
+          <button class="perfil-cta" type="button" data-action="escolher-pessoal">
+            Pessoal
+          </button>
+        </article>
+      </section>
+    </main>
+
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
