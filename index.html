@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="description" content="Um projeto academico de mapeamento, chamado maps link" />
@@ -11,40 +10,39 @@
 <body>
 
   <header class="nav-container nav-fixed" role="banner">
-    <nav class="nav-pilula">
+    <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
       <a href="#" class="nav-logo-link" aria-label="Ir para Home">
-        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo pilula Maps Link" class="nav-logo" />
+        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo pilula Maps Link" class="nav-logo" loading="lazy" decoding="async" />
       </a>
 
-      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
-        <i class="ri-menu-line"></i>
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
+        <i class="ri-menu-line" aria-hidden="true"></i>
       </button>
 
-      <ul class="nav-links" id="navMenu" role="navigation">
+      <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
         <li><a class="nav-link" href="#home">Home</a></li>
         <li><a class="nav-link" href="#planos">Planos</a></li>
         <li><a class="nav-link" href="#maps">Maps</a></li>
-        <li><a class="nav-link active" href="#profile">Profile</a></li>
+        <li><a class="nav-link active" href="#profile" aria-current="page">Profile</a></li>
         <li><a class="nav-link" href="#about">About</a></li>
         <li><a class="nav-link" href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
- 
-  <main id="profile" class="perfil-page" role="main">
+  <main id="profile" class="perfil-page" role="main" aria-labelledby="perfil-nome">
     <div class="perfil-wrap">
 
-      <aside class="perfil-sidebar card">
+      <aside class="perfil-sidebar card" role="complementary" aria-label="Informações do usuário">
         <figure class="perfil-avatar">
-          <img src="assets/images/3d_avatar_21.png" alt="Avatar do usuário" />
+          <img src="assets/images/3d_avatar_21.png" alt="Avatar do usuário" loading="lazy" decoding="async" />
         </figure>
 
         <div class="perfil-identidade">
-          <h2 class="perfil-nome">GELADO DA SILVA</h2>
+          <h2 class="perfil-nome" id="perfil-nome">GELADO DA SILVA</h2>
         </div>
 
-        <ul class="perfil-contatos">
+        <ul class="perfil-contatos" aria-label="Canais de contato">
           <li>
             <i class="ri-instagram-line" aria-hidden="true"></i>
             <a href="#" target="_blank" rel="noopener">Gelado.ofc</a>
@@ -64,15 +62,14 @@
         </ul>
       </aside>
 
-      <section class="perfil-conteudo">
+      <section class="perfil-conteudo" aria-label="Conteúdo do perfil">
 
-        <section class="card curriculo-card" aria-label="Atalho para Currículo">
+        <section class="card curriculo-card" aria-label="Atalho para Currículo" role="region">
           <i class="ri-folder-2-line" aria-hidden="true"></i>
           <span class="titulo">Currículo</span>
         </section>
 
-        <section class="bloco card curriculo">
-
+        <section class="bloco card curriculo" aria-label="Resumo e experiências">
           <div class="curriculo-grid">
             <div class="curriculo-resumo">
               <p>
@@ -84,7 +81,7 @@
               </p>
             </div>
 
-            <ul class="curriculo-experiencias">
+            <ul class="curriculo-experiencias" aria-label="Experiências profissionais">
               <li>
                 <strong>Tech Lead</strong> | InovaTech Soluções | 2019 – 2024
               </li>
@@ -104,9 +101,9 @@
           </div>
         </section>
 
-        <section class="bloco card sobre">
+        <section class="bloco card sobre" aria-labelledby="titulo-sobre-mim">
           <header class="bloco-header">
-            <h3>Sobre Mim</h3>
+            <h3 id="titulo-sobre-mim">Sobre Mim</h3>
           </header>
           <p>
             Desenvolvedor Sênior com mais de 10 anos de experiência na criação de soluções
