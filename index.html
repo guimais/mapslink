@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+  <title>Maps Link</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+
+<body>
+  <header class="site-header" role="banner">
+    <div class="nav-fixed" role="navigation" aria-label="Navegação principal">
+      <nav class="nav-pilula" aria-label="Menu">
+        <a href="#maps" class="nav-logo-link" aria-label="Ir para Maps">
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+        </a>
+
+        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+          <i class="ri-menu-line" aria-hidden="true"></i>
+        </button>
+
+        <ul class="nav-links" id="navMenu" role="menubar">
+          <li role="none"><a role="menuitem" class="nav-link" href="#home">Home</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="#planos">Planos</a></li>
+          <li role="none"><a role="menuitem" class="nav-link active" href="#maps">Maps</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="#profile">Profile</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="#about">About</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button id="btnFiltro" class="btn-filtro" type="button" aria-controls="painelFiltros" aria-expanded="false">
+        <i class="ri-filter-3-line" aria-hidden="true"></i>
+        <span>Filtro</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="maps" class="maps-page" role="main">
+    <div class="maps-layout">
+      <aside class="lista-empresas" aria-labelledby="titulo-lista">
+        <h2 id="titulo-lista">Empresas Listadas</h2>
+
+        <ul class="cards-empresas">
+          <li class="card-empresa">
+            <span class="badge-vagas aberta" aria-label="Vagas Abertas"><i class="ri-briefcase-2-fill" aria-hidden="true"></i> Vagas Abertas</span>
+            <h3 class="empresa-nome">SIDI</h3>
+            <p class="empresa-endereco">Rua Ângacu, 171 - Lot. Alphaville Campinas, Campinas - SP, 13098-321</p>
+            <button class="btn-detalhes" type="button">Mais detalhes</button>
+          </li>
+
+          <li class="card-empresa">
+            <span class="badge-vagas fechada" aria-label="Vagas Fechadas"><i class="ri-briefcase-2-line" aria-hidden="true"></i> Vagas Fechadas</span>
+            <h3 class="empresa-nome">SAMSUNG</h3>
+            <p class="empresa-endereco">R. Thomas Nilsen Júnior, 150 - Parque Imperador, Campinas - SP, 13097-105</p>
+            <button class="btn-detalhes" type="button">Mais detalhes</button>
+          </li>
+
+          <li class="card-empresa">
+            <span class="badge-vagas aberta" aria-label="Vagas Abertas"><i class="ri-briefcase-2-fill" aria-hidden="true"></i> Vagas Abertas</span>
+            <h3 class="empresa-nome">CNPEM</h3>
+            <p class="empresa-endereco">Polo II de Alta Tecnologia - R. Giuseppe Máximo Scolfaro, 10000 - Bosque das Palmeiras, Campinas - SP, 13083-100</p>
+            <button class="btn-detalhes" type="button">Mais detalhes</button>
+          </li>
+        </ul>
+      </aside>
+
+      <section class="mapa-area" aria-label="Mapa de empresas">
+        <div class="mapa-wrapper">
+          <div id="map" role="application" aria-label="Mapa interativo"></div>
+
+          <button class="mapa-control fullscreen" type="button" aria-label="Tela cheia">
+            <i class="ri-fullscreen-line" aria-hidden="true"></i>
+          </button>
+
+          <form class="busca-mapa" role="search" aria-label="Buscar empresa">
+            <i class="ri-search-line" aria-hidden="true"></i>
+            <input type="search" name="q" placeholder="Pesquise sua empresa" aria-label="Pesquise sua empresa">
+            <button class="btn-localizar" type="button" aria-label="Localizar">
+              <i class="ri-crosshair-2-line" aria-hidden="true"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <aside id="painelFiltros" class="painel-filtros" role="dialog" aria-modal="true" aria-labelledby="tituloFiltros" hidden>
+        <div class="filtros-conteudo">
+          <h2 id="tituloFiltros">Filtros</h2>
+
+          <label for="filtroLocal" class="label-campo">Cidade, Estado ou Região</label>
+          <div class="campo-icone">
+            <i class="ri-map-pin-2-line" aria-hidden="true"></i>
+            <input id="filtroLocal" type="text" placeholder="Cidade, Estado ou Região">
+          </div>
+
+          <fieldset class="grupo-cbx">
+            <legend>Área de Atuação</legend>
+            <label><input type="checkbox"> Tecnologia</label>
+            <label><input type="checkbox"> Saúde</label>
+            <label><input type="checkbox"> Educação</label>
+            <label><input type="checkbox"> Marketing</label>
+            <label><input type="checkbox"> Vendas</label>
+          </fieldset>
+
+          <fieldset class="grupo-chips">
+            <legend>Porte da Empresa</legend>
+            <button type="button" class="chip">Pequena</button>
+            <button type="button" class="chip">Média</button>
+            <button type="button" class="chip">Grande</button>
+            <button type="button" class="chip">Startup</button>
+          </fieldset>
+
+          <fieldset class="grupo-chips">
+            <legend>Modalidade de Trabalho</legend>
+            <button type="button" class="chip">Presencial</button>
+            <button type="button" class="chip">Híbrido</button>
+            <button type="button" class="chip">Remoto</button>
+          </fieldset>
+
+          <div class="linha-toggle">
+            <span>Apenas com Vagas Abertas</span>
+            <button type="button" class="toggle" aria-pressed="false" aria-label="Apenas com Vagas Abertas"></button>
+          </div>
+
+          <div class="linha-toggle">
+            <span>Mapa de Calor</span>
+            <button id="toggleHeat" type="button" class="toggle" aria-pressed="false" aria-label="Ativar mapa de calor"></button>
+          </div>
+
+          <button class="btn-aplicar" type="button">Aplicar Filtros</button>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
