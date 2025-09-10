@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -11,48 +10,48 @@
 
   <body>
     <header class="nav-container">
-      <nav class="nav-pilula">
+      <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
         <a href="index.html" class="nav-logo-link" aria-label="Ir para a página inicial">
-          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" />
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" loading="lazy" decoding="async" />
         </a>
 
-        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
-          <i class="ri-menu-line"></i>
+        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
+          <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
 
-        <ul class="nav-links" id="navMenu">
+        <ul class="nav-links" id="navMenu" role="list">
           <li><a class="nav-link" href="index.html#home">Home</a></li>
           <li><a class="nav-link" href="planos.html">Planos</a></li>
           <li><a class="nav-link" href="maps.html">Maps</a></li>
-          <li><a class="nav-link active" href="profile.html">Profile</a></li>
+          <li><a class="nav-link active" href="profile.html" aria-current="page">Profile</a></li>
           <li><a class="nav-link" href="about.html">About</a></li>
           <li><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </header>
 
-    <main id="profile" class="profile-selecao">
-      <section class="opcoes-perfil">
-        <article class="perfil-card" data-perfil="empresarial">
-          <div class="perfil-avatar circulo">
+    <main id="profile" class="profile-selecao" role="main" aria-label="Seleção de perfil">
+      <section class="opcoes-perfil" role="list" aria-label="Opções de perfil">
+        <article class="perfil-card" data-perfil="empresarial" role="listitem" aria-labelledby="titulo-perfil-empresarial">
+          <div class="perfil-avatar circulo" aria-hidden="true">
             <i class="ri-briefcase-line" aria-hidden="true"></i>
           </div>
 
-          <h2 class="perfil-titulo">Empresarial</h2>
+          <h2 class="perfil-titulo" id="titulo-perfil-empresarial">Empresarial</h2>
 
-          <button class="perfil-cta" type="button" data-action="escolher-empresarial">
+          <button class="perfil-cta" type="button" data-action="escolher-empresarial" aria-labelledby="titulo-perfil-empresarial">
             Empresarial
           </button>
         </article>
 
-        <article class="perfil-card" data-perfil="pessoal">
+        <article class="perfil-card" data-perfil="pessoal" role="listitem" aria-labelledby="titulo-perfil-pessoal">
           <div class="perfil-avatar circulo">
-            <img src="assets/images/avatar-pessoal.png" alt="Perfil pessoal (ilustração)" />
+            <img src="assets/images/avatar-pessoal.png" alt="Perfil pessoal (ilustração)" loading="lazy" decoding="async" />
           </div>
 
-          <h2 class="perfil-titulo">Pessoal</h2>
+          <h2 class="perfil-titulo" id="titulo-perfil-pessoal">Pessoal</h2>
 
-          <button class="perfil-cta" type="button" data-action="escolher-pessoal">
+          <button class="perfil-cta" type="button" data-action="escolher-pessoal" aria-labelledby="titulo-perfil-pessoal">
             Pessoal
           </button>
         </article>
