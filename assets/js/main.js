@@ -82,9 +82,7 @@
     const gapRatio = 0.28;
     const band = w / n;
     const barW = Math.max(24, Math.floor(band * (1 - gapRatio)));
-    const grad = ctx.createLinearGradient(0, margin.top, 0, margin.top + h);
-    grad.addColorStop(0, '#2da0ff');
-    grad.addColorStop(1, COLORS.bar);
+    const barColor = COLORS.bar;
 
     const start = performance.now();
     const duration = 500;
@@ -108,14 +106,9 @@
         const yTop = y(d.value * p);
         const barH = margin.top + h - yTop;
 
-        ctx.save();
-        ctx.shadowColor = 'rgba(0,0,0,0.08)';
-        ctx.shadowBlur = 8;
-        ctx.shadowOffsetY = 2;
-        ctx.fillStyle = grad;
+        ctx.fillStyle = barColor;
         drawRoundedRect(ctx, x, yTop, barW, barH, 6);
         ctx.fill();
-        ctx.restore();
 
         
         ctx.fillStyle = COLORS.brand;
@@ -146,9 +139,15 @@
     const title = box ? box.querySelector('.chart-title') : null;
     const padding = 18;
     const availH = box ? Math.max(240, box.clientHeight - (title ? title.offsetHeight : 0) - padding*2) : 240;
-    const rect = canvas.getBoundingClientRect();
-    const baseW = Math.max(260, Math.floor(rect.width || 260));
-    const cssW = Math.floor(baseW * 0.78);
+    const group = canvas.closest('.chart-with-legend');
+    const legend = group ? group.querySelector('.chart-legend') : null;
+    const groupRect = group ? group.getBoundingClientRect() : { width: 0 };
+    const legendRect = legend ? legend.getBoundingClientRect() : { width: 0 };
+    const gapW = 24; 
+    const fallbackRect = canvas.getBoundingClientRect();
+    const baseW = Math.max(260, Math.floor((groupRect.width || fallbackRect.width || 260)));
+    const effLegendW = (legendRect.width && groupRect.width && legendRect.width < groupRect.width * 0.6) ? legendRect.width : 0;
+    const cssW = Math.max(260, Math.floor(baseW - effLegendW - gapW));
     const cssH = Math.floor(availH);
     const dpr = window.devicePixelRatio || 1;
     canvas.width = Math.round(cssW * dpr);
@@ -159,10 +158,10 @@
 
     ctx.clearRect(0,0,cssW,cssH);
 
-    const cx = Math.floor(cssW * 0.44); 
+    const cx = Math.floor(cssW / 2); 
     const cy = Math.floor(cssH / 2);
-    const radius = Math.floor(Math.min(cssW, cssH) * 0.34);
-    const thickness = Math.max(22, Math.min(46, Math.floor(radius * 0.48)));
+    const radius = Math.floor(Math.min(cssW, cssH) * 0.38);
+    const thickness = Math.max(22, Math.min(52, Math.floor(radius * 0.50)));
 
     ctx.lineWidth = thickness;
     ctx.strokeStyle = 'rgba(0,0,0,0.06)';
@@ -174,7 +173,7 @@
     const total = dataset.reduce((s,d)=>s + d.value, 0) || 1;
     const full = Math.PI * 2;
     const start = -Math.PI / 2; 
-    const gap = 0.06; // ~3.4° para separar segmentos
+    const gap = 0.06; 
 
     const t0 = performance.now();
     const dur = 600;
@@ -205,6 +204,16 @@
         acc += segAngle;
       });
 
+      
+      ctx.fillStyle = COLORS.brand;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '900 26px "Montserrat", system-ui, -apple-system, sans-serif';
+      ctx.fillText(String(total), cx, cy - 6);
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '600 12px "Open Sans", system-ui, -apple-system, sans-serif';
+      ctx.fillText('Total', cx, cy + 14);
+
       if(p < 1) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
@@ -224,7 +233,7 @@
   function renderStatus(){
     const canvas = document.getElementById('chartStatus');
     if(!canvas) return;
-    const ANALISE = '#e5e7eb';
+    const ANALISE = '#a5b4fc';
     const ABERTA  = '#1e90ff';
     const FECHADA = '#ef4444';
     const data = [
@@ -233,6 +242,19 @@
       { label:'Fechada',    value: 18, color: FECHADA }
     ];
     drawDonutChart(canvas, data);
+
+    const legend = canvas.closest('.chart-with-legend')?.querySelector('.chart-legend');
+    if(legend){
+      const items = legend.querySelectorAll('li');
+      const sum = data.reduce((s,d)=>s+d.value,0) || 1;
+      const percent = v => Math.round((v/sum)*100);
+      const colors = [ANALISE, ABERTA, FECHADA];
+      items.forEach((li, i) => {
+        const seg = data[i];
+        if(!seg) return;
+        li.innerHTML = `<span class="legend-dot" style="background:${colors[i]}"></span> ${seg.label} — ${seg.value} (${percent(seg.value)}%)`;
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => { renderCandidatos(); renderStatus(); });

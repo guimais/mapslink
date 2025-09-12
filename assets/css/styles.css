@@ -213,11 +213,12 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 
 .chart-title{
-  margin:4px 0 12px;
+  margin:6px 0 14px;
   font-family:'Montserrat',sans-serif;
-  font-weight:800;
-  font-size:22px;
-  color:#000;
+  font-weight:900;
+  font-size:24px;
+  letter-spacing:.2px;
+  color:#0f172a;
 }
 
 .chart-with-legend{
@@ -234,9 +235,9 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   display:flex;
   flex-direction:column;
   gap:14px;
-  font-size:16px; /* textos mais presentes */
-  font-weight:700; /* negrito */
-  flex:1; /* ocupa mais espaço no card */
+  font-size:16px;
+  font-weight:700;
+  flex:1; 
   align-self:stretch;
   justify-content:center;
   min-width:180px;
@@ -251,7 +252,6 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   vertical-align:middle;
 }
 
-/* melhora o layout de cada item da legenda */
 .chart-legend li{
   display:flex;
   align-items:center;
