@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+  <title>Maps Link</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+</head>
+
+<body>
+  <header class="site-header" role="banner">
+    <nav class="nav-pilula" role="navigation" aria-label="Principal">
+      <a href="#home" class="nav-logo-link" aria-label="Maps Link - Início">
+        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+      </a>
+
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+      </button>
+
+      <ul class="nav-links" id="navMenu">
+        <li><a class="nav-link" href="#home">Home</a></li>
+        <li><a class="nav-link" href="#planos">Planos</a></li>
+        <li><a class="nav-link" href="#maps">Maps</a></li>
+        <li><a class="nav-link active" href="#dashboard" aria-current="page">Dashboard</a></li>
+        <li><a class="nav-link" href="#vagas">Vagas</a></li>
+        <li><a class="nav-link" href="#curriculo">Currículo</a></li>
+        <li><a class="nav-link" href="#agenda">Agenda</a></li>
+        <li><a class="nav-link" href="#contact">Contact</a></li>
+        <li><a class="nav-link" href="#about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="dashboard" class="dashboard">
+    <section class="dash-header">
+      <div class="empresa-logo">
+        <img src="assets/images/image 4.png" alt="Logo da empresa">
+      </div>
+
+      <div class="dash-cards">
+        <article class="dash-card">
+          <i class="ri-briefcase-line" aria-hidden="true"></i>
+          <div class="dash-card-info">
+            <strong class="dash-card-num">12</strong>
+            <span class="dash-card-label">Vagas abertas</span>
+          </div>
+        </article>
+
+        <article class="dash-card">
+          <i class="ri-file-list-3-line" aria-hidden="true"></i>
+          <div class="dash-card-info">
+            <strong class="dash-card-num">32</strong>
+            <span class="dash-card-label">Currículos recebido</span>
+          </div>
+        </article>
+
+        <article class="dash-card">
+          <i class="ri-user-search-line" aria-hidden="true"></i>
+          <div class="dash-card-info">
+            <strong class="dash-card-num">12</strong>
+            <span class="dash-card-label">Em análise</span>
+          </div>
+        </article>
+
+        <article class="dash-card">
+          <i class="ri-calendar-check-line" aria-hidden="true"></i>
+          <div class="dash-card-info">
+            <strong class="dash-card-num">5</strong>
+            <span class="dash-card-label">Entrevistas agendadas</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <hr class="dash-divider">
+
+    <section class="dash-charts">
+      <div class="chart-box">
+        <h3 class="chart-title">Candidatos por vaga</h3>
+        <canvas id="chartCandidatos" width="560" height="300" aria-label="Gráfico de candidatos por vaga" role="img"></canvas>
+        <div class="chart-fallback" aria-hidden="true"></div>
+      </div>
+
+      <div class="chart-box">
+        <h3 class="chart-title">Vagas por Status</h3>
+        <div class="chart-with-legend">
+          <canvas id="chartStatus" width="360" height="360" aria-label="Gráfico de vagas por status" role="img"></canvas>
+          <ul class="chart-legend" aria-label="Legenda">
+            <li><span class="legend-dot legend-analise"></span>Em análise</li>
+            <li><span class="legend-dot legend-aberta"></span>Aberta</li>
+            <li><span class="legend-dot legend-fechada"></span>Fechada</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
