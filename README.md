@@ -140,4 +140,4 @@ Feel free to fork, use, or contribute!
 - Remix Icon: [https://remixicon.com](https://remixicon.com)  
 - Google Fonts: [Montserrat](https://fonts.google.com/specimen/Montserrat), [Open Sans](https://fonts.google.com/specimen/Open+Sans)  
 - Map tools (coming soon): Mapbox / Leaflet / Google Maps API  
-- Special thanks to **Prof. Douglas de Assis Ferreira** for guidance during this project.
+- Special thanks to **Prof. Fernando Luiz de Almeida Silveira** for guidance during this project.
