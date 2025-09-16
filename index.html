@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maps Link — Vagas</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+</head>
+
+<body>
+  <header class="nav-container" role="banner">
+    <nav class="nav-pilula" aria-label="Principal">
+      <a href="#home" class="nav-logo-link" aria-label="Maps Link - Início">
+        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+      </a>
+
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+      </button>
+
+      <ul class="nav-links" id="navMenu" role="menubar">
+        <li role="none"><a role="menuitem" class="nav-link" href="#home">Home</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#planos">Planos</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#maps">Maps</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#dashboard">Dashboard</a></li>
+        <li role="none"><a role="menuitem" class="nav-link active" href="#vagas">Vagas</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#curriculo">Currículo</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#agenda">Agenda</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#about">About</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="vagas" class="page-wrapper" role="main">
+
+    <section class="page-header" aria-labelledby="titulo-vagas">
+      <div class="page-title-wrap">
+        <span class="avatar-badge"><img src="assets/images/image 4.png" alt="Ícone do módulo de vagas"></span>
+        <h1 id="titulo-vagas">Vagas</h1>
+      </div>
+    </section>
+
+    <section class="table-section" aria-labelledby="tabela-vagas">
+      <h2 id="tabela-vagas" class="sr-only">Lista de vagas publicadas</h2>
+
+      <div class="table-wrapper" role="region" aria-live="polite" aria-describedby="tabela-vagas">
+        <table class="table-cv">
+        <thead>
+            <tr>
+                <th scope="col">Título da Vaga</th>
+                <th scope="col">Área</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Data de Publicação</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+          <tbody>
+            <tr>
+              <td><span class="cell-text">Dev Frontend</span></td>
+              <td>Tecnologia</td>
+              <td>CLT</td>
+              <td><time datetime="2025-05-08">08/05/2025</time></td>
+              <td><span class="status status-aprovado" aria-label="Vaga aberta">Aberta</span></td>
+            </tr>
+
+            <tr>
+              <td><span class="cell-text">Analista de Dados</span></td>
+              <td>Tecnologia</td>
+              <td>PJ</td>
+              <td><time datetime="2023-07-10">10/07/2023</time></td>
+              <td><span class="status status-reprovada" aria-label="Vaga fechada">Fechada</span></td>
+            </tr>
+
+            <tr>
+              <td><span class="cell-text">Gerente de Marketing</span></td>
+              <td>Marketing</td>
+              <td>CLT</td>
+              <td><time datetime="2022-03-26">26/03/2022</time></td>
+              <td><span class="status status-aprovado" aria-label="Vaga aberta">Aberta</span></td>
+            </tr>
+
+            <tr>
+              <td><span class="cell-text">Designer</span></td>
+              <td>Design</td>
+              <td>ESTÁGIO</td>
+              <td><time datetime="2025-06-22">22/06/2025</time></td>
+              <td><span class="status status-aprovado" aria-label="Vaga aberta">Aberta</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="page-header" aria-labelledby="titulo-cadastrar-vaga" style="margin-top:28px;">
+      <div class="page-title-wrap">
+        <h2 id="titulo-cadastrar-vaga">Cadastrar Vaga</h2>
+      </div>
+    </section>
+
+    <section aria-labelledby="form-cadastrar-vaga">
+      <h3 id="form-cadastrar-vaga" class="sr-only">Formulário para cadastro de nova vaga</h3>
+
+      <form id="form-vaga" class="filter-form" aria-describedby="dica-form-vaga">
+        <div class="filter-group">
+          <label for="vaga-titulo">Título da Vaga</label>
+          <input type="text" id="vaga-titulo" name="titulo" placeholder="Ex.: Dev Frontend" required>
+        </div>
+
+        <div class="filter-group">
+          <label for="vaga-area">Área</label>
+          <input type="text" id="vaga-area" name="area" placeholder="Ex.: Tecnologia" required>
+        </div>
+
+        <div class="filter-group">
+          <label for="vaga-descricao">Descrição</label>
+          <input type="text" id="vaga-descricao" name="descricao" placeholder="Resumo da vaga">
+        </div>
+
+        <div class="filter-group">
+          <label for="vaga-tipo">Tipo de contrato</label>
+          <input type="text" id="vaga-tipo" name="tipo" placeholder="Ex.: CLT, PJ, ESTÁGIO" required>
+        </div>
+
+        <div class="filter-actions" style="justify-content:flex-start">
+          <button type="submit" class="btn btn-primary">Adicionar Vaga</button>
+        </div>
+        <p id="dica-form-vaga" class="sr-only">Preencha os campos e pressione o botão Adicionar Vaga para cadastrar.</p>
+      </form>
+    </section>
+  </main>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
