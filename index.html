@@ -8,6 +8,7 @@
     <title>Sobre - Maps Link</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
+
   </head>
 
   <body>
@@ -21,16 +22,79 @@
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
 
-        <ul class="nav-links" id="navMenu" role="list">
+       <ul class="nav-links" id="navMenu" role="list">
           <li><a class="nav-link" href="index.html#home">Home</a></li>
           <li><a class="nav-link" href="index.html#planos">Planos</a></li>
           <li><a class="nav-link" href="index.html#maps">Maps</a></li>
           <li><a class="nav-link" href="index.html#profile">Profile</a></li>
-          <li><a class="nav-link active" href="about.html" aria-current="page">About</a></li>
-          <li><a class="nav-link" href="index.html#contact">Contact</a></li>
-        </ul>
+          <li><a class="nav-link" href="about.html">About</a></li>
+          <li><a class="nav-link active" href="index.html#contact" aria-current="page">Contact</a></li>
+      </ul>
+        
       </nav>
     </div>
+
+
+    <section id="contact" class="contact-section" role="main" aria-labelledby="titulo-contato">
+      <div class="contact-wrap">
+        <aside class="contact-card" role="complementary" aria-label="Canais de contato">
+          <div class="contact-card__logo">
+            <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" loading="lazy" decoding="async">
+          </div>
+
+          <ul class="contact-card__list" aria-label="Lista de contatos">
+            <li>E-mail: ajuda@mapslink.com</li>
+            <li>E-mail: comercio@mapslink.com</li>
+            <li>E-mail: adm@mapslink.com</li>
+            <li>Telefone: (19) 99111-0000</li>
+            <li>Telefone: 0800 777 2222</li>
+          </ul>
+        </aside>
+
+        <div class="contact-main">
+          <h1 class="titulo-principal" id="titulo-contato">Fale conosco</h1>
+
+          <form class="contact-form" action="#" method="post" autocomplete="on" aria-labelledby="titulo-contato">
+            <div class="form-row two-cols" role="group" aria-label="Identificação">
+              <div class="form-field">
+                <label for="nome">Nome (Obrigatório)</label>
+                <input type="text" id="nome" name="nome" required placeholder="" autocomplete="given-name" inputmode="text">
+              </div>
+
+              <div class="form-field">
+                <label for="sobrenome">Sobrenome (Obrigatório)</label>
+                <input type="text" id="sobrenome" name="sobrenome" required placeholder="" autocomplete="family-name" inputmode="text">
+              </div>
+            </div>
+
+            <div class="form-row" role="group" aria-label="Contato">
+              <div class="form-field">
+                <label for="email">E-mail (Obrigatório)</label>
+                <input type="email" id="email" name="email" required placeholder="" autocomplete="email" inputmode="email">
+              </div>
+            </div>
+
+            <div class="form-row" role="group" aria-label="Mensagem">
+              <div class="form-field">
+                <label for="mensagem">Mensagem (Obrigatório)</label>
+                <textarea id="mensagem" name="mensagem" rows="4" required placeholder="" autocomplete="on"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions" role="group" aria-label="Ações do formulário">
+              <button type="submit" class="botao">Enviar</button>
+            </div>
+          </form>
+
+          <div class="social-bar" aria-label="Redes sociais e WhatsApp">
+            <a href="#" class="social-item" rel="noopener"><i class="ri-instagram-line" aria-hidden="true"></i> @Mapslink</a>
+            <a href="#" class="social-item" rel="noopener"><i class="ri-facebook-circle-line" aria-hidden="true"></i> @MapsLink.Fb</a>
+            <a href="#" class="social-item" rel="noopener"><i class="ri-linkedin-box-line" aria-hidden="true"></i> @MapsLink.in</a>
+            <a href="https://wa.me/5519912223333" class="social-item" rel="noopener"><i class="ri-whatsapp-line" aria-hidden="true"></i> (19) 91222-3333</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <main class="about-section" role="main" aria-labelledby="about-title">
       <section class="about-container" role="region" aria-labelledby="about-title">
