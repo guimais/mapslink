@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+  <title>Maps Link</title>
+  <link rel="stylesheet" href="assets/css/mapacheio.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+</head>
+<body>
+
+  <header class="nav-container" role="banner">
+    <nav class="nav-pilula" role="navigation" aria-label="Navegação principal">
+      <a href="/" class="nav-logo-link" aria-label="Página inicial Maps Link">
+        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+      </a>
+
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+      </button>
+
+      <ul class="nav-links" id="navMenu">
+        <li><a class="nav-link" href="/#home">Home</a></li>
+        <li><a class="nav-link" href="/#planos">Planos</a></li>
+        <li><a class="nav-link active" href="/#maps" aria-current="page">Maps</a></li>
+        <li><a class="nav-link" href="/#profile">Profile</a></li>
+        <li><a class="nav-link" href="/#about">About</a></li>
+        <li><a class="nav-link" href="/#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="maps-page" role="main">
+    <section class="map-wrapper" aria-label="Mapa interativo">
+      <div id="map" class="map-canvas" role="application" aria-label="Canvas do mapa"></div>
+
+      <div class="search-ui" aria-label="Busca e filtros">
+        <form class="search-bar" role="search" aria-label="Pesquisar empresas">
+          <input
+            type="search"
+            name="q"
+            id="search"
+            placeholder="Pesquise sua empresa"
+            autocomplete="off"
+            aria-label="Campo de busca por empresa">
+          <button type="submit" class="search-btn" aria-label="Buscar">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <button class="filter-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="filterPanel">
+          <i class="ri-equalizer-line" aria-hidden="true"></i>
+          <span>Filtro</span>
+        </button>
+      </div>
+
+      <aside id="filterPanel" class="filter-panel" aria-label="Painel de filtros" hidden>
+      </aside>
+    </section>
+  </main>
+
+  <script src="assets/js/mapacheio.js"></script>
+</body>
+</html>
