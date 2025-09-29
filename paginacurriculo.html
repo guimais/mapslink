@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maps Link — Currículos</title>
+  <link rel="stylesheet" href="assets/css/paginacurriculo.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+</head>
+
+<body>
+  <header class="nav-container" role="banner">
+    <nav class="nav-pilula" aria-label="Principal">
+      <a href="#home" class="nav-logo-link" aria-label="Maps Link - Início">
+        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+      </a>
+
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+      </button>
+
+      <ul class="nav-links" id="navMenu" role="menubar">
+        <li role="none"><a role="menuitem" class="nav-link" href="#home">Home</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#planos">Planos</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#maps">Maps</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#dashboard">Dashboard</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#vagas">Vagas</a></li>
+        <li role="none"><a role="menuitem" class="nav-link active" href="#curriculo">Currículo</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#agenda">Agenda</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#about">About</a></li>
+        <li role="none"><a role="menuitem" class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="curriculo" class="page-wrapper" role="main">
+
+    <section class="page-header" aria-labelledby="titulo-curriculos">
+      <div class="page-title-wrap">
+        <span class="avatar-badge"><img src="assets/images/image 4.png" alt="Foto do usuário"></span>
+        <h1 id="titulo-curriculos">Currículos recebidos</h1>
+      </div>
+
+      <div class="actions-bar" role="group" aria-label="Ações de currículos">
+        <label class="search-input">
+          <i class="ri-search-line" aria-hidden="true"></i>
+          <input type="search" id="busca-cv" name="q" placeholder="Pesquisar" aria-label="Pesquisar currículos">
+        </label>
+
+        <button class="btn" id="btn-exportar" type="button">Exportar</button>
+        <button class="btn" id="btn-filtrar" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="painel-filtro">Filtrar</button>
+
+        <div id="painel-filtro" class="filter-panel" role="dialog" aria-modal="false" aria-labelledby="titulo-filtros" hidden>
+          <div class="filter-header">
+            <h3 id="titulo-filtros">Filtrar resultados</h3>
+            <button class="filter-close" type="button" aria-label="Fechar filtros"><i class="ri-close-line" aria-hidden="true"></i></button>
+          </div>
+
+          <form id="form-filtros" class="filter-form">
+            <div class="filter-group">
+              <label for="f-status">Status</label>
+              <select id="f-status" name="status">
+                <option value="">Todos</option>
+                <option value="Aprovado">Aprovado</option>
+                <option value="Reprovada">Reprovada</option>
+                <option value="Em análise">Em análise</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="f-vaga">Vaga</label>
+              <input type="text" id="f-vaga" name="vaga" placeholder="Ex.: Desenvolvedor" />
+            </div>
+
+            <div class="filter-group filter-dates">
+              <div>
+                <label for="f-data-inicio">Data inicial</label>
+                <input type="text" id="f-data-inicio" name="data_inicio" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" aria-label="Data inicial no formato dia/mês/ano" />
+              </div>
+              <div>
+                <label for="f-data-fim">Data final</label>
+                <input type="text" id="f-data-fim" name="data_fim" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" aria-label="Data final no formato dia/mês/ano" />
+              </div>
+            </div>
+
+            <div class="filter-actions">
+              <button type="submit" class="btn btn-primary">Aplicar</button>
+              <button type="button" class="btn btn-secondary" id="btn-limpar-filtros">Limpar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-section" aria-labelledby="tabela-curriculos">
+      <h2 id="tabela-curriculos" class="sr-only">Lista de currículos</h2>
+
+      <div class="table-wrapper" role="region" aria-live="polite" aria-describedby="tabela-curriculos">
+        <table class="table-cv">
+          <thead>
+            <tr>
+              <th scope="col">Nome do candidato</th>
+              <th scope="col">Vaga</th>
+              <th scope="col">Data de envio</th>
+              <th scope="col">Status</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="avatar"><img src="assets/images/3d_avatar_21.png" alt="Avatar"></span>
+                <span class="cell-text">Gelado da Silva</span>
+              </td>
+              <td>Desenvolvedor Senior</td>
+              <td><time datetime="2025-08-20">20/08/2025</time></td>
+              <td><span class="status status-aprovado">Aprovado</span></td>
+              <td><button class="btn btn-small ver-cv" data-id="cv-gelado" type="button">Ver CV</button></td>
+            </tr>
+
+            <tr>
+              <td>
+                <span class="avatar"><img src="assets/images/10.png" alt="Avatar"></span>
+                <span class="cell-text">Lívia</span>
+              </td>
+              <td>Secretária</td>
+              <td><time datetime="2023-01-30">30/01/2023</time></td>
+              <td><span class="status status-reprovada">Reprovada</span></td>
+              <td><button class="btn btn-small ver-cv" data-id="cv-livia" type="button">Ver CV</button></td>
+            </tr>
+
+            <tr>
+              <td>
+                <span class="avatar"><img src="assets/images/1.png" alt="Avatar"></span>
+                <span class="cell-text">Mohamed</span>
+              </td>
+              <td>PO</td>
+              <td><time datetime="2025-11-06">06/11/2025</time></td>
+              <td><span class="status status-analise">Em análise</span></td>
+              <td><button class="btn btn-small ver-cv" data-id="cv-mohamed" type="button">Ver CV</button></td>
+            </tr>
+
+            <tr>
+              <td>
+                <span class="avatar"><img src="assets/images/13.png" alt="Avatar"></span>
+                <span class="cell-text">Alberto</span>
+              </td>
+              <td>CFO</td>
+              <td><time datetime="2024-04-10">10/04/2024</time></td>
+              <td><span class="status status-aprovado">Aprovado</span></td>
+              <td><button class="btn btn-small ver-cv" data-id="cv-alberto" type="button">Ver CV</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/paginacurriculo.js"></script>
+</body>
+</html>
