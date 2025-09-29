@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+  <title>Maps Link — Perfil de Empresa</title>
+  <link rel="stylesheet" href="assets/css/perfilempresa.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+</head>
+
+<body>
+  <div class="nav-container" role="banner">
+    <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
+      <a href="index.html" class="nav-logo-link" aria-label="Ir para Home">
+        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" loading="lazy" decoding="async">
+      </a>
+
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" type="button">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+      </button>
+
+      <ul class="nav-links" id="navMenu" role="list">
+        <li><a class="nav-link" href="index.html#home">Home</a></li>
+        <li><a class="nav-link" href="index.html#planos">Planos</a></li>
+        <li><a class="nav-link" href="index.html#maps">Maps</a></li>
+        <li><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+        <li><a class="nav-link" href="vagas.html">Vagas</a></li>
+        <li><a class="nav-link" href="curriculo.html">Currículo</a></li>
+        <li><a class="nav-link" href="agenda.html">Agenda</a></li>
+        <li><a class="nav-link" href="about.html">About</a></li>
+        <li><a class="nav-link" href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main class="empresa-page" role="main" aria-labelledby="titulo-principal-empresa">
+    <div class="empresa-layout">
+      
+      <aside class="empresa-sidebar" role="complementary" aria-label="Informações da empresa">
+        <div class="empresa-avatar">
+          <img src="assets/images/image 4.png" alt="Logo da empresa" loading="lazy" decoding="async">
+        </div>
+
+        <ul class="empresa-contatos" role="list" aria-label="Canais de contato da empresa">
+          <li role="listitem"><i class="ri-instagram-line" aria-hidden="true"></i><span>@amazon</span></li>
+          <li role="listitem"><i class="ri-linkedin-box-line" aria-hidden="true"></i><span>@amazon</span></li>
+          <li role="listitem"><i class="ri-at-line" aria-hidden="true"></i><span>support@amazon.com</span></li>
+          <li role="listitem"><i class="ri-map-pin-line" aria-hidden="true"></i>
+            <span>Rua Plínio Luis de Siqueira Jr</span>
+          </li>
+        </ul>
+      </aside>
+
+      <section class="empresa-content" aria-label="Conteúdo da empresa">
+
+        <div class="card card-wide" id="curriculos-recebidos" aria-label="Currículos recebidos">
+          <div class="card-icon"><i class="ri-folder-2-line" aria-hidden="true"></i></div>
+          <h2 class="card-title" id="titulo-principal-empresa">Currículos recebidos</h2>
+        </div>
+
+        <div class="empresa-grid">
+          <article class="card" id="bio-empresa" aria-labelledby="titulo-bio-empresa">
+            <h2 id="titulo-bio-empresa">Bio da empresa</h2>
+            <p>
+              Uma gigante global de tecnologia focada em e‑commerce, computação em nuvem (AWS),
+              streaming digital e inteligência artificial. Reconhecida por sua inovação constante
+              e por ser uma das marcas mais valiosas do mundo.
+            </p>
+          </article>
+
+          <article class="card card-agenda" id="agenda-entrevistas" aria-live="polite" aria-labelledby="titulo-agenda">
+            <h2 id="titulo-agenda">Agenda</h2>
+            <h3 class="sub">Entrevistas de hoje</h3>
+            <div class="agenda-numero" aria-label="Quantidade de entrevistas hoje">3</div>
+          </article>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/js/perfilempresa.js"></script>
+</body>
+</html>
