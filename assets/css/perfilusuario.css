@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root{
+  --bg:#f8fafc;
+  --surface:#edf2f7;
+  --surface-2:#e6edf5;
+  --text:#0f172a;
+  --muted:#475569;
+  --brand:#102569;
+  --brand-2:#0b1b4a;
+  --fs-body:17px;
+  --fs-heading:22px;
+  --fs-card-title:22px;
+  --pad-card:24px;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:0;
+  font-family:'Open Sans',sans-serif;
+  font-size:var(--fs-body);
+  color:var(--text);
+  line-height:1.6;
+  background-color:var(--bg);
+}
+h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
+  font-family:'Montserrat',sans-serif;
+  letter-spacing:.2px;
+}
+
+.nav-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  position:fixed;
+  top:20px;
+  left:0;
+  z-index:1000;
+}
+
+.nav-pilula{
+  background:var(--surface);
+  border-radius:9999px;
+  padding:12px 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  width:90%;
+  height:60px;
+  max-width:1100px;
+  border:1px solid rgba(16,37,105,.10);
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+}
+.nav-logo{height:100px;text-align:left;margin-top:5px;}
+.nav-links{list-style:none;display:flex;gap:22px;margin:0;padding:0;}
+.nav-toggle{display:none;}
+.nav-link{
+  text-decoration:none;
+  color:var(--text);
+  font-weight:700;
+  font-size:18px;
+  opacity:.92;
+  padding:8px 8px;
+  border-radius:8px;
+  transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
+}
+.nav-link.active{color:var(--brand-2);background-color:rgba(16,37,105,.10);font-weight:800;}
+.nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px);}
+.nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
+
+main, .perfil-page{padding-top:120px;}
+
+.perfil-wrap{
+  max-width:1400px;
+  margin:0 auto;
+  padding:0 20px 72px;
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  gap:24px;
+}
+
+.card{
+  background:var(--surface);
+  border:1px solid rgba(16,37,105,.10);
+  border-radius:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+}
+
+.perfil-sidebar{
+  padding:calc(var(--pad-card) + 6px) var(--pad-card);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.perfil-avatar{
+  width:88px;height:88px;border-radius:50%;
+  overflow:hidden;margin:6px 0 8px 0;
+}
+.perfil-avatar img{width:100%;height:100%;object-fit:cover;}
+.perfil-nome{font-size:18px;line-height:1.2;margin:0 0 6px 0;}
+.perfil-contatos{
+  list-style:none;margin:6px 0 0 0;padding:0;display:flex;flex-direction:column;gap:12px;
+}
+.perfil-contatos li{display:flex;align-items:center;gap:10px;}
+.perfil-contatos i{font-size:18px;color:var(--brand-2);}
+.perfil-contatos a{color:var(--text);text-decoration:none;font-weight:700;}
+.perfil-contatos a:hover{color:var(--brand);}
+
+.perfil-conteudo{display:flex;flex-direction:column;gap:22px;}
+
+.bloco{padding:calc(var(--pad-card) + 6px) var(--pad-card);} 
+.bloco-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:10px;
+}
+.bloco-header i{font-size:24px;color:var(--brand-2);} 
+.bloco-header h2,.bloco-header h3{margin:0;font-size:var(--fs-heading)}
+
+.curriculo-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  min-height:88px;
+  padding:28px 26px;
+  background:var(--surface);
+  border:1px solid rgba(16,37,105,.10);
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+  border-radius:20px;
+}
+.curriculo-card i{font-size:24px;color:var(--brand-2);} 
+.curriculo-card .titulo{font-weight:800;font-size:var(--fs-card-title);color:var(--text);} 
+
+.curriculo .curriculo-grid{
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap:22px;
+}
+.curriculo-resumo p{margin:0;color:var(--text);font-size:19px}
+.curriculo-experiencias{
+  list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;
+}
+.curriculo-experiencias li{
+  background:var(--brand-2);
+  color:#ffffff;
+  border:none;
+  border-radius:16px;
+  padding:18px 18px;
+  font-size:16px;
+  box-shadow:0 6px 16px rgba(0,0,0,.12);
+}
+.curriculo-experiencias li strong{color:#ffffff}
+
+.sobre p{margin:0;color:var(--text);font-size:var(--fs-body)}
