@@ -13,7 +13,6 @@
   const searchInput = page.querySelector('.search-input input');
   const live = createLiveRegion();
   document.body.appendChild(live);
-
   const slugify = (s) =>
     (s || '')
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
