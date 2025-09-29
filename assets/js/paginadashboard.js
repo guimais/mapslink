@@ -1,5 +1,4 @@
-(function(){
-  function token(name, fallback){
+ function token(name, fallback){
     const v = getComputedStyle(document.documentElement).getPropertyValue(name);
     return (v && v.trim()) || fallback;
   }
@@ -262,4 +261,3 @@
     clearTimeout(window.__charts_rsz);
     window.__charts_rsz = setTimeout(() => { renderCandidatos(); renderStatus(); }, 120);
   });
-})();
