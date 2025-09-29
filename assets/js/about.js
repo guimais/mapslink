@@ -10,44 +10,24 @@ function smoothScrollTo(targetId) {
 }
 navLinks.forEach(link => {
     const href = link.getAttribute('href');
-    // Garante que só vamos adicionar o evento em links que levam para uma âncora (#)
     if (href && href.startsWith('#')) {
         link.addEventListener('click', (e) => {
-            // Previne o comportamento padrão do link para não pular a página
             e.preventDefault();
-
             const targetId = link.getAttribute('href');
-            // Chama a função que faz o scroll suave
             smoothScrollTo(targetId);
         });
     }
 });
 
-const contactSection = document.querySelector('#contact');
-const linkByHash = new Map([...navLinks].map(a => [a.getAttribute('href'), a]));
-if (contactSection) {
-  const contactObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      navLinks.forEach(a => a.classList.remove('active'));
-      const contactLink = linkByHash.get('#contact');
-      if (contactLink) contactLink.classList.add('active');
-    });
-  }, { threshold: 0.5 });
-  contactObserver.observe(contactSection);
-}
-
-const originalShadow = getComputedStyle(nav).boxShadow;
+const originalShadow = nav ? getComputedStyle(nav).boxShadow : '';
 function updateNavShadow() {
+  if (!nav) return;
   nav.style.boxShadow = (window.scrollY > 8)
     ? '0 10px 26px rgba(0,0,0,0.12)'
     : originalShadow;
 }
 window.addEventListener('scroll', updateNavShadow);
 updateNavShadow();
-
-const toggleBtn = document.querySelector('.nav-toggle');
-const navMenu = document.getElementById('navMenu');
 
 if (toggleBtn && navMenu) {
   const setIcon = (open) => {
@@ -83,94 +63,7 @@ if (toggleBtn && navMenu) {
   });
 }
 
-const form = document.querySelector('.contact-form');
-const inputs = form ? form.querySelectorAll('input, textarea') : [];
-const textArea = form ? form.querySelector('textarea') : null;
-const submitBtn = form ? form.querySelector('button[type="submit"], .botao') : null;
-
-function autoResizeTA(ta) {
-  ta.style.height = 'auto';
-  ta.style.height = ta.scrollHeight + 'px';
-}
-if (textArea) {
-  autoResizeTA(textArea);
-  textArea.addEventListener('input', () => autoResizeTA(textArea));
-}
-
-inputs.forEach(el => {
-  const setState = () => el.classList.toggle('is-filled', !!el.value.trim());
-  el.addEventListener('input', setState);
-  el.addEventListener('blur', setState);
-  setState();
-});
-
-function ripple(e, target) {
-  const rect = target.getBoundingClientRect();
-  const d = Math.max(rect.width, rect.height);
-  const x = e.clientX - rect.left - d / 2;
-  const y = e.clientY - rect.top - d / 2;
-  const circle = document.createElement('span');
-  Object.assign(circle.style, {
-    position: 'absolute',
-    left: x + 'px',
-    top: y + 'px',
-    width: d + 'px',
-    height: d + 'px',
-    borderRadius: '50%',
-    background: 'rgba(255,255,255,.35)',
-    transform: 'scale(0)',
-    pointerEvents: 'none',
-    transition: 'transform 400ms ease, opacity 600ms ease'
-  });
-  target.style.position = 'relative';
-  target.style.overflow = 'hidden';
-  target.appendChild(circle);
-  requestAnimationFrame(() => (circle.style.transform = 'scale(1)'));
-  setTimeout(() => { circle.style.opacity = '0'; }, 320);
-  setTimeout(() => { circle.remove(); }, 800);
-}
-
-if (form && submitBtn) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    const nome = String(data.get('nome') || '').trim();
-    const sobrenome = String(data.get('sobrenome') || '').trim();
-    const email = String(data.get('email') || '').trim();
-    const msg = String(data.get('mensagem') || '').trim();
-
-    const errors = [];
-    if (!nome) errors.push('Nome');
-    if (!sobrenome) errors.push('Sobrenome');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('E-mail');
-    if (msg.length < 5) errors.push('Mensagem');
-
-    if (errors.length) {
-      submitBtn.classList.add('shake');
-      setTimeout(() => submitBtn.classList.remove('shake'), 400);
-      showToast('Corrija: ' + errors.join(', ') + ' ⚠️');
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.8';
-    submitBtn.textContent = 'Enviando...';
-
-    setTimeout(() => {
-      showToast('Mensagem enviada com sucesso! ✅');
-      form.reset();
-      inputs.forEach(el => el.classList.remove('is-filled'));
-      if (textArea) autoResizeTA(textArea);
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = '';
-      submitBtn.textContent = 'Enviar';
-    }, 900);
-  });
-
-  submitBtn.addEventListener('click', (e) => ripple(e, submitBtn));
-}
-
-Afunction showToast(text) {
+function showToast(text) {
   const t = document.createElement('div');
   t.textContent = text;
   Object.assign(t.style, {
@@ -199,22 +92,6 @@ Afunction showToast(text) {
     setTimeout(() => t.remove(), 250);
   }, 2200);
 }
-
-(() => {
-  const el = document.querySelector('.contact-card');
-  if (!el) return;
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(16px)';
-  el.style.transition = 'opacity .4s ease, transform .4s ease';
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
-      io.disconnect();
-    });
-  }, { threshold: 0.2 });
-  io.observe(el);
 
 (function highlightAbout() {
   const current = location.pathname.split('/').pop() || '';
