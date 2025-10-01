@@ -76,7 +76,7 @@
       localStorage.setItem(PERFIL_KEY, tipo);
     } catch (_) {}
     const destino =
-      tipo === "empresarial" ? "empresarial.html" : "pessoal.html";
+      tipo === "empresarial" ? "perfilempresa.html" : "perfilusuario.html";
     window.location.href = destino;
   };
 
@@ -108,3 +108,4 @@
     document.documentElement.style.setProperty("--ml-motion-scale", "1");
   }
 })();
+

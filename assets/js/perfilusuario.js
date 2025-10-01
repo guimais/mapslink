@@ -52,23 +52,34 @@
     });
   });
 
+  const markActiveByPath = () => {
+    const path = location.pathname.split('/').pop() || 'index.html';
+    $$('.nav-link').forEach((link) => {
+      const href = link.getAttribute('href') || '';
+      if (!href || href.startsWith('#')) return;
+      const normalized = href.split('?')[0];
+      link.classList.toggle('active', normalized === path);
+    });
+  };
 
+  const sectionLinks = $$('.nav-link[href^="#"]');
   const sectionIds = ['#home','#planos','#maps','#profile','#about','#contact'];
   const sections = sectionIds.map(id => $(id)).filter(Boolean);
-  if (sections.length) {
-    const map = new Map($$('.nav-link').map(l => [l.getAttribute('href'), l]));
+  if (sectionLinks.length && sections.length) {
+    const map = new Map(sectionLinks.map(l => [l.getAttribute('href'), l]));
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const id = '#' + entry.target.id;
-        $$('.nav-link').forEach(l => l.classList.remove('active'));
+        sectionLinks.forEach(l => l.classList.remove('active'));
         map.get(id)?.classList.add('active');
       });
     }, { rootMargin: '-45% 0px -50% 0px', threshold: 0.01 });
     sections.forEach(sec => io.observe(sec));
-    // marca inicial (default para #profile)
     const start = location.hash && map.get(location.hash) ? location.hash : '#profile';
     map.get(start)?.classList.add('active');
+  } else {
+    markActiveByPath();
   }
 
   const toast = (() => {

@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 :root{
   --bg:#f8fafc;
@@ -55,7 +55,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 .nav-logo-link{display:flex;align-items:center;justify-content:center;height:100%}
 .nav-logo{display:block;height:60px;width:auto}
-.nav-links{list-style:none;display:flex;gap:22px;margin:0;padding:0}
+.nav-links{list-style:none;display:flex;gap:8px;margin:0;padding:0}
 .nav-toggle{display:none}
 .nav-link{
   text-decoration:none;
@@ -63,7 +63,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   font-weight:700;
   font-size:16px;
   opacity:.92;
-  padding:12px 16px;
+  padding:10px 12px;
   border-radius:8px;
   transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
 }
@@ -116,7 +116,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 
 .actions-bar{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
 }
 .search-input{
   display:flex;align-items:center;gap:8px;
@@ -188,7 +188,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   background:rgba(16,37,105,.04);
 }
 .table-cv td:first-child{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:8px;
 }
 .avatar{
   width:28px;height:28px;display:grid;place-items:center;
@@ -258,7 +258,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .filter-group input::placeholder{color:#94a3b8}
 .filter-group input:focus,.filter-group select:focus{outline:none;border-color:rgba(16,37,105,.36);box-shadow:0 0 0 3px rgba(16,37,105,.12), 0 8px 18px rgba(16,37,105,.08)}
 .filter-dates{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.filter-actions{grid-column:1 / -1;display:flex;justify-content:flex-end;gap:10px;margin-top:6px}
+.filter-actions{grid-column:1 / -1;display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
 
 @media (max-width: 720px){
   .filter-form{grid-template-columns:1fr}
@@ -282,4 +282,6 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   height:90px !important;
   width:auto !important;
 }
+
+
 

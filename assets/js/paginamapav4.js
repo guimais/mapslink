@@ -138,14 +138,9 @@
   }
 
   const fullBtn = document.querySelector('.mapa-control.fullscreen');
-  const map = document.getElementById('map');
-  if (fullBtn && map) {
+  if (fullBtn) {
     fullBtn.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        map.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen();
-      }
+      window.location.href = 'mapacheio.html';
     });
   }
 
