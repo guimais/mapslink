@@ -41,13 +41,13 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   border:1px solid rgba(16,37,105,.10);
   box-shadow:0 6px 20px rgba(0,0,0,.06);
   border-radius:9999px;
-  padding:10px 24px;
+  padding:12px 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   width:92%;
   max-width:1100px;
-  height:56px;
+  height:68px;
 }
 
 .nav-logo-link{
@@ -58,7 +58,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 
 .nav-logo{
-  height:92px; 
+  height:60px; 
   width:auto;
   display:block; 
   margin-right:8px;
@@ -88,7 +88,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   font-weight:800;
   font-size:16px;
   opacity:.92;
-  padding:8px 10px;
+  padding:12px 16px;
   border-radius:10px;
   transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
 }
