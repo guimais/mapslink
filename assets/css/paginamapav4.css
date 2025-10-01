@@ -43,7 +43,11 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   border:1px solid rgba(16,37,105,.10);
   border-radius:var(--radius-pill);
   padding:12px 28px;
+<<<<<<< HEAD
   height:68px;
+=======
+  height:60px;
+>>>>>>> d65cc4787b6cab9eb16bea2024fa0986500524cb
   width:min(1100px,90%);
   display:flex; align-items:center; justify-content:space-between;
   box-shadow:var(--shadow-md);
@@ -263,7 +267,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .btn-aplicar:active{transform:translateY(1px)}
 
 @media (max-width: 992px){
-  .nav-pilula{height:54px; width:94%; padding:10px 18px}
+  .nav-pilula{padding:12px 28px;height:60px; width:94%;}
   .nav-logo{height:40px}
   .nav-links{gap:16px; flex-wrap:wrap}
 }

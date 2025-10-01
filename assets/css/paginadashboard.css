@@ -47,7 +47,11 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   justify-content:space-between;
   width:92%;
   max-width:1100px;
+<<<<<<< HEAD
   height:68px;
+=======
+  height:60px;
+>>>>>>> d65cc4787b6cab9eb16bea2024fa0986500524cb
 }
 
 .nav-logo-link{
