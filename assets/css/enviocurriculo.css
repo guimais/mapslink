@@ -48,7 +48,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .nav-pilula{
   background:var(--surface);
   border-radius:9999px;
-  padding:6px 32px;
+  padding:12px 28px;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -265,7 +265,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 
 @media (max-width: 720px){
   .nav-logo{height:72px}
-  .nav-pilula{height:56px}
+  .nav-pilula{padding:12px 28px;height:60px}
   .page-header{gap:12px}
   .search-input input{min-width:150px}
   .table-cv thead th,.table-cv tbody td{padding:14px 16px}

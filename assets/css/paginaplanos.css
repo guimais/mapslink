@@ -72,7 +72,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   -webkit-backdrop-filter:saturate(140%) blur(8px);
   backdrop-filter:saturate(140%) blur(8px);
   border-radius:9999px;
-  padding:12px 22px;
+  padding:12px 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;

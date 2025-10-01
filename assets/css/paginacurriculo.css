@@ -43,7 +43,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .nav-pilula{
   background:var(--surface);
   border-radius:9999px;
-  padding:6px 32px;
+  padding:12px 28px;
   display:flex;
   justify-content:space-between;
   align-items:center;
