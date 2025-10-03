@@ -1,251 +1,442 @@
-const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const qs = (selector, root = document) => root.querySelector(selector);
+const qsa = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+const DEFAULT_VIEW = { center: [-22.909938, -47.062633], zoom: 12 };
+const MAP_STORAGE_KEY = 'mapslink:view';
+
+const toFilterPayload = (raw) => ({
+  region: (raw.region || '').trim().toLowerCase(),
+  areas: Array.isArray(raw.areas) ? raw.areas.slice() : [],
+  porte: Array.isArray(raw.porte) ? raw.porte.slice() : [],
+  modalities: Array.isArray(raw.modalities) ? raw.modalities.slice() : [],
+  openOnly: !!raw.openOnly,
+  heat: !!raw.heat,
+});
+
+const hasActiveFilters = (filters) => {
+  if (!filters) return false;
+  return Boolean(filters.region || filters.openOnly || filters.areas.length || filters.porte.length || filters.modalities.length);
+};
 
 (() => {
-  const btn = $('.nav-toggle');
-  const list = $('#navMenu');
-  if (!btn || !list) return;
-
-  const toggle = () => {
-    const open = list.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', String(open));
-  };
-  btn.addEventListener('click', toggle);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && list.classList.contains('is-open')) {
-      list.classList.remove('is-open');
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
-})();
-
-(() => {
-  const toggleBtn = $('.filter-toggle');
-  const panel = $('#filterPanel');
-  if (!toggleBtn || !panel) return;
-
-  if (!panel.dataset.hydrated) {
-    panel.innerHTML = `
-      <header style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-        <strong style="font-family:Montserrat,system-ui">Filtros</strong>
-        <button id="closeFilters" type="button" aria-label="Fechar" style="border:0;background:transparent;font-size:20px;cursor:pointer">✕</button>
-      </header>
-      <hr style="border:none;border-top:1px solid rgba(16,37,105,.15);margin:10px 0">
-      <div style="display:grid;gap:10px">
-        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-filter="ti"> Tecnologia</label>
-        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-filter="industry"> Indústria</label>
-        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" data-filter="health"> Saúde</label>
-      </div>
-      <div style="height:12px"></div>
-      <button id="applyFilters" type="button" style="padding:10px 12px;border-radius:9999px;border:1px solid rgba(16,37,105,.25);background:#edf2f7;cursor:pointer;font-weight:700">Aplicar</button>
-    `;
-    panel.dataset.hydrated = '1';
+  const navToggle = qs('.nav-toggle');
+  const navMenu = qs('#navMenu');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navMenu.classList.toggle('is-open');
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && navMenu.classList.contains('is-open')) {
+        navMenu.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
   }
-
-  const open = () => {
-    panel.hidden = false;
-    toggleBtn.setAttribute('aria-expanded', 'true');
-    panel.focus?.();
-  };
-  const close = () => {
-    panel.hidden = true;
-    toggleBtn.setAttribute('aria-expanded', 'false');
-  };
-
-  toggleBtn.addEventListener('click', () => (panel.hidden ? open() : close()));
-  panel.addEventListener('click', (e) => {
-    if (e.target.id === 'closeFilters') close();
-    if (e.target.id === 'applyFilters') {
-      toggleBtn.classList.add('applied');
-      close();
-    }
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !panel.hidden) close();
-  });
-  document.addEventListener('click', (e) => {
-    if (!panel.hidden && !panel.contains(e.target) && e.target !== toggleBtn) close();
-  });
 })();
-
-(function buildPrettyFilterPanel(){
-  const panel = document.getElementById('filterPanel');
-  const toggleBtn = document.querySelector('.filter-toggle');
-  if (!panel || !toggleBtn) return;
+const buildFilterPanel = () => {
+  const panel = qs('#filterPanel');
+  const toggleBtn = qs('.filter-toggle');
+  if (!panel || !toggleBtn || panel.dataset.hydrated) return { panel: null, toggleBtn: null };
 
   panel.innerHTML = `
     <div class="fp">
       <header class="fp-header">
         <strong class="fp-title">Filtros</strong>
-        <button id="closeFilters" type="button" aria-label="Fechar" class="fp-close">×</button>
+        <button id="closeFilters" type="button" aria-label="Fechar painel" class="fp-close">&times;</button>
       </header>
 
       <div class="fp-group">
-        <div class="fp-subtle">Cidade, Estado ou Região</div>
-        <label class="fp-input" aria-label="Cidade, Estado ou Região">
+        <span class="fp-subtle">Cidade, estado ou regiao</span>
+        <label class="fp-input" aria-label="Cidade, estado ou regiao">
           <i class="ri-map-pin-2-line" aria-hidden="true"></i>
-          <input type="text" placeholder="Cidade, Estado ou Região" />
+          <input type="text" id="f-region" placeholder="Ex.: Campinas, SP" />
         </label>
       </div>
 
       <div class="fp-section">
-        <div class="fp-heading">Área de Atuação</div>
+        <div class="fp-heading">Area de atuacao</div>
         <div class="fp-checklist">
           <label class="fp-check"><input type="checkbox" data-filter="ti"><span>Tecnologia</span></label>
-          <label class="fp-check"><input type="checkbox" data-filter="health"><span>Saúde</span></label>
-          <label class="fp-check"><input type="checkbox" data-filter="edu"><span>Educação</span></label>
+          <label class="fp-check"><input type="checkbox" data-filter="health"><span>Saude</span></label>
+          <label class="fp-check"><input type="checkbox" data-filter="edu"><span>Educacao</span></label>
           <label class="fp-check"><input type="checkbox" data-filter="mkt"><span>Marketing</span></label>
           <label class="fp-check"><input type="checkbox" data-filter="sales"><span>Vendas</span></label>
         </div>
       </div>
 
       <div class="fp-section">
-        <div class="fp-heading">Porte da Empresa</div>
-        <div class="fp-pills" role="group" aria-label="Porte da Empresa">
+        <div class="fp-heading">Porte da empresa</div>
+        <div class="fp-pills" role="group" aria-label="Porte da empresa">
           <button type="button" class="pill" data-porte="small">Pequena</button>
-          <button type="button" class="pill" data-porte="medium">Média</button>
+          <button type="button" class="pill" data-porte="medium">Media</button>
           <button type="button" class="pill" data-porte="large">Grande</button>
           <button type="button" class="pill" data-porte="startup">Startup</button>
         </div>
       </div>
 
       <div class="fp-section">
-        <div class="fp-heading">Modalidade de Trabalho</div>
-        <div class="fp-pills" role="group" aria-label="Modalidade de Trabalho">
+        <div class="fp-heading">Modalidade de trabalho</div>
+        <div class="fp-pills" role="group" aria-label="Modalidade de trabalho">
           <button type="button" class="pill" data-modal="presencial">Presencial</button>
-          <button type="button" class="pill" data-modal="hibrido">Híbrido</button>
+          <button type="button" class="pill" data-modal="hibrido">Hibrido</button>
           <button type="button" class="pill" data-modal="remoto">Remoto</button>
         </div>
       </div>
 
       <div class="fp-switch-row">
-        <span>Apenas com Vagas Abertas</span>
+        <span>Apenas com vagas abertas</span>
         <label class="fp-switch"><input type="checkbox" id="f-openings"><span class="fp-slider"></span></label>
       </div>
       <div class="fp-switch-row">
-        <span>Mapa de Calor</span>
+        <span>Mapa de calor</span>
         <label class="fp-switch"><input type="checkbox" id="f-heat"><span class="fp-slider"></span></label>
       </div>
 
-      <button id="applyFilters" type="button" class="fp-apply">Aplicar Filtros</button>
-    </div>`;
-
-  panel.addEventListener('click', (e) => {
-    const t = e.target;
-    if (t.id === 'closeFilters') { panel.hidden = true; toggleBtn.setAttribute('aria-expanded', 'false'); }
-    if (t.classList && t.classList.contains('pill')) t.classList.toggle('active');
-  });
-})();
-
-(async () => {
-  const mapDiv = $('#map');
-  if (!mapDiv) return;
-
-  const pulseCss = `
-    .pulse-dot{position:relative;width:14px;height:14px;border-radius:50%;background:#ff3b30;border:2px solid #fff;box-shadow:0 0 0 2px rgba(255,59,48,.35)}
-    .pulse-dot::after{content:"";position:absolute;inset:-6px;border:2px solid rgba(255,59,48,.65);border-radius:50%;animation:pulse 1.6s ease-out infinite}
-    @keyframes pulse{0%{transform:scale(.5);opacity:.9}70%{transform:scale(1.6);opacity:0}100%{opacity:0}}
+      <button id="applyFilters" type="button" class="fp-apply">Aplicar filtros</button>
+    </div>
   `;
-  const styleTag = document.createElement('style');
-  styleTag.textContent = pulseCss;
-  document.head.appendChild(styleTag);
+  panel.dataset.hydrated = '1';
 
-  const inject = (el) => new Promise(res => { el.onload = res; document.head.appendChild(el); });
+  panel.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.classList?.contains('pill')) {
+      target.classList.toggle('active');
+    }
+  });
+
+  return { panel, toggleBtn };
+};
+
+const setupFilterInteractions = (panel, toggleBtn, mapReady, appliedFiltersRef) => {
+  if (!panel || !toggleBtn) return;
+
+  const closePanel = () => {
+    panel.hidden = true;
+    toggleBtn.setAttribute('aria-expanded', 'false');
+  };
+  const openPanel = () => {
+    panel.hidden = false;
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    panel.focus?.();
+  };
+
+  const readFilters = () => {
+    const region = qs('#f-region', panel)?.value || '';
+    const areas = qsa('input[data-filter]:checked', panel).map((input) => input.dataset.filter);
+    const porte = qsa('.pill[data-porte].active', panel).map((pill) => pill.dataset.porte);
+    const modalities = qsa('.pill[data-modal].active', panel).map((pill) => pill.dataset.modal);
+    const openOnly = qs('#f-openings', panel)?.checked || false;
+    const heat = qs('#f-heat', panel)?.checked || false;
+    return toFilterPayload({ region, areas, porte, modalities, openOnly, heat });
+  };
+
+  const escapeListener = (event) => {
+    if (event.key === 'Escape' && !panel.hidden) {
+      closePanel();
+    }
+  };
+
+  toggleBtn.addEventListener('click', () => {
+    if (panel.hidden) openPanel();
+    else closePanel();
+  });
+
+  panel.addEventListener('click', (event) => {
+    if (event.target.id === 'closeFilters') {
+      closePanel();
+    }
+  });
+
+  document.addEventListener('keydown', escapeListener);
+  document.addEventListener('click', (event) => {
+    if (!panel.hidden && !panel.contains(event.target) && event.target !== toggleBtn) {
+      closePanel();
+    }
+  });
+
+  const applyBtn = qs('#applyFilters', panel);
+  applyBtn?.addEventListener('click', () => {
+    const nextFilters = readFilters();
+    appliedFiltersRef.current = nextFilters;
+    toggleBtn.classList.toggle('applied', hasActiveFilters(nextFilters));
+    mapReady.then((controller) => {
+      controller?.applyFilters?.(nextFilters);
+    });
+    closePanel();
+  });
+};
+const loadLeafletAssets = async () => {
+  const inject = (el) => new Promise((resolve, reject) => {
+    el.onload = resolve;
+    el.onerror = reject;
+    document.head.appendChild(el);
+  });
+
   await inject(Object.assign(document.createElement('link'), {
     rel: 'stylesheet',
     href: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
   }));
   await inject(Object.assign(document.createElement('script'), {
-    src: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-    defer: true
+    src: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
   }));
+  await inject(Object.assign(document.createElement('script'), {
+    src: 'https://unpkg.com/leaflet.heat/dist/leaflet-heat.js'
+  }));
+};
 
-  const saved = localStorage.getItem('mapslink:view');
-  const initial = saved ? JSON.parse(saved) : { center: [-22.909938, -47.062633], zoom: 12 };
+const initFullMap = async () => {
+  const mapContainer = qs('#map');
+  if (!mapContainer) return null;
 
-  const map = L.map('map', { zoomControl: false }).setView(initial.center, initial.zoom);
+  await loadLeafletAssets();
 
+  const savedView = (() => {
+    try {
+      return JSON.parse(localStorage.getItem(MAP_STORAGE_KEY) || 'null');
+    } catch (err) {
+      return null;
+    }
+  })();
+  const startView = savedView || DEFAULT_VIEW;
+
+  const map = L.map('map', { zoomControl: false }).setView(startView.center, startView.zoom);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors'
+    attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
   map.on('moveend', () => {
-    const c = map.getCenter();
-    localStorage.setItem('mapslink:view', JSON.stringify({ center: [c.lat, c.lng], zoom: map.getZoom() }));
+    const center = map.getCenter();
+    localStorage.setItem(MAP_STORAGE_KEY, JSON.stringify({ center: [center.lat, center.lng], zoom: map.getZoom() }));
   });
 
-  const geoBtn = L.control({ position: 'topright' });
-  geoBtn.onAdd = () => {
-    const btn = L.DomUtil.create('button', '');
-    btn.title = 'Minha localização (g)';
-    btn.setAttribute('aria-label', 'Minha localização');
-    btn.style.cssText = 'margin:6px;padding:8px;border-radius:9999px;border:1px solid rgba(0,0,0,.25);background:#fff;cursor:pointer';
-    btn.textContent = '⊙';
-    btn.onclick = () => locate();
-    return btn;
+  const locateBtn = L.control({ position: 'topright' });
+  locateBtn.onAdd = () => {
+    const button = L.DomUtil.create('button', '');
+    button.type = 'button';
+        button.title = 'Minha localizacao (g)';
+        button.setAttribute('aria-label', 'Minha localizacao');
+    button.style.cssText = 'margin:6px;padding:8px;border-radius:9999px;border:1px solid rgba(0,0,0,0.25);background:#fff;cursor:pointer';
+    button.textContent = 'GPS';
+    button.addEventListener('click', () => geoLocate());
+    return button;
   };
-  geoBtn.addTo(map);
+  locateBtn.addTo(map);
 
-  function locate() {
+  const allCompanies = Array.isArray(window.mapsLinkCompanies) ? window.mapsLinkCompanies.map((company) => ({
+    ...company,
+    nameLower: company.name.toLowerCase(),
+    addressLower: (company.address || '').toLowerCase(),
+    cityLower: (company.city || '').toLowerCase()
+  })) : [];
+
+  const markersLayer = L.layerGroup().addTo(map);
+  const markerById = new Map();
+  let customMarker = null;
+  let heatLayer = null;
+  let filteredCompanies = allCompanies.slice();
+  let activeFilters = toFilterPayload({});
+
+  const heatOptions = {
+    radius: 36,
+    blur: 24,
+    maxZoom: 17,
+    minOpacity: 0.25,
+    max: Math.max(20, Math.max(1, allCompanies.length) * 3),
+    gradient: {
+      0.0: '#59ee90ff',
+      0.25: '#1eff00ff',
+      0.5: '#eab308',
+      0.75: '#f97316',
+      1.0: '#ef4444'
+    }
+  };
+  const pulseCss = `
+    .pulse-dot{position:relative;width:14px;height:14px;border-radius:50%;background:#ff3b30;border:2px solid #fff;box-shadow:0 0 0 2px rgba(255,59,48,0.35)}
+    .pulse-dot::after{content:"";position:absolute;inset:-6px;border:2px solid rgba(255,59,48,0.65);border-radius:50%;animation:pulse 1.6s ease-out infinite}
+    @keyframes pulse{0%{transform:scale(0.5);opacity:0.9}70%{transform:scale(1.6);opacity:0}100%{opacity:0}}
+  `;
+  const styleTag = document.createElement('style');
+  styleTag.textContent = pulseCss;
+  document.head.appendChild(styleTag);
+
+  const addPulseMarker = (coords, popupText) => {
+    if (!coords) return null;
+    const icon = L.divIcon({ className: 'pulse-dot', html: '', iconSize: [14, 14] });
+    const marker = L.marker(coords, { icon }).addTo(map);
+    if (popupText) marker.bindPopup(popupText).openPopup();
+    return marker;
+  };
+
+  const geoLocate = () => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition((pos) => {
-      const { latitude, longitude } = pos.coords;
-      map.flyTo([latitude, longitude], 15, { duration: 0.8 });
-      addPulseMarker([latitude, longitude], 'Você está aqui');
+      const coords = [pos.coords.latitude, pos.coords.longitude];
+      map.flyTo(coords, 15, { duration: 0.8 });
+      if (customMarker) map.removeLayer(customMarker);
+      customMarker =       customMarker = addPulseMarker(coords, 'Voce esta aqui');
     });
-  }
+  };
 
-  function addPulseMarker(latlng, title = '') {
-    const icon = L.divIcon({ className: 'pulse-dot', html: '', iconSize: [14,14] });
-    const m = L.marker(latlng, { icon }).addTo(map);
-    if (title) m.bindPopup(title).openPopup();
-    return m;
-  }
+  const matchesFilters = (company) => {
+    const region = activeFilters.region;
+    if (region) {
+      const inRegion = company.addressLower.includes(region) || company.cityLower.includes(region);
+      if (!inRegion) return false;
+    }
+    if (activeFilters.openOnly && company.status !== 'open') return false;
+    if (activeFilters.areas.length) {
+      const ok = (company.areas || []).some((area) => activeFilters.areas.includes(area));
+      if (!ok) return false;
+    }
+    if (activeFilters.porte.length && !activeFilters.porte.includes(company.porte)) return false;
+    if (activeFilters.modalities.length) {
+      const ok = (company.modalities || []).some((mode) => activeFilters.modalities.includes(mode));
+      if (!ok) return false;
+    }
+    return true;
+  };
 
-  const form = $('.search-bar');
-  const input = $('#search');
-  let lastMarker = null;
+  const updateHeatLayer = () => {
+    if (heatLayer) {
+      map.removeLayer(heatLayer);
+      heatLayer = null;
+    }
+    if (!activeFilters.heat || !L.heatLayer) return;
+    if (!filteredCompanies.length) return;
+    const points = filteredCompanies.map((company) => [company.coords[0], company.coords[1], 1]);
+    heatLayer = L.heatLayer(points, heatOptions).addTo(map);
+  };
 
-  async function geocode(q) {
+  const render = () => {
+    markersLayer.clearLayers();
+    markerById.clear();
+    filteredCompanies = allCompanies.filter(matchesFilters);
+
+    const addedMarkers = filteredCompanies.map((company) => {
+      const marker = L.marker(company.coords);
+      const statusLabel = company.status === 'open' ? 'Vagas abertas' : 'Sem vagas no momento';
+      marker.bindPopup(`
+        <strong>${company.name}</strong><br>
+        ${company.address}<br>
+        ${statusLabel}
+      `);
+      markersLayer.addLayer(marker);
+      markerById.set(company.id, marker);
+      return marker;
+    });
+
+    if (addedMarkers.length) {
+      const group = L.featureGroup(addedMarkers);
+      map.fitBounds(group.getBounds().pad(0.25));
+    } else {
+      map.setView(startView.center, startView.zoom);
+    }
+
+    updateHeatLayer();
+  };
+
+  render();
+
+  document.addEventListener('keydown', (event) => {
+    if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')) return;
+    if (event.key === '/') {
+      event.preventDefault();
+      qs('#search')?.focus();
+    }
+    if (event.key.toLowerCase() === 'f') {
+      qs('.filter-toggle')?.click();
+    }
+    if (event.key.toLowerCase() === 'g') {
+      geoLocate();
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    setTimeout(() => map.invalidateSize(), 200);
+  });
+
+  return {
+    applyFilters(nextFilters) {
+      activeFilters = toFilterPayload(nextFilters || {});
+      render();
+      return filteredCompanies.length;
+    },
+    focusCompany(query) {
+      const normalized = (query || '').toLowerCase();
+      if (!normalized) return false;
+      const company = filteredCompanies.find((item) => item.nameLower.includes(normalized))
+        || allCompanies.find((item) => item.nameLower.includes(normalized));
+      if (!company) return false;
+      map.flyTo(company.coords, 15, { duration: 0.8 });
+      const marker = markerById.get(company.id);
+      if (marker) marker.openPopup();
+      else {
+        if (customMarker) map.removeLayer(customMarker);
+        customMarker = addPulseMarker(company.coords, company.name);
+      }
+      return true;
+    },
+    showGeocodeResult(lat, lon, label) {
+      const coords = [lat, lon];
+      map.flyTo(coords, 16, { duration: 0.9 });
+      if (customMarker) map.removeLayer(customMarker);
+      customMarker = addPulseMarker(coords, label);
+    }
+  };
+};
+
+const mapReady = initFullMap();
+(() => {
+  const appliedFiltersRef = { current: toFilterPayload({}) };
+  const { panel, toggleBtn } = buildFilterPanel();
+  setupFilterInteractions(panel, toggleBtn, mapReady, appliedFiltersRef);
+})();
+
+(() => {
+  const form = qs('.search-bar');
+  const input = qs('#search');
+  if (!form || !input) return;
+
+  const geocode = async (query) => {
     const url = new URL('https://nominatim.openstreetmap.org/search');
-    url.searchParams.set('q', q);
+    url.searchParams.set('q', query);
     url.searchParams.set('format', 'jsonv2');
     url.searchParams.set('addressdetails', '1');
     url.searchParams.set('limit', '1');
     url.searchParams.set('countrycodes', 'br');
-    const res = await fetch(url.toString(), { headers: { 'Accept-Language': 'pt-BR' } });
-    if (!res.ok) throw new Error('Falha na busca');
-    const data = await res.json();
+    const response = await fetch(url.toString(), { headers: { 'Accept-Language': 'pt-BR' } });
+    if (!response.ok) throw new Error('Falha na busca');
+    const data = await response.json();
     return data[0];
-  }
+  };
 
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const q = input?.value?.trim();
-    if (!q) return;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const query = input.value.trim();
+    if (!query) return;
+
+    const handled = await mapReady.then((controller) => controller?.focusCompany?.(query));
+    if (handled) {
+      input.value = '';
+      return;
+    }
 
     form.classList.add('loading');
     try {
-      const hit = await geocode(q);
+      const hit = await geocode(query);
       if (!hit) return;
-
-      const lat = parseFloat(hit.lat), lon = parseFloat(hit.lon);
-      if (lastMarker) map.removeLayer(lastMarker);
-      map.flyTo([lat, lon], 16, { duration: 0.9 });
-      lastMarker = addPulseMarker([lat, lon], hit.display_name);
+      const lat = parseFloat(hit.lat);
+      const lon = parseFloat(hit.lon);
+      mapReady.then((controller) => controller?.showGeocodeResult?.(lat, lon, hit.display_name));
     } catch (err) {
       console.warn(err);
     } finally {
       form.classList.remove('loading');
+      input.value = '';
     }
   });
-
-  document.addEventListener('keydown', (e) => {
-    if (['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
-    if (e.key === '/') { e.preventDefault(); input?.focus(); }
-    if (e.key.toLowerCase() === 'f') { $('.filter-toggle')?.click(); }
-    if (e.key.toLowerCase() === 'g') { locate(); }
-  });
 })();
+
