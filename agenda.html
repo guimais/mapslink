@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Agenda semanal do projeto Maps Link">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Maps Link</title>
+    <link rel="stylesheet" href="assets/css/agenda.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  </head>
+
+  <body>
+    <header class="site-header" role="banner">
+      <nav class="nav-pilula" role="navigation" aria-label="Principal">
+        <a href="paginainicial.html" class="nav-logo-link" aria-label="Maps Link - Início">
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+        </a>
+        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+          <i class="ri-menu-line" aria-hidden="true"></i>
+        </button>
+        <ul class="nav-links" id="navMenu">
+          <li><a class="nav-link" href="paginainicial.html">Home</a></li>
+          <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
+          <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
+          <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
+          <li><a class="nav-link" href="paginadashboard.html">Dashboard</a></li>
+          <li><a class="nav-link" href="vagas.html">Vagas</a></li>
+          <li><a class="nav-link" href="enviocurriculo.html">Currículo</a></li>
+          <li><a class="nav-link active" href="agenda.html" aria-current="page">Agenda</a></li>
+          <li><a class="nav-link" href="contact.html">Contact</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="agenda" class="agenda">
+      <section class="agenda-container">
+        <h1 class="agenda-title">Agenda</h1>
+
+        <div class="agenda-week">
+          <span>Seg<br>1</span>
+          <span class="active-day">Ter<br>2</span>
+          <span>Qua<br>3</span>
+          <span>Qui<br>4</span>
+          <span>Sex<br>5</span>
+        </div>
+
+        <div class="agenda-timeline">
+          <div class="agenda-hour">09:00</div>
+          <div class="agenda-event azul">
+            <i class="ri-video-chat-line"></i>
+            <span>Reunião de Alinhamento Semanal</span>
+          </div>
+
+          <div class="agenda-hour">11:00</div>
+          <div class="agenda-event verde">
+            <i class="ri-user-line"></i>
+            <span>Entrevista; Gelado da Silva</span>
+          </div>
+
+          <div class="agenda-hour">14:00</div>
+          <div class="agenda-event amarelo">
+            <i class="ri-lightbulb-line"></i>
+            <span>Brainstorming - Projeto MapsLink</span>
+          </div>
+
+          <div class="agenda-hour">16:00</div>
+          <div class="agenda-event roxo">
+            <i class="ri-presentation-line"></i>
+            <span>Apresentação de Resultados</span>
+          </div>
+
+          <div class="agenda-hour">18:00</div>
+          <div class="agenda-event laranja">
+            <i class="ri-cup-line"></i>
+            <span>Happy Hour da Equipe</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/js/agenda.js"></script>
+  </body>
+</html>
