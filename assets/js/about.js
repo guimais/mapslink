@@ -2,35 +2,35 @@ const nav = document.querySelector('.nav-pilula');
 const navMenu = document.getElementById('navMenu');
 const navLinks = document.querySelectorAll('.nav-links a');
 const toggleBtn = document.querySelector('.nav-toggle');
+const navLinksArr = Array.from(navLinks);
 
 function smoothScrollTo(targetId) {
   const el = document.querySelector(targetId);
   if (!el) return;
   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-navLinks.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && href.startsWith('#')) {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href');
-            smoothScrollTo(targetId);
-        });
-    }
+
+navLinksArr.forEach(link => {
+  const href = link.getAttribute('href');
+  if (href && href.startsWith('#')) {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      smoothScrollTo(targetId);
+    });
+  }
 });
 
 const originalShadow = nav ? getComputedStyle(nav).boxShadow : '';
 function updateNavShadow() {
   if (!nav) return;
-  nav.style.boxShadow = (window.scrollY > 8)
-    ? '0 10px 26px rgba(0,0,0,0.12)'
-    : originalShadow;
+  nav.style.boxShadow = window.scrollY > 8 ? '0 10px 26px rgba(0,0,0,0.12)' : originalShadow;
 }
 window.addEventListener('scroll', updateNavShadow);
 updateNavShadow();
 
 if (toggleBtn && navMenu) {
-  const setIcon = (open) => {
+  const setIcon = open => {
     const icon = toggleBtn.querySelector('i');
     if (icon) icon.className = open ? 'ri-close-line' : 'ri-menu-line';
     toggleBtn.setAttribute('aria-expanded', String(open));
@@ -47,14 +47,12 @@ if (toggleBtn && navMenu) {
       }
     });
   });
-  
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       navMenu.classList.remove('is-open');
       setIcon(false);
     }
   });
-
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 560px)').matches) {
       navMenu.classList.remove('is-open');
@@ -94,23 +92,18 @@ function showToast(text) {
 }
 
 (function highlightAbout() {
-  const current = location.pathname.split('/').pop() || '';
-  let target = null;
-  target = [...navLinks].find(a =>
-    (a.getAttribute('href') || '').includes('about.html')) ||
-    [...navLinks].find(a =>
-      (a.getAttribute('href') || '') === '#about');
+  const target =
+    navLinksArr.find(a => (a.getAttribute('href') || '').includes('about.html')) ||
+    navLinksArr.find(a => (a.getAttribute('href') || '') === '#about');
   if (target) {
-    navLinks.forEach(a => a.classList.remove('active'));
+    navLinksArr.forEach(a => a.classList.remove('active'));
     target.classList.add('active');
   }
 })();
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const revealEls = document.querySelectorAll(
-  '.about-container p, .about-container h3, .about-cta'
-);
+const revealEls = document.querySelectorAll('.about-container p, .about-container h3, .about-cta');
 
 revealEls.forEach((el, idx) => {
   el.style.opacity = '0';
@@ -122,7 +115,7 @@ revealEls.forEach((el, idx) => {
   el.dataset.stagger = String(idx);
 });
 
-const revealObs = new IntersectionObserver((entries) => {
+const revealObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
     const el = entry.target;
@@ -141,7 +134,6 @@ revealEls.forEach(el => revealObs.observe(el));
 (function mountReadingProgress() {
   const container = document.querySelector('.about-container');
   if (!container) return;
-
   const bar = document.createElement('div');
   bar.id = 'readingProgress';
   Object.assign(bar.style, {
@@ -156,10 +148,9 @@ revealEls.forEach(el => revealObs.observe(el));
     transition: reduceMotion ? 'none' : 'width .15s linear'
   });
   document.body.appendChild(bar);
-
   function updateProgress() {
     const docH = document.documentElement.scrollHeight - window.innerHeight;
-    const p = docH > 0 ? (window.scrollY / docH) : 0;
+    const p = docH > 0 ? window.scrollY / docH : 0;
     bar.style.width = (p * 100).toFixed(2) + '%';
   }
   window.addEventListener('scroll', updateProgress, { passive: true });

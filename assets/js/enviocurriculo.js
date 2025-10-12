@@ -13,16 +13,18 @@
   const searchInput = page.querySelector('.search-input input');
   const live = createLiveRegion();
   document.body.appendChild(live);
-  const slugify = (s) =>
+
+  const slugify = s =>
     (s || '')
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase().replace(/[^a-z0-9]+/g, '-')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
 
   const LS_KEY = `mapslink_envio_cv_${slugify(empresaNome)}_v1`;
   const LS_SORT = `${LS_KEY}_sort`;
 
-  /** @type {Set<string>} */
   let applied = new Set();
 
   function createLiveRegion() {
@@ -32,6 +34,7 @@
     el.setAttribute('aria-atomic', 'true');
     return el;
   }
+
   function announce(msg) {
     live.textContent = '';
     setTimeout(() => (live.textContent = msg), 10);
@@ -43,8 +46,11 @@
       if (raw) applied = new Set(JSON.parse(raw));
     } catch {}
   }
+
   function save() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify([...applied])); } catch {}
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify([...applied]));
+    } catch {}
   }
 
   function ensureRowIds() {
@@ -52,7 +58,7 @@
       const btn = tr.querySelector('.prestar-vaga');
       if (!btn) return;
       if (!btn.dataset.id) {
-        const titulo = tr.querySelector('td:first-child .cell-text')?.textContent?.trim() || `vaga-${idx+1}`;
+        const titulo = tr.querySelector('td:first-child .cell-text')?.textContent?.trim() || `vaga-${idx + 1}`;
         const modelo = tr.querySelector('td:nth-child(3)')?.textContent?.trim() || '';
         btn.dataset.id = `${slugify(empresaNome)}-${slugify(titulo)}-${slugify(modelo)}-${idx}`;
       }
@@ -123,7 +129,13 @@
     }
   }
 
-  function debounce(fn, ms=250){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); }; }
+  function debounce(fn, ms = 250) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), ms);
+    };
+  }
 
   function filterRows(query) {
     const q = (query || '').trim().toLowerCase();
@@ -155,34 +167,37 @@
   }
 
   if (searchInput) {
-    searchInput.addEventListener('input', debounce((e)=>{
-      filterRows(e.target.value);
-      const wrapper = page.querySelector('.table-wrapper');
-      if (wrapper) wrapper.scrollTop = 0;
-    }, 200));
+    searchInput.addEventListener(
+      'input',
+      debounce(e => {
+        filterRows(e.target.value);
+        const wrapper = page.querySelector('.table-wrapper');
+        if (wrapper) wrapper.scrollTop = 0;
+      }, 200)
+    );
   }
 
   const sortState = loadSortState();
   initHeadSort();
   if (sortState) applySort(sortState.index, sortState.dir);
 
-  function initHeadSort(){
+  function initHeadSort() {
     [...thead.rows[0].cells].forEach((th, index) => {
       const isActions = index === thead.rows[0].cells.length - 1;
       if (isActions) return;
 
       th.style.cursor = 'pointer';
       th.tabIndex = 0;
-      th.setAttribute('role','columnheader');
-      th.setAttribute('aria-sort','none');
+      th.setAttribute('role', 'columnheader');
+      th.setAttribute('aria-sort', 'none');
 
       const label = th.textContent.trim();
       th.title = `Ordenar por ${label}`;
 
       const triggerSort = () => {
         const dir = toggleDir(th.getAttribute('aria-sort'));
-        [...thead.rows[0].cells].forEach((oth, i)=>{
-          if (i!==index) oth.setAttribute('aria-sort','none');
+        [...thead.rows[0].cells].forEach((oth, i) => {
+          if (i !== index) oth.setAttribute('aria-sort', 'none');
         });
         th.setAttribute('aria-sort', dir);
         applySort(index, dir);
@@ -190,34 +205,40 @@
       };
 
       th.addEventListener('click', triggerSort);
-      th.addEventListener('keydown', (e)=>{
-        if (e.key==='Enter' || e.key===' ') { e.preventDefault(); triggerSort(); }
+      th.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerSort();
+        }
       });
     });
   }
 
-  function toggleDir(state){
-    if (state==='ascending') return 'descending';
+  function toggleDir(state) {
+    if (state === 'ascending') return 'descending';
     return 'ascending';
   }
 
-  function applySort(colIndex, dir='ascending'){
-    const rows = [...tbody.rows].filter(r => r.style.display !== 'none'); // respeita filtro
-    rows.sort((a,b)=>{
+  function applySort(colIndex, dir = 'ascending') {
+    const rows = [...tbody.rows].filter(r => r.style.display !== 'none');
+    rows.sort((a, b) => {
       const ta = (a.cells[colIndex]?.innerText || '').trim().toLowerCase();
       const tb = (b.cells[colIndex]?.innerText || '').trim().toLowerCase();
-      if (ta < tb) return dir==='ascending' ? -1 : 1;
-      if (ta > tb) return dir==='ascending' ? 1 : -1;
+      if (ta < tb) return dir === 'ascending' ? -1 : 1;
+      if (ta > tb) return dir === 'ascending' ? 1 : -1;
       return 0;
     });
     rows.forEach(r => tbody.appendChild(r));
     [...tbody.rows].filter(r => r.style.display === 'none').forEach(r => tbody.appendChild(r));
   }
 
-  function saveSortState(index, dir){
-    try { localStorage.setItem(LS_SORT, JSON.stringify({index, dir})); } catch {}
+  function saveSortState(index, dir) {
+    try {
+      localStorage.setItem(LS_SORT, JSON.stringify({ index, dir }));
+    } catch {}
   }
-  function loadSortState(){
+
+  function loadSortState() {
     try {
       const raw = localStorage.getItem(LS_SORT);
       if (raw) return JSON.parse(raw);
@@ -226,10 +247,10 @@
   }
 
   let resetTimer = null;
-  window.addEventListener('keydown', (e)=>{
-    if (e.key.toLowerCase()==='r' && e.altKey) {
+  window.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'r' && e.altKey) {
       if (resetTimer) return;
-      resetTimer = setTimeout(()=>{
+      resetTimer = setTimeout(() => {
         const ok = confirm(`Limpar histórico de vagas aplicadas para "${empresaNome}"?`);
         if (ok) {
           applied.clear();
@@ -238,11 +259,15 @@
           announce('Histórico de aplicações limpo.');
         }
         resetTimer = null;
-      }, 1000); 
+      }, 1000);
     }
   });
-  window.addEventListener('keyup', ()=>{
-    if (resetTimer){ clearTimeout(resetTimer); resetTimer = null; }
+
+  window.addEventListener('keyup', () => {
+    if (resetTimer) {
+      clearTimeout(resetTimer);
+      resetTimer = null;
+    }
   });
 
   load();

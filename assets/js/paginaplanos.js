@@ -10,17 +10,13 @@
     const css = `
       [data-animate="fade-up"]{opacity:0;transform:translateY(8px);}
       .in-view{opacity:1;transform:none;transition:transform .6s ease, opacity .6s ease}
-
       .ripple-wrap{position:relative;overflow:hidden}
       .ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;width:10px;height:10px;background:currentColor;opacity:.25;animation:ripple .6s ease-out}
       @keyframes ripple{from{opacity:.35;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-50%) scale(18)}}
-
       .snackbar{position:fixed;right:20px;bottom:20px;background:var(--brand,#102569);color:#fff;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow-md,0 8px 18px rgba(16,37,105,.14));opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .3s, transform .3s;z-index:2000;display:flex;align-items:center;gap:10px;font-weight:700}
       .snackbar.show{opacity:1;transform:none;pointer-events:auto}
       .snackbar .close{background:transparent;border:0;color:#fff;font-size:18px;cursor:pointer}
-
       .plan-selected{outline:2px solid var(--brand-2,#0b1b4a);box-shadow:0 0 0 4px rgba(16,37,105,.12)}
-
       .burst{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
       .burst span{position:absolute;width:8px;height:8px;border-radius:50%;opacity:.9}
     `;
@@ -43,15 +39,15 @@
 
   function setupSectionRouting() {
     const links = $$('.nav-link');
-    const sectionIds = ['home','planos','maps','profile','about','contact'];
+    const sectionIds = ['home', 'planos', 'maps', 'profile', 'about', 'contact'];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
-    const show = (id) => {
+    const show = id => {
       sections.forEach(s => {
         const on = s.id === id;
         s.toggleAttribute('hidden', !on);
         if (on) {
-          s.setAttribute('tabindex','-1');
+          s.setAttribute('tabindex', '-1');
           try { s.focus({ preventScroll: true }); } catch {}
           s.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
         }
@@ -65,7 +61,7 @@
     };
 
     links.forEach(a => {
-      a.addEventListener('click', (e) => {
+      a.addEventListener('click', e => {
         const href = a.getAttribute('href') || '';
         if (!href.startsWith('#')) return;
         e.preventDefault();
@@ -82,7 +78,7 @@
         const toggle = $('.nav-toggle');
         if (menu?.classList.contains('open')) {
           menu.classList.remove('open');
-          toggle?.setAttribute('aria-expanded','false');
+          toggle?.setAttribute('aria-expanded', 'false');
         }
       });
     });
@@ -113,10 +109,10 @@
   function attachRipple(selector = '.botao') {
     $$(selector).forEach(btn => {
       btn.classList.add('ripple-wrap');
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         const rect = btn.getBoundingClientRect();
-        const x = (e.clientX || (rect.left + rect.width/2)) - rect.left;
-        const y = (e.clientY || (rect.top + rect.height/2)) - rect.top;
+        const x = (e.clientX || rect.left + rect.width / 2) - rect.left;
+        const y = (e.clientY || rect.top + rect.height / 2) - rect.top;
         const span = document.createElement('span');
         span.className = 'ripple';
         span.style.left = `${x}px`;
@@ -145,6 +141,7 @@
     document.body.appendChild(snackbar);
     return snackbar;
   }
+
   function showToast(message, timeout = 2600) {
     const el = ensureSnackbar();
     el.querySelector('.snackbar-text').textContent = message;
@@ -152,6 +149,7 @@
     if (showToast._t) clearTimeout(showToast._t);
     showToast._t = setTimeout(() => hideToast(), timeout);
   }
+
   function hideToast() {
     if (!snackbar) return;
     snackbar.classList.remove('show');
@@ -159,7 +157,7 @@
 
   function burstFrom(el) {
     if (prefersReducedMotion) return;
-    const colors = ['#ffd166','#06d6a0','#118ab2','#ef476f','#8338ec'];
+    const colors = ['#ffd166', '#06d6a0', '#118ab2', '#ef476f', '#8338ec'];
     const rect = el.getBoundingClientRect();
     const cx = rect.width / 2;
     const cy = rect.height / 2;
@@ -177,10 +175,13 @@
       const dist = 20 + Math.random() * 32;
       const tx = Math.cos(angle) * dist;
       const ty = Math.sin(angle) * dist;
-      dot.animate([
-        { transform: 'translate(-50%,-50%) translate(0,0)', opacity: 0.9 },
-        { transform: `translate(-50%,-50%) translate(${tx}px,${ty}px)`, opacity: 0 }
-      ], { duration: 700, easing: 'ease-out' });
+      dot.animate(
+        [
+          { transform: 'translate(-50%,-50%) translate(0,0)', opacity: 0.9 },
+          { transform: `translate(-50%,-50%) translate(${tx}px,${ty}px)`, opacity: 0 }
+        ],
+        { duration: 700, easing: 'ease-out' }
+      );
       group.appendChild(dot);
     }
     setTimeout(() => group.remove(), 720);

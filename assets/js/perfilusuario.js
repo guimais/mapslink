@@ -16,6 +16,7 @@
     document.addEventListener('click', outsideClose);
     document.addEventListener('keydown', escClose);
   };
+
   const closeMenu = () => {
     if (!navMenu) return;
     navMenu.classList.remove('is-open');
@@ -23,10 +24,14 @@
     document.removeEventListener('click', outsideClose);
     document.removeEventListener('keydown', escClose);
   };
-  const outsideClose = (e) => {
+
+  const outsideClose = e => {
     if (!nav.contains(e.target)) closeMenu();
   };
-  const escClose = (e) => { if (e.key === 'Escape') closeMenu(); };
+
+  const escClose = e => {
+    if (e.key === 'Escape') closeMenu();
+  };
 
   toggleBtn?.addEventListener('click', () => {
     navMenu?.classList.contains('is-open') ? closeMenu() : openMenu();
@@ -41,7 +46,7 @@
   onScroll();
 
   $$('.nav-link[href^="#"]').forEach(a => {
-    a.addEventListener('click', (e) => {
+    a.addEventListener('click', e => {
       const hash = a.getAttribute('href');
       const target = hash ? document.querySelector(hash) : null;
       if (!target) return;
@@ -54,7 +59,7 @@
 
   const markActiveByPath = () => {
     const path = location.pathname.split('/').pop() || 'index.html';
-    $$('.nav-link').forEach((link) => {
+    $$('.nav-link').forEach(link => {
       const href = link.getAttribute('href') || '';
       if (!href || href.startsWith('#')) return;
       const normalized = href.split('?')[0];
@@ -63,11 +68,12 @@
   };
 
   const sectionLinks = $$('.nav-link[href^="#"]');
-  const sectionIds = ['#home','#planos','#maps','#profile','#about','#contact'];
+  const sectionIds = ['#home', '#planos', '#maps', '#profile', '#about', '#contact'];
   const sections = sectionIds.map(id => $(id)).filter(Boolean);
+
   if (sectionLinks.length && sections.length) {
     const map = new Map(sectionLinks.map(l => [l.getAttribute('href'), l]));
-    const io = new IntersectionObserver((entries) => {
+    const io = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const id = '#' + entry.target.id;
@@ -85,27 +91,40 @@
   const toast = (() => {
     const el = document.createElement('div');
     Object.assign(el.style, {
-      position:'fixed', left:'50%', bottom:'28px', transform:'translateX(-50%)',
-      background:'rgba(16,37,105,.98)', color:'#fff', padding:'10px 14px',
-      borderRadius:'10px', fontSize:'14px', boxShadow:'0 8px 18px rgba(0,0,0,.18)',
-      opacity:'0', pointerEvents:'none', transition:'opacity .2s ease', zIndex:'9999'
+      position: 'fixed',
+      left: '50%',
+      bottom: '28px',
+      transform: 'translateX(-50%)',
+      background: 'rgba(16,37,105,.98)',
+      color: '#fff',
+      padding: '10px 14px',
+      borderRadius: '10px',
+      fontSize: '14px',
+      boxShadow: '0 8px 18px rgba(0,0,0,.18)',
+      opacity: '0',
+      pointerEvents: 'none',
+      transition: 'opacity .2s ease',
+      zIndex: '9999'
     });
     document.body.appendChild(el);
-    let t; 
-    return (msg) => { clearTimeout(t); el.textContent = msg; el.style.opacity = '1';
-      t = setTimeout(() => el.style.opacity = '0', 1400);
+    let t;
+    return msg => {
+      clearTimeout(t);
+      el.textContent = msg;
+      el.style.opacity = '1';
+      t = setTimeout(() => (el.style.opacity = '0'), 1400);
     };
   })();
 
-  const toCopy = (a) => {
+  const toCopy = a => {
     const href = a.getAttribute('href') || '';
-    if (href.startsWith('mailto:')) return href.replace(/^mailto:/,'');
-    if (href.startsWith('tel:')) return href.replace(/^tel:/,'');
+    if (href.startsWith('mailto:')) return href.replace(/^mailto:/, '');
+    if (href.startsWith('tel:')) return href.replace(/^tel:/, '');
     return a.textContent.trim();
   };
 
   $$('.perfil-contatos a').forEach(a => {
-    a.addEventListener('click', async (e) => {
+    a.addEventListener('click', async e => {
       try {
         const text = toCopy(a);
         await navigator.clipboard.writeText(text);
@@ -114,7 +133,9 @@
           e.preventDefault();
           window.open(a.href, '_blank', 'noopener');
         }
-      } catch { toast('Não foi possível copiar'); }
+      } catch {
+        toast('Não foi possível copiar');
+      }
     });
   });
 
@@ -137,13 +158,12 @@
     revealTargets.forEach(el => revealer.observe(el));
   }
 
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', e => {
     if (e.altKey && e.key.toLowerCase() === 'm') {
       e.preventDefault();
       navMenu?.classList.contains('is-open') ? closeMenu() : openMenu();
     }
   });
-
 })();
 
 (function () {
@@ -163,16 +183,13 @@
       '.js-card-init{opacity:0;transform:translateY(14px);}',
       '.js-card-in{opacity:1;transform:translateY(0);}',
       '.js-card-in.js-card-elevate:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.08)!important;}',
-      '.js-card-pressed{transform:translateY(0) scale(.995)!important;}',
+      '.js-card-pressed{transform:translateY(0) scale(.995)!important;}'
     ].join('');
     document.head.appendChild(style);
 
- 
     cards.forEach(function (el) {
       el.classList.add('js-card-hover', 'js-card-elevate');
       if (!prefersReduced) el.classList.add('js-card-init');
-
-
       el.addEventListener('pointerdown', function () { el.classList.add('js-card-pressed'); });
       ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (evt) {
         el.addEventListener(evt, function () { el.classList.remove('js-card-pressed'); });
@@ -202,6 +219,7 @@
 
     var prefersReduced = false;
     try { prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (_) {}
+
     var styleId = 'mini-cards-anim-styles';
     if (!document.getElementById(styleId)) {
       var style = document.createElement('style');
@@ -209,9 +227,10 @@
       style.textContent = [
         '.js-mini{transition:transform .2s ease, box-shadow .25s ease, opacity .35s ease, background-position .25s ease; position:relative; overflow:hidden;}',
         '.js-mini-light{background-image: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.10), rgba(255,255,255,0) 45%); background-repeat:no-repeat;}',
-        '.js-mini-init{opacity:0; transform:translateX(12px);}','.js-mini-in{opacity:1; transform:none;}',
+        '.js-mini-init{opacity:0; transform:translateX(12px);}',
+        '.js-mini-in{opacity:1; transform:none;}',
         '.js-mini:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,.22);}',
-        '.js-mini-press{transform:translateY(0) scale(.995)!important;}',
+        '.js-mini-press{transform:translateY(0) scale(.995)!important;}'
       ].join('');
       document.head.appendChild(style);
     }
@@ -230,20 +249,19 @@
         el.style.setProperty('--my', y + 'px');
       });
 
-      // Press feedback
       el.addEventListener('pointerdown', function () { el.classList.add('js-mini-press'); });
       ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (evt) {
         el.addEventListener(evt, function () { el.classList.remove('js-mini-press'); });
       });
     });
 
-    if (prefersReduced) return; 
+    if (prefersReduced) return;
 
     var obs = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         var el = entry.target;
-        var delay = (parseInt(el.dataset.idx || '0', 10) % 8) * 70; 
+        var delay = (parseInt(el.dataset.idx || '0', 10) % 8) * 70;
         setTimeout(function () {
           el.classList.add('js-mini-in');
           el.classList.remove('js-mini-init');

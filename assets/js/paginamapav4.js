@@ -96,13 +96,13 @@
       }
     });
 
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && painelFiltros.classList.contains('is-open')) closeDrawer();
     });
   }
 
   if (layout) {
-    layout.addEventListener('transitionend', (event) => {
+    layout.addEventListener('transitionend', event => {
       if (event.propertyName === 'grid-template-columns') {
         window.leafletDemo?.invalidate?.();
       }
@@ -110,9 +110,9 @@
   }
 
   const vagasToggle = document.querySelector('.linha-toggle .toggle');
-  const applyOpenPositionsFilter = (onlyOpen) => {
+  const applyOpenPositionsFilter = onlyOpen => {
     const cards = document.querySelectorAll('.card-empresa');
-    cards.forEach((card) => {
+    cards.forEach(card => {
       const isClosed = !!card.querySelector('.badge-vagas.fechada');
       card.style.display = onlyOpen && isClosed ? 'none' : '';
     });
@@ -135,7 +135,7 @@
 
   const buscaMapa = document.querySelector('.busca-mapa input');
   if (buscaMapa) {
-    buscaMapa.addEventListener('keypress', (event) => {
+    buscaMapa.addEventListener('keypress', event => {
       if (event.key === 'Enter') {
         event.preventDefault();
         const query = buscaMapa.value.trim().toLowerCase();
@@ -160,7 +160,7 @@
 
     const companies = Array.isArray(window.mapsLinkCompanies) ? window.mapsLinkCompanies : [];
     const markerById = new Map();
-    const markers = companies.map((company) => {
+    const markers = companies.map(company => {
       const marker = L.marker(company.coords).addTo(leafletMap);
       marker.bindPopup(`<b>${company.name}</b><br>${company.address}`);
       markerById.set(company.id, marker);
@@ -174,7 +174,7 @@
       leafletMap.setView([-22.909938, -47.062633], 12);
     }
 
-    const heatData = companies.map((company) => [company.coords[0], company.coords[1], 1]);
+    const heatData = companies.map(company => [company.coords[0], company.coords[1], 1]);
     const heatOptions = {
       radius: 36,
       blur: 24,
@@ -189,7 +189,7 @@
         1.0: '#ef4444'
       }
     };
-    heatLayerRef = (L.heatLayer && heatData.length) ? L.heatLayer(heatData, heatOptions) : null;
+    heatLayerRef = L.heatLayer && heatData.length ? L.heatLayer(heatData, heatOptions) : null;
 
     document.addEventListener('fullscreenchange', () => {
       setTimeout(() => leafletMap.invalidateSize(), 200);
@@ -202,7 +202,7 @@
       search(query) {
         const normalized = (query || '').toLowerCase();
         if (!normalized) return;
-        const company = companies.find((item) => item.name.toLowerCase().includes(normalized));
+        const company = companies.find(item => item.name.toLowerCase().includes(normalized));
         if (company) {
           leafletMap.setView(company.coords, 15);
           markerById.get(company.id)?.openPopup();

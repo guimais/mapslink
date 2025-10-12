@@ -8,29 +8,28 @@ function smoothScrollTo(targetId) {
   if (!el) return;
   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
 navLinks.forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && href.startsWith('#')) {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href');
-            smoothScrollTo(targetId);
-        });
-    }
+  const href = link.getAttribute('href');
+  if (href && href.startsWith('#')) {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      smoothScrollTo(targetId);
+    });
+  }
 });
 
 const originalShadow = nav ? getComputedStyle(nav).boxShadow : '';
 function updateNavShadow() {
   if (!nav) return;
-  nav.style.boxShadow = (window.scrollY > 8)
-    ? '0 10px 26px rgba(0,0,0,0.12)'
-    : originalShadow;
+  nav.style.boxShadow = window.scrollY > 8 ? '0 10px 26px rgba(0,0,0,0.12)' : originalShadow;
 }
 window.addEventListener('scroll', updateNavShadow);
 updateNavShadow();
 
 if (toggleBtn && navMenu) {
-  const setIcon = (open) => {
+  const setIcon = open => {
     const icon = toggleBtn.querySelector('i');
     if (icon) icon.className = open ? 'ri-close-line' : 'ri-menu-line';
     toggleBtn.setAttribute('aria-expanded', String(open));
@@ -47,14 +46,12 @@ if (toggleBtn && navMenu) {
       }
     });
   });
-  
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       navMenu.classList.remove('is-open');
       setIcon(false);
     }
   });
-
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 560px)').matches) {
       navMenu.classList.remove('is-open');
@@ -93,11 +90,10 @@ function showToast(text) {
   }, 2200);
 }
 
-
 const contactSection = document.querySelector('#contact');
 const linkByHash = new Map([...navLinks].map(a => [a.getAttribute('href'), a]));
 if (contactSection) {
-  const contactObserver = new IntersectionObserver((entries) => {
+  const contactObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       navLinks.forEach(a => a.classList.remove('active'));
@@ -156,7 +152,7 @@ function ripple(e, target) {
 }
 
 if (form && submitBtn) {
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
     const data = new FormData(form);
     const nome = String(data.get('nome') || '').trim();
@@ -192,7 +188,7 @@ if (form && submitBtn) {
     }, 900);
   });
 
-  submitBtn.addEventListener('click', (e) => ripple(e, submitBtn));
+  submitBtn.addEventListener('click', e => ripple(e, submitBtn));
 }
 
 (() => {
@@ -201,7 +197,7 @@ if (form && submitBtn) {
   el.style.opacity = '0';
   el.style.transform = 'translateY(16px)';
   el.style.transition = 'opacity .4s ease, transform .4s ease';
-  const io = new IntersectionObserver((entries) => {
+  const io = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       el.style.opacity = '1';

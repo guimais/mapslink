@@ -4,18 +4,24 @@ const qsa = (selector, root = document) => Array.from(root.querySelectorAll(sele
 const DEFAULT_VIEW = { center: [-22.909938, -47.062633], zoom: 12 };
 const MAP_STORAGE_KEY = 'mapslink:view';
 
-const toFilterPayload = (raw) => ({
+const toFilterPayload = raw => ({
   region: (raw.region || '').trim().toLowerCase(),
   areas: Array.isArray(raw.areas) ? raw.areas.slice() : [],
   porte: Array.isArray(raw.porte) ? raw.porte.slice() : [],
   modalities: Array.isArray(raw.modalities) ? raw.modalities.slice() : [],
   openOnly: !!raw.openOnly,
-  heat: !!raw.heat,
+  heat: !!raw.heat
 });
 
-const hasActiveFilters = (filters) => {
+const hasActiveFilters = filters => {
   if (!filters) return false;
-  return Boolean(filters.region || filters.openOnly || filters.areas.length || filters.porte.length || filters.modalities.length);
+  return Boolean(
+    filters.region ||
+    filters.openOnly ||
+    filters.areas.length ||
+    filters.porte.length ||
+    filters.modalities.length
+  );
 };
 
 (() => {
@@ -27,7 +33,7 @@ const hasActiveFilters = (filters) => {
       navToggle.setAttribute('aria-expanded', String(!expanded));
       navMenu.classList.toggle('is-open');
     });
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && navMenu.classList.contains('is-open')) {
         navMenu.classList.remove('is-open');
         navToggle.setAttribute('aria-expanded', 'false');
@@ -35,6 +41,7 @@ const hasActiveFilters = (filters) => {
     });
   }
 })();
+
 const buildFilterPanel = () => {
   const panel = qs('#filterPanel');
   const toggleBtn = qs('.filter-toggle');
@@ -99,11 +106,9 @@ const buildFilterPanel = () => {
   `;
   panel.dataset.hydrated = '1';
 
-  panel.addEventListener('click', (event) => {
+  panel.addEventListener('click', event => {
     const target = event.target;
-    if (target.classList?.contains('pill')) {
-      target.classList.toggle('active');
-    }
+    if (target.classList?.contains('pill')) target.classList.toggle('active');
   });
 
   return { panel, toggleBtn };
@@ -116,6 +121,7 @@ const setupFilterInteractions = (panel, toggleBtn, mapReady, appliedFiltersRef) 
     panel.hidden = true;
     toggleBtn.setAttribute('aria-expanded', 'false');
   };
+
   const openPanel = () => {
     panel.hidden = false;
     toggleBtn.setAttribute('aria-expanded', 'true');
@@ -124,18 +130,16 @@ const setupFilterInteractions = (panel, toggleBtn, mapReady, appliedFiltersRef) 
 
   const readFilters = () => {
     const region = qs('#f-region', panel)?.value || '';
-    const areas = qsa('input[data-filter]:checked', panel).map((input) => input.dataset.filter);
-    const porte = qsa('.pill[data-porte].active', panel).map((pill) => pill.dataset.porte);
-    const modalities = qsa('.pill[data-modal].active', panel).map((pill) => pill.dataset.modal);
+    const areas = qsa('input[data-filter]:checked', panel).map(input => input.dataset.filter);
+    const porte = qsa('.pill[data-porte].active', panel).map(pill => pill.dataset.porte);
+    const modalities = qsa('.pill[data-modal].active', panel).map(pill => pill.dataset.modal);
     const openOnly = qs('#f-openings', panel)?.checked || false;
     const heat = qs('#f-heat', panel)?.checked || false;
     return toFilterPayload({ region, areas, porte, modalities, openOnly, heat });
   };
 
-  const escapeListener = (event) => {
-    if (event.key === 'Escape' && !panel.hidden) {
-      closePanel();
-    }
+  const escapeListener = event => {
+    if (event.key === 'Escape' && !panel.hidden) closePanel();
   };
 
   toggleBtn.addEventListener('click', () => {
@@ -143,17 +147,13 @@ const setupFilterInteractions = (panel, toggleBtn, mapReady, appliedFiltersRef) 
     else closePanel();
   });
 
-  panel.addEventListener('click', (event) => {
-    if (event.target.id === 'closeFilters') {
-      closePanel();
-    }
+  panel.addEventListener('click', event => {
+    if (event.target.id === 'closeFilters') closePanel();
   });
 
   document.addEventListener('keydown', escapeListener);
-  document.addEventListener('click', (event) => {
-    if (!panel.hidden && !panel.contains(event.target) && event.target !== toggleBtn) {
-      closePanel();
-    }
+  document.addEventListener('click', event => {
+    if (!panel.hidden && !panel.contains(event.target) && event.target !== toggleBtn) closePanel();
   });
 
   const applyBtn = qs('#applyFilters', panel);
@@ -161,18 +161,18 @@ const setupFilterInteractions = (panel, toggleBtn, mapReady, appliedFiltersRef) 
     const nextFilters = readFilters();
     appliedFiltersRef.current = nextFilters;
     toggleBtn.classList.toggle('applied', hasActiveFilters(nextFilters));
-    mapReady.then((controller) => {
-      controller?.applyFilters?.(nextFilters);
-    });
+    mapReady.then(controller => controller?.applyFilters?.(nextFilters));
     closePanel();
   });
 };
+
 const loadLeafletAssets = async () => {
-  const inject = (el) => new Promise((resolve, reject) => {
-    el.onload = resolve;
-    el.onerror = reject;
-    document.head.appendChild(el);
-  });
+  const inject = el =>
+    new Promise((resolve, reject) => {
+      el.onload = resolve;
+      el.onerror = reject;
+      document.head.appendChild(el);
+    });
 
   await inject(Object.assign(document.createElement('link'), {
     rel: 'stylesheet',
@@ -195,10 +195,11 @@ const initFullMap = async () => {
   const savedView = (() => {
     try {
       return JSON.parse(localStorage.getItem(MAP_STORAGE_KEY) || 'null');
-    } catch (err) {
+    } catch {
       return null;
     }
   })();
+
   const startView = savedView || DEFAULT_VIEW;
 
   const map = L.map('map', { zoomControl: false }).setView(startView.center, startView.zoom);
@@ -209,28 +210,34 @@ const initFullMap = async () => {
 
   map.on('moveend', () => {
     const center = map.getCenter();
-    localStorage.setItem(MAP_STORAGE_KEY, JSON.stringify({ center: [center.lat, center.lng], zoom: map.getZoom() }));
+    localStorage.setItem(
+      MAP_STORAGE_KEY,
+      JSON.stringify({ center: [center.lat, center.lng], zoom: map.getZoom() })
+    );
   });
 
   const locateBtn = L.control({ position: 'topright' });
   locateBtn.onAdd = () => {
     const button = L.DomUtil.create('button', '');
     button.type = 'button';
-        button.title = 'Minha localizacao (g)';
-        button.setAttribute('aria-label', 'Minha localizacao');
-    button.style.cssText = 'margin:6px;padding:8px;border-radius:9999px;border:1px solid rgba(0,0,0,0.25);background:#fff;cursor:pointer';
+    button.title = 'Minha localizacao (g)';
+    button.setAttribute('aria-label', 'Minha localizacao');
+    button.style.cssText =
+      'margin:6px;padding:8px;border-radius:9999px;border:1px solid rgba(0,0,0,0.25);background:#fff;cursor:pointer';
     button.textContent = 'GPS';
     button.addEventListener('click', () => geoLocate());
     return button;
   };
   locateBtn.addTo(map);
 
-  const allCompanies = Array.isArray(window.mapsLinkCompanies) ? window.mapsLinkCompanies.map((company) => ({
-    ...company,
-    nameLower: company.name.toLowerCase(),
-    addressLower: (company.address || '').toLowerCase(),
-    cityLower: (company.city || '').toLowerCase()
-  })) : [];
+  const allCompanies = Array.isArray(window.mapsLinkCompanies)
+    ? window.mapsLinkCompanies.map(company => ({
+        ...company,
+        nameLower: company.name.toLowerCase(),
+        addressLower: (company.address || '').toLowerCase(),
+        cityLower: (company.city || '').toLowerCase()
+      }))
+    : [];
 
   const markersLayer = L.layerGroup().addTo(map);
   const markerById = new Map();
@@ -253,6 +260,7 @@ const initFullMap = async () => {
       1.0: '#ef4444'
     }
   };
+
   const pulseCss = `
     .pulse-dot{position:relative;width:14px;height:14px;border-radius:50%;background:#ff3b30;border:2px solid #fff;box-shadow:0 0 0 2px rgba(255,59,48,0.35)}
     .pulse-dot::after{content:"";position:absolute;inset:-6px;border:2px solid rgba(255,59,48,0.65);border-radius:50%;animation:pulse 1.6s ease-out infinite}
@@ -272,15 +280,15 @@ const initFullMap = async () => {
 
   const geoLocate = () => {
     if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition((pos) => {
+    navigator.geolocation.getCurrentPosition(pos => {
       const coords = [pos.coords.latitude, pos.coords.longitude];
       map.flyTo(coords, 15, { duration: 0.8 });
       if (customMarker) map.removeLayer(customMarker);
-      customMarker =       customMarker = addPulseMarker(coords, 'Voce esta aqui');
+      customMarker = addPulseMarker(coords, 'Voce esta aqui');
     });
   };
 
-  const matchesFilters = (company) => {
+  const matchesFilters = company => {
     const region = activeFilters.region;
     if (region) {
       const inRegion = company.addressLower.includes(region) || company.cityLower.includes(region);
@@ -288,12 +296,12 @@ const initFullMap = async () => {
     }
     if (activeFilters.openOnly && company.status !== 'open') return false;
     if (activeFilters.areas.length) {
-      const ok = (company.areas || []).some((area) => activeFilters.areas.includes(area));
+      const ok = (company.areas || []).some(area => activeFilters.areas.includes(area));
       if (!ok) return false;
     }
     if (activeFilters.porte.length && !activeFilters.porte.includes(company.porte)) return false;
     if (activeFilters.modalities.length) {
-      const ok = (company.modalities || []).some((mode) => activeFilters.modalities.includes(mode));
+      const ok = (company.modalities || []).some(mode => activeFilters.modalities.includes(mode));
       if (!ok) return false;
     }
     return true;
@@ -306,7 +314,7 @@ const initFullMap = async () => {
     }
     if (!activeFilters.heat || !L.heatLayer) return;
     if (!filteredCompanies.length) return;
-    const points = filteredCompanies.map((company) => [company.coords[0], company.coords[1], 1]);
+    const points = filteredCompanies.map(company => [company.coords[0], company.coords[1], 1]);
     heatLayer = L.heatLayer(points, heatOptions).addTo(map);
   };
 
@@ -315,7 +323,7 @@ const initFullMap = async () => {
     markerById.clear();
     filteredCompanies = allCompanies.filter(matchesFilters);
 
-    const addedMarkers = filteredCompanies.map((company) => {
+    const addedMarkers = filteredCompanies.map(company => {
       const marker = L.marker(company.coords);
       const statusLabel = company.status === 'open' ? 'Vagas abertas' : 'Sem vagas no momento';
       marker.bindPopup(`
@@ -340,18 +348,14 @@ const initFullMap = async () => {
 
   render();
 
-  document.addEventListener('keydown', (event) => {
+  document.addEventListener('keydown', event => {
     if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName || '')) return;
     if (event.key === '/') {
       event.preventDefault();
       qs('#search')?.focus();
     }
-    if (event.key.toLowerCase() === 'f') {
-      qs('.filter-toggle')?.click();
-    }
-    if (event.key.toLowerCase() === 'g') {
-      geoLocate();
-    }
+    if (event.key.toLowerCase() === 'f') qs('.filter-toggle')?.click();
+    if (event.key.toLowerCase() === 'g') geoLocate();
   });
 
   document.addEventListener('fullscreenchange', () => {
@@ -367,8 +371,9 @@ const initFullMap = async () => {
     focusCompany(query) {
       const normalized = (query || '').toLowerCase();
       if (!normalized) return false;
-      const company = filteredCompanies.find((item) => item.nameLower.includes(normalized))
-        || allCompanies.find((item) => item.nameLower.includes(normalized));
+      const company =
+        filteredCompanies.find(item => item.nameLower.includes(normalized)) ||
+        allCompanies.find(item => item.nameLower.includes(normalized));
       if (!company) return false;
       map.flyTo(company.coords, 15, { duration: 0.8 });
       const marker = markerById.get(company.id);
@@ -389,6 +394,7 @@ const initFullMap = async () => {
 };
 
 const mapReady = initFullMap();
+
 (() => {
   const appliedFiltersRef = { current: toFilterPayload({}) };
   const { panel, toggleBtn } = buildFilterPanel();
@@ -400,7 +406,7 @@ const mapReady = initFullMap();
   const input = qs('#search');
   if (!form || !input) return;
 
-  const geocode = async (query) => {
+  const geocode = async query => {
     const url = new URL('https://nominatim.openstreetmap.org/search');
     url.searchParams.set('q', query);
     url.searchParams.set('format', 'jsonv2');
@@ -413,12 +419,12 @@ const mapReady = initFullMap();
     return data[0];
   };
 
-  form.addEventListener('submit', async (event) => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     const query = input.value.trim();
     if (!query) return;
 
-    const handled = await mapReady.then((controller) => controller?.focusCompany?.(query));
+    const handled = await mapReady.then(controller => controller?.focusCompany?.(query));
     if (handled) {
       input.value = '';
       return;
@@ -430,7 +436,7 @@ const mapReady = initFullMap();
       if (!hit) return;
       const lat = parseFloat(hit.lat);
       const lon = parseFloat(hit.lon);
-      mapReady.then((controller) => controller?.showGeocodeResult?.(lat, lon, hit.display_name));
+      mapReady.then(controller => controller?.showGeocodeResult?.(lat, lon, hit.display_name));
     } catch (err) {
       console.warn(err);
     } finally {
@@ -439,4 +445,3 @@ const mapReady = initFullMap();
     }
   });
 })();
-
