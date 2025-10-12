@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Maps Link - Login Empresarial">
+    <title>Maps Link — Login Empresarial</title>
+    <link rel="stylesheet" href="assets/css/loginempresa.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  </head>
+  <body>
+    <header class="nav-container">
+      <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
+        <a href="index.html" class="nav-logo-link" aria-label="Ir para a página inicial">
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" loading="lazy" decoding="async">
+        </a>
+        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
+          <i class="ri-menu-line" aria-hidden="true"></i>
+        </button>
+        <ul class="nav-links" id="navMenu" role="list">
+          <li><a class="nav-link" href="paginainicial.html">Home</a></li>
+          <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
+          <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
+          <li><a class="nav-link active" href="selecaoperfil.html" aria-current="page">Profile</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
+          <li><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="loginempresarial" class="loginempresarial" role="main" aria-label="Login empresarial">
+      <div class="login-container">
+        <div class="login-card">
+          <div class="login-header">
+            <h1 class="login-title">Login Empresarial</h1>
+            <p class="login-subtitle">Entre com os dados da sua empresa</p>
+          </div>
+          
+          <form class="login-form" id="loginForm" novalidate>
+            <div class="form-group">
+              <label for="emailOrCnpj" class="form-label">E-mail ou CNPJ</label>
+              <div class="input-container">
+                <i class="ri-building-4-line input-icon"></i>
+                <input type="text" id="emailOrCnpj" name="emailOrCnpj" class="form-input" placeholder="Digite o e-mail ou CNPJ da empresa" required autocomplete="username">
+              </div>
+              <span class="error-message" id="emailOrCnpjError"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="form-label">Senha</label>
+              <div class="input-container">
+                <i class="ri-lock-line input-icon"></i>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Sua senha de acesso" required autocomplete="current-password">
+                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Mostrar senha">
+                  <i class="ri-eye-line"></i>
+                </button>
+              </div>
+              <span class="error-message" id="passwordError"></span>
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-container">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <span class="checkmark"></span>
+                Lembrar-me
+              </label>
+              <a href="#" class="forgot-password">Esqueci minha senha</a>
+            </div>
+
+            <button type="submit" class="login-button" id="loginButton">
+              <span class="button-text">Entrar na Conta Empresarial</span>
+              <i class="ri-arrow-right-line button-icon"></i>
+            </button>
+          </form>
+
+          <div class="login-footer">
+            <p>Não tem uma conta? <a href="registroempresarial.html" class="register-link">Crie uma conta empresarial</a></p>
+            <div class="divider">
+              <span>ou</span>
+            </div>
+            <a href="loginpessoal.html" class="personal-login-link">
+              <i class="ri-user-line"></i>
+              Login Pessoal
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/loginempresa.js"></script>
+  </body>
+</html>
