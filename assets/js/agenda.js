@@ -1,34 +1,6 @@
 const $ = (s, r = document) => r.querySelector(s)
 const $$ = (s, r = document) => [...r.querySelectorAll(s)]
 
-const navToggle = $('.nav-toggle')
-const navMenu = $('#navMenu')
-const body = document.body
-
-const openMenu = () => {
-  navMenu.classList.add('open')
-  navToggle.setAttribute('aria-expanded', 'true')
-  body.style.overflow = 'hidden'
-}
-const closeMenu = () => {
-  navMenu.classList.remove('open')
-  navToggle.setAttribute('aria-expanded', 'false')
-  body.style.overflow = ''
-}
-
-navToggle?.addEventListener('click', () => {
-  const open = navMenu.classList.contains('open')
-  open ? closeMenu() : openMenu()
-})
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeMenu()
-})
-
-document.addEventListener('click', e => {
-  if (!e.target.closest('.nav-pilula')) closeMenu()
-})
-
 const days = $$('.agenda-week span')
 const week = $('.agenda-week')
 
@@ -177,7 +149,11 @@ const resize = (() => {
   let t
   return () => {
     clearTimeout(t)
-    t = setTimeout(() => closeMenu(), 120)
+    t = setTimeout(() => {
+      if (window.MapsApp && typeof window.MapsApp.closeNav === 'function') {
+        window.MapsApp.closeNav()
+      }
+    }, 120)
   }
 })()
 window.addEventListener('resize', resize)

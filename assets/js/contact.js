@@ -1,65 +1,3 @@
-const nav = document.querySelector('.nav-pilula');
-const navMenu = document.getElementById('navMenu');
-const navLinks = document.querySelectorAll('.nav-links a');
-const toggleBtn = document.querySelector('.nav-toggle');
-
-function smoothScrollTo(targetId) {
-  const el = document.querySelector(targetId);
-  if (!el) return;
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-navLinks.forEach(link => {
-  const href = link.getAttribute('href');
-  if (href && href.startsWith('#')) {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href');
-      smoothScrollTo(targetId);
-    });
-  }
-});
-
-const originalShadow = nav ? getComputedStyle(nav).boxShadow : '';
-function updateNavShadow() {
-  if (!nav) return;
-  nav.style.boxShadow = window.scrollY > 8 ? '0 10px 26px rgba(0,0,0,0.12)' : originalShadow;
-}
-window.addEventListener('scroll', updateNavShadow);
-updateNavShadow();
-
-if (toggleBtn && navMenu) {
-  const setIcon = open => {
-    const icon = toggleBtn.querySelector('i');
-    if (icon) icon.className = open ? 'ri-close-line' : 'ri-menu-line';
-    toggleBtn.setAttribute('aria-expanded', String(open));
-  };
-  toggleBtn.addEventListener('click', () => {
-    const open = navMenu.classList.toggle('is-open');
-    setIcon(open);
-  });
-  navMenu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      if (window.matchMedia('(max-width: 560px)').matches) {
-        navMenu.classList.remove('is-open');
-        setIcon(false);
-      }
-    });
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      navMenu.classList.remove('is-open');
-      setIcon(false);
-    }
-  });
-  window.addEventListener('resize', () => {
-    if (!window.matchMedia('(max-width: 560px)').matches) {
-      navMenu.classList.remove('is-open');
-      setIcon(false);
-    }
-  });
-}
-
 function showToast(text) {
   const t = document.createElement('div');
   t.textContent = text;
@@ -88,20 +26,6 @@ function showToast(text) {
     t.style.transform = 'translateX(-50%) translateY(0)';
     setTimeout(() => t.remove(), 250);
   }, 2200);
-}
-
-const contactSection = document.querySelector('#contact');
-const linkByHash = new Map([...navLinks].map(a => [a.getAttribute('href'), a]));
-if (contactSection) {
-  const contactObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      navLinks.forEach(a => a.classList.remove('active'));
-      const contactLink = linkByHash.get('#contact');
-      if (contactLink) contactLink.classList.add('active');
-    });
-  }, { threshold: 0.5 });
-  contactObserver.observe(contactSection);
 }
 
 const form = document.querySelector('.contact-form');

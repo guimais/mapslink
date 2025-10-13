@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+
     <meta charset="UTF-8">
     <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
     <title>Maps Link — Perfil de Empresa</title>
     <link rel="stylesheet" href="../assets/css/perfilempresa.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   </head>
-  <body>
+  <body data-nav-active="perfilempresa.html">
     <div class="nav-container" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
         <a href="../index.html" class="nav-logo-link" aria-label="Ir para Home">
@@ -72,8 +75,16 @@
       </div>
     </main>
 
-    <script src="../assets/js/perfilempresa.js"></script>
-  </body>
+
+
+    <script src="../assets/js/_shared-nav.js" defer></script>
+
+
+    <script src="../assets/js/main.js" defer></script>
+
+
+    <script defer src="../assets/js/perfilempresa.js"></script>
+</body>
 </html>
 
 

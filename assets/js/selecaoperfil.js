@@ -3,50 +3,6 @@
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
   const nav = $('.nav-pilula');
-  const navToggle = $('.nav-toggle');
-  const navMenu = $('#navMenu');
-
-  const setMenuState = isOpen => {
-    if (!navMenu) return;
-    navMenu.classList.toggle('is-open', isOpen);
-    if (navToggle) navToggle.setAttribute('aria-expanded', String(isOpen));
-    document.body.classList.toggle('lock-scroll', isOpen);
-    if (isOpen) {
-      const first = navMenu.querySelector("a,button,[tabindex]:not([tabindex='-1'])");
-      if (first) first.focus({ preventScroll: true });
-    } else if (navToggle) {
-      navToggle.focus({ preventScroll: true });
-    }
-  };
-
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      const open = !navMenu.classList.contains('is-open');
-      setMenuState(open);
-    });
-  }
-
-  if (navMenu) {
-    navMenu.addEventListener('click', e => {
-      const el = e.target.closest('a');
-      if (!el) return;
-      if (navMenu.classList.contains('is-open')) setMenuState(false);
-    });
-  }
-
-  document.addEventListener('click', e => {
-    if (!navMenu || !navToggle) return;
-    const isOpen = navMenu.classList.contains('is-open');
-    if (!isOpen) return;
-    const withinNav = e.target.closest('.nav-pilula');
-    if (!withinNav) setMenuState(false);
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && navMenu && navMenu.classList.contains('is-open')) {
-      setMenuState(false);
-    }
-  });
 
   const onScroll = () => {
     if (!nav) return;
@@ -56,9 +12,17 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  const navLinks = (window.MapsApp && typeof window.MapsApp.navLinks === 'function')
+    ? window.MapsApp.navLinks()
+    : $$('.nav-link');
+
   const markActive = () => {
     const path = location.pathname.split('/').pop() || 'index.html';
-    $$('.nav-link').forEach(a => {
+    if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
+      window.MapsApp.highlightNav(path);
+      return;
+    }
+    navLinks.forEach(a => {
       const href = a.getAttribute('href') || '';
       const isHashOnly = href.startsWith('#');
       const matches =

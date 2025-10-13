@@ -2,65 +2,40 @@
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 
-  const navToggle = $('.nav-toggle');
-  const navLinks = $('#navMenu');
-
-  function openMenu(open) {
-    if (!navLinks) return;
-    if (open) {
-      navLinks.classList.add('is-open');
-      navToggle?.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    } else {
-      navLinks.classList.remove('is-open');
-      navToggle?.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-  }
-
-  navToggle?.addEventListener('click', () => {
-    const isOpen = navLinks.classList.contains('is-open');
-    openMenu(!isOpen);
-  });
-
-  document.addEventListener('click', e => {
-    if (!navLinks?.classList.contains('is-open')) return;
-    const inside = e.target.closest('.nav-pilula');
-    if (!inside) openMenu(false);
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') openMenu(false);
-  });
-
-  navLinks?.addEventListener('click', e => {
-    const a = e.target.closest('a.nav-link');
-    if (!a) return;
-    setActiveLink(a.href);
-    openMenu(false);
-  });
+  const navLinks = (window.MapsApp && typeof window.MapsApp.navLinks === 'function')
+    ? window.MapsApp.navLinks()
+    : Array.from($$('.nav-link'));
 
   function setActiveLink(url) {
-    $$('.nav-link').forEach(a => {
+    if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
+      window.MapsApp.highlightNav(url);
+      return;
+    }
+    navLinks.forEach(a => {
       const same = a.href === url || (a.hash && a.hash === location.hash);
       a.classList.toggle('active', same);
     });
   }
   setActiveLink(location.href);
 
-  $$('.nav-link[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const id = a.getAttribute('href');
-      const el = id && $(id);
-      if (el) {
-        e.preventDefault();
-        const y = el.getBoundingClientRect().top + window.scrollY - 100;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-        history.pushState(null, '', id);
-        setActiveLink(location.href);
-      }
+  navLinks
+    .filter(a => (a.getAttribute('href') || '').startsWith('#'))
+    .forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        const el = id && $(id);
+        if (el) {
+          e.preventDefault();
+          const y = el.getBoundingClientRect().top + window.scrollY - 100;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+          history.pushState(null, '', id);
+          setActiveLink(location.href);
+          if (window.MapsApp && typeof window.MapsApp.closeNav === 'function') {
+            window.MapsApp.closeNav();
+          }
+        }
+      });
     });
-  });
 
   const agendaEl = $('#agenda-entrevistas .agenda-numero');
   const curriculosCard = $('#curriculos-recebidos');

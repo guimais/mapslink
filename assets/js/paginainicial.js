@@ -1,52 +1,30 @@
-const nav = document.querySelector('.nav-pilula');
-const navLinks = document.querySelectorAll('.nav-links a');
-
-function smoothScrollTo(targetId) {
-  const el = document.querySelector(targetId);
-  if (!el) return;
-  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-navLinks.forEach(link => {
-  const href = link.getAttribute('href');
-  if (href && href.startsWith('#')) {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      smoothScrollTo(href);
-    });
-  }
-});
+const navLinks = (window.MapsApp && typeof window.MapsApp.navLinks === 'function')
+  ? window.MapsApp.navLinks()
+  : Array.from(document.querySelectorAll('.nav-links a'));
 
 const sectionIds = ['#home', '#sobre', '#planos', '#maps', '#profile', '#about', '#contact'];
-const sections = sectionIds.map(id => document.querySelector(id)).filter(Boolean);
+const sections = sectionIds
+  .map(id => document.querySelector(id))
+  .filter(Boolean);
 
-const activeClass = 'active';
-const linkByHash = new Map([...navLinks].map(a => [a.getAttribute('href'), a]));
+const linkByHash = new Map(navLinks.map(a => [a.getAttribute('href'), a]));
 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    const id = '#' + entry.target.id;
+    if (!entry.isIntersecting) return;
+    const id = `#${entry.target.id}`;
+    if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
+      window.MapsApp.highlightNav(id);
+      return;
+    }
     const link = linkByHash.get(id);
     if (!link) return;
-    if (entry.isIntersecting) {
-      navLinks.forEach(a => a.classList.remove(activeClass));
-      link.classList.add(activeClass);
-    }
+    navLinks.forEach(a => a.classList.remove('active'));
+    link.classList.add('active');
   });
 }, { root: null, threshold: 0.6 });
 
 sections.forEach(sec => observer.observe(sec));
-
-const originalShadow = getComputedStyle(nav).boxShadow;
-function updateNavShadow() {
-  if (window.scrollY > 8) {
-    nav.style.boxShadow = '0 10px 26px rgba(0,0,0,0.12)';
-  } else {
-    nav.style.boxShadow = originalShadow;
-  }
-}
-window.addEventListener('scroll', updateNavShadow);
-updateNavShadow();
 
 const cards = document.querySelectorAll('.card-sobre');
 
@@ -141,31 +119,3 @@ if (floatIcons.length) {
   requestAnimationFrame(animateFloat);
 }
 
-const toggleBtn = document.querySelector('.nav-toggle');
-const navMenu = document.getElementById('navMenu');
-
-if (toggleBtn && navMenu) {
-  const setIcon = open => {
-    const icon = toggleBtn.querySelector('i');
-    if (icon) icon.className = open ? 'ri-close-line' : 'ri-menu-line';
-    toggleBtn.setAttribute('aria-expanded', String(open));
-  };
-  toggleBtn.addEventListener('click', () => {
-    const open = navMenu.classList.toggle('is-open');
-    setIcon(open);
-  });
-  navMenu.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      if (window.matchMedia('(max-width: 560px)').matches) {
-        navMenu.classList.remove('is-open');
-        setIcon(false);
-      }
-    });
-  });
-  window.addEventListener('resize', () => {
-    if (!window.matchMedia('(max-width: 560px)').matches) {
-      navMenu.classList.remove('is-open');
-      setIcon(false);
-    }
-  });
-}

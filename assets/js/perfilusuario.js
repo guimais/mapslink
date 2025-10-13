@@ -3,39 +3,30 @@
   const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
 
   const header = $('.nav-container');
-  const nav = $('.nav-pilula');
-  const toggleBtn = $('.nav-toggle');
-  const navMenu = $('#navMenu');
 
-  const openMenu = () => {
-    if (!navMenu) return;
-    navMenu.classList.add('is-open');
-    toggleBtn?.setAttribute('aria-expanded', 'true');
-    const first = navMenu.querySelector('a, button');
-    first?.focus();
-    document.addEventListener('click', outsideClose);
-    document.addEventListener('keydown', escClose);
+  const navLinksAll = (window.MapsApp && typeof window.MapsApp.navLinks === 'function')
+    ? window.MapsApp.navLinks()
+    : $$('.nav-link');
+
+  const highlightNav = target => {
+    if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
+      window.MapsApp.highlightNav(target);
+      return true;
+    }
+    return false;
   };
 
   const closeMenu = () => {
-    if (!navMenu) return;
-    navMenu.classList.remove('is-open');
-    toggleBtn?.setAttribute('aria-expanded', 'false');
-    document.removeEventListener('click', outsideClose);
-    document.removeEventListener('keydown', escClose);
+    if (window.MapsApp && typeof window.MapsApp.closeNav === 'function') {
+      window.MapsApp.closeNav();
+    }
   };
 
-  const outsideClose = e => {
-    if (!nav.contains(e.target)) closeMenu();
+  const toggleMenu = () => {
+    if (window.MapsNav && typeof window.MapsNav.toggle === 'function') {
+      window.MapsNav.toggle();
+    }
   };
-
-  const escClose = e => {
-    if (e.key === 'Escape') closeMenu();
-  };
-
-  toggleBtn?.addEventListener('click', () => {
-    navMenu?.classList.contains('is-open') ? closeMenu() : openMenu();
-  });
 
   const onScroll = () => {
     if (!header) return;
@@ -45,21 +36,24 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  $$('.nav-link[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const hash = a.getAttribute('href');
-      const target = hash ? document.querySelector(hash) : null;
-      if (!target) return;
-      e.preventDefault();
+  navLinksAll
+    .filter(a => (a.getAttribute('href') || '').startsWith('#'))
+    .forEach(a => {
+      a.addEventListener('click', e => {
+        const hash = a.getAttribute('href');
+        const target = hash ? document.querySelector(hash) : null;
+        if (!target) return;
+        e.preventDefault();
       closeMenu();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       history.pushState(null, '', hash);
     });
-  });
+    });
 
   const markActiveByPath = () => {
     const path = location.pathname.split('/').pop() || 'index.html';
-    $$('.nav-link').forEach(link => {
+    if (highlightNav(path)) return;
+    navLinksAll.forEach(link => {
       const href = link.getAttribute('href') || '';
       if (!href || href.startsWith('#')) return;
       const normalized = href.split('?')[0];
@@ -67,7 +61,7 @@
     });
   };
 
-  const sectionLinks = $$('.nav-link[href^="#"]');
+  const sectionLinks = navLinksAll.filter(a => (a.getAttribute('href') || '').startsWith('#'));
   const sectionIds = ['#home', '#planos', '#maps', '#profile', '#about', '#contact'];
   const sections = sectionIds.map(id => $(id)).filter(Boolean);
 
@@ -77,13 +71,16 @@
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const id = '#' + entry.target.id;
+        if (highlightNav(id)) return;
         sectionLinks.forEach(l => l.classList.remove('active'));
         map.get(id)?.classList.add('active');
       });
     }, { rootMargin: '-45% 0px -50% 0px', threshold: 0.01 });
     sections.forEach(sec => io.observe(sec));
     const start = location.hash && map.get(location.hash) ? location.hash : '#profile';
-    map.get(start)?.classList.add('active');
+    if (!highlightNav(start)) {
+      map.get(start)?.classList.add('active');
+    }
   } else {
     markActiveByPath();
   }
@@ -161,7 +158,7 @@
   document.addEventListener('keydown', e => {
     if (e.altKey && e.key.toLowerCase() === 'm') {
       e.preventDefault();
-      navMenu?.classList.contains('is-open') ? closeMenu() : openMenu();
+      toggleMenu();
     }
   });
 })();

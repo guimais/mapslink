@@ -24,24 +24,6 @@ const hasActiveFilters = filters => {
   );
 };
 
-(() => {
-  const navToggle = qs('.nav-toggle');
-  const navMenu = qs('#navMenu');
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', String(!expanded));
-      navMenu.classList.toggle('is-open');
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && navMenu.classList.contains('is-open')) {
-        navMenu.classList.remove('is-open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-})();
-
 const buildFilterPanel = () => {
   const panel = qs('#filterPanel');
   const toggleBtn = qs('.filter-toggle');

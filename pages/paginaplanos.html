@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Maps Link - Planos e recursos">
@@ -8,7 +11,7 @@
     <link rel="stylesheet" href="../assets/css/paginaplanos.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
   </head>
-  <body>
+  <body data-nav-active="paginaplanos.html">
     <header class="nav-container" role="banner">
       <nav class="nav-pilula" role="navigation" aria-label="Navegação principal">
         <a href="#home" class="nav-logo-link" aria-label="Ir para Início">
@@ -99,8 +102,16 @@
     <section id="about" hidden></section>
     <section id="contact" hidden></section>
 
-    <script src="../assets/js/paginaplanos.js"></script>
-  </body>
+
+
+    <script src="../assets/js/_shared-nav.js" defer></script>
+
+
+    <script src="../assets/js/main.js" defer></script>
+
+
+    <script defer src="../assets/js/paginaplanos.js"></script>
+</body>
 </html>
 
 

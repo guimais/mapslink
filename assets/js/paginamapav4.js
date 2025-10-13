@@ -1,14 +1,4 @@
 (() => {
-  const navToggle = document.querySelector('.nav-toggle');
-  const navMenu = document.getElementById('navMenu');
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', String(!expanded));
-      navMenu.classList.toggle('is-open');
-    });
-  }
-
   const btnFiltro = document.getElementById('btnFiltro');
   const painelFiltros = document.getElementById('painelFiltros');
   const layout = document.querySelector('.maps-layout');

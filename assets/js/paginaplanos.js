@@ -26,19 +26,10 @@
     document.head.appendChild(style);
   }
 
-  function setupMenu() {
-    const toggle = $('.nav-toggle');
-    const menu = $('#navMenu');
-    if (!toggle || !menu) return;
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!expanded));
-      menu.classList.toggle('open');
-    });
-  }
-
   function setupSectionRouting() {
-    const links = $$('.nav-link');
+    const links = (window.MapsApp && typeof window.MapsApp.navLinks === 'function')
+      ? window.MapsApp.navLinks()
+      : $$('.nav-link');
     const sectionIds = ['home', 'planos', 'maps', 'profile', 'about', 'contact'];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
@@ -58,6 +49,9 @@
         a.setAttribute('aria-current', active ? 'page' : 'false');
       });
       if (id) history.replaceState(null, '', `#${id}`);
+      if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
+        window.MapsApp.highlightNav(`#${id}`);
+      }
     };
 
     links.forEach(a => {
@@ -74,11 +68,8 @@
         } else if (target) {
           show(id);
         }
-        const menu = $('#navMenu');
-        const toggle = $('.nav-toggle');
-        if (menu?.classList.contains('open')) {
-          menu.classList.remove('open');
-          toggle?.setAttribute('aria-expanded', 'false');
+        if (window.MapsApp && typeof window.MapsApp.closeNav === 'function') {
+          window.MapsApp.closeNav();
         }
       });
     });
@@ -221,7 +212,6 @@
 
   function init() {
     injectStyles();
-    setupMenu();
     setupSectionRouting();
     setupReveal();
     attachRipple('.botao');

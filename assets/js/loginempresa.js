@@ -22,7 +22,6 @@ const LoginEmpresa = (() => {
     setupLinkShortcuts();
     setupTouchEnhancements();
     setupInputAnimations();
-    initializeNavbar();
     if (!el.form) return;
     originalButtonLabel = el.button ? el.button.innerHTML : '';
     ensureCapsLockWarning();
@@ -394,46 +393,6 @@ const LoginEmpresa = (() => {
       node.dataset.focusEnhanced = 'true';
       node.addEventListener('focus', () => node.classList.add('is-focused'));
       node.addEventListener('blur', () => node.classList.remove('is-focused'));
-    });
-  }
-
-  function initializeNavbar() {
-    const navToggle = document.querySelector('.nav-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (!navToggle || !navLinks || navToggle.dataset.enhancedNav) return;
-    navToggle.dataset.enhancedNav = 'true';
-    let overlay = document.querySelector('.nav-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.className = 'nav-overlay';
-      document.body.appendChild(overlay);
-    }
-    const setMenu = open => {
-      const isActive = navLinks.classList.contains('active');
-      if (open === isActive) return;
-      navLinks.classList.toggle('active', open);
-      overlay.classList.toggle('active', open);
-      document.body.style.overflow = open ? 'hidden' : '';
-      const icon = navToggle.querySelector('i');
-      if (icon) {
-        icon.classList.remove('ri-menu-line', 'ri-close-line');
-        icon.classList.add(open ? 'ri-close-line' : 'ri-menu-line');
-      }
-      navToggle.setAttribute('aria-expanded', String(open));
-    };
-    navToggle.addEventListener('click', event => {
-      event.preventDefault();
-      setMenu(!navLinks.classList.contains('active'));
-    });
-    overlay.addEventListener('click', () => setMenu(false));
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && navLinks.classList.contains('active')) setMenu(false);
-    });
-    navLinks.addEventListener('click', event => {
-      if (event.target.closest('.nav-link')) setTimeout(() => setMenu(false), 120);
-    });
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) setMenu(false);
     });
   }
 
