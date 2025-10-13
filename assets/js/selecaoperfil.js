@@ -75,7 +75,7 @@
     try {
       localStorage.setItem(PERFIL_KEY, tipo);
     } catch {}
-    const destino = tipo === 'empresarial' ? 'perfilempresa.html' : 'perfilusuario.html';
+    const destino = tipo === 'empresarial' ? 'loginempresa.html' : 'loginpessoal.html';
     window.location.href = destino;
   };
 

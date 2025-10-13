@@ -462,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginLink) {
         loginLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para login...');
+            navigateWithFeedback('loginpessoal.html', 'Redirecionando para login pessoal...');
         });
     }
     
@@ -478,8 +478,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (businessRegisterLink) {
         businessRegisterLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para registro empresarial...');
+            navigateWithFeedback('registroempresa.html', 'Redirecionando para registro empresarial...');
         });
+    }
+    
+    function navigateWithFeedback(url, message) {
+        if (window.innerWidth <= 768) {
+            showMobileAlert(message);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 800);
+        } else {
+            window.location.href = url;
+        }
     }
     
     function showMobileAlert(message) {
@@ -522,9 +533,9 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(message);
         }
     }
-    
+
     if ('ontouchstart' in window) {
-        const touchElements = document.querySelectorAll('.register-button, .password-toggle, .checkbox-container, .business-register-link');
+        const touchElements = document.querySelectorAll('.register-button, .password-toggle, .checkbox-container, .business-register-link, .login-link');
         
         touchElements.forEach(element => {
             element.addEventListener('touchstart', function() {
@@ -682,3 +693,5 @@ function initializeMobileNavbar() {
         });
     }
 }
+
+

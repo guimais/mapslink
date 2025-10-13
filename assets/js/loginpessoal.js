@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (registerLink) {
         registerLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para página de cadastro...');
+            navigateWithFeedback('registropessoal.html', 'Redirecionando para pagina de cadastro...');
         });
     }
     
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para recuperação de senha...');
+            navigateWithFeedback('esqueceusenha.html', 'Redirecionando para recuperacao de senha...');
         });
     }
     
@@ -254,8 +254,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (businessLoginLink) {
         businessLoginLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para login empresarial...');
+            navigateWithFeedback('loginempresa.html', 'Redirecionando para login empresarial...');
         });
+    }
+    
+    function navigateWithFeedback(url, message) {
+        if (window.innerWidth <= 768) {
+            showMobileAlert(message);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 800);
+        } else {
+            window.location.href = url;
+        }
     }
     
     function showMobileAlert(message) {
@@ -294,13 +305,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.body.removeChild(toast);
                 }, 300);
             }, 3000);
-        } else {
-            alert(message);
         }
     }
-    
     if ('ontouchstart' in window) {
-        const touchElements = document.querySelectorAll('.login-button, .password-toggle, .checkbox-container, .forgot-password, .business-login-link');
+        const touchElements = document.querySelectorAll('.login-button, .password-toggle, .checkbox-container, .forgot-password, .business-login-link, .register-link');
         
         touchElements.forEach(element => {
             element.addEventListener('touchstart', function() {
@@ -491,3 +499,7 @@ function initializeMobileNavbar() {
         });
     }
 }
+
+
+
+

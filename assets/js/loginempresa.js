@@ -11,8 +11,8 @@ const LoginEmpresa = (() => {
   let styleTag = null;
 
   const linkShortcuts = [
-    { selector: '.register-link', message: 'Redirecionando para o cadastro empresarial...', href: 'registroempresarial.html' },
-    { selector: '.forgot-password', message: 'Vamos ajudar você a recuperar o acesso...', href: 'recuperar-senha.html' },
+    { selector: '.register-link', message: 'Redirecionando para o cadastro empresarial...', href: 'registroempresa.html' },
+    { selector: '.forgot-password', message: 'Vamos ajudar você a recuperar o acesso...', href: 'esqueceusenha.html' },
     { selector: '.personal-login-link', message: 'Indo para o login pessoal...', href: 'loginpessoal.html' }
   ];
 
@@ -494,3 +494,5 @@ const LoginEmpresa = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', LoginEmpresa.init);
+
+

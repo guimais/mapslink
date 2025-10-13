@@ -688,26 +688,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginLink) {
         loginLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para login empresarial...');
+            navigateWithFeedback('loginempresa.html', 'Redirecionando para login empresarial...');
         });
     }
-    
-    const termsLinks = document.querySelectorAll('.terms-link');
-    termsLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            showMobileAlert('Abrindo termos de uso...');
-        });
-    });
     
     const personalRegisterLink = document.querySelector('.personal-register-link');
     if (personalRegisterLink) {
         personalRegisterLink.addEventListener('click', function(e) {
             e.preventDefault();
-            showMobileAlert('Redirecionando para registro pessoal...');
+            navigateWithFeedback('registropessoal.html', 'Redirecionando para registro pessoal...');
         });
     }
     
+    function navigateWithFeedback(url, message) {
+        if (window.innerWidth <= 768) {
+            showMobileAlert(message);
+            setTimeout(() => {
+                window.location.href = url;
+            }, 800);
+        } else {
+            window.location.href = url;
+        }
+    }
+
     function showMobileAlert(message) {
         if (window.innerWidth <= 768) {
             const toast = document.createElement('div');
@@ -750,7 +753,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if ('ontouchstart' in window) {
-        const touchElements = document.querySelectorAll('.register-button, .password-toggle, .checkbox-container, .personal-register-link');
+        const touchElements = document.querySelectorAll('.register-button, .password-toggle, .checkbox-container, .personal-register-link, .login-link');
         
         touchElements.forEach(element => {
             element.addEventListener('touchstart', function() {
@@ -908,3 +911,5 @@ function initializeMobileNavbar() {
         });
     }
 }
+
+
