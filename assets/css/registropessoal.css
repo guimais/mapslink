@@ -275,7 +275,7 @@ h1,h2,.titulo-principal{
 
 .register-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -322,7 +322,7 @@ h1,h2,.titulo-principal{
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .form-row {

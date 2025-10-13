@@ -11,9 +11,9 @@ const LoginEmpresa = (() => {
   let styleTag = null;
 
   const linkShortcuts = [
-    { selector: '.register-link', message: 'Redirecionando para o cadastro empresarial...', href: 'registroempresa.html' },
-    { selector: '.forgot-password', message: 'Vamos ajudar você a recuperar o acesso...', href: 'esqueceusenha.html' },
-    { selector: '.personal-login-link', message: 'Indo para o login pessoal...', href: 'loginpessoal.html' }
+    { selector: '.register-link', href: 'registroempresa.html' },
+    { selector: '.forgot-password', href: 'esqueceusenha.html' },
+    { selector: '.personal-login-link', href: 'loginpessoal.html' }
   ];
 
   function init() {
@@ -347,16 +347,13 @@ const LoginEmpresa = (() => {
   }
 
   function setupLinkShortcuts() {
-    linkShortcuts.forEach(({ selector, message, href }) => {
+    linkShortcuts.forEach(({ selector, href }) => {
       const target = document.querySelector(selector);
       if (!target || target.dataset.enhanced) return;
       target.dataset.enhanced = 'true';
       target.addEventListener('click', event => {
         event.preventDefault();
-        showToast(message, 'info', 1800);
-        setTimeout(() => {
-          window.location.href = href;
-        }, 900);
+        window.location.href = href;
       });
     });
   }
@@ -494,5 +491,6 @@ const LoginEmpresa = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', LoginEmpresa.init);
+
 
 
