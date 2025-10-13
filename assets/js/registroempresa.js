@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 showSuccessMessage('Conta empresarial criada com sucesso!');
                 setTimeout(() => {
-                    window.location.href = 'paginainicial.html';
+                    window.location.href = '../index.html';
                 }, 2000);
                 
             } else {
@@ -911,5 +911,6 @@ function initializeMobileNavbar() {
         });
     }
 }
+
 
 
