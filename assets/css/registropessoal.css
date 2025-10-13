@@ -96,7 +96,7 @@ h1,h2,.titulo-principal{
 .nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
 .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
-/* Mobile Navbar Styles */
+
 @media (max-width: 768px) {
   .nav-container {
     top: 12px;
@@ -181,7 +181,7 @@ h1,h2,.titulo-principal{
     border-left: 4px solid var(--brand);
   }
   
-  /* Overlay para fechar menu */
+  
   .nav-overlay {
     position: fixed;
     top: 0;
@@ -235,7 +235,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* Touch-friendly navbar */
+
 @media (pointer: coarse) {
   .nav-toggle {
     min-width: 44px;
@@ -250,7 +250,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* Register Styles */
+
 .registropessoal {
   min-height: 100vh;
   display: flex;
@@ -260,7 +260,7 @@ h1,h2,.titulo-principal{
   background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 100%);
 }
 
-/* Ajustar padding para navbar mobile */
+
 @media (max-width: 768px) {
   .registropessoal {
     padding-top: 80px;
@@ -331,13 +331,13 @@ h1,h2,.titulo-principal{
   gap: 16px;
 }
 
-/* Campos de senha sempre empilhados para melhor UX */
+
 .form-row.password-row {
   grid-template-columns: 1fr;
   gap: 20px;
 }
 
-/* Melhorar espaçamento dos campos de senha */
+
 .form-row.password-row .form-group {
   margin-bottom: 8px;
 }
@@ -434,7 +434,7 @@ h1,h2,.titulo-principal{
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
-/* Password Strength Indicator */
+
 .password-strength {
   margin-top: 8px;
 }
@@ -659,7 +659,7 @@ h1,h2,.titulo-principal{
   font-size: 16px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .registropessoal {
     padding: 60px 16px 32px;
@@ -688,7 +688,7 @@ h1,h2,.titulo-principal{
     gap: 16px;
   }
   
-  /* Campos de senha com mais espaço no mobile */
+  
   .form-row.password-row {
     gap: 24px;
   }
@@ -767,7 +767,7 @@ h1,h2,.titulo-principal{
     gap: 14px;
   }
   
-  /* Campos de senha com máximo espaço no mobile pequeno */
+  
   .form-row.password-row {
     gap: 20px;
   }
@@ -856,7 +856,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* Mobile Landscape */
+
 @media (max-width: 768px) and (orientation: landscape) {
   .registropessoal {
     padding: 20px 16px;
@@ -890,7 +890,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* Touch-friendly improvements */
+
 @media (pointer: coarse) {
   .form-input {
     min-height: 48px;
@@ -915,7 +915,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* iOS Safari specific fixes */
+
 @supports (-webkit-touch-callout: none) {
   .registropessoal {
     min-height: -webkit-fill-available;
@@ -932,9 +932,10 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* High DPI displays */
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .register-card {
     border-width: 0.5px;
   }
 }
+

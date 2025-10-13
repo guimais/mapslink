@@ -96,7 +96,7 @@ h1,h2,.titulo-principal{
 .nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
 .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
-/* Mobile Navbar Styles */
+
 @media (max-width: 768px) {
   .nav-container {
     top: 12px;
@@ -181,7 +181,7 @@ h1,h2,.titulo-principal{
     border-left: 4px solid var(--brand);
   }
   
-  /* Overlay para fechar menu */
+  
   .nav-overlay {
     position: fixed;
     top: 0;
@@ -235,7 +235,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* Touch-friendly navbar */
+
 @media (pointer: coarse) {
   .nav-toggle {
     min-width: 44px;
@@ -250,7 +250,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-/* Register Styles */
+
 .registroempresarial {
   min-height: 100vh;
   display: flex;
@@ -260,7 +260,7 @@ h1,h2,.titulo-principal{
   background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 100%);
 }
 
-/* Ajustar padding para navbar mobile */
+
 @media (max-width: 768px) {
   .registroempresarial {
     padding-top: 80px;
@@ -325,7 +325,7 @@ h1,h2,.titulo-principal{
   gap: 24px;
 }
 
-/* Seções do formulário */
+
 .form-section {
   background: var(--surface);
   border-radius: 16px;
@@ -353,13 +353,13 @@ h1,h2,.titulo-principal{
   gap: 16px;
 }
 
-/* Campos de senha sempre empilhados para melhor UX */
+
 .form-row.password-row {
   grid-template-columns: 1fr;
   gap: 20px;
 }
 
-/* Melhorar espaçamento dos campos de senha */
+
 .form-row.password-row .form-group {
   margin-bottom: 8px;
 }
@@ -374,7 +374,7 @@ h1,h2,.titulo-principal{
   gap: 8px;
 }
 
-/* Campo "Outros" com animação */
+
 #otherCategoryGroup {
   display: none;
   opacity: 0;
@@ -437,7 +437,7 @@ h1,h2,.titulo-principal{
   color: var(--brand);
 }
 
-/* Estilo específico para select */
+
 .form-input select,
 select.form-input {
   appearance: none;
@@ -486,7 +486,7 @@ select.form-input {
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
-/* Password Strength Indicator */
+
 .password-strength {
   margin-top: 8px;
 }
@@ -711,7 +711,7 @@ select.form-input {
   font-size: 16px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .registroempresarial {
     padding: 60px 16px 32px;
@@ -754,7 +754,7 @@ select.form-input {
     gap: 16px;
   }
   
-  /* Campos de senha com mais espaço no mobile */
+  
   .form-row.password-row {
     gap: 24px;
   }
@@ -843,7 +843,7 @@ select.form-input {
     gap: 14px;
   }
   
-  /* Campos de senha com máximo espaço no mobile pequeno */
+  
   .form-row.password-row {
     gap: 20px;
   }
@@ -932,7 +932,7 @@ select.form-input {
   }
 }
 
-/* Mobile Landscape */
+
 @media (max-width: 768px) and (orientation: landscape) {
   .registroempresarial {
     padding: 20px 16px;
@@ -970,7 +970,7 @@ select.form-input {
   }
 }
 
-/* Touch-friendly improvements */
+
 @media (pointer: coarse) {
   .form-input {
     min-height: 48px;
@@ -995,7 +995,7 @@ select.form-input {
   }
 }
 
-/* iOS Safari specific fixes */
+
 @supports (-webkit-touch-callout: none) {
   .registroempresarial {
     min-height: -webkit-fill-available;
@@ -1012,9 +1012,10 @@ select.form-input {
   }
 }
 
-/* High DPI displays */
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .register-card {
     border-width: 0.5px;
   }
 }
+

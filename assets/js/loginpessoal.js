@@ -1,8 +1,5 @@
-// Login Pessoal - Funcionalidade JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    // Funcionalidade da Navbar Mobile
     initializeMobileNavbar();
-    // Elementos do formulário
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -10,11 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginButton = document.getElementById('loginButton');
     const rememberMeCheckbox = document.getElementById('rememberMe');
     
-    // Elementos de erro
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
     
-    // Toggle de visibilidade da senha
     passwordToggle.addEventListener('click', function() {
         const isPasswordVisible = passwordInput.type === 'text';
         passwordInput.type = isPasswordVisible ? 'password' : 'text';
@@ -25,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         this.setAttribute('aria-label', isPasswordVisible ? 'Mostrar senha' : 'Ocultar senha');
     });
     
-    // Validação em tempo real
     emailInput.addEventListener('input', function() {
         validateEmail();
     });
@@ -34,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
         validatePassword();
     });
     
-    // Validação de email
     function validateEmail() {
         const email = emailInput.value.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validação de senha
     function validatePassword() {
         const password = passwordInput.value;
         
@@ -67,46 +59,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Mostrar erro
     function showError(input, errorElement, message) {
         input.classList.add('error');
         errorElement.textContent = message;
         errorElement.classList.add('show');
     }
     
-    // Ocultar erro
     function hideError(input, errorElement) {
         input.classList.remove('error');
         errorElement.classList.remove('show');
         errorElement.textContent = '';
     }
     
-    // Limpar todos os erros
     function clearAllErrors() {
         hideError(emailInput, emailError);
         hideError(passwordInput, passwordError);
     }
     
-    // Simular login (substitua pela lógica real)
     async function performLogin(email, password, rememberMe) {
         try {
-            // Simular delay de rede
             await new Promise(resolve => setTimeout(resolve, 1500));
             
-            // Aqui você faria a chamada real para a API
-            // const response = await fetch('/api/login', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ email, password })
-            // });
             
-            // Simulação de resposta da API
             const isValidUser = email === 'teste@exemplo.com' && password === '123456';
             
             if (isValidUser) {
-                // Salvar dados se "Lembrar-me" estiver marcado
                 if (rememberMe) {
                     localStorage.setItem('userEmail', email);
                     localStorage.setItem('rememberMe', 'true');
@@ -115,14 +92,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.removeItem('rememberMe');
                 }
                 
-                // Simular token de autenticação
                 localStorage.setItem('authToken', 'simulated-token-' + Date.now());
                 localStorage.setItem('userType', 'personal');
                 
-                // Redirecionar para página principal
                 showSuccessMessage('Login realizado com sucesso!');
                 setTimeout(() => {
-                    window.location.href = 'perfilusuario.html'; // Substitua pela página de destino
+                    window.location.href = 'perfilusuario.html';
                 }, 1500);
                 
             } else {
@@ -134,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Mostrar mensagem de sucesso
     function showSuccessMessage(message) {
         loginButton.innerHTML = `
             <i class="ri-check-line button-icon"></i>
@@ -144,7 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loginButton.disabled = true;
     }
     
-    // Mostrar mensagem de erro
     function showErrorMessage(message) {
         loginButton.innerHTML = `
             <i class="ri-error-warning-line button-icon"></i>
@@ -153,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loginButton.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
         loginButton.disabled = true;
         
-        // Restaurar botão após 3 segundos
         setTimeout(() => {
             loginButton.innerHTML = `
                 <span class="button-text">Entrar</span>
@@ -163,11 +135,9 @@ document.addEventListener('DOMContentLoaded', function() {
             loginButton.disabled = false;
         }, 3000);
         
-        // Mostrar erro geral
         alert(message);
     }
     
-    // Restaurar botão de loading
     function showLoadingButton() {
         loginButton.innerHTML = `
             <div class="loading-spinner"></div>
@@ -176,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loginButton.disabled = true;
     }
     
-    // Restaurar botão normal
     function restoreButton() {
         loginButton.innerHTML = `
             <span class="button-text">Entrar</span>
@@ -185,14 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
         loginButton.disabled = false;
     }
     
-    // Submissão do formulário
     loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        // Limpar erros anteriores
         clearAllErrors();
         
-        // Validar campos
         const isEmailValid = validateEmail();
         const isPasswordValid = validatePassword();
         
@@ -200,19 +166,15 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Mostrar loading
         showLoadingButton();
         
-        // Dados do formulário
         const email = emailInput.value.trim();
         const password = passwordInput.value;
         const rememberMe = rememberMeCheckbox.checked;
         
-        // Executar login
         await performLogin(email, password, rememberMe);
     });
     
-    // Restaurar dados salvos se "Lembrar-me" estava marcado
     function restoreSavedData() {
         const savedEmail = localStorage.getItem('userEmail');
         const rememberMe = localStorage.getItem('rememberMe');
@@ -223,10 +185,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Carregar dados salvos ao inicializar
     restoreSavedData();
     
-    // Adicionar estilo para loading spinner
     const style = document.createElement('style');
     style.textContent = `
         .loading-spinner {
@@ -245,12 +205,10 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
     
-    // Focar no campo de email ao carregar (apenas em desktop)
     if (window.innerWidth > 768) {
         emailInput.focus();
     }
     
-    // Prevenir zoom no iOS ao focar em inputs
     if (window.innerWidth <= 768) {
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
@@ -275,42 +233,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Funcionalidade adicional para links e mobile
 document.addEventListener('DOMContentLoaded', function() {
-    // Link para cadastro
     const registerLink = document.querySelector('.register-link');
     if (registerLink) {
         registerLink.addEventListener('click', function(e) {
             e.preventDefault();
             showMobileAlert('Redirecionando para página de cadastro...');
-            // window.location.href = 'cadastro.html';
         });
     }
     
-    // Link para esqueci senha
     const forgotPasswordLink = document.querySelector('.forgot-password');
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', function(e) {
             e.preventDefault();
             showMobileAlert('Redirecionando para recuperação de senha...');
-            // window.location.href = 'recuperar-senha.html';
         });
     }
     
-    // Link para login empresarial
     const businessLoginLink = document.querySelector('.business-login-link');
     if (businessLoginLink) {
         businessLoginLink.addEventListener('click', function(e) {
             e.preventDefault();
             showMobileAlert('Redirecionando para login empresarial...');
-            // window.location.href = 'loginempresarial.html';
         });
     }
     
-    // Função para mostrar alertas mobile-friendly
     function showMobileAlert(message) {
         if (window.innerWidth <= 768) {
-            // Criar toast mobile-friendly
             const toast = document.createElement('div');
             toast.style.cssText = `
                 position: fixed;
@@ -333,13 +282,11 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.textContent = message;
             document.body.appendChild(toast);
             
-            // Animar entrada
             setTimeout(() => {
                 toast.style.transform = 'translateY(0)';
                 toast.style.opacity = '1';
             }, 100);
             
-            // Remover após 3 segundos
             setTimeout(() => {
                 toast.style.transform = 'translateY(100px)';
                 toast.style.opacity = '0';
@@ -352,7 +299,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Melhorar feedback tátil em dispositivos móveis
     if ('ontouchstart' in window) {
         const touchElements = document.querySelectorAll('.login-button, .password-toggle, .checkbox-container, .forgot-password, .business-login-link');
         
@@ -372,12 +318,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Detectar orientação e ajustar layout
     function handleOrientationChange() {
         if (window.innerWidth <= 768) {
             const loginCard = document.querySelector('.login-card');
             if (loginCard) {
-                // Ajustar padding baseado na orientação
                 if (window.innerHeight < window.innerWidth) {
                     loginCard.style.padding = '20px 24px';
                 } else {
@@ -387,19 +331,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Executar na mudança de orientação
     window.addEventListener('orientationchange', function() {
         setTimeout(handleOrientationChange, 100);
     });
     
-    // Executar no resize
     window.addEventListener('resize', handleOrientationChange);
     
-    // Melhorar scroll em mobile
     if (window.innerWidth <= 768) {
         document.body.style.overflowX = 'hidden';
         
-        // Prevenir scroll durante interação com formulário
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
@@ -414,38 +354,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Adicionar haptic feedback se disponível
     function addHapticFeedback() {
         const buttons = document.querySelectorAll('.login-button, .password-toggle');
         buttons.forEach(button => {
             button.addEventListener('click', function() {
                 if ('vibrate' in navigator) {
-                    navigator.vibrate(50); // Vibração suave
+                    navigator.vibrate(50);
                 }
             });
         });
     }
     
-    // Executar se for dispositivo móvel
     if (window.innerWidth <= 768) {
         addHapticFeedback();
     }
 });
 
-// Função para inicializar navbar mobile
 function initializeMobileNavbar() {
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
     const navOverlay = document.createElement('div');
     const body = document.body;
     
-    // Adicionar overlay se não existir
     if (!document.querySelector('.nav-overlay')) {
         navOverlay.className = 'nav-overlay';
         body.appendChild(navOverlay);
     }
     
-    // Função para abrir/fechar menu
     function toggleMenu() {
         const isOpen = navLinks.classList.contains('active');
         
@@ -456,38 +391,32 @@ function initializeMobileNavbar() {
         }
     }
     
-    // Função para abrir menu
     function openMenu() {
         navLinks.classList.add('active');
         navOverlay.classList.add('active');
         body.style.overflow = 'hidden';
         
-        // Animação do ícone hambúrguer
         const icon = navToggle.querySelector('i');
         if (icon) {
             icon.className = 'ri-close-line';
         }
         
-        // Haptic feedback
         if ('vibrate' in navigator) {
             navigator.vibrate(30);
         }
     }
     
-    // Função para fechar menu
     function closeMenu() {
         navLinks.classList.remove('active');
         navOverlay.classList.remove('active');
         body.style.overflow = '';
         
-        // Restaurar ícone hambúrguer
         const icon = navToggle.querySelector('i');
         if (icon) {
             icon.className = 'ri-menu-line';
         }
     }
     
-    // Event listeners
     if (navToggle) {
         navToggle.addEventListener('click', function(e) {
             e.preventDefault();
@@ -496,34 +425,29 @@ function initializeMobileNavbar() {
         });
     }
     
-    // Fechar menu ao clicar no overlay
     if (navOverlay) {
         navOverlay.addEventListener('click', closeMenu);
     }
     
-    // Fechar menu ao clicar em um link
     const navLinkItems = document.querySelectorAll('.nav-link');
     navLinkItems.forEach(link => {
         link.addEventListener('click', function() {
-            setTimeout(closeMenu, 100); // Pequeno delay para ver a animação
+            setTimeout(closeMenu, 100);
         });
     });
     
-    // Fechar menu ao pressionar ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) {
             closeMenu();
         }
     });
     
-    // Fechar menu ao redimensionar para desktop
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
             closeMenu();
         }
     });
     
-    // Melhorar acessibilidade
     if (navToggle) {
         navToggle.setAttribute('aria-expanded', 'false');
         navToggle.setAttribute('aria-controls', 'navMenu');
@@ -534,7 +458,6 @@ function initializeMobileNavbar() {
         });
     }
     
-    // Smooth scroll para links âncora (se houver)
     navLinkItems.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -551,7 +474,6 @@ function initializeMobileNavbar() {
         });
     });
     
-    // Adicionar efeito de toque nos links mobile
     if (window.innerWidth <= 768) {
         navLinkItems.forEach(link => {
             link.addEventListener('touchstart', function() {

@@ -1,9 +1,6 @@
-// Registro Pessoal - Funcionalidade JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    // Funcionalidade da Navbar Mobile
     initializeMobileNavbar();
     
-    // Elementos do formulário
     const registerForm = document.getElementById('registerForm');
     const firstNameInput = document.getElementById('firstName');
     const lastNameInput = document.getElementById('lastName');
@@ -18,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const agreeTermsCheckbox = document.getElementById('agreeTerms');
     const agreeMarketingCheckbox = document.getElementById('agreeMarketing');
     
-    // Elementos de erro
     const firstNameError = document.getElementById('firstNameError');
     const lastNameError = document.getElementById('lastNameError');
     const emailError = document.getElementById('emailError');
@@ -28,22 +24,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmPasswordError = document.getElementById('confirmPasswordError');
     const termsError = document.getElementById('termsError');
     
-    // Elementos de força da senha
     const strengthFill = document.getElementById('strengthFill');
     const strengthText = document.getElementById('strengthText');
     
-    // Toggle de visibilidade da senha
     passwordToggle.addEventListener('click', function() {
         const isPasswordHidden = passwordInput.type === 'password';
         
         if (isPasswordHidden) {
-            // Senha está oculta, vamos mostrar
             passwordInput.type = 'text';
             const icon = this.querySelector('i');
             icon.className = 'ri-eye-off-line';
             this.setAttribute('aria-label', 'Ocultar senha');
         } else {
-            // Senha está visível, vamos ocultar
             passwordInput.type = 'password';
             const icon = this.querySelector('i');
             icon.className = 'ri-eye-line';
@@ -55,13 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const isPasswordHidden = confirmPasswordInput.type === 'password';
         
         if (isPasswordHidden) {
-            // Senha está oculta, vamos mostrar
             confirmPasswordInput.type = 'text';
             const icon = this.querySelector('i');
             icon.className = 'ri-eye-off-line';
             this.setAttribute('aria-label', 'Ocultar senha');
         } else {
-            // Senha está visível, vamos ocultar
             confirmPasswordInput.type = 'password';
             const icon = this.querySelector('i');
             icon.className = 'ri-eye-line';
@@ -69,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Validação em tempo real
     firstNameInput.addEventListener('input', function() {
         validateFirstName();
     });
@@ -104,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
         validateTerms();
     });
     
-    // Validação de nome
     function validateFirstName() {
         const firstName = firstNameInput.value.trim();
         
@@ -123,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validação de sobrenome
     function validateLastName() {
         const lastName = lastNameInput.value.trim();
         
@@ -142,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validação de email
     function validateEmail() {
         const email = emailInput.value.trim();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -159,7 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Formatação de telefone
     function formatPhoneNumber() {
         let phone = phoneInput.value.replace(/\D/g, '');
         
@@ -176,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
         phoneInput.value = phone;
     }
     
-    // Validação de telefone
     function validatePhone() {
         const phone = phoneInput.value.replace(/\D/g, '');
         
@@ -195,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validação de data de nascimento
     function validateBirthDate() {
         const birthDate = birthDateInput.value;
         
@@ -225,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Verificar força da senha
     function checkPasswordStrength() {
         const password = passwordInput.value;
         let strength = 0;
@@ -257,7 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
         strengthText.textContent = strengthLabel;
     }
     
-    // Validação de senha
     function validatePassword() {
         const password = passwordInput.value;
         
@@ -282,7 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validação de confirmação de senha
     function validateConfirmPassword() {
         const password = passwordInput.value;
         const confirmPassword = confirmPasswordInput.value;
@@ -299,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Validação de termos
     function validateTerms() {
         if (!agreeTermsCheckbox.checked) {
             showError(agreeTermsCheckbox, termsError, 'Você deve aceitar os termos de uso');
@@ -310,21 +289,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Mostrar erro
     function showError(input, errorElement, message) {
         input.classList.add('error');
         errorElement.textContent = message;
         errorElement.classList.add('show');
     }
     
-    // Ocultar erro
     function hideError(input, errorElement) {
         input.classList.remove('error');
         errorElement.classList.remove('show');
         errorElement.textContent = '';
     }
     
-    // Limpar todos os erros
     function clearAllErrors() {
         hideError(firstNameInput, firstNameError);
         hideError(lastNameInput, lastNameError);
@@ -336,35 +312,22 @@ document.addEventListener('DOMContentLoaded', function() {
         hideError(agreeTermsCheckbox, termsError);
     }
     
-    // Simular registro (substitua pela lógica real)
     async function performRegister(formData) {
         try {
-            // Simular delay de rede
             await new Promise(resolve => setTimeout(resolve, 2000));
             
-            // Aqui você faria a chamada real para a API
-            // const response = await fetch('/api/register', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(formData)
-            // });
             
-            // Simulação de resposta da API
             const isEmailAvailable = formData.email !== 'teste@exemplo.com';
             
             if (isEmailAvailable) {
-                // Simular token de autenticação
                 localStorage.setItem('authToken', 'simulated-token-' + Date.now());
                 localStorage.setItem('userType', 'personal');
                 localStorage.setItem('userEmail', formData.email);
                 localStorage.setItem('userName', `${formData.firstName} ${formData.lastName}`);
                 
-                // Redirecionar para página principal
                 showSuccessMessage('Conta criada com sucesso!');
                 setTimeout(() => {
-                    window.location.href = 'paginainicial.html'; // Substitua pela página de destino
+                    window.location.href = 'paginainicial.html';
                 }, 2000);
                 
             } else {
@@ -376,7 +339,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Mostrar mensagem de sucesso
     function showSuccessMessage(message) {
         registerButton.innerHTML = `
             <i class="ri-check-line button-icon"></i>
@@ -386,7 +348,6 @@ document.addEventListener('DOMContentLoaded', function() {
         registerButton.disabled = true;
     }
     
-    // Mostrar mensagem de erro
     function showErrorMessage(message) {
         registerButton.innerHTML = `
             <i class="ri-error-warning-line button-icon"></i>
@@ -395,7 +356,6 @@ document.addEventListener('DOMContentLoaded', function() {
         registerButton.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
         registerButton.disabled = true;
         
-        // Restaurar botão após 3 segundos
         setTimeout(() => {
             registerButton.innerHTML = `
                 <span class="button-text">Criar Conta</span>
@@ -405,11 +365,9 @@ document.addEventListener('DOMContentLoaded', function() {
             registerButton.disabled = false;
         }, 3000);
         
-        // Mostrar erro geral
         alert(message);
     }
     
-    // Restaurar botão de loading
     function showLoadingButton() {
         registerButton.innerHTML = `
             <div class="loading-spinner"></div>
@@ -418,14 +376,11 @@ document.addEventListener('DOMContentLoaded', function() {
         registerButton.disabled = true;
     }
     
-    // Submissão do formulário
     registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        // Limpar erros anteriores
         clearAllErrors();
         
-        // Validar todos os campos
         const isFirstNameValid = validateFirstName();
         const isLastNameValid = validateLastName();
         const isEmailValid = validateEmail();
@@ -441,10 +396,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Mostrar loading
         showLoadingButton();
         
-        // Dados do formulário
         const formData = {
             firstName: firstNameInput.value.trim(),
             lastName: lastNameInput.value.trim(),
@@ -455,11 +408,9 @@ document.addEventListener('DOMContentLoaded', function() {
             agreeMarketing: agreeMarketingCheckbox.checked
         };
         
-        // Executar registro
         await performRegister(formData);
     });
     
-    // Adicionar estilo para loading spinner
     const style = document.createElement('style');
     style.textContent = `
         .loading-spinner {
@@ -478,12 +429,10 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
     
-    // Focar no campo de nome ao carregar (apenas em desktop)
     if (window.innerWidth > 768) {
         firstNameInput.focus();
     }
     
-    // Prevenir zoom no iOS ao focar em inputs
     if (window.innerWidth <= 768) {
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
@@ -508,19 +457,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Funcionalidade adicional para links e mobile
 document.addEventListener('DOMContentLoaded', function() {
-    // Link para login
     const loginLink = document.querySelector('.login-link');
     if (loginLink) {
         loginLink.addEventListener('click', function(e) {
             e.preventDefault();
             showMobileAlert('Redirecionando para login...');
-            // window.location.href = 'loginpessoal.html';
         });
     }
     
-    // Link para termos
     const termsLinks = document.querySelectorAll('.terms-link');
     termsLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -529,7 +474,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Link para registro empresarial
     const businessRegisterLink = document.querySelector('.business-register-link');
     if (businessRegisterLink) {
         businessRegisterLink.addEventListener('click', function(e) {
@@ -538,10 +482,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Função para mostrar alertas mobile-friendly
     function showMobileAlert(message) {
         if (window.innerWidth <= 768) {
-            // Criar toast mobile-friendly
             const toast = document.createElement('div');
             toast.style.cssText = `
                 position: fixed;
@@ -564,13 +506,11 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.textContent = message;
             document.body.appendChild(toast);
             
-            // Animar entrada
             setTimeout(() => {
                 toast.style.transform = 'translateY(0)';
                 toast.style.opacity = '1';
             }, 100);
             
-            // Remover após 3 segundos
             setTimeout(() => {
                 toast.style.transform = 'translateY(100px)';
                 toast.style.opacity = '0';
@@ -583,7 +523,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Melhorar feedback tátil em dispositivos móveis
     if ('ontouchstart' in window) {
         const touchElements = document.querySelectorAll('.register-button, .password-toggle, .checkbox-container, .business-register-link');
         
@@ -603,12 +542,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Detectar orientação e ajustar layout
     function handleOrientationChange() {
         if (window.innerWidth <= 768) {
             const registerCard = document.querySelector('.register-card');
             if (registerCard) {
-                // Ajustar padding baseado na orientação
                 if (window.innerHeight < window.innerWidth) {
                     registerCard.style.padding = '20px 24px';
                 } else {
@@ -618,19 +555,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Executar na mudança de orientação
     window.addEventListener('orientationchange', function() {
         setTimeout(handleOrientationChange, 100);
     });
     
-    // Executar no resize
     window.addEventListener('resize', handleOrientationChange);
     
-    // Melhorar scroll em mobile
     if (window.innerWidth <= 768) {
         document.body.style.overflowX = 'hidden';
         
-        // Prevenir scroll durante interação com formulário
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
@@ -645,38 +578,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Adicionar haptic feedback se disponível
     function addHapticFeedback() {
         const buttons = document.querySelectorAll('.register-button, .password-toggle');
         buttons.forEach(button => {
             button.addEventListener('click', function() {
                 if ('vibrate' in navigator) {
-                    navigator.vibrate(50); // Vibração suave
+                    navigator.vibrate(50);
                 }
             });
         });
     }
     
-    // Executar se for dispositivo móvel
     if (window.innerWidth <= 768) {
         addHapticFeedback();
     }
 });
 
-// Função para inicializar navbar mobile (reutilizada do login)
 function initializeMobileNavbar() {
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
     const navOverlay = document.createElement('div');
     const body = document.body;
     
-    // Adicionar overlay se não existir
     if (!document.querySelector('.nav-overlay')) {
         navOverlay.className = 'nav-overlay';
         body.appendChild(navOverlay);
     }
     
-    // Função para abrir/fechar menu
     function toggleMenu() {
         const isOpen = navLinks.classList.contains('active');
         
@@ -687,38 +615,32 @@ function initializeMobileNavbar() {
         }
     }
     
-    // Função para abrir menu
     function openMenu() {
         navLinks.classList.add('active');
         navOverlay.classList.add('active');
         body.style.overflow = 'hidden';
         
-        // Animação do ícone hambúrguer
         const icon = navToggle.querySelector('i');
         if (icon) {
             icon.className = 'ri-close-line';
         }
         
-        // Haptic feedback
         if ('vibrate' in navigator) {
             navigator.vibrate(30);
         }
     }
     
-    // Função para fechar menu
     function closeMenu() {
         navLinks.classList.remove('active');
         navOverlay.classList.remove('active');
         body.style.overflow = '';
         
-        // Restaurar ícone hambúrguer
         const icon = navToggle.querySelector('i');
         if (icon) {
             icon.className = 'ri-menu-line';
         }
     }
     
-    // Event listeners
     if (navToggle) {
         navToggle.addEventListener('click', function(e) {
             e.preventDefault();
@@ -727,12 +649,10 @@ function initializeMobileNavbar() {
         });
     }
     
-    // Fechar menu ao clicar no overlay
     if (navOverlay) {
         navOverlay.addEventListener('click', closeMenu);
     }
     
-    // Fechar menu ao clicar em um link
     const navLinkItems = document.querySelectorAll('.nav-link');
     navLinkItems.forEach(link => {
         link.addEventListener('click', function() {
@@ -740,21 +660,18 @@ function initializeMobileNavbar() {
         });
     });
     
-    // Fechar menu ao pressionar ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) {
             closeMenu();
         }
     });
     
-    // Fechar menu ao redimensionar para desktop
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
             closeMenu();
         }
     });
     
-    // Melhorar acessibilidade
     if (navToggle) {
         navToggle.setAttribute('aria-expanded', 'false');
         navToggle.setAttribute('aria-controls', 'navMenu');

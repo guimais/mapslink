@@ -1,4 +1,4 @@
-﻿(function(){
+(function(){
   const companies = [
     {
       id: 'sidi',
