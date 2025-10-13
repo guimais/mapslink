@@ -44,7 +44,9 @@
         }
       });
       links.forEach(a => {
-        const active = a.getAttribute('href') === `#${id}`;
+        const href = a.getAttribute('href') || '';
+        if (!href.startsWith('#')) return;
+        const active = href === `#${id}`;
         a.classList.toggle('active', active);
         a.setAttribute('aria-current', active ? 'page' : 'false');
       });
@@ -224,3 +226,4 @@
     init();
   }
 })();
+

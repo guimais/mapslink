@@ -2,25 +2,40 @@ const navLinks = (window.MapsApp && typeof window.MapsApp.navLinks === 'function
   ? window.MapsApp.navLinks()
   : Array.from(document.querySelectorAll('.nav-links a'));
 
-const sectionIds = ['#home', '#sobre', '#planos', '#maps', '#profile', '#about', '#contact'];
+const sectionIds = ['home', 'sobre', 'planos', 'maps', 'profile', 'about', 'contact'];
 const sections = sectionIds
-  .map(id => document.querySelector(id))
+  .map(id => document.getElementById(id))
   .filter(Boolean);
 
-const linkByHash = new Map(navLinks.map(a => [a.getAttribute('href'), a]));
+const linkByKey = new Map();
+navLinks.forEach(link => {
+  const href = (link.getAttribute('href') || '').toLowerCase();
+  if (href) linkByKey.set(href, link);
+  const key = (link.dataset.navKey || link.textContent || '').trim().toLowerCase();
+  if (key) linkByKey.set(key, link);
+});
 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
-    const id = `#${entry.target.id}`;
+    const rawId = entry.target.id || '';
+    const idKey = rawId.toLowerCase();
     if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
-      window.MapsApp.highlightNav(id);
+      window.MapsApp.highlightNav(rawId);
       return;
     }
-    const link = linkByHash.get(id);
+    const link =
+      linkByKey.get(`#${idKey}`) ||
+      linkByKey.get(idKey);
     if (!link) return;
-    navLinks.forEach(a => a.classList.remove('active'));
+    navLinks.forEach(a => {
+      if ((a.getAttribute('href') || '').startsWith('#')) {
+        a.classList.remove('active');
+        a.removeAttribute('aria-current');
+      }
+    });
     link.classList.add('active');
+    link.setAttribute('aria-current', 'page');
   });
 }, { root: null, threshold: 0.6 });
 

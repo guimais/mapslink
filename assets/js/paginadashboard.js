@@ -236,7 +236,7 @@ function renderStatus() {
   const ABERTA = '#1e90ff';
   const FECHADA = '#ef4444';
   const data = [
-    { label: 'Em análise', value: 6, color: ANALISE },
+    { label: 'Em an\u00E1lise', value: 6, color: ANALISE },
     { label: 'Aberta', value: 12, color: ABERTA },
     { label: 'Fechada', value: 18, color: FECHADA }
   ];
@@ -251,7 +251,7 @@ function renderStatus() {
     items.forEach((li, i) => {
       const seg = data[i];
       if (!seg) return;
-      li.innerHTML = `<span class="legend-dot" style="background:${colors[i]}"></span> ${seg.label} — ${seg.value} (${percent(seg.value)}%)`;
+      li.innerHTML = `<span class="legend-dot" style="background:${colors[i]}"></span> ${seg.label} - ${seg.value} (${percent(seg.value)}%)`;
     });
   }
 }

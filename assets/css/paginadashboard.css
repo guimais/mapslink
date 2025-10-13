@@ -83,6 +83,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 
 .nav-link{
+  font-family:'Montserrat',sans-serif;
   text-decoration:none;
   color:#1a1a1a;
   font-weight:700;
@@ -179,7 +180,6 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .dash-card-label{
   display:block;
   font-size:12px;
-  text-transform:uppercase;
   letter-spacing:.4px;
   color:#222;
   opacity:.85;
