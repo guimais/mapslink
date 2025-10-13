@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
 
 :root{
   --bg:#f8fafc;
@@ -61,7 +61,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .nav-link{
   text-decoration:none;
   color:#1a1a1a;
-  font-weight:800;
+  font-weight: 700;
   font-size:16px;
   opacity:.92;
   padding:12px 16px;
@@ -70,7 +70,8 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 .nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
 .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-.nav-link.active{color:var(--brand-2);background:rgba(16,37,105,.10)}
+.nav-link.active{  font-weight: 800;
+color:var(--brand-2);background:rgba(16,37,105,.10)}
 .nav-toggle{display:none}
 
 .btn-filtro{
@@ -79,7 +80,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   background:var(--surface);
   border:1px solid rgba(16,37,105,.10);
   height:44px;padding:0 14px;border-radius:14px;
-  font-weight:800;color:#1a1a1a;cursor:pointer;
+  font-weight:700;color:#1a1a1a;cursor:pointer;
   box-shadow:var(--shadow-sm);
   transition:transform .15s,box-shadow .15s,background-color .15s,border-color .15s;
 }
@@ -101,20 +102,20 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .maps-layout.filters-closed{--filters-col:0}
 .maps-layout.filters-closed .painel-filtros{opacity:0;transform:translateX(12px);pointer-events:none}
 
-.lista-empresas h2{font-size:22px;font-weight:900;margin:8px 0 16px 0;padding-left:5px}
+.lista-empresas h2{font-size:22px;font-weight:700;margin:8px 0 16px 0;padding-left:5px}
 .cards-empresas{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
 .card-empresa{
   background:#fff;border:1px solid rgba(16,37,105,.10);
   border-radius:18px;padding:16px;box-shadow:var(--shadow-sm);
   position:relative;min-height:220px;
 }
-.empresa-nome{margin:0 0 6px;font-size:20px;font-weight:900}
+.empresa-nome{margin:0 0 6px;font-size:20px;font-weight:700}
 .empresa-endereco{margin:0 0 12px;color:var(--muted);font-size:14px}
 .btn-detalhes{background:var(--surface-2);border:1px solid rgba(16,37,105,.2);padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer}
 
 .badge-vagas{
   position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:6px;
-  padding:6px 10px;border-radius:12px;font-size:12px;font-weight:800;line-height:1;
+  padding:6px 10px;border-radius:12px;font-size:12px;font-weight:700;line-height:1;
   border:1px solid;box-shadow:var(--shadow-sm);
 }
 .badge-vagas i{font-size:14px}
@@ -155,7 +156,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   padding:16px;transition:opacity .22s,transform .22s,box-shadow .2s;
 }
 .painel-filtros:hover{box-shadow:var(--shadow-md)}
-.filtros-conteudo h2{margin:0 0 10px;font-size:18px;font-weight:800}
+.filtros-conteudo h2{margin:0 0 10px;font-size:18px;font-weight:700}
 .painel-filtros .filtros-conteudo>*{opacity:1;transform:none;transition:opacity .28s,transform .28s}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -177,11 +178,11 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .campo-icone input{border:none;outline:none;flex:1;background:transparent;font-size:14px}
 
 .grupo-cbx{border:none;margin:10px 0 4px;padding:0}
-.grupo-cbx legend{font-weight:800;margin-bottom:8px}
+.grupo-cbx legend{font-weight:700;margin-bottom:8px}
 .grupo-cbx label{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:14px}
 
 .grupo-chips{border:none;margin:12px 0;padding:0}
-.grupo-chips legend{font-weight:800;margin-bottom:8px}
+.grupo-chips legend{font-weight:700;margin-bottom:8px}
 .chip{
   display:inline-flex;align-items:center;justify-content:center;
   padding:8px 12px;border-radius:12px;margin:4px 6px 0 0;
@@ -204,7 +205,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 
 .btn-aplicar{
   width:100%;height:40px;border-radius:10px;border:1px solid rgba(16,37,105,.18);
-  background:var(--brand);color:#fff;font-weight:800;cursor:pointer;transition:transform .12s,box-shadow .15s,filter .15s;
+  background:var(--brand);color:#fff;font-weight:700;cursor:pointer;transition:transform .12s,box-shadow .15s,filter .15s;
 }
 .btn-aplicar:hover{box-shadow:var(--shadow-md);filter:brightness(1.05)}
 .btn-aplicar:active{transform:translateY(1px)}
@@ -224,7 +225,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .leaflet-control-zoom a{
   width:36px;height:36px;line-height:36px;text-align:center;
   background:#fff;border:1px solid rgba(16,37,105,.12);border-width:0 0 1px 0;
-  color:#0b1b4a;font-weight:800;transition:background-color .15s,color .15s;
+  color:#0b1b4a;font-weight:700;transition:background-color .15s,color .15s;
 }
 .leaflet-control-zoom a:first-child{border-top-left-radius:12px;border-top-right-radius:12px}
 .leaflet-control-zoom a:last-child{border-bottom-left-radius:12px;border-bottom-right-radius:12px;border-bottom-width:0}
@@ -256,7 +257,8 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
     max-height:0;opacity:0;pointer-events:none;transition:max-height .3s,padding .25s,opacity .25s;z-index:1001;
   }
   .nav-links.is-open{max-height:320px;padding:12px;opacity:1;pointer-events:auto}
-  .nav-link{padding:10px 6px;font-size:16px}
+  {  font-weight: 700;
+padding:10px 6px;font-size:16px}
 }
 @media (max-width:480px){
   .busca-mapa{width:94%}

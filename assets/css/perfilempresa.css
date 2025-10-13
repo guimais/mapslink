@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
 
 :root{
   --bg:#f8fafc;
@@ -53,14 +53,15 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 .nav-link{
   text-decoration:none;
   color:#1a1a1a;
-  font-weight:800;
+  font-weight: 700;
   font-size:16px;
   opacity:.92;
   padding:12px 16px;
   border-radius:10px;
   transition:color .2s, background-color .2s, opacity .2s, transform .15s;
 }
-.nav-link.active{color:var(--brand-2);background-color:rgba(16,37,105,.10)}
+.nav-link.active{  font-weight: 800;
+color:var(--brand-2);background-color:rgba(16,37,105,.10)}
 .nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
 .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
@@ -119,7 +120,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   color:var(--text);font-weight:700;line-height:1.25;
 }
 .empresa-contatos i{font-size:24px;color:#000}
-.empresa-contatos span{font-size:18px;font-weight:800}
+.empresa-contatos span{font-size:18px;font-weight:700}
 
 .empresa-content{display:grid;gap:24px}
 
@@ -155,7 +156,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   to{opacity:1;transform:translateY(0) scale(1)}
 }
 
-.card h2{margin:0 0 10px;font-size:28px;font-weight:900}
+.card h2{margin:0 0 10px;font-size:28px;font-weight:700}
 .card p{margin:10px 0 0;font-weight:700}
 
 .card-wide{
@@ -165,7 +166,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface-2);
 }
 .card-icon i{font-size:22px;color:#000}
-.card-title{font-size:20px;font-weight:800;margin:0}
+.card-title{font-size:20px;font-weight:700;margin:0}
 
 .empresa-grid{
   display:grid;
@@ -175,7 +176,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 
 .card-agenda h2{margin-bottom:4px}
 .card-agenda .sub{margin:0 0 18px;font-size:20px;font-weight:600;color:#000}
-.agenda-numero{font-family:'Montserrat',sans-serif;font-size:64px;font-weight:900;line-height:1}
+.agenda-numero{font-family:'Montserrat',sans-serif;font-size:64px;font-weight:700;line-height:1}
 
 @media (max-width:1200px){
   .nav-pilula{padding:12px 28px;height:60px;max-width:960px}
@@ -215,6 +216,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
     max-height:0;opacity:0;pointer-events:none;transition:max-height .3s,padding .25s,opacity .25s;z-index:1001;
   }
   .nav-links.is-open{max-height:320px;padding:12px;opacity:1;pointer-events:auto}
-  .nav-link{padding:10px 6px;font-size:14px}
+  {  font-weight: 700;
+padding:10px 6px;font-size:14px}
   .empresa-page{padding-top:86px}
 }

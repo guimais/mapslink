@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
 
 :root{
   --bg:#f8fafc;
@@ -85,14 +85,15 @@ h1,h2,.titulo-principal{
 .nav-link{
   text-decoration:none;
   color:#1a1a1a;
-  font-weight:800;
+  font-weight: 700;
   font-size:16px;
   opacity:.92;
   padding:12px 16px;
   border-radius:10px;
   transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
 }
-.nav-link.active{color:var(--brand-2);background-color:rgba(16,37,105,.10)}
+.nav-link.active{  font-weight: 800;
+color:var(--brand-2);background-color:rgba(16,37,105,.10)}
 .nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
 .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
@@ -154,11 +155,11 @@ h1,h2,.titulo-principal{
     border-bottom: none;
   }
   
-  .nav-link {
+  .nav-link{
     display: block;
     padding: 18px 24px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text);
     border-radius: 0;
     transition: all 0.2s ease;
@@ -175,7 +176,8 @@ h1,h2,.titulo-principal{
     opacity: 1;
   }
   
-  .nav-link.active {
+  .nav-link.active {  font-weight: 800;
+
     background: rgba(16, 37, 105, 0.08);
     color: var(--brand);
     border-left: 4px solid var(--brand);
@@ -228,7 +230,8 @@ h1,h2,.titulo-principal{
     padding: 70px 0 30px;
   }
   
-  .nav-link {
+  {  font-weight: 700;
+
     padding: 16px 20px;
     font-size: 15px;
     min-height: 50px;
@@ -245,7 +248,8 @@ h1,h2,.titulo-principal{
     justify-content: center;
   }
   
-  .nav-link {
+  {  font-weight: 700;
+
     min-height: 48px;
   }
 }
@@ -417,7 +421,7 @@ h1,h2,.titulo-principal{
 .error-message {
   color: var(--error);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 4px;
   opacity: 0;
   transform: translateY(-4px);
@@ -472,7 +476,7 @@ h1,h2,.titulo-principal{
 
 .strength-text {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted);
 }
 
@@ -494,7 +498,7 @@ h1,h2,.titulo-principal{
   cursor: pointer;
   font-size: 14px;
   color: var(--text);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.4;
   gap: 8px;
 }
@@ -630,7 +634,7 @@ h1,h2,.titulo-principal{
   padding: 0 16px;
   color: var(--muted);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .business-register-link {
@@ -938,4 +942,3 @@ h1,h2,.titulo-principal{
     border-width: 0.5px;
   }
 }
-
