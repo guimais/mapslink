@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Recuperação de senha - Maps Link">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueceu a Senha - Maps Link</title>
+    <link rel="stylesheet" href="assets/css/esqueceusenha.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+  </head>
+
+  <body>
+    <main class="forgot">
+      <section class="forgot-wrap" role="region" aria-labelledby="title-forgot">
+        <div class="card">
+          <a href="paginainicial.html" class="brand brand-card">
+            <img src="assets/images/Logo Certa - Fundo png.png" alt="Maps Link" class="brand-logo">
+          </a>
+          <i class="ri-lock-password-line card-icon" aria-hidden="true"></i>
+          <h1 id="title-forgot" class="card-title">Esqueceu sua senha?</h1>
+          <p class="card-sub">Informe seu e-mail cadastrado e enviaremos um link para redefinição.</p>
+
+          <form class="form" id="forgotForm" novalidate>
+            <label for="email" class="label">E-mail</label>
+            <input type="email" id="email" name="email" class="input" placeholder="seu@email.com" autocomplete="email" required>
+            <button type="submit" class="btn">
+              <i class="ri-mail-send-line" aria-hidden="true"></i>
+              Enviar link de recuperação
+            </button>
+          </form>
+
+          <div class="links">
+            <a href="login.html" class="link"><i class="ri-arrow-left-line"></i> Voltar ao login</a>
+            <a href="signup.html" class="link">Criar conta</a>
+          </div>
+        </div>
+
+        <div class="status" aria-live="polite" aria-atomic="true" id="statusArea"></div>
+      </section>
+    </main>
+
+    <script src="assets/js/esqueceusenha.js"></script>
+  </body>
+</html>
