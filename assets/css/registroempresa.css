@@ -1,0 +1,1020 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root{
+  --bg:#f8fafc;
+  --surface:#edf2f7;
+  --surface-2:#e6edf5;
+  --text:#0f172a;
+  --muted:#475569;
+  --brand:#102569;
+  --brand-2:#0b1b4a;
+  --success:#10b981;
+  --warning:#f59e0b;
+  --error:#dc2626;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:0;
+  font-family:'Open Sans',sans-serif;
+  color:var(--text);
+  line-height:1.6;
+  background-color:var(--bg);
+}
+
+h1,h2,.titulo-principal{
+  font-family:'Montserrat',sans-serif;
+  letter-spacing:.2px;
+}
+
+.nav-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  position:fixed;
+  top:20px;
+  left:0;
+  z-index:1000;
+}
+
+.nav-pilula{
+  background:var(--surface);
+  border:1px solid rgba(16,37,105,.10);
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
+  border-radius:9999px;
+  padding:12px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:92%;
+  max-width:1100px;
+  height:60px;
+}
+.nav-logo-link{display:flex;align-items:center;justify-content:center;height:100%}
+.nav-logo{height:90px;width:auto;display:block;margin-right:8px}
+.nav-toggle{
+  display:none;
+  background:none;
+  border:none;
+  color:var(--text);
+  font-size:24px;
+  cursor:pointer;
+  padding:8px;
+  border-radius:8px;
+  transition:all .2s ease;
+  position:relative;
+  z-index:1001;
+}
+.nav-toggle:hover{
+  background:rgba(16,37,105,.05);
+  color:var(--brand);
+}
+.nav-toggle:focus-visible{
+  outline:2px solid var(--brand);
+  outline-offset:2px;
+}
+.nav-links{
+  list-style:none;
+  display:flex;
+  gap:16px;
+  margin:0;
+  padding:0;
+}
+.nav-link{
+  text-decoration:none;
+  color:#1a1a1a;
+  font-weight:800;
+  font-size:16px;
+  opacity:.92;
+  padding:12px 16px;
+  border-radius:10px;
+  transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
+}
+.nav-link.active{color:var(--brand-2);background-color:rgba(16,37,105,.10)}
+.nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
+.nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+/* Mobile Navbar Styles */
+@media (max-width: 768px) {
+  .nav-container {
+    top: 12px;
+    padding: 0 12px;
+  }
+  
+  .nav-pilula {
+    width: 100%;
+    max-width: none;
+    padding: 8px 16px;
+    height: 52px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+  
+  .nav-logo {
+    height: 70px;
+    margin-right: 0;
+  }
+  
+  .nav-toggle {
+    display: block;
+    font-size: 22px;
+    padding: 6px;
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 80px 0 40px;
+    gap: 0;
+    transition: right 0.3s ease;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  
+  .nav-links.active {
+    right: 0;
+  }
+  
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--surface);
+  }
+  
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+  
+  .nav-link {
+    display: block;
+    padding: 18px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    border-radius: 0;
+    transition: all 0.2s ease;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--surface);
+    color: var(--brand);
+    transform: none;
+    opacity: 1;
+  }
+  
+  .nav-link.active {
+    background: rgba(16, 37, 105, 0.08);
+    color: var(--brand);
+    border-left: 4px solid var(--brand);
+  }
+  
+  /* Overlay para fechar menu */
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+  }
+  
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    top: 8px;
+    padding: 0 8px;
+  }
+  
+  .nav-pilula {
+    padding: 6px 12px;
+    height: 48px;
+    border-radius: 14px;
+  }
+  
+  .nav-logo {
+    height: 60px;
+  }
+  
+  .nav-toggle {
+    font-size: 20px;
+    padding: 4px;
+  }
+  
+  .nav-links {
+    width: 100%;
+    right: -100%;
+    padding: 70px 0 30px;
+  }
+  
+  .nav-link {
+    padding: 16px 20px;
+    font-size: 15px;
+    min-height: 50px;
+  }
+}
+
+/* Touch-friendly navbar */
+@media (pointer: coarse) {
+  .nav-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-link {
+    min-height: 48px;
+  }
+}
+
+/* Register Styles */
+.registroempresarial {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 40px;
+  background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 100%);
+}
+
+/* Ajustar padding para navbar mobile */
+@media (max-width: 768px) {
+  .registroempresarial {
+    padding-top: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registroempresarial {
+    padding-top: 72px;
+  }
+}
+
+.register-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.register-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border: 1px solid rgba(16, 37, 105, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%);
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.register-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.register-subtitle {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Seções do formulário */
+.form-section {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(16, 37, 105, 0.05);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--brand);
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title i {
+  font-size: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Campos de senha sempre empilhados para melhor UX */
+.form-row.password-row {
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Melhorar espaçamento dos campos de senha */
+.form-row.password-row .form-group {
+  margin-bottom: 8px;
+}
+
+.form-row.password-row .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Campo "Outros" com animação */
+#otherCategoryGroup {
+  display: none;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#otherCategoryGroup.show {
+  display: flex;
+  opacity: 1;
+  max-height: 100px;
+  margin-top: 16px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--muted);
+  font-size: 18px;
+  z-index: 1;
+  transition: color 0.2s ease;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border: 2px solid var(--surface);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  background: white;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(16, 37, 105, 0.1);
+}
+
+.form-input:focus + .input-icon,
+.form-input:not(:placeholder-shown) + .input-icon {
+  color: var(--brand);
+}
+
+/* Estilo específico para select */
+.form-input select,
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: var(--brand);
+  background: rgba(16, 37, 105, 0.05);
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: all 0.2s ease;
+}
+
+.error-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form-input.error {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Password Strength Indicator */
+.password-strength {
+  margin-top: 8px;
+}
+
+.strength-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--surface);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.strength-fill.weak {
+  width: 33%;
+  background: var(--error);
+}
+
+.strength-fill.medium {
+  width: 66%;
+  background: var(--warning);
+}
+
+.strength-fill.strong {
+  width: 100%;
+  background: var(--success);
+}
+
+.strength-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.strength-text.weak {
+  color: var(--error);
+}
+
+.strength-text.medium {
+  color: var(--warning);
+}
+
+.strength-text.strong {
+  color: var(--success);
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.4;
+  gap: 8px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--surface);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox-container input[type="checkbox"]:checked + .checkmark {
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.terms-link {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.terms-link:hover {
+  color: var(--brand-2);
+  text-decoration: underline;
+}
+
+.register-button {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 37, 105, 0.3);
+}
+
+.register-button:active {
+  transform: translateY(0);
+}
+
+.register-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button-icon {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.register-button:hover .button-icon {
+  transform: translateX(4px);
+}
+
+.register-footer {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.register-footer p {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 20px 0;
+}
+
+.login-link {
+  color: var(--brand);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover {
+  color: var(--brand-2);
+  text-decoration: underline;
+}
+
+.divider {
+  position: relative;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--surface);
+}
+
+.divider span {
+  background: white;
+  padding: 0 16px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.personal-register-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: 2px solid var(--surface);
+  border-radius: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.personal-register-link:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: rgba(16, 37, 105, 0.05);
+  transform: translateY(-1px);
+}
+
+.personal-register-link i {
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .registroempresarial {
+    padding: 60px 16px 32px;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  }
+  
+  .register-container {
+    max-width: 500px;
+  }
+  
+  .register-card {
+    padding: 32px 24px;
+    border-radius: 20px;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+    border: none;
+  }
+  
+  .register-title {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  
+  .register-subtitle {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  
+  .form-section {
+    padding: 20px;
+    border-radius: 14px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  /* Campos de senha com mais espaço no mobile */
+  .form-row.password-row {
+    gap: 24px;
+  }
+  
+  .form-row.password-row .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-input {
+    padding: 18px 18px 18px 52px;
+    font-size: 16px;
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+  }
+  
+  .input-icon {
+    left: 18px;
+    font-size: 18px;
+  }
+  
+  .password-toggle {
+    right: 18px;
+    padding: 8px;
+    font-size: 20px;
+  }
+  
+  .register-button {
+    padding: 18px 24px;
+    font-size: 17px;
+    border-radius: 14px;
+    margin-top: 12px;
+  }
+  
+  .personal-register-link {
+    padding: 16px 24px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registroempresarial {
+    padding: 40px 12px 24px;
+    min-height: 100vh;
+  }
+  
+  .register-container {
+    max-width: 100%;
+  }
+  
+  .register-card {
+    padding: 28px 20px;
+    border-radius: 18px;
+    margin: 0 8px;
+  }
+  
+  .register-header {
+    margin-bottom: 28px;
+  }
+  
+  .register-title {
+    font-size: 24px;
+    letter-spacing: -0.3px;
+  }
+  
+  .register-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  
+  .form-section {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+  
+  .register-form {
+    gap: 18px;
+  }
+  
+  .form-row {
+    gap: 14px;
+  }
+  
+  /* Campos de senha com máximo espaço no mobile pequeno */
+  .form-row.password-row {
+    gap: 20px;
+  }
+  
+  .form-row.password-row .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-group {
+    gap: 6px;
+  }
+  
+  .form-label {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  
+  .form-input {
+    padding: 16px 16px 16px 48px;
+    font-size: 16px;
+    border-radius: 12px;
+    min-height: 52px;
+  }
+  
+  .input-icon {
+    left: 16px;
+    font-size: 16px;
+  }
+  
+  .password-toggle {
+    right: 16px;
+    padding: 6px;
+    font-size: 18px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  
+  .register-button {
+    padding: 16px 20px;
+    font-size: 16px;
+    border-radius: 12px;
+    min-height: 52px;
+    margin-top: 8px;
+  }
+  
+  .register-footer {
+    margin-top: 28px;
+  }
+  
+  .register-footer p {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  
+  .divider {
+    margin: 16px 0;
+  }
+  
+  .divider span {
+    font-size: 13px;
+    padding: 0 12px;
+  }
+  
+  .personal-register-link {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+    min-height: 48px;
+  }
+  
+  .checkbox-container {
+    font-size: 13px;
+    align-items: flex-start;
+  }
+  
+  .checkmark {
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+  }
+  
+  .checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+    font-size: 10px;
+  }
+}
+
+/* Mobile Landscape */
+@media (max-width: 768px) and (orientation: landscape) {
+  .registroempresarial {
+    padding: 20px 16px;
+  }
+  
+  .register-card {
+    padding: 24px 20px;
+  }
+  
+  .register-title {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  
+  .register-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .register-form {
+    gap: 16px;
+  }
+  
+  .form-section {
+    padding: 16px;
+  }
+  
+  .form-input {
+    padding: 14px 14px 14px 44px;
+  }
+  
+  .register-button {
+    padding: 14px 20px;
+    margin-top: 8px;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (pointer: coarse) {
+  .form-input {
+    min-height: 48px;
+  }
+  
+  .register-button {
+    min-height: 48px;
+  }
+  
+  .password-toggle {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  
+  .checkbox-container {
+    min-height: 44px;
+    padding: 8px 0;
+  }
+  
+  .personal-register-link {
+    min-height: 48px;
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .registroempresarial {
+    min-height: -webkit-fill-available;
+  }
+  
+  .form-input {
+    -webkit-appearance: none;
+    border-radius: 12px;
+  }
+  
+  .register-button {
+    -webkit-appearance: none;
+    border-radius: 12px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .register-card {
+    border-width: 0.5px;
+  }
+}
