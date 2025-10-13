@@ -8,7 +8,7 @@ It connects people and businesses through geolocation, smart filters, and a clea
 
 ## 🏗️ Project Overview
 
-MapsLink is a front-end project developed as part of an academic and professional initiative to explore **web mapping technologies**, **data visualization**, and **user experience design** — bringing together engineering, creativity, and functionality.
+MapsLink is a front-end project developed as part of an academic and professional initiative to explore **web mapping technologies**, **data visualization**, and **user experience design** bringing together engineering, creativity, and functionality.
 
 ---
 
@@ -165,7 +165,6 @@ Add screenshots or a short demo GIF once the first public version is deployed.
 | **João Breganon** | Front-End Developer |
 | **Luigi Lima** | UX & UI Designer |
 | **Gabriel Frias** | Full-Stack Support & Testing |
-| **Co-Ideation:** *Guadalupe Candela Peralta* |
 
 > Please keep all team credits visible in derived versions or forks.
 
