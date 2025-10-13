@@ -1,143 +1,169 @@
-# MapsLink
+# 🌍 MapsLink
 
-**MapsLink** is an interactive mapping platform designed to help users **discover companies and job opportunities**, especially in the **Campinas and São Paulo** regions of Brazil. It allows users to explore a dynamic map, browse a company list, and use a side filter panel to refine their search.
+**MapsLink** is an interactive web platform that helps users discover **companies, job opportunities, and events directly on a map** — starting with **Campinas (SP, Brazil)** and expanding further.
 
-This is an academic project developed by students of **Computer Engineering at PUC‑Campinas**, focused on building real‑world applications using web technologies and good UI/UX practices.
-
----
-
-## 🌐 Demo
-
-> _Live version coming soon_  
-> Screenshots and video demos will be added in future updates.
+It connects people and businesses through geolocation, smart filters, and a clean, responsive interface built with simplicity and performance in mind.
 
 ---
 
-## ✅ Features
+## 🏗️ Project Overview
 
-- Sticky top navigation bar with responsive layout  
-- Interactive map centered on São Paulo / Campinas  
-- Left panel with list of companies (scrollable and filterable)  
-- Toggleable right panel with filter options  
-- Map pins representing each company  
-- Modern, clean UI with strong visual hierarchy  
-- Responsive behavior for different screen sizes  
+MapsLink is a front-end project developed as part of an academic and professional initiative to explore **web mapping technologies**, **data visualization**, and **user experience design** — bringing together engineering, creativity, and functionality.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Features
 
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla)  
-- **Icons:** Remix Icon  
-- **Fonts:** Montserrat (headings), Open Sans (body)  
-- **Map API:** (planned) Mapbox or Leaflet  
-- **Design Tools:** Figma for wireframes and visual mockups  
+- 📍 **Interactive Map** — view companies and open positions by region  
+- 🔎 **Dynamic Filters** — search by city, sector, or keywords in real time  
+- 🧭 **Sticky Navigation Bar** — fixed header for intuitive navigation  
+- 🗂️ **Company & Profile Pages** — dedicated areas for users and businesses  
+- 📊 **Dashboard Interface** — metrics, KPIs, and insights (in development)  
+- 🌐 **Mobile-Ready Layout** — responsive design for all devices  
+- 🧭 **Mapbox / Leaflet Integration (upcoming)**  
 
 ---
 
-## 📁 Project Structure
+## 🧩 Tech Stack
 
-```
+| Category | Technologies |
+|-----------|---------------|
+| **Frontend** | HTML5, CSS3, JavaScript (Vanilla) |
+| **UI/UX** | Montserrat & Open Sans (Google Fonts), Remix Icons |
+| **Mapping** | Leaflet / Mapbox API *(planned)* |
+| **Deployment** | GitHub Pages |
+| **Version Control** | Git & GitHub |
+
+---
+
+## 🗂️ Folder Structure
+
 mapslink/
-├── index.html
-├── css/
-│   └── styles.css
-├── js/
-│   └── app.js
-├── assets/
-│   └── images/
-├── README.md
-```
+├─ index.html # Home page
+├─ pages/ # Additional pages
+│ ├─ vagas.html
+│ ├─ mapacheio.html
+│ ├─ perfilusuario.html
+│ ├─ perfilempresa.html
+│ └─ ...
+├─ assets/
+│ ├─ css/ # Stylesheets
+│ ├─ js/ # JavaScript files
+│ └─ images/ # Icons & graphics
+├─ README.md
+└─ LICENSE
+
+yaml
+Copiar código
+
+> All pages share the same color tokens, typography, and responsive layout standards.
 
 ---
 
-## ⚙️ Getting Started
+## 🛠️ How to Run Locally
 
-### Prerequisites
+Run a simple local server in the project root:
 
-- Any modern browser (Chrome, Firefox, Edge)  
-- Optional: local static server (for testing CORS/maps)  
-
-### Run Locally
-
-1. Clone the repository:
+**Option 1 – Python**
 ```bash
-git clone https://github.com/guimais/mapslink.git
-cd mapslink
-```
+python -m http.server
+Option 2 – Node.js
 
-2. Open the project:
-- Open `index.html` directly in your browser  
-**or**  
-- Use a local server (recommended for some map APIs):
-```bash
-# using Python
-python -m http.server 5173
+bash
+Copiar código
+npx http-server
+Then open your browser at:
 
-# using Node
-npx serve .
+arduino
+Copiar código
+http://localhost:8000
+🗺️ Roadmap
+ Core structure and layout
 
-# or install a simple server globally
-npm i -g http-server
-http-server
-```
+ Sticky navbar and navigation flow
 
-Then visit `http://localhost:5173` or the printed URL in your terminal.
+ JSON-based data layer for companies
 
----
+ Leaflet / Mapbox map integration
 
-## 🧪 Status
+ Search & filter system (city, sector, keyword)
 
-The project is in early development phase.  
-Current progress:
-- [x] Initial layout and design system  
-- [x] Responsive sticky navbar  
-- [x] Company list UI  
-- [x] Layout for map area and filter panel  
-- [ ] Map integration with markers  
-- [ ] Interactive filters  
-- [ ] Company details and click behavior  
+ User and company dashboards
 
----
+ Responsive mobile version
 
-## 🔭 Roadmap
+ Authentication and login pages
 
-- [ ] Mobile version with bottom sheet  
-- [ ] Integration with real data (via JSON or database)  
-- [ ] Search bar and keyword filtering  
-- [ ] Mapbox or Leaflet integration  
-- [ ] Favorite companies (localStorage or backend)  
-- [ ] Admin dashboard for managing companies/jobs  
-- [ ] Job listing integration  
-- [ ] Authentication system (optional)  
-- [ ] English/Portuguese language toggle  
+ Multi-language (pt/en) support
 
----
+🎨 Design Tokens
+Token	Example	Description
+--bg	#f8fafc	Background color
+--surface	#edf2f7	Card surface
+--text	#0f172a	Primary text color
+--brand	#102569	Brand primary
+--brand-2	#0b1b4a	Brand secondary
 
-## 👨‍💻 Authors
+Typography:
 
-This project is developed as part of our academic journey at **PUC‑Campinas (2nd semester)**.
+Montserrat — titles & headings
 
-| Name                               |
-|------------------------------------|
-| **Guilherme Carvalho Mais**        |
-| **Gabriel Duarte Frias**           |
-| **João Gabriel Breganon Ferreira** |
-| **Gabriel Senatore Costa**         |
-| **Luigi Lima**                     |
+Open Sans — paragraphs & UI text
 
----
+🧭 Architecture Overview
+Frontend: static HTML + CSS + JS (modular structure).
 
-## 📜 License
+Map Module: renders companies dynamically on the map.
 
-This project is under the [MIT License](https://opensource.org/licenses/MIT).  
-Feel free to fork, use, or contribute!
+Filter Module: controls user search and updates map/list in real time.
 
----
+Data Layer: mock companies.json (future DB integration).
 
-## 🙌 Acknowledgements
+UI Layer: manages components (navbar, cards, dashboard).
 
-- Remix Icon: [https://remixicon.com](https://remixicon.com)  
-- Google Fonts: [Montserrat](https://fonts.google.com/specimen/Montserrat), [Open Sans](https://fonts.google.com/specimen/Open+Sans)  
-- Map tools (coming soon): Mapbox / Leaflet / Google Maps API  
-- Special thanks to **Prof. Fernando Luiz de Almeida Silveira** for guidance during this project.
+💡 Development Guidelines
+Keep consistent code formatting (2-space indentation, no inline styles).
+
+Use semantic HTML for accessibility (proper <header>, <main>, <footer>).
+
+All scripts must include the defer attribute.
+
+Maintain WCAG AA contrast ratios in color adjustments.
+
+📸 Demo Preview
+(coming soon — will be hosted via GitHub Pages)
+
+Add screenshots or a short demo GIF once the first public version is deployed.
+
+🤝 Contributing
+Fork the repository
+
+Create a new branch: git checkout -b feature/your-feature
+
+Commit your changes: git commit -m "add: new feature"
+
+Push to your branch: git push origin feature/your-feature
+
+Open a Pull Request 🚀
+
+👥 Team
+Member	Role
+Guilherme Carvalho Mais	Front-End Developer & Project Lead
+Gabriel Senatore	Software Engineer
+João Breganon	Front-End Developer
+Luigi Lima	UX & UI Designer
+Gabriel Frias	Full-Stack Support & Testing
+Co-Ideation: Guadalupe Candela Peralta	
+
+Please keep all team credits visible in derived versions or forks.
+
+🏆 Badges
+
+
+
+
+📄 License
+This project is licensed under the MIT License — see the LICENSE file for details.
+
+“MapsLink connects more than locations — it connects people, ideas, and opportunities.”
+— The MapsLink Team
