@@ -1,0 +1,14 @@
+[
+  {
+    "id": "cmp-001",
+    "name": "Exemplo Company",
+    "sector": "Software",
+    "city": "Campinas",
+    "state": "SP",
+    "location": { "lat": -22.9056, "lng": -47.0608 },
+    "website": "",
+    "jobs": [],
+    "tags": [],
+    "updated_at": "2025-10-13"
+  }
+]

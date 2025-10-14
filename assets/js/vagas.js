@@ -186,6 +186,37 @@
   } catch {}
 })();
 
+// Stub seguro: prepara agregacao de vagas, sem render automatico
+(function () {
+  if (window.__vagasSetup) return;
+  window.__vagasSetup = true;
+
+  async function prepareJobsData() {
+    try {
+      const data =
+        window.__companies || (await loadJSON('/assets/data/companies.json'));
+      const jobs = [];
+      (data || []).forEach(c =>
+        (c.jobs || []).forEach(j => {
+          jobs.push({
+            ...j,
+            companyId: c.id,
+            company: c.name,
+            city: c.city,
+            sector: c.sector
+          });
+        })
+      );
+      window.__jobs = jobs;
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  // Disponibiliza para uso manual futuro; nao autoexecuta.
+  window.prepareJobsData = prepareJobsData;
+})();
+
 (function () {
   const page = document.getElementById('vagas');
   if (!page) return;

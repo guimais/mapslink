@@ -1,3 +1,21 @@
+// Helpers sem side-effects (nao alteram UI nem fluxo atual)
+window.$ = (sel, root = document) => root.querySelector(sel);
+window.$$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+window.loadJSON = async path => {
+  const res = await fetch(path, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Falha ao carregar ${path}`);
+  return res.json();
+};
+
+window.readParams = () =>
+  Object.fromEntries(new URLSearchParams(location.search));
+
+window.writeParams = (params = {}) => {
+  const sp = new URLSearchParams(params);
+  history.replaceState(null, '', `${location.pathname}?${sp.toString()}`);
+};
+
 (() => {
   const win = window;
   const doc = document;

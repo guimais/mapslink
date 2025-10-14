@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <link rel="manifest" href="../manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102569">
+    <link rel="manifest" href="/manifest.json">
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
 
     <meta charset="UTF-8">
     <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Maps Link — Currículos</title>
+    <title>Maps Link ÔÇö Curr├¡culos</title>
     <link rel="stylesheet" href="../assets/css/paginacurriculo.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">    
+    <script src='/assets/js/_shared-nav.js' defer></script>
   </head>
   <body data-nav-active="paginacurriculo.html">
     <header class="nav-container" role="banner">
       <nav class="nav-pilula" aria-label="Principal">
-        <a href="#home" class="nav-logo-link" aria-label="Maps Link - Início">
+        <a href="#home" class="nav-logo-link" aria-label="Maps Link - In├¡cio">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
@@ -27,7 +32,7 @@
           <li role="none"><a role="menuitem" class="nav-link" href="selecaoperfil.html">Profile</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginadashboard.html">Dashboard</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="vagas.html">Vagas</a></li>
-          <li role="none"><a role="menuitem" class="nav-link active" href="paginacurriculo.html" aria-current="page">Currículos</a></li>
+          <li role="none"><a role="menuitem" class="nav-link active" href="paginacurriculo.html" aria-current="page">Curr├¡culos</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="agenda.html">Agenda</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="about.html">About</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="contact.html">Contact</a></li>
@@ -38,14 +43,14 @@
     <main id="curriculo" class="page-wrapper" role="main">
       <section class="page-header" aria-labelledby="titulo-curriculos">
         <div class="page-title-wrap">
-          <span class="avatar-badge"><img src="../assets/images/image 4.png" alt="Foto do usuário"></span>
-          <h1 id="titulo-curriculos">Currículos recebidos</h1>
+          <span class="avatar-badge"><img src="../assets/images/image 4.png" alt="Foto do usu├írio"></span>
+          <h1 id="titulo-curriculos">Curr├¡culos recebidos</h1>
         </div>
 
-        <div class="actions-bar" role="group" aria-label="Ações de currículos">
+        <div class="actions-bar" role="group" aria-label="A├º├Áes de curr├¡culos">
           <label class="search-input">
             <i class="ri-search-line" aria-hidden="true"></i>
-            <input type="search" id="busca-cv" name="q" placeholder="Pesquisar" aria-label="Pesquisar currículos">
+            <input type="search" id="busca-cv" name="q" placeholder="Pesquisar" aria-label="Pesquisar curr├¡culos">
           </label>
 
           <button class="btn" id="btn-exportar" type="button">Exportar</button>
@@ -64,7 +69,7 @@
                   <option value="">Todos</option>
                   <option value="Aprovado">Aprovado</option>
                   <option value="Reprovada">Reprovada</option>
-                  <option value="Em análise">Em análise</option>
+                  <option value="Em an├ílise">Em an├ílise</option>
                 </select>
               </div>
 
@@ -76,11 +81,11 @@
               <div class="filter-group filter-dates">
                 <div>
                   <label for="f-data-inicio">Data inicial</label>
-                  <input type="text" id="f-data-inicio" name="data_inicio" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" aria-label="Data inicial no formato dia/mês/ano">
+                  <input type="text" id="f-data-inicio" name="data_inicio" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" aria-label="Data inicial no formato dia/m├¬s/ano">
                 </div>
                 <div>
                   <label for="f-data-fim">Data final</label>
-                  <input type="text" id="f-data-fim" name="data_fim" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" aria-label="Data final no formato dia/mês/ano">
+                  <input type="text" id="f-data-fim" name="data_fim" placeholder="dd/mm/aaaa" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" aria-label="Data final no formato dia/m├¬s/ano">
                 </div>
               </div>
 
@@ -94,7 +99,7 @@
       </section>
 
       <section class="table-section" aria-labelledby="tabela-curriculos">
-        <h2 id="tabela-curriculos" class="sr-only">Lista de currículos</h2>
+        <h2 id="tabela-curriculos" class="sr-only">Lista de curr├¡culos</h2>
         <div class="table-wrapper" role="region" aria-live="polite" aria-describedby="tabela-curriculos">
           <table class="table-cv">
             <thead>
@@ -103,7 +108,7 @@
                 <th scope="col">Vaga</th>
                 <th scope="col">Data de envio</th>
                 <th scope="col">Status</th>
-                <th scope="col">Ações</th>
+                <th scope="col">A├º├Áes</th>
               </tr>
             </thead>
             <tbody>
@@ -121,9 +126,9 @@
               <tr>
                 <td>
                   <span class="avatar"><img src="../assets/images/10.png" alt="Avatar"></span>
-                  <span class="cell-text">Lívia</span>
+                  <span class="cell-text">L├¡via</span>
                 </td>
-                <td>Secretária</td>
+                <td>Secret├íria</td>
                 <td><time datetime="2023-01-30">30/01/2023</time></td>
                 <td><span class="status status-reprovada">Reprovada</span></td>
                 <td><button class="btn btn-small ver-cv" data-id="cv-livia" type="button">Ver CV</button></td>
@@ -136,7 +141,7 @@
                 </td>
                 <td>PO</td>
                 <td><time datetime="2025-11-06">06/11/2025</time></td>
-                <td><span class="status status-analise">Em análise</span></td>
+                <td><span class="status status-analise">Em an├ílise</span></td>
                 <td><button class="btn btn-small ver-cv" data-id="cv-mohamed" type="button">Ver CV</button></td>
               </tr>
 
@@ -157,15 +162,8 @@
     </main>
 
 
-
-    <script src="../assets/js/_shared-nav.js" defer></script>
-
-
-    <script src="../assets/js/main.js" defer></script>
-
-
     <script defer src="../assets/js/paginacurriculo.js"></script>
-</body>
+  </body>
 </html>
 
 

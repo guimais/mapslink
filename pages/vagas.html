@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <link rel="manifest" href="../manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102569">
+    <link rel="manifest" href="/manifest.json">
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
 
     <meta charset="UTF-8">
     <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Maps Link — Vagas</title>
+    <title>Maps Link ÔÇö Vagas</title>
     <link rel="stylesheet" href="../assets/css/vagas.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">    
+    <script src='/assets/js/_shared-nav.js' defer></script>
   </head>
   <body data-nav-active="vagas.html">
     <header class="nav-container" role="banner">
       <nav class="nav-pilula" aria-label="Principal">
-        <a href="#home" class="nav-logo-link" aria-label="Maps Link - Início">
+        <a href="#home" class="nav-logo-link" aria-label="Maps Link - In├¡cio">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
@@ -27,7 +32,7 @@
           <li role="none"><a role="menuitem" class="nav-link" href="selecaoperfil.html">Profile</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginadashboard.html">Dashboard</a></li>
           <li role="none"><a role="menuitem" class="nav-link active" href="vagas.html" aria-current="page">Vagas</a></li>
-          <li role="none"><a role="menuitem" class="nav-link" href="enviocurriculo.html">Currículo</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="enviocurriculo.html">Curr├¡culo</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="agenda.html">Agenda</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="about.html">About</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="contact.html">Contact</a></li>
@@ -38,7 +43,7 @@
     <main id="vagas" class="page-wrapper" role="main">
       <section class="page-header" aria-labelledby="titulo-vagas">
         <div class="page-title-wrap">
-          <span class="avatar-badge"><img src="../assets/images/image 4.png" alt="Ícone do módulo de vagas"></span>
+          <span class="avatar-badge"><img src="../assets/images/image 4.png" alt="├ìcone do m├│dulo de vagas"></span>
           <h1 id="titulo-vagas">Vagas</h1>
         </div>
       </section>
@@ -49,12 +54,12 @@
           <table class="table-cv">
             <thead>
               <tr>
-                <th scope="col">Título da Vaga</th>
-                <th scope="col">Área</th>
+                <th scope="col">T├¡tulo da Vaga</th>
+                <th scope="col">├ürea</th>
                 <th scope="col">Tipo</th>
-                <th scope="col">Data de Publicação</th>
+                <th scope="col">Data de Publica├º├úo</th>
                 <th scope="col">Status</th>
-                <th scope="col">Ações</th>
+                <th scope="col">A├º├Áes</th>
               </tr>
             </thead>
             <tbody>
@@ -82,7 +87,7 @@
               <tr>
                 <td><span class="cell-text">Designer</span></td>
                 <td>Design</td>
-                <td>ESTÁGIO</td>
+                <td>EST├üGIO</td>
                 <td><time datetime="2025-06-22">22/06/2025</time></td>
                 <td><span class="status status-aprovado" aria-label="Vaga aberta">Aberta</span></td>
               </tr>
@@ -98,42 +103,35 @@
       </section>
 
       <section aria-labelledby="form-cadastrar-vaga">
-        <h3 id="form-cadastrar-vaga" class="sr-only">Formulário para cadastro de nova vaga</h3>
+        <h3 id="form-cadastrar-vaga" class="sr-only">Formul├írio para cadastro de nova vaga</h3>
         <form id="form-vaga" class="filter-form" aria-describedby="dica-form-vaga">
           <div class="filter-group">
-            <label for="vaga-titulo">Título da Vaga</label>
+            <label for="vaga-titulo">T├¡tulo da Vaga</label>
             <input type="text" id="vaga-titulo" name="titulo" placeholder="Ex.: Dev Frontend" required>
           </div>
           <div class="filter-group">
-            <label for="vaga-area">Área</label>
+            <label for="vaga-area">├ürea</label>
             <input type="text" id="vaga-area" name="area" placeholder="Ex.: Tecnologia" required>
           </div>
           <div class="filter-group">
-            <label for="vaga-descricao">Descrição</label>
+            <label for="vaga-descricao">Descri├º├úo</label>
             <input type="text" id="vaga-descricao" name="descricao" placeholder="Resumo da vaga">
           </div>
           <div class="filter-group">
             <label for="vaga-tipo">Tipo de contrato</label>
-            <input type="text" id="vaga-tipo" name="tipo" placeholder="Ex.: CLT, PJ, ESTÁGIO" required>
+            <input type="text" id="vaga-tipo" name="tipo" placeholder="Ex.: CLT, PJ, EST├üGIO" required>
           </div>
           <div class="filter-actions" style="justify-content:flex-start">
             <button type="submit" class="btn btn-primary">Adicionar Vaga</button>
           </div>
-          <p id="dica-form-vaga" class="sr-only">Preencha os campos e pressione o botão Adicionar Vaga para cadastrar.</p>
+          <p id="dica-form-vaga" class="sr-only">Preencha os campos e pressione o bot├úo Adicionar Vaga para cadastrar.</p>
         </form>
       </section>
     </main>
 
 
-
-    <script src="../assets/js/_shared-nav.js" defer></script>
-
-
-    <script src="../assets/js/main.js" defer></script>
-
-
     <script defer src="../assets/js/vagas.js"></script>
-</body>
+  </body>
 </html>
 
 

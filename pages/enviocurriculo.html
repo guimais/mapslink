@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <link rel="manifest" href="../manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102569">
+    <link rel="manifest" href="/manifest.json">
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
 
     <meta charset="UTF-8">
-    <meta name="description" content="Maps Link — Envio de Currículo para empresa">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Maps Link — Envio de Currículo</title>
+    <meta name="description" content="Maps Link ÔÇö Envio de Curr├¡culo para empresa">
+    <title>Maps Link ÔÇö Envio de Curr├¡culo</title>
     <link rel="stylesheet" href="../assets/css/enviocurriculo.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">    
+    <script src='/assets/js/_shared-nav.js' defer></script>
   </head>
   <body data-nav-active="enviocurriculo.html">
     <header class="nav-container" role="banner">
       <nav class="nav-pilula" aria-label="Principal">
-        <a href="#home" class="nav-logo-link" aria-label="Maps Link - Início">
+        <a href="#home" class="nav-logo-link" aria-label="Maps Link - In├¡cio">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
@@ -27,8 +32,8 @@
           <li role="none"><a role="menuitem" class="nav-link" href="selecaoperfil.html">Profile</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginadashboard.html">Dashboard</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="vagas.html">Vagas</a></li>
-          <li role="none"><a role="menuitem" class="nav-link active" href="enviocurriculo.html" aria-current="page">Currículo</a></li>
-          <li role="none"><a role="menuitem" class="nav-link" href="paginacurriculo.html">Currículos</a></li>
+          <li role="none"><a role="menuitem" class="nav-link active" href="enviocurriculo.html" aria-current="page">Curr├¡culo</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="paginacurriculo.html">Curr├¡culos</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="about.html">About</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="contact.html">Contact</a></li>
         </ul>
@@ -39,14 +44,14 @@
       <section class="page-header" aria-labelledby="empresa-titulo">
         <div class="page-title-wrap">
           <span class="avatar-badge" aria-hidden="true">
-            <img src="../assets/images/image 4.png" alt="Ícone da empresa">
+            <img src="../assets/images/image 4.png" alt="├ìcone da empresa">
           </span>
           <div>
             <h1 id="empresa-titulo" style="color:var(--brand)">SAMSUNG</h1>
             <p class="subtitulo-principal" style="margin:.25rem 0 0 0;">Veja a disponibilidade de vaga!</p>
           </div>
         </div>
-        <div class="actions-bar" aria-label="Ações rápidas">
+        <div class="actions-bar" aria-label="A├º├Áes r├ípidas">
           <div class="search-input" role="search">
             <i class="ri-search-line" aria-hidden="true"></i>
             <input type="search" placeholder="Buscar vaga..." aria-label="Buscar vaga">
@@ -55,15 +60,15 @@
       </section>
 
       <section class="table-section" aria-labelledby="lista-vagas-empresa">
-        <h2 id="lista-vagas-empresa" class="sr-only">Vagas disponíveis nesta empresa</h2>
+        <h2 id="lista-vagas-empresa" class="sr-only">Vagas dispon├¡veis nesta empresa</h2>
         <div class="table-wrapper" role="region" aria-live="polite" aria-describedby="lista-vagas-empresa">
           <table class="table-cv table-empresa">
             <thead>
               <tr>
-                <th scope="col">Título</th>
-                <th scope="col">Área/Tecnologia</th>
+                <th scope="col">T├¡tulo</th>
+                <th scope="col">├ürea/Tecnologia</th>
                 <th scope="col">Modelo</th>
-                <th scope="col" style="text-align:right;">Ações</th>
+                <th scope="col" style="text-align:right;">A├º├Áes</th>
               </tr>
             </thead>
             <tbody>
@@ -72,27 +77,27 @@
                 <td>C/C++</td>
                 <td>Presencial</td>
                 <td>
-                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-backend-ccpp" aria-pressed="false" title='Enviar currículo para "Dev Backend"'>
+                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-backend-ccpp" aria-pressed="false" title='Enviar curr├¡culo para "Dev Backend"'>
                     <i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga
                   </button>
                 </td>
               </tr>
               <tr>
                 <td><span class="cell-text">Marketing</span></td>
-                <td>—</td>
+                <td>ÔÇö</td>
                 <td>Presencial</td>
                 <td>
-                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-mkt" aria-pressed="false" title='Enviar currículo para "Marketing"'>
+                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-mkt" aria-pressed="false" title='Enviar curr├¡culo para "Marketing"'>
                     <i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga
                   </button>
                 </td>
               </tr>
               <tr>
                 <td><span class="cell-text">Consultor Financeiro</span></td>
-                <td>—</td>
+                <td>ÔÇö</td>
                 <td>Presencial</td>
                 <td>
-                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-consultor-fin" aria-pressed="false" title='Enviar currículo para "Consultor Financeiro"'>
+                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-consultor-fin" aria-pressed="false" title='Enviar curr├¡culo para "Consultor Financeiro"'>
                     <i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga
                   </button>
                 </td>
@@ -102,17 +107,17 @@
                 <td>Python</td>
                 <td>Presencial</td>
                 <td>
-                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-analista-dados" aria-pressed="false" title='Enviar currículo para "Analista de Dados"'>
+                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-analista-dados" aria-pressed="false" title='Enviar curr├¡culo para "Analista de Dados"'>
                     <i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga
                   </button>
                 </td>
               </tr>
               <tr>
                 <td><span class="cell-text">Gerente de Produto</span></td>
-                <td>—</td>
+                <td>ÔÇö</td>
                 <td>Presencial</td>
                 <td>
-                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-gpm" aria-pressed="false" title='Enviar currículo para "Gerente de Produto"'>
+                  <button class="btn btn-primary btn-small prestar-vaga" data-id="samsung-gpm" aria-pressed="false" title='Enviar curr├¡culo para "Gerente de Produto"'>
                     <i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga
                   </button>
                 </td>
@@ -124,15 +129,8 @@
     </main>
 
 
-
-    <script src="../assets/js/_shared-nav.js" defer></script>
-
-
-    <script src="../assets/js/main.js" defer></script>
-
-
     <script defer src="../assets/js/enviocurriculo.js"></script>
-</body>
+  </body>
 </html>
 
 

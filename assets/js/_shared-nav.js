@@ -1,3 +1,15 @@
+// NAO injetar nada ainda (evita mudancas visuais)
+// Apenas deixar o template reservado para o STEP 2.
+const NAV_HTML = ``;
+
+// Funcao disponivel para uso futuro; nao e chamada automaticamente.
+window.injectSharedNav = function injectSharedNav() {
+  if (!document.body) return;
+  if (!document.querySelector('header')) return;
+  if (!NAV_HTML) return;
+  document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
+};
+
 (() => {
   const win = window;
   const doc = document;
