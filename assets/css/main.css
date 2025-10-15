@@ -1,0 +1,64 @@
+@charset "UTF-8";
+[class^="ri-"], [class*=" ri-"] {
+    font-family: "remixicon" !important;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+html,
+main,
+header,
+nav,
+footer,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li,
+span,
+i,
+button,
+input,
+textarea,
+select,
+label {
+    font-family: inherit;
+}
+
+i:not([class^="ri-"]):not([class*=" ri-"]) {
+    font-family: inherit !important;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+button {
+    font-variant-ligatures: none;
+    -webkit-font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "clig" 0, "calt" 0;
+}
+
+body {
+    font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    font-family: "Montserrat", "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", sans-serif;
+}

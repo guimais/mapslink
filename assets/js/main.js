@@ -1,4 +1,3 @@
-// Helpers sem side-effects (nao alteram UI nem fluxo atual)
 window.$ = (sel, root = document) => root.querySelector(sel);
 window.$$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 

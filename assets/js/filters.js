@@ -1,25 +1,30 @@
-// Logica pura de filtros (sem mexer no DOM/UI)
 (function () {
-  function filterCompanies(data, { city, sector, q } = {}) {
-    const QQ = (q || '').toLowerCase();
+  function filterCompanies(data, filters = {}) {
+    const q = (filters.q || '').toLowerCase();
+    const city = filters.city || '';
+    const sector = filters.sector || '';
     return (data || []).filter(c => {
-      const okCity = !city || c.city === city;
-      const okSector = !sector || c.sector === sector;
-      const corpus = [
-        c.name || '',
-        (c.tags || []).join(' '),
-        ...(c.jobs || []).map(j => j.title || '')
-      ]
-        .join(' ')
-        .toLowerCase();
-      const okText = !QQ || corpus.includes(QQ);
-      return okCity && okSector && okText;
+      const byCity = !city || c.city === city;
+      const bySector = !sector || c.sector === sector;
+      const byText =
+        !q ||
+        [
+          c.name || '',
+          c.sector || '',
+          c.city || '',
+          ...(c.tags || []),
+          ...(c.jobs || []).map(j => j.title || '')
+        ]
+          .join(' ')
+          .toLowerCase()
+          .includes(q);
+      return byCity && bySector && byText;
     });
   }
 
-  function unique(list, key) {
+  function uniqueValues(list, key) {
     return [...new Set((list || []).map(i => i[key]).filter(Boolean))];
   }
 
-  window.MapsFilters = { filterCompanies, unique };
+  window.MapsFilters = { filterCompanies, uniqueValues };
 })();
