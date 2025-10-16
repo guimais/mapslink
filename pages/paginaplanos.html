@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-BR">\n  <head>
-    <meta charset="UTF-8">
+﻿<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="/manifest.json">
-    <link href="/assets/css/main.css" rel="stylesheet">
-<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+    <link rel="manifest" href="../manifest.json">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Maps Link - Planos e recursos">
-    <title>Maps Link - Planos</title>
+    <title>MapsLink &ndash; Planos</title>
     <link rel="stylesheet" href="../assets/css/paginaplanos.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <script defer src="../assets/js/_shared-nav.js"></script>
+    <script defer src="../assets/js/main.js"></script>
   </head>
-  <body data-nav-active="paginaplanos.html">
-    <header class="nav-container" role="banner">
-      <nav class="nav-pilula" role="navigation" aria-label="Navegação principal">
-        <a href="#home" class="nav-logo-link" aria-label="Ir para Início">
+  <body data-page="planos" data-nav-active="paginaplanos.html">
+    <header id="app-nav" class="nav-container" role="banner">
+      <nav class="nav-pilula" role="navigation" aria-label="Navega&ccedil;&atilde;o principal">
+        <a href="#home" class="nav-logo-link" aria-label="Ir para In&iacute;cio">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir/Fechar menu">
@@ -37,20 +40,20 @@
         <p class="subtitulo-principal">Recursos que aceleram a sua busca por oportunidades e conectam empresas e talentos pelo mapa.</p>
       </section>
 
-      <section class="planos-grid" aria-label="Planos disponíveis">
+      <section class="planos-grid" aria-label="Planos dispon&iacute;veis">
         <article class="plano-card plano-bronze" aria-labelledby="plano-bronze-titulo">
           <header class="plano-header">
             <i class="ri-medal-2-line" aria-hidden="true"></i>
             <h2 id="plano-bronze-titulo">Bronze</h2>
-            <p class="plano-tagline">Mais filtros — Básico</p>
+            <p class="plano-tagline">Mais filtros &ndash; B&aacute;sico</p>
           </header>
           <ul class="plano-features">
-            <li>Filtros avançados por área/cidade</li>
-            <li>Visualização básica no mapa</li>
+            <li>Filtros avan&ccedil;ados por &aacute;rea/cidade</li>
+            <li>Visualiza&ccedil;&atilde;o b&aacute;sica no mapa</li>
             <li>3 alertas de vaga por semana</li>
           </ul>
           <div class="plano-footer">
-            <span class="preco">R$ —</span>
+            <span class="preco">R$ &ndash;</span>
             <button class="botao assinar" data-plan="bronze" aria-label="Assinar plano Bronze">Assinar</button>
           </div>
         </article>
@@ -59,15 +62,15 @@
           <header class="plano-header">
             <i class="ri-medal-line" aria-hidden="true"></i>
             <h2 id="plano-silver-titulo">Silver</h2>
-            <p class="plano-tagline">IA Auxiliadora — Intermediário</p>
+            <p class="plano-tagline">IA Auxiliadora &ndash; Intermedi&aacute;rio</p>
           </header>
           <ul class="plano-features">
-            <li>Recomendações com IA no perfil</li>
-            <li>Tags interativas e avaliações no mapa</li>
+            <li>Recomenda&ccedil;&otilde;es com IA no perfil</li>
+            <li>Tags interativas e avalia&ccedil;&otilde;es no mapa</li>
             <li>10 alertas de vaga por semana</li>
           </ul>
           <div class="plano-footer">
-            <span class="preco">R$ —</span>
+            <span class="preco">R$ &ndash;</span>
             <button class="botao assinar" data-plan="silver" aria-label="Assinar plano Silver">Assinar</button>
           </div>
         </article>
@@ -76,22 +79,22 @@
           <header class="plano-header">
             <i class="ri-medal-fill" aria-hidden="true"></i>
             <h2 id="plano-gold-titulo">Gold</h2>
-            <p class="plano-tagline">Head Hunter exclusivo — Completo</p>
+            <p class="plano-tagline">Head Hunter exclusivo &ndash; Completo</p>
           </header>
           <ul class="plano-features">
             <li>Destaque nas buscas e no mapa</li>
-            <li>Estatísticas do bairro em tempo real</li>
-            <li>Canal com Head Hunter &amp; suporte prioritário</li>
+            <li>Estat&iacute;sticas do bairro em tempo real</li>
+            <li>Canal com Head Hunter e suporte priorit&aacute;rio</li>
           </ul>
           <div class="plano-footer">
-            <span class="preco">R$ —</span>
+            <span class="preco">R$ &ndash;</span>
             <button class="botao assinar" data-plan="gold" aria-label="Assinar plano Gold">Assinar</button>
           </div>
         </article>
       </section>
 
       <section class="planos-cta">
-        <p>Dúvidas sobre qual plano escolher?</p>
+        <p>D&uacute;vidas sobre qual plano escolher?</p>
         <a class="botao" href="contact.html">Falar com a equipe</a>
       </section>
     </main>
@@ -101,7 +104,6 @@
     <section id="profile" hidden></section>
     <section id="about" hidden></section>
     <section id="contact" hidden></section>
-
 
     <script defer src="../assets/js/paginaplanos.js"></script>
   </body>
