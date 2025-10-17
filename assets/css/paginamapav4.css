@@ -14,6 +14,11 @@
   --shadow-md:0 6px 20px rgba(0,0,0,.08);
   --shadow-lg:0 10px 28px rgba(0,0,0,.12);
   --nav-h:68px;
+
+  /* NOVO: controle da lista de empresas */
+  --card-h:220px;          /* altura-base de cada card (bate com teu min-height) */
+  --cards-visible:3;       /* quantos cards visíveis */
+  --cards-gap:14px;        /* gap entre cards, igual ao que já usas */
 }
 
 *{
@@ -87,7 +92,7 @@ h2,
   width:auto;
   display:block;
   margin-right:8px;
-  max-height:calc(var(--nav-h) + 20px);
+  max-height:calc(var(--nav-h) + 20px); 
 }
 
 .nav-logo-link{
@@ -216,7 +221,28 @@ h2,
   padding:0;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:var(--cards-gap);
+
+  max-height:calc(
+    var(--card-h) * var(--cards-visible) +
+    var(--cards-gap) * (var(--cards-visible) - 1)
+  );
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(16,37,105,.22) rgba(16,37,105,.06);
+}
+
+.cards-empresas::-webkit-scrollbar{
+  width:8px;
+}
+.cards-empresas::-webkit-scrollbar-thumb{
+  background:rgba(16,37,105,.22);
+  border-radius:8px;
+}
+.cards-empresas::-webkit-scrollbar-track{
+  background:rgba(16,37,105,.06);
+  border-radius:8px;
 }
 
 .card-empresa{
@@ -226,7 +252,7 @@ h2,
   padding:16px;
   box-shadow:var(--shadow-sm);
   position:relative;
-  min-height:220px;
+  min-height:var(--card-h); 
 }
 
 .empresa-nome{
@@ -730,6 +756,11 @@ h2,
     font-weight:700;
     padding:10px 6px;
     font-size:16px;
+  }
+
+  .cards-empresas{
+    max-height:none;
+    overflow:visible;
   }
 }
 
