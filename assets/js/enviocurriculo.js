@@ -1,26 +1,45 @@
 (function () {
-  const page = document.getElementById('envio-cv');
+  "use strict";
+
+  function ensureStyles() {
+    if (document.getElementById("ml-envio-styles")) return;
+    const s = document.createElement("style");
+    s.id = "ml-envio-styles";
+    s.textContent = `
+#result-count.envio-result {
+  margin: 8px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+}
+`;
+    document.head.appendChild(s);
+  }
+
+  const page = document.getElementById("envio-cv");
   if (!page) return;
 
-  const table = page.querySelector('.table-empresa');
+  const table = page.querySelector(".table-empresa");
   const thead = table?.tHead;
   const tbody = table?.tBodies?.[0];
   if (!table || !thead || !tbody) return;
 
-  const empresaTituloEl = document.getElementById('empresa-titulo');
-  const empresaNome = (empresaTituloEl?.textContent || 'empresa').trim();
+  ensureStyles();
 
-  const searchInput = page.querySelector('.search-input input');
+  const empresaTituloEl = document.getElementById("empresa-titulo");
+  const empresaNome = (empresaTituloEl?.textContent || "empresa").trim();
+
+  const searchInput = page.querySelector(".search-input input");
   const live = createLiveRegion();
   document.body.appendChild(live);
 
   const slugify = s =>
-    (s || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+    (s || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
 
   const LS_KEY = `mapslink_envio_cv_${slugify(empresaNome)}_v1`;
   const LS_SORT = `${LS_KEY}_sort`;
@@ -28,15 +47,15 @@
   let applied = new Set();
 
   function createLiveRegion() {
-    const el = document.createElement('div');
-    el.className = 'sr-only';
-    el.setAttribute('aria-live', 'polite');
-    el.setAttribute('aria-atomic', 'true');
+    const el = document.createElement("div");
+    el.className = "sr-only";
+    el.setAttribute("aria-live", "polite");
+    el.setAttribute("aria-atomic", "true");
     return el;
   }
 
   function announce(msg) {
-    live.textContent = '';
+    live.textContent = "";
     setTimeout(() => (live.textContent = msg), 10);
   }
 
@@ -55,40 +74,40 @@
 
   function ensureRowIds() {
     [...tbody.rows].forEach((tr, idx) => {
-      const btn = tr.querySelector('.prestar-vaga');
+      const btn = tr.querySelector(".prestar-vaga");
       if (!btn) return;
       if (!btn.dataset.id) {
-        const titulo = tr.querySelector('td:first-child .cell-text')?.textContent?.trim() || `vaga-${idx + 1}`;
-        const modelo = tr.querySelector('td:nth-child(3)')?.textContent?.trim() || '';
+        const titulo = tr.querySelector("td:first-child .cell-text")?.textContent?.trim() || `vaga-${idx + 1}`;
+        const modelo = tr.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
         btn.dataset.id = `${slugify(empresaNome)}-${slugify(titulo)}-${slugify(modelo)}-${idx}`;
       }
-      btn.setAttribute('type', 'button');
-      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute("type", "button");
+      btn.setAttribute("aria-pressed", "false");
     });
   }
 
   function markAsApplied(btn, titulo) {
-    btn.classList.add('btn-prestado');
-    btn.setAttribute('aria-pressed', 'true');
-    btn.setAttribute('disabled', 'true');
+    btn.classList.add("btn-prestado");
+    btn.setAttribute("aria-pressed", "true");
+    btn.setAttribute("disabled", "true");
     btn.innerHTML = `<i class="ri-check-line" aria-hidden="true"></i> Aplicado`;
-    btn.title = titulo ? `Você já se candidatou a "${titulo}"` : 'Você já se candidatou';
+    btn.title = titulo ? `Você já se candidatou a "${titulo}"` : "Você já se candidatou";
   }
 
   function unmark(btn, titulo) {
-    btn.classList.remove('btn-prestado');
-    btn.removeAttribute('disabled');
-    btn.setAttribute('aria-pressed', 'false');
+    btn.classList.remove("btn-prestado");
+    btn.removeAttribute("disabled");
+    btn.setAttribute("aria-pressed", "false");
     btn.innerHTML = `<i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga`;
-    btn.title = titulo ? `Enviar currículo para "${titulo}"` : 'Enviar currículo';
+    btn.title = titulo ? `Enviar currículo para "${titulo}"` : "Enviar currículo";
   }
 
   function updateButtonsState() {
-    const buttons = tbody.querySelectorAll('.prestar-vaga');
+    const buttons = tbody.querySelectorAll(".prestar-vaga");
     buttons.forEach(btn => {
-      const id = btn.dataset.id || '';
-      const tr = btn.closest('tr');
-      const titulo = tr?.querySelector('td:first-child .cell-text')?.textContent?.trim() || '';
+      const id = btn.dataset.id || "";
+      const tr = btn.closest("tr");
+      const titulo = tr?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
       if (applied.has(id)) {
         markAsApplied(btn, titulo);
       } else {
@@ -98,21 +117,21 @@
   }
 
   function handleApplyClick(e) {
-    const btn = e.target.closest('.prestar-vaga');
+    const btn = e.target.closest(".prestar-vaga");
     if (!btn) return;
 
-    const id = btn.dataset.id || '';
+    const id = btn.dataset.id || "";
     if (!id) return;
     if (applied.has(id)) return;
 
-    const tr = btn.closest('tr');
-    const titulo = tr?.querySelector('td:first-child .cell-text')?.textContent?.trim() || '';
-    const modelo = tr?.querySelector('td:nth-child(3)')?.textContent?.trim() || '';
+    const tr = btn.closest("tr");
+    const titulo = tr?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
+    const modelo = tr?.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
 
     const ok = confirm(
       titulo
-        ? `Confirmar envio de currículo para a vaga "${titulo}" (${empresaNome}, ${modelo || '—'})?`
-        : 'Confirmar envio de currículo para esta vaga?'
+        ? `Confirmar envio de currículo para a vaga "${titulo}" (${empresaNome}, ${modelo || "—"})?`
+        : "Confirmar envio de currículo para esta vaga?"
     );
     if (!ok) return;
 
@@ -123,7 +142,7 @@
   }
 
   function handleKeydown(e) {
-    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('prestar-vaga')) {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("prestar-vaga")) {
       e.preventDefault();
       handleApplyClick(e);
     }
@@ -138,14 +157,14 @@
   }
 
   function filterRows(query) {
-    const q = (query || '').trim().toLowerCase();
+    const q = (query || "").trim().toLowerCase();
     let visible = 0;
     [...tbody.rows].forEach(tr => {
-      const t1 = tr.cells[0]?.innerText?.toLowerCase() || '';
-      const t2 = tr.cells[1]?.innerText?.toLowerCase() || '';
-      const t3 = tr.cells[2]?.innerText?.toLowerCase() || '';
+      const t1 = tr.cells[0]?.innerText?.toLowerCase() || "";
+      const t2 = tr.cells[1]?.innerText?.toLowerCase() || "";
+      const t3 = tr.cells[2]?.innerText?.toLowerCase() || "";
       const match = !q || t1.includes(q) || t2.includes(q) || t3.includes(q);
-      tr.style.display = match ? '' : 'none';
+      tr.style.display = match ? "" : "none";
       if (match) visible++;
     });
     updateCounter(visible);
@@ -153,25 +172,22 @@
   }
 
   function updateCounter(count) {
-    let badge = page.querySelector('#result-count');
+    let badge = page.querySelector("#result-count");
     if (!badge) {
-      badge = document.createElement('div');
-      badge.id = 'result-count';
-      badge.style.margin = '8px 0 0';
-      badge.style.fontSize = '13px';
-      badge.style.fontWeight = '800';
-      badge.style.color = 'var(--muted)';
-      page.querySelector('.actions-bar')?.appendChild(badge);
+      badge = document.createElement("div");
+      badge.id = "result-count";
+      badge.className = "envio-result";
+      page.querySelector(".actions-bar")?.appendChild(badge);
     }
     badge.textContent = `${count} resultado(s)`;
   }
 
   if (searchInput) {
     searchInput.addEventListener(
-      'input',
+      "input",
       debounce(e => {
         filterRows(e.target.value);
-        const wrapper = page.querySelector('.table-wrapper');
+        const wrapper = page.querySelector(".table-wrapper");
         if (wrapper) wrapper.scrollTop = 0;
       }, 200)
     );
@@ -186,27 +202,27 @@
       const isActions = index === thead.rows[0].cells.length - 1;
       if (isActions) return;
 
-      th.style.cursor = 'pointer';
+      th.style.cursor = "pointer";
       th.tabIndex = 0;
-      th.setAttribute('role', 'columnheader');
-      th.setAttribute('aria-sort', 'none');
+      th.setAttribute("role", "columnheader");
+      th.setAttribute("aria-sort", "none");
 
       const label = th.textContent.trim();
       th.title = `Ordenar por ${label}`;
 
       const triggerSort = () => {
-        const dir = toggleDir(th.getAttribute('aria-sort'));
+        const dir = toggleDir(th.getAttribute("aria-sort"));
         [...thead.rows[0].cells].forEach((oth, i) => {
-          if (i !== index) oth.setAttribute('aria-sort', 'none');
+          if (i !== index) oth.setAttribute("aria-sort", "none");
         });
-        th.setAttribute('aria-sort', dir);
+        th.setAttribute("aria-sort", dir);
         applySort(index, dir);
         saveSortState(index, dir);
       };
 
-      th.addEventListener('click', triggerSort);
-      th.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
+      th.addEventListener("click", triggerSort);
+      th.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           triggerSort();
         }
@@ -215,21 +231,21 @@
   }
 
   function toggleDir(state) {
-    if (state === 'ascending') return 'descending';
-    return 'ascending';
+    if (state === "ascending") return "descending";
+    return "ascending";
   }
 
-  function applySort(colIndex, dir = 'ascending') {
-    const rows = [...tbody.rows].filter(r => r.style.display !== 'none');
+  function applySort(colIndex, dir = "ascending") {
+    const rows = [...tbody.rows].filter(r => r.style.display !== "none");
     rows.sort((a, b) => {
-      const ta = (a.cells[colIndex]?.innerText || '').trim().toLowerCase();
-      const tb = (b.cells[colIndex]?.innerText || '').trim().toLowerCase();
-      if (ta < tb) return dir === 'ascending' ? -1 : 1;
-      if (ta > tb) return dir === 'ascending' ? 1 : -1;
+      const ta = (a.cells[colIndex]?.innerText || "").trim().toLowerCase();
+      const tb = (b.cells[colIndex]?.innerText || "").trim().toLowerCase();
+      if (ta < tb) return dir === "ascending" ? -1 : 1;
+      if (ta > tb) return dir === "ascending" ? 1 : -1;
       return 0;
     });
     rows.forEach(r => tbody.appendChild(r));
-    [...tbody.rows].filter(r => r.style.display === 'none').forEach(r => tbody.appendChild(r));
+    [...tbody.rows].filter(r => r.style.display === "none").forEach(r => tbody.appendChild(r));
   }
 
   function saveSortState(index, dir) {
@@ -247,8 +263,8 @@
   }
 
   let resetTimer = null;
-  window.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() === 'r' && e.altKey) {
+  window.addEventListener("keydown", e => {
+    if (e.key.toLowerCase() === "r" && e.altKey) {
       if (resetTimer) return;
       resetTimer = setTimeout(() => {
         const ok = confirm(`Limpar histórico de vagas aplicadas para "${empresaNome}"?`);
@@ -256,14 +272,14 @@
           applied.clear();
           save();
           updateButtonsState();
-          announce('Histórico de aplicações limpo.');
+          announce("Histórico de aplicações limpo.");
         }
         resetTimer = null;
       }, 1000);
     }
   });
 
-  window.addEventListener('keyup', () => {
+  window.addEventListener("keyup", () => {
     if (resetTimer) {
       clearTimeout(resetTimer);
       resetTimer = null;
@@ -273,8 +289,8 @@
   load();
   ensureRowIds();
   updateButtonsState();
-  filterRows(searchInput?.value || '');
+  filterRows(searchInput?.value || "");
 
-  tbody.addEventListener('click', handleApplyClick);
-  tbody.addEventListener('keydown', handleKeydown);
+  tbody.addEventListener("click", handleApplyClick);
+  tbody.addEventListener("keydown", handleKeydown);
 })();

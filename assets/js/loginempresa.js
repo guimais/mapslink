@@ -121,6 +121,11 @@ const LoginEmpresa = (() => {
       .catch(handleLoginError);
   }
 
+  function getRedirectTarget() {
+    const attr = el.form?.getAttribute('data-redirect');
+    return attr && attr.trim() ? attr.trim() : 'perfilempresa.html';
+  }
+
   function handleLoginSuccess(identifierValue, rememberChoice) {
     if (rememberChoice) {
       localStorage.setItem('businessLoginIdentifier', identifierValue);
@@ -134,7 +139,7 @@ const LoginEmpresa = (() => {
     setButtonState('success', 'Login aprovado!');
     showToast('Login realizado com sucesso. Redirecionando...', 'success', 2600);
     setTimeout(() => {
-      window.location.href = 'perfilempresa.html';
+      window.location.href = getRedirectTarget();
     }, 1600);
   }
 
@@ -450,6 +455,3 @@ const LoginEmpresa = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', LoginEmpresa.init);
-
-
-

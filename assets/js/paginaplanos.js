@@ -1,12 +1,15 @@
 (() => {
-  'use strict';
+  "use strict";
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (window.__ml_planos_init__) return;
+  window.__ml_planos_init__ = true;
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   function injectStyles() {
-    if (document.getElementById('app-dynamic-styles')) return;
+    if (document.getElementById("app-dynamic-styles")) return;
     const css = `
       [data-animate="fade-up"]{opacity:0;transform:translateY(8px);}
       .in-view{opacity:1;transform:none;transition:transform .6s ease, opacity .6s ease}
@@ -20,78 +23,82 @@
       .burst{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
       .burst span{position:absolute;width:8px;height:8px;border-radius:50%;opacity:.9}
     `;
-    const style = document.createElement('style');
-    style.id = 'app-dynamic-styles';
+    const style = document.createElement("style");
+    style.id = "app-dynamic-styles";
     style.textContent = css;
     document.head.appendChild(style);
   }
 
   function setupSectionRouting() {
-    const links = (window.MapsApp && typeof window.MapsApp.navLinks === 'function')
-      ? window.MapsApp.navLinks()
-      : $$('.nav-link');
-    const sectionIds = ['home', 'planos', 'maps', 'profile', 'about', 'contact'];
+    const links =
+      (window.MapsApp && typeof window.MapsApp.navLinks === "function")
+        ? (window.MapsApp.navLinks() || [])
+        : $$(".nav-link");
+
+    const sectionIds = ["home", "planos", "maps", "profile", "about", "contact"];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
     const show = id => {
       sections.forEach(s => {
         const on = s.id === id;
-        s.toggleAttribute('hidden', !on);
+        s.toggleAttribute("hidden", !on);
         if (on) {
-          s.setAttribute('tabindex', '-1');
+          s.setAttribute("tabindex", "-1");
           try { s.focus({ preventScroll: true }); } catch {}
-          s.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+          s.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
         }
       });
       links.forEach(a => {
-        const href = a.getAttribute('href') || '';
-        if (!href.startsWith('#')) return;
+        const href = a.getAttribute("href") || "";
+        if (!href.startsWith("#")) return;
         const active = href === `#${id}`;
-        a.classList.toggle('active', active);
-        a.setAttribute('aria-current', active ? 'page' : 'false');
+        a.classList.toggle("active", active);
+        a.setAttribute("aria-current", active ? "page" : "false");
       });
-      if (id) history.replaceState(null, '', `#${id}`);
-      if (window.MapsApp && typeof window.MapsApp.highlightNav === 'function') {
-        window.MapsApp.highlightNav(`#${id}`);
+      if (id) history.replaceState(null, "", `#${id}`);
+      if (window.MapsApp && typeof window.MapsApp.highlightNav === "function") {
+        try { window.MapsApp.highlightNav(`#${id}`); } catch {}
       }
     };
 
     links.forEach(a => {
-      a.addEventListener('click', e => {
-        const href = a.getAttribute('href') || '';
-        if (!href.startsWith('#')) return;
+      if (a.__pl_bound) return;
+      a.__pl_bound = true;
+      a.addEventListener("click", e => {
+        const href = a.getAttribute("href") || "";
+        if (!href.startsWith("#")) return;
         e.preventDefault();
         const id = href.slice(1);
         const target = document.getElementById(id);
-        const targetHasContent = target && target.children && target.children.length > 0;
-        if (id !== 'planos' && (!target || !targetHasContent)) {
-          show('planos');
-          showToast('Seção em construção');
+        const targetHasContent = !!(target && target.children && target.children.length > 0);
+        if (id !== "planos" && (!target || !targetHasContent)) {
+          show("planos");
+          showToast("Seção em construção");
         } else if (target) {
           show(id);
         }
-        if (window.MapsApp && typeof window.MapsApp.closeNav === 'function') {
-          window.MapsApp.closeNav();
+        if (window.MapsApp && typeof window.MapsApp.closeNav === "function") {
+          try { window.MapsApp.closeNav(); } catch {}
         }
       });
     });
 
-    const initialCandidate = (location.hash && location.hash.slice(1)) || 'planos';
+    const initialCandidate = (location.hash && location.hash.slice(1)) || "planos";
     const initialEl = document.getElementById(initialCandidate);
-    const initialHasContent = initialEl && initialEl.children && initialEl.children.length > 0;
-    const initial = initialHasContent ? initialCandidate : 'planos';
+    const initialHasContent = !!(initialEl && initialEl.children && initialEl.children.length > 0);
+    const initial = initialHasContent ? initialCandidate : "planos";
     if (document.getElementById(initial)) show(initial);
   }
 
   function setupReveal() {
     if (prefersReducedMotion) return;
-    const cards = $$('.plano-card');
+    const cards = $$(".plano-card");
     if (!cards.length) return;
-    cards.forEach(el => el.setAttribute('data-animate', 'fade-up'));
+    cards.forEach(el => el.setAttribute("data-animate", "fade-up"));
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
+          entry.target.classList.add("in-view");
           obs.unobserve(entry.target);
         }
       });
@@ -99,19 +106,21 @@
     cards.forEach(el => io.observe(el));
   }
 
-  function attachRipple(selector = '.botao') {
+  function attachRipple(selector = ".botao") {
     $$(selector).forEach(btn => {
-      btn.classList.add('ripple-wrap');
-      btn.addEventListener('click', e => {
+      if (btn.__ripple_bound) return;
+      btn.__ripple_bound = true;
+      btn.classList.add("ripple-wrap");
+      btn.addEventListener("click", e => {
         const rect = btn.getBoundingClientRect();
         const x = (e.clientX || rect.left + rect.width / 2) - rect.left;
         const y = (e.clientY || rect.top + rect.height / 2) - rect.top;
-        const span = document.createElement('span');
-        span.className = 'ripple';
+        const span = document.createElement("span");
+        span.className = "ripple";
         span.style.left = `${x}px`;
         span.style.top = `${y}px`;
         btn.appendChild(span);
-        span.addEventListener('animationend', () => span.remove());
+        span.addEventListener("animationend", () => span.remove(), { once: true });
       });
     });
   }
@@ -119,17 +128,17 @@
   let snackbar;
   function ensureSnackbar() {
     if (snackbar) return snackbar;
-    snackbar = document.createElement('div');
-    snackbar.className = 'snackbar';
-    snackbar.setAttribute('role', 'status');
-    snackbar.setAttribute('aria-live', 'polite');
-    const text = document.createElement('span');
-    text.className = 'snackbar-text';
-    const close = document.createElement('button');
-    close.className = 'close';
-    close.setAttribute('aria-label', 'Fechar');
-    close.innerHTML = '&times;';
-    close.addEventListener('click', () => hideToast());
+    snackbar = document.createElement("div");
+    snackbar.className = "snackbar";
+    snackbar.setAttribute("role", "status");
+    snackbar.setAttribute("aria-live", "polite");
+    const text = document.createElement("span");
+    text.className = "snackbar-text";
+    const close = document.createElement("button");
+    close.className = "close";
+    close.setAttribute("aria-label", "Fechar");
+    close.innerHTML = "&times;";
+    close.addEventListener("click", () => hideToast());
     snackbar.append(text, close);
     document.body.appendChild(snackbar);
     return snackbar;
@@ -137,30 +146,32 @@
 
   function showToast(message, timeout = 2600) {
     const el = ensureSnackbar();
-    el.querySelector('.snackbar-text').textContent = message;
-    el.classList.add('show');
+    el.querySelector(".snackbar-text").textContent = message;
+    el.classList.add("show");
     if (showToast._t) clearTimeout(showToast._t);
     showToast._t = setTimeout(() => hideToast(), timeout);
   }
 
   function hideToast() {
     if (!snackbar) return;
-    snackbar.classList.remove('show');
+    snackbar.classList.remove("show");
   }
 
   function burstFrom(el) {
     if (prefersReducedMotion) return;
-    const colors = ['#ffd166', '#06d6a0', '#118ab2', '#ef476f', '#8338ec'];
+    const colors = ["#ffd166", "#06d6a0", "#118ab2", "#ef476f", "#8338ec"];
     const rect = el.getBoundingClientRect();
     const cx = rect.width / 2;
     const cy = rect.height / 2;
-    const group = document.createElement('div');
-    group.className = 'burst';
-    el.style.position = el.style.position || 'relative';
+    const group = document.createElement("div");
+    group.className = "burst";
+    if (!/relative|absolute|fixed|sticky/.test(getComputedStyle(el).position)) {
+      el.style.position = "relative";
+    }
     el.appendChild(group);
     const n = 12;
     for (let i = 0; i < n; i++) {
-      const dot = document.createElement('span');
+      const dot = document.createElement("span");
       dot.style.background = colors[i % colors.length];
       dot.style.left = `${cx}px`;
       dot.style.top = `${cy}px`;
@@ -170,10 +181,10 @@
       const ty = Math.sin(angle) * dist;
       dot.animate(
         [
-          { transform: 'translate(-50%,-50%) translate(0,0)', opacity: 0.9 },
+          { transform: "translate(-50%,-50%) translate(0,0)", opacity: 0.9 },
           { transform: `translate(-50%,-50%) translate(${tx}px,${ty}px)`, opacity: 0 }
         ],
-        { duration: 700, easing: 'ease-out' }
+        { duration: 700, easing: "ease-out" }
       );
       group.appendChild(dot);
     }
@@ -181,32 +192,34 @@
   }
 
   function setupPlans() {
-    const buttons = $$('.botao.assinar');
+    const buttons = $$(".botao.assinar");
     if (!buttons.length) return;
-    const KEY = 'selectedPlan';
+    const KEY = "selectedPlan";
 
     const updateCard = (plan, selected) => {
       const btn = buttons.find(b => b.dataset.plan === plan);
       if (!btn) return;
-      btn.textContent = selected ? 'Assinado' : 'Assinar';
+      btn.textContent = selected ? "Assinado" : "Assinar";
       btn.disabled = !!selected;
-      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
-      const card = btn.closest('.plano-card');
-      if (card) card.classList.toggle('plan-selected', !!selected);
+      btn.setAttribute("aria-pressed", selected ? "true" : "false");
+      const card = btn.closest(".plano-card");
+      if (card) card.classList.toggle("plan-selected", !!selected);
     };
 
     const saved = localStorage.getItem(KEY);
     if (saved) updateCard(saved, true);
 
     buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      if (btn.__plan_bound) return;
+      btn.__plan_bound = true;
+      btn.addEventListener("click", () => {
         const plan = btn.dataset.plan;
         if (!plan) return;
         localStorage.setItem(KEY, plan);
         buttons.forEach(b => updateCard(b.dataset.plan, b.dataset.plan === plan));
         burstFrom(btn);
         const pretty = plan.charAt(0).toUpperCase() + plan.slice(1);
-        const emoji = plan === 'gold' ? '🏆' : plan === 'silver' ? '🥈' : '🥉';
+        const emoji = plan === "gold" ? "🏆" : plan === "silver" ? "🥈" : "🥉";
         showToast(`${emoji} Plano ${pretty} ativado!`);
       });
     });
@@ -216,14 +229,13 @@
     injectStyles();
     setupSectionRouting();
     setupReveal();
-    attachRipple('.botao');
+    attachRipple(".botao");
     setupPlans();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
     init();
   }
 })();
-

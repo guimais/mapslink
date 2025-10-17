@@ -41,27 +41,41 @@ window.injectSharedNav = function injectSharedNav() {
     changeListeners: new Set()
   };
 
+  const truthy = v => typeof v === 'string' ? /^(1|true|yes)$/i.test(v) : !!v;
+
   const applyConfig = config => {
     const merged = { ...DEFAULTS };
     Object.keys(config || {}).forEach(key => {
       const value = config[key];
-      if (value !== undefined && value !== null && value !== '') {
-        merged[key] = value;
-      }
+      if (value !== undefined && value !== null && value !== '') merged[key] = value;
     });
-    if (!merged.altOpenClass && merged.openClass !== 'active') {
-      merged.altOpenClass = 'active';
-    }
+    if (!merged.altOpenClass && merged.openClass !== 'active') merged.altOpenClass = 'active';
     return merged;
+  };
+
+  const configFromBody = () => {
+    const b = doc.body?.dataset || {};
+    const cfg = {};
+    if (b.navOpenClass) cfg.openClass = b.navOpenClass;
+    if (b.navOverlay !== undefined) cfg.overlay = truthy(b.navOverlay);
+    if (b.navLockScroll !== undefined) cfg.lockScroll = truthy(b.navLockScroll);
+    if (b.navCloseOnLink !== undefined) cfg.closeOnLink = truthy(b.navCloseOnLink);
+    if (b.navCloseOnOutside !== undefined) cfg.closeOnOutside = truthy(b.navCloseOnOutside);
+    if (b.navCloseOnEsc !== undefined) cfg.closeOnEsc = truthy(b.navCloseOnEsc);
+    if (b.navSmoothScroll !== undefined) cfg.smoothScroll = truthy(b.navSmoothScroll);
+    if (b.navShadow !== undefined) cfg.shadow = truthy(b.navShadow);
+    if (b.navBreakpoint) cfg.breakpoint = parseInt(b.navBreakpoint, 10) || DEFAULTS.breakpoint;
+    if (b.navActive) cfg.highlight = b.navActive;
+    if (b.navIconOpen) cfg.iconOpen = b.navIconOpen;
+    if (b.navIconClose) cfg.iconClose = b.navIconClose;
+    return cfg;
   };
 
   const getMenuElement = () => {
     const nav = doc.querySelector('.nav-pilula');
     if (!nav) return { nav: null, menu: null, toggle: null };
-    const toggle =
-      nav.querySelector('.nav-toggle') || doc.querySelector('.nav-toggle');
-    const menu =
-      doc.getElementById('navMenu') || nav.querySelector('.nav-links');
+    const toggle = nav.querySelector('.nav-toggle') || doc.querySelector('.nav-toggle');
+    const menu = doc.getElementById('navMenu') || nav.querySelector('.nav-links');
     return { nav, menu, toggle };
   };
 
@@ -71,6 +85,7 @@ window.injectSharedNav = function injectSharedNav() {
     if (existing) return existing;
     const overlay = doc.createElement('div');
     overlay.className = 'nav-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
     doc.body.appendChild(overlay);
     overlay.addEventListener('click', () => api.close());
     return overlay;
@@ -93,12 +108,8 @@ window.injectSharedNav = function injectSharedNav() {
   };
 
   const updateAria = open => {
-    if (state.toggle) {
-      state.toggle.setAttribute('aria-expanded', String(open));
-    }
-    if (state.menu) {
-      state.menu.setAttribute('data-nav-open', String(open));
-    }
+    if (state.toggle) state.toggle.setAttribute('aria-expanded', String(open));
+    if (state.menu) state.menu.setAttribute('data-nav-open', String(open));
   };
 
   const openClasses = () => {
@@ -113,25 +124,14 @@ window.injectSharedNav = function injectSharedNav() {
 
   const notifyChange = open => {
     state.changeListeners.forEach(fn => {
-      try {
-        fn(open);
-      } catch (err) {
-        console.error('[MapsNav] listener error', err);
-      }
+      try { fn(open); } catch {}
     });
   };
 
   const handleDocumentClick = e => {
     if (!state.config.closeOnOutside || !state.isOpen) return;
-    const target = e.target;
-    if (
-      state.nav?.contains(target) ||
-      state.menu?.contains(target) ||
-      state.toggle?.contains(target) ||
-      state.overlay?.contains(target)
-    ) {
-      return;
-    }
+    const t = e.target;
+    if (state.nav?.contains(t) || state.menu?.contains(t) || state.toggle?.contains(t) || state.overlay?.contains(t)) return;
     api.close();
   };
 
@@ -142,16 +142,13 @@ window.injectSharedNav = function injectSharedNav() {
 
   const handleResize = () => {
     if (!state.isOpen) return;
-    if (win.innerWidth > state.config.breakpoint) {
-      api.close();
-    }
+    if (win.innerWidth > state.config.breakpoint) api.close();
   };
 
   const handleLinkClick = e => {
     const link = e.currentTarget;
     const href = link.getAttribute('href');
     const isHash = href && href.startsWith('#');
-
     if (isHash && state.config.smoothScroll) {
       const target = doc.querySelector(href);
       if (target) {
@@ -159,56 +156,34 @@ window.injectSharedNav = function injectSharedNav() {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-
     if (!state.config.closeOnLink) return;
-    if (win.innerWidth <= state.config.breakpoint) {
-      setTimeout(() => api.close(), 60);
-    }
+    if (win.innerWidth <= state.config.breakpoint) setTimeout(() => api.close(), 60);
   };
 
   const bindLinks = () => {
-    state.links.forEach(link => {
-      link.addEventListener('click', handleLinkClick);
-    });
+    state.links.forEach(link => link.addEventListener('click', handleLinkClick));
   };
 
   const unbindLinks = () => {
-    state.links.forEach(link => {
-      link.removeEventListener('click', handleLinkClick);
-    });
+    state.links.forEach(link => link.removeEventListener('click', handleLinkClick));
   };
 
   const highlightLink = target => {
     if (!target) return;
     const norm = target.toLowerCase();
-    const compare = value => (value || '').toLowerCase();
+    const compare = v => (v || '').toLowerCase();
     let activeLink = null;
-
     state.links.forEach(link => {
       link.classList.remove('active');
-      if (link.hasAttribute('aria-current')) {
-        link.removeAttribute('aria-current');
-      }
+      if (link.hasAttribute('aria-current')) link.removeAttribute('aria-current');
     });
-
     const byHref = state.links.find(link => {
       const href = compare(link.getAttribute('href'));
       if (!href) return false;
-      return (
-        href === norm ||
-        href.endsWith(norm) ||
-        (norm.startsWith('#') && href === norm) ||
-        href.includes(norm)
-      );
+      return href === norm || href.endsWith(norm) || (norm.startsWith('#') && href === norm) || href.includes(norm);
     });
-
-    const byKey =
-      byHref ||
-      state.links.find(link => compare(link.dataset.navKey) === norm) ||
-      state.links.find(link => compare(link.textContent) === norm);
-
+    const byKey = byHref || state.links.find(link => compare(link.dataset.navKey) === norm) || state.links.find(link => compare(link.textContent) === norm);
     activeLink = byHref || byKey || null;
-
     if (activeLink) {
       activeLink.classList.add('active');
       activeLink.setAttribute('aria-current', 'page');
@@ -218,9 +193,7 @@ window.injectSharedNav = function injectSharedNav() {
   const updateShadow = () => {
     if (!state.config.shadow || !state.nav) return;
     const scrolled = win.scrollY > 8;
-    state.nav.style.boxShadow = scrolled
-      ? '0 10px 26px rgba(0,0,0,0.12)'
-      : state.originalShadow;
+    state.nav.style.boxShadow = scrolled ? '0 10px 26px rgba(0,0,0,0.12)' : state.originalShadow;
   };
 
   const bindGlobalEvents = () => {
@@ -242,18 +215,11 @@ window.injectSharedNav = function injectSharedNav() {
     state.nav = elements.nav;
     state.menu = elements.menu;
     state.toggle = elements.toggle;
-
     if (!state.nav || !state.menu || !state.toggle) return;
-
     state.config = applyConfig(config);
-    state.links = Array.from(
-      state.menu.querySelectorAll('a.nav-link, .nav-link')
-    );
+    state.links = Array.from(state.menu.querySelectorAll('a.nav-link, .nav-link'));
     state.overlay = ensureOverlay();
-    state.originalShadow = state.nav
-      ? getComputedStyle(state.nav).boxShadow || ''
-      : '';
-
+    state.originalShadow = state.nav ? getComputedStyle(state.nav).boxShadow || '' : '';
     if (!state.initialized) {
       state.toggle.addEventListener('click', evt => {
         evt.preventDefault();
@@ -267,12 +233,8 @@ window.injectSharedNav = function injectSharedNav() {
       unbindLinks();
       bindLinks();
     }
-
     updateShadow();
-
-    if (state.config.highlight) {
-      highlightLink(state.config.highlight);
-    }
+    if (state.config.highlight) highlightLink(state.config.highlight);
   };
 
   const api = {
@@ -307,20 +269,26 @@ window.injectSharedNav = function injectSharedNav() {
       return state.links.slice();
     },
     onChange(fn) {
-      if (typeof fn === 'function') {
-        state.changeListeners.add(fn);
-      }
+      if (typeof fn === 'function') state.changeListeners.add(fn);
       return () => state.changeListeners.delete(fn);
     },
     destroy() {
       unbindLinks();
       unbindGlobalEvents();
-      if (state.overlay && state.overlay.parentElement === doc.body) {
-        state.overlay.remove();
-      }
+      if (state.overlay && state.overlay.parentElement === doc.body) state.overlay.remove();
       state.initialized = false;
     }
   };
 
   win.MapsNav = api;
+
+  if (doc.readyState === 'loading') {
+    doc.addEventListener('DOMContentLoaded', () => {
+      const cfg = configFromBody();
+      api.init(cfg);
+    });
+  } else {
+    const cfg = configFromBody();
+    api.init(cfg);
+  }
 })();
