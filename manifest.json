@@ -1,21 +1,63 @@
 {
-  "name": "Maps Link",
+  "name": "MapsLink",
   "short_name": "MapsLink",
-  "start_url": ".",
+  "description": "Conectando profissionais e empresas através de um mapa interativo e inteligente.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#102569",
-  "description": "Conectando profissionais e empresas através de um mapa interativo.",
+  "categories": ["business", "maps", "productivity"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "assets/images/logo-icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "assets/images/logo-icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/images/screenshots/home.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "label": "Tela inicial do MapsLink"
+    },
+    {
+      "src": "assets/images/screenshots/map.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "label": "Mapa interativo de empresas"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Abrir Mapa",
+      "short_name": "Mapa",
+      "description": "Ver empresas e vagas no mapa interativo",
+      "url": "/pages/mapa.html",
+      "icons": [
+        { "src": "assets/images/shortcut-map.png", "sizes": "96x96", "type": "image/png" }
+      ]
+    },
+    {
+      "name": "Ver Vagas",
+      "short_name": "Vagas",
+      "description": "Navegar pelas oportunidades disponíveis",
+      "url": "/pages/vagas.html",
+      "icons": [
+        { "src": "assets/images/shortcut-jobs.png", "sizes": "96x96", "type": "image/png" }
+      ]
     }
   ]
 }
