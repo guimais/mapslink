@@ -12,9 +12,13 @@
   --fs-heading:22px;
   --fs-card-title:22px;
   --pad-card:24px;
+  --nav-h:68px;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   padding:0;
@@ -24,7 +28,12 @@ body{
   line-height:1.6;
   background-color:var(--bg);
 }
-h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
+
+h1,
+h2,
+.titulo-principal,
+.subtitulo-principal,
+.titulo-sobre{
   font-family:'Montserrat',sans-serif;
   letter-spacing:.2px;
 }
@@ -38,6 +47,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   left:0;
   z-index:1000;
 }
+
 .nav-pilula{
   background:var(--surface);
   border:1px solid rgba(16,37,105,.10);
@@ -49,15 +59,39 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   justify-content:space-between;
   width:92%;
   max-width:1100px;
-  height:60px;
+  height:var(--nav-h);
 }
-.nav-logo-link{display:flex;align-items:center;justify-content:center;height:100%}
-.nav-logo{height:90px;width:auto;display:block;margin-right:8px}
-.nav-links{list-style:none;display:flex;gap:16px;margin:0;padding:0}
-.nav-toggle{display:none}
+
+.nav-logo-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+}
+
+.nav-logo{
+  height:auto;
+  width:auto;
+  display:block;
+  margin-right:8px;
+  max-height:calc(var(--nav-h) - 20px);
+}
+
+.nav-links{
+  list-style:none;
+  display:flex;
+  gap:16px;
+  margin:0;
+  padding:0;
+}
+
+.nav-toggle{
+  display:none;
+}
+
 .nav-link{
   font-family:'Montserrat',sans-serif;
-  font-weight: 700;
+  font-weight:700;
   text-decoration:none;
   color:#1a1a1a;
   font-size:16px;
@@ -66,16 +100,29 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
   border-radius:10px;
   transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
 }
-.nav-link.active{
-  font-weight: 800;
-  color: var(--brand-2, #0b1b4a);
-  background-color: rgba(16,37,105,.12);
-  box-shadow: 0 0 0 1px rgba(16,37,105,.18) inset;
-}
-.nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
-.nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
-main,.perfil-page{padding-top:120px}
+.nav-link.active{
+  font-weight:800;
+  color:var(--brand-2);
+  background-color:rgba(16,37,105,.12);
+  box-shadow:0 0 0 1px rgba(16,37,105,.18) inset;
+}
+
+.nav-link:hover{
+  opacity:1;
+  color:var(--brand);
+  transform:translateY(-1px);
+}
+
+.nav-link:focus-visible{
+  outline:2px solid var(--brand);
+  outline-offset:2px;
+}
+
+main,
+.perfil-page{
+  padding-top:calc(20px + var(--nav-h) + 32px);
+}
 
 .perfil-wrap{
   max-width:1400px;
@@ -99,21 +146,84 @@ main,.perfil-page{padding-top:120px}
   flex-direction:column;
   gap:14px;
 }
-.perfil-avatar{width:88px;height:88px;border-radius:50%;overflow:hidden;margin:6px 0 8px}
-.perfil-avatar img{width:100%;height:100%;object-fit:cover}
-.perfil-nome{font-size:18px;line-height:1.2;margin:0 0 6px}
-.perfil-contatos{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
-.perfil-contatos li{display:flex;align-items:center;gap:10px}
-.perfil-contatos i{font-size:18px;color:var(--brand-2)}
-.perfil-contatos a{color:var(--text);text-decoration:none;font-weight:700}
-.perfil-contatos a:hover{color:var(--brand)}
 
-.perfil-conteudo{display:flex;flex-direction:column;gap:22px}
+.perfil-avatar{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  overflow:hidden;
+  margin:6px 0 8px;
+}
 
-.bloco{padding:calc(var(--pad-card) + 6px) var(--pad-card)}
-.bloco-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.bloco-header i{font-size:24px;color:var(--brand-2)}
-.bloco-header h2,.bloco-header h3{margin:0;font-size:var(--fs-heading)}
+.perfil-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.perfil-nome{
+  font-size:18px;
+  line-height:1.2;
+  margin:0 0 6px;
+}
+
+.perfil-contatos{
+  list-style:none;
+  margin:6px 0 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.perfil-contatos li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.perfil-contatos i{
+  font-size:18px;
+  color:var(--brand-2);
+}
+
+.perfil-contatos a{
+  color:var(--text);
+  text-decoration:none;
+  font-weight:700;
+}
+
+.perfil-contatos a:hover{
+  color:var(--brand);
+}
+
+.perfil-conteudo{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+.bloco{
+  padding:calc(var(--pad-card) + 6px) var(--pad-card);
+}
+
+.bloco-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.bloco-header i{
+  font-size:24px;
+  color:var(--brand-2);
+}
+
+.bloco-header h2,
+.bloco-header h3{
+  margin:0;
+  font-size:var(--fs-heading);
+}
 
 .curriculo-card{
   display:flex;
@@ -127,18 +237,39 @@ main,.perfil-page{padding-top:120px}
   box-shadow:0 6px 16px rgba(0,0,0,.06);
   border-radius:20px;
 }
-.curriculo-card i{font-size:24px;color:var(--brand-2)}
-.curriculo-card .titulo{font-weight:700;font-size:var(--fs-card-title);color:var(--text)}
+
+.curriculo-card i{
+  font-size:24px;
+  color:var(--brand-2);
+}
+
+.curriculo-card .titulo{
+  font-weight:700;
+  font-size:var(--fs-card-title);
+  color:var(--text);
+}
 
 .curriculo .curriculo-grid{
   display:grid;
   grid-template-columns:1.1fr .9fr;
   gap:22px;
 }
-.curriculo-resumo p{margin:0;color:var(--text);font-size:19px}
-.curriculo-experiencias{
-  list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;
+
+.curriculo-resumo p{
+  margin:0;
+  color:var(--text);
+  font-size:19px;
 }
+
+.curriculo-experiencias{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
 .curriculo-experiencias li{
   background:var(--brand-2);
   color:#fff;
@@ -148,7 +279,13 @@ main,.perfil-page{padding-top:120px}
   font-size:16px;
   box-shadow:0 6px 16px rgba(0,0,0,.12);
 }
-.curriculo-experiencias li strong{color:#fff}
 
-.sobre p{margin:0;color:var(--text);font-size:var(--fs-body)}
+.curriculo-experiencias li strong{
+  color:#fff;
+}
 
+.sobre p{
+  margin:0;
+  color:var(--text);
+  font-size:var(--fs-body);
+}

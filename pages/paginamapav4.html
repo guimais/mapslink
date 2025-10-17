@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#102569">
     <link rel="manifest" href="../manifest.json">
     <link href="../assets/css/main.css" rel="stylesheet">
-<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
     <title>Maps Link</title>
     <link rel="stylesheet" href="../assets/css/paginamapav4.css">
@@ -87,13 +87,11 @@
         <aside id="painelFiltros" class="painel-filtros" role="dialog" aria-modal="true" aria-labelledby="tituloFiltros" hidden>
           <form class="filtros-conteudo" aria-label="Filtrar vagas">
             <h2 id="tituloFiltros">Filtros</h2>
-
             <label for="filtroLocal" class="label-campo">Cidade, Estado ou Regiao</label>
             <div class="campo-icone">
               <i class="ri-map-pin-2-line" aria-hidden="true"></i>
               <input id="filtroLocal" type="text" placeholder="Cidade, Estado ou Regiao">
             </div>
-
             <fieldset class="grupo-cbx">
               <legend>Area de Atuacao</legend>
               <label><input type="checkbox"> Tecnologia</label>
@@ -102,7 +100,6 @@
               <label><input type="checkbox"> Marketing</label>
               <label><input type="checkbox"> Vendas</label>
             </fieldset>
-
             <fieldset class="grupo-chips">
               <legend>Porte da Empresa</legend>
               <button type="button" class="chip">Pequena</button>
@@ -110,44 +107,30 @@
               <button type="button" class="chip">Grande</button>
               <button type="button" class="chip">Startup</button>
             </fieldset>
-
             <fieldset class="grupo-chips">
               <legend>Modalidade de Trabalho</legend>
               <button type="button" class="chip">Presencial</button>
               <button type="button" class="chip">Hibrido</button>
               <button type="button" class="chip">Remoto</button>
             </fieldset>
-
             <div class="linha-toggle">
               <span>Apenas com Vagas Abertas</span>
               <button type="button" class="toggle" aria-pressed="false" aria-label="Apenas com Vagas Abertas"></button>
             </div>
-
             <div class="linha-toggle">
               <span>Mapa de Calor</span>
               <button id="toggleHeat" type="button" class="toggle" aria-pressed="false" aria-label="Ativar mapa de calor"></button>
             </div>
-
             <button class="btn-aplicar" type="button">Aplicar Filtros</button>
           </form>
         </aside>
       </div>
     </main>
 
-
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-
     <script defer src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
-
-
+    <script defer src="../assets/js/filters.js"></script>
     <script defer src="../assets/js/maps-data.js"></script>
-
-
     <script defer src="../assets/js/paginamapav4.js"></script>
   </body>
 </html>
-
-
-
-

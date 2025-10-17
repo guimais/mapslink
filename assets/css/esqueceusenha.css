@@ -116,7 +116,7 @@ body{
   color:transparent;
   background:linear-gradient(135deg,#102569 0%,#0b1b4a 88%);
   -webkit-background-clip:text;
-          background-clip:text;
+  background-clip:text;
 }
 .card-title::after{
   content:"";
@@ -304,4 +304,3 @@ body{
     width:42px;
   }
 }
-
