@@ -13,28 +13,62 @@
   }
 
   function popupHtml(c) {
-    const t = (Array.isArray(c?.tags) ? c.tags : []).join(", ");
-    const jobs = (Array.isArray(c?.jobs) ? c.jobs : [])
-      .map(j => `<li><a href="${j.url}" target="_blank" rel="noopener">${j.title} (${j.type})</a></li>`)
+    const tags = Array.isArray(c?.tags) ? c.tags : [];
+    const jobs = Array.isArray(c?.jobs) ? c.jobs : [];
+    const tagsHtml = tags
+      .filter(Boolean)
+      .map((tag) => `<span class="ml-popup__chip">${tag}</span>`)
       .join("");
-    const hiring = c?.is_hiring
-      ? `<span style="padding:.2rem .5rem;border-radius:9999px;background:#16a34a;color:#fff;font-size:.75rem;">Contratando</span>`
-      : `<span style="padding:.2rem .5rem;border-radius:9999px;background:#94a3b8;color:#fff;font-size:.75rem;">Sem vagas</span>`;
-    const logo = c?.logo ? `<img src="${c.logo}" alt="${c.name || ""}" style="height:28px;width:auto;display:block;margin-bottom:8px;">` : "";
-    const site = c?.website ? `<a href="${c.website}" target="_blank" rel="noopener">${c.website.replace(/^https?:\/\//,"")}</a>` : "";
+    const jobsHtml = jobs
+      .map((j) => {
+        const jobTitle = j?.title || "Vaga";
+        const jobType = j?.type
+          ? `<span class="ml-popup__job-type">${j.type}</span>`
+          : "";
+        const jobName = `<span class="ml-popup__job-name">${jobTitle}</span>`;
+        if (j?.url) {
+          return `<li class="ml-popup__job"><a href="${j.url}" target="_blank" rel="noopener">${jobName}${jobType}</a></li>`;
+        }
+        return `<li class="ml-popup__job"><span class="ml-popup__job-static">${jobName}${jobType}</span></li>`;
+      })
+      .join("");
+    const badgeText = c?.is_hiring ? "Contratando" : "Sem vagas";
+    const badgeClass = c?.is_hiring ? "ml-popup__badge--open" : "ml-popup__badge--closed";
+    const addressParts = [
+      c?.address ? c.address : "",
+      [c?.city, c?.state].filter(Boolean).join(" - "),
+    ].filter(Boolean);
+    const address = addressParts.join(" · ");
+    const website = c?.website ? c.website.replace(/^https?:\/\//, "") : "";
+    const name = c?.name || "Empresa";
+    const ariaLabel = name.replace(/"/g, "&quot;");
+    const initials = name.trim().charAt(0).toUpperCase() || "M";
+    const logo = c?.logo
+      ? `<img src="${c.logo}" alt="${ariaLabel}" class="ml-popup__logo">`
+      : `<span class="ml-popup__logo ml-popup__logo--placeholder">${initials}</span>`;
+    const vagasUrl = location.pathname.includes("/pages/")
+      ? "tabelavagas.html"
+      : "pages/tabelavagas.html";
     return `
-      <div style="min-width:220px;max-width:280px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif;">
-        ${logo}
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <strong style="font-size:14px;line-height:1.2">${c?.name || ""}</strong>
-          ${hiring}
+      <article class="ml-popup" role="group" aria-label="${ariaLabel}">
+        <header class="ml-popup__header">
+          <div class="ml-popup__avatar">${logo}</div>
+          <div class="ml-popup__headline">
+            <h3 class="ml-popup__title">${name}</h3>
+            ${c?.industry || c?.sector ? `<p class="ml-popup__subtitle">${c?.industry ?? c?.sector ?? ""}</p>` : ""}
+          </div>
+          <span class="ml-popup__badge ${badgeClass}">${badgeText}</span>
+        </header>
+        <div class="ml-popup__body">
+          ${address ? `<p class="ml-popup__text">${address}</p>` : ""}
+          ${website ? `<a class="ml-popup__link" href="${c.website}" target="_blank" rel="noopener">${website}</a>` : ""}
+          ${tagsHtml ? `<div class="ml-popup__chips">${tagsHtml}</div>` : ""}
         </div>
-        <div style="font-size:12px;color:#334155;margin-top:4px">${c?.industry ?? c?.sector ?? ""}</div>
-        <div style="font-size:12px;color:#475569;margin:6px 0">${c?.address ? c.address + " · " : ""}${c?.city || ""}${c?.state ? " - " + c.state : ""}</div>
-        ${site ? `<div style="font-size:12px;margin:6px 0">${site}</div>` : ""}
-        ${t ? `<div style="font-size:12px;color:#0f172a;margin:6px 0">Tags: ${t}</div>` : ""}
-        ${jobs ? `<ul style="padding-left:18px;margin:6px 0 0 0;font-size:12px">${jobs}</ul>` : ""}
-      </div>
+        ${jobsHtml ? `<div class="ml-popup__jobs"><p class="ml-popup__jobs-title">Vagas em destaque</p><ul class="ml-popup__jobs-list">${jobsHtml}</ul></div>` : ""}
+        <footer class="ml-popup__footer">
+          <a href="${vagasUrl}" class="ml-popup__cta">Ver vagas</a>
+        </footer>
+      </article>
     `;
   }
 
@@ -49,7 +83,7 @@
       const coords = getCoords(c);
       if (!coords) return;
       const marker = L.marker(coords);
-      marker.bindPopup(popupHtml(c));
+      marker.bindPopup(popupHtml(c), { className: "ml-popup-wrapper" });
       markersLayer.addLayer(marker);
       bounds.push(coords);
     });

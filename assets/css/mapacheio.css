@@ -550,3 +550,255 @@ h2,
     height:64vh;
   }
 }
+
+.leaflet-popup.ml-popup-wrapper{
+  border-radius:20px;
+}
+
+.leaflet-popup.ml-popup-wrapper .leaflet-popup-content-wrapper{
+  padding:0;
+  border-radius:18px;
+  box-shadow:0 18px 42px rgba(15,23,42,.18);
+}
+
+.leaflet-popup.ml-popup-wrapper .leaflet-popup-content{
+  margin:0;
+}
+
+.leaflet-popup.ml-popup-wrapper .leaflet-popup-tip{
+  box-shadow:0 12px 30px rgba(15,23,42,.12);
+}
+
+.ml-popup{
+  width:min(320px,84vw);
+  padding:20px 22px 18px;
+  border-radius:18px;
+  background:#fff;
+  color:#0f172a;
+  font-family:'Open Sans',sans-serif;
+}
+
+.ml-popup__header{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.ml-popup__avatar{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(16,37,105,.12),rgba(16,37,105,.2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.ml-popup__logo{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.ml-popup__logo--placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Montserrat',sans-serif;
+  font-weight:700;
+  font-size:18px;
+  color:var(--brand);
+}
+
+.ml-popup__headline{
+  flex:1;
+  min-width:0;
+}
+
+.ml-popup__title{
+  margin:0;
+  font-size:16px;
+  font-weight:700;
+  color:#0f172a;
+  line-height:1.25;
+}
+
+.ml-popup__subtitle{
+  margin:4px 0 0;
+  font-size:12px;
+  color:#475569;
+}
+
+.ml-popup__badge{
+  padding:6px 10px;
+  border-radius:9999px;
+  font-size:11px;
+  font-weight:600;
+  line-height:1;
+  border:1px solid transparent;
+  white-space:nowrap;
+}
+
+.ml-popup__badge--open{
+  background:#dcfce7;
+  color:#15803d;
+  border-color:#bbf7d0;
+}
+
+.ml-popup__badge--closed{
+  background:#e2e8f0;
+  color:#334155;
+  border-color:#cbd5f5;
+}
+
+.ml-popup__body{
+  margin-top:12px;
+  display:grid;
+  gap:6px;
+  font-size:12px;
+  color:#475569;
+}
+
+.ml-popup__text{
+  margin:0;
+}
+
+.ml-popup__link{
+  color:#1d4ed8;
+  font-weight:600;
+  text-decoration:none;
+}
+
+.ml-popup__link:hover,
+.ml-popup__link:focus-visible{
+  text-decoration:underline;
+  outline:none;
+}
+
+.ml-popup__chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:2px;
+}
+
+.ml-popup__chip{
+  padding:6px 10px;
+  border-radius:9999px;
+  background:rgba(16,37,105,.08);
+  color:var(--brand);
+  font-size:11px;
+  font-weight:600;
+}
+
+.ml-popup__jobs{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(15,23,42,.08);
+}
+
+.ml-popup__jobs-title{
+  margin:0 0 8px;
+  font-size:12px;
+  font-weight:700;
+  color:#0f172a;
+}
+
+.ml-popup__jobs-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  gap:6px;
+}
+
+.ml-popup__job a,
+.ml-popup__job-static{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:600;
+  text-decoration:none;
+  transition:background .2s ease, transform .2s ease;
+}
+
+.ml-popup__job a{
+  background:rgba(29,78,216,.08);
+  color:#1d4ed8;
+}
+
+.ml-popup__job a:hover,
+.ml-popup__job a:focus-visible{
+  background:rgba(29,78,216,.14);
+  transform:translateY(-1px);
+  outline:none;
+}
+
+.ml-popup__job-static{
+  background:rgba(15,23,42,.06);
+  color:#0f172a;
+}
+
+.ml-popup__job-name{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.ml-popup__job-name,
+.ml-popup__job-type{
+  display:inline-flex;
+  align-items:center;
+}
+
+.ml-popup__job-type{
+  margin-left:auto;
+  padding:4px 8px;
+  border-radius:9999px;
+  background:rgba(15,23,42,.08);
+  color:#0f172a;
+  font-weight:600;
+  font-size:11px;
+}
+
+.ml-popup__job-static .ml-popup__job-type{
+  background:rgba(15,23,42,.12);
+}
+
+.ml-popup__footer{
+  margin-top:16px;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.ml-popup__cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 18px;
+  border-radius:9999px;
+  background:var(--brand);
+  color:#fff;
+  font-weight:700;
+  font-size:12px;
+  text-decoration:none;
+  box-shadow:0 12px 28px rgba(16,37,105,.24);
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.ml-popup__cta:hover,
+.ml-popup__cta:focus-visible{
+  background:var(--brand-2);
+  transform:translateY(-1px);
+  box-shadow:0 16px 32px rgba(16,37,105,.28);
+  outline:none;
+}

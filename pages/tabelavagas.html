@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102569">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+    <title>Maps Link - Tabela de Vagas</title>
+    <link rel="stylesheet" href="../assets/css/tabelavagas.css">
+  </head>
+  <body>
+    <main class="wrap" role="main">
+      <header class="hero" aria-labelledby="titulo-vagas">
+        <span class="hero-badge">
+          <img src="../assets/images/image 4.png" alt="">
+        </span>
+        <h1 id="titulo-vagas">Vagas</h1>
+        <p class="hero-sub">Lista de vagas publicadas</p>
+      </header>
+
+      <section class="board" aria-labelledby="tabela-vagas">
+        <h2 id="tabela-vagas" class="sr-only">Tabela de vagas</h2>
+        <div class="board-actions">
+          <a class="btn-apply" href="enviocurriculo.html">Aplicar para vagas</a>
+        </div>
+        <div class="table-card">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th scope="col">Título</th>
+                <th scope="col">Área</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Publicação</th>
+                <th scope="col" class="col-status">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="strong">Dev Frontend</span></td>
+                <td>Tecnologia</td>
+                <td>CLT</td>
+                <td><time datetime="2025-05-08">08/05/2025</time></td>
+                <td class="col-status"><span class="status status-aberta">Aberta</span></td>
+              </tr>
+              <tr>
+                <td><span class="strong">Analista de Dados</span></td>
+                <td>Tecnologia</td>
+                <td>PJ</td>
+                <td><time datetime="2023-07-10">10/07/2023</time></td>
+                <td class="col-status"><span class="status status-fechada">Fechada</span></td>
+              </tr>
+              <tr>
+                <td><span class="strong">Gerente de Marketing</span></td>
+                <td>Marketing</td>
+                <td>CLT</td>
+                <td><time datetime="2022-03-26">26/03/2022</time></td>
+                <td class="col-status"><span class="status status-aberta">Aberta</span></td>
+              </tr>
+              <tr>
+                <td><span class="strong">Designer</span></td>
+                <td>Design</td>
+                <td>ESTÁGIO</td>
+                <td><time datetime="2025-06-22">22/06/2025</time></td>
+                <td class="col-status"><span class="status status-aberta">Aberta</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
