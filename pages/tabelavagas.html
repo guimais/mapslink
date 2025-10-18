@@ -9,7 +9,25 @@
     <title>Maps Link - Tabela de Vagas</title>
     <link rel="stylesheet" href="../assets/css/tabelavagas.css">
   </head>
-  <body>
+  <body data-page="tabelavagas" data-nav-active="paginamapav4.html">
+    <header class="site-header">
+      <nav class="nav-fixed">
+        <div class="nav-pilula">
+          <a href="../index.html" class="nav-logo-link">
+            <img src="../assets/images/Logo Certa - Fundo png.png" alt="MapsLink logo" class="nav-logo">
+          </a>
+          <ul class="nav-links">
+            <li><a class="nav-link" href="../index.html">Home</a></li>
+            <li><a class="nav-link active" href="paginamapav4.html" aria-current="page">Maps</a></li>
+            <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
+            <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
+            <li><a class="nav-link" href="about.html">About</a></li>
+            <li><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
     <main class="wrap" role="main">
       <header class="hero" aria-labelledby="titulo-vagas">
         <span class="hero-badge">
@@ -20,8 +38,8 @@
       </header>
 
       <section class="board" aria-labelledby="tabela-vagas">
-        <h2 id="tabela-vagas" class="sr-only">Tabela de vagas</h2>
-        <div class="board-actions">
+        <div class="board-header">
+          <h2 id="tabela-vagas" class="board-title">Tabela de vagas</h2>
           <a class="btn-apply" href="enviocurriculo.html">Aplicar para vagas</a>
         </div>
         <div class="table-card">
@@ -41,7 +59,7 @@
                 <td>Tecnologia</td>
                 <td>CLT</td>
                 <td><time datetime="2025-05-08">08/05/2025</time></td>
-                <td class="col-status"><span class="status status-aberta">Aberta</span></td>
+                <td class="col-status"><span class="status">Aberta</span></td>
               </tr>
               <tr>
                 <td><span class="strong">Analista de Dados</span></td>
@@ -55,14 +73,14 @@
                 <td>Marketing</td>
                 <td>CLT</td>
                 <td><time datetime="2022-03-26">26/03/2022</time></td>
-                <td class="col-status"><span class="status status-aberta">Aberta</span></td>
+                <td class="col-status"><span class="status">Aberta</span></td>
               </tr>
               <tr>
                 <td><span class="strong">Designer</span></td>
                 <td>Design</td>
-                <td>ESTÁGIO</td>
+                <td>Estágio</td>
                 <td><time datetime="2025-06-22">22/06/2025</time></td>
-                <td class="col-status"><span class="status status-aberta">Aberta</span></td>
+                <td class="col-status"><span class="status">Aberta</span></td>
               </tr>
             </tbody>
           </table>

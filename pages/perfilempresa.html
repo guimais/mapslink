@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="utf-8">
@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#102569">
     <link rel="manifest" href="../manifest.json">
     <link href="../assets/css/main.css" rel="stylesheet">
-<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
     <title>Maps Link - Perfil de Empresa</title>
     <link rel="stylesheet" href="../assets/css/perfilempresa.css">
@@ -14,7 +14,7 @@
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
   </head>
-  <body data-page="perfilempresa" data-nav-active="perfilempresa.html">
+  <body data-page="perfilempresa" data-nav-active="selecaoperfil.html">
     <div class="nav-container" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
         <a href="../index.html" class="nav-logo-link" aria-label="Ir para Home">
@@ -28,8 +28,8 @@
           <li role="none"><a role="menuitem" class="nav-link" href="paginamapav4.html">Maps</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="selecaoperfil.html">Profile</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginadashboard.html">Dashboard</a></li>
-          <li role="none"><a role="menuitem" class="nav-link active" href="vagas.html" aria-current="page">Vagas</a></li>
-          <li role="none"><a role="menuitem" class="nav-link active" href="paginacurriculo.html" aria-current="page">Currículos</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="vagas.html">Vagas</a></li>
+          <li role="none"><a role="menuitem" class="nav-link" href="paginacurriculo.html">Currículos</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="agenda.html">Agenda</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginaplanos.html">Planos</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="about.html">About</a></li>
@@ -39,28 +39,75 @@
     </div>
 
     <main class="empresa-page" role="main" aria-labelledby="titulo-principal-empresa">
-      <h1 id="titulo-principal-empresa" style="position:absolute;left:-9999px;">Perfil da empresa</h1>
-      <div class="empresa-layout">
-        <aside class="empresa-sidebar" role="complementary" aria-label="InformaÃ§Ãµes da empresa">
-          <div class="empresa-avatar">
-            <img src="../assets/images/image 4.png" alt="Logo da empresa" loading="lazy" decoding="async">
+      <section class="empresa-hero" aria-labelledby="empresa-nome-exibicao">
+        <div class="empresa-hero-main">
+          <div class="empresa-hero-avatar" aria-hidden="true">
+            <img src="../assets/images/image 4.png" alt="" loading="lazy" decoding="async">
           </div>
-          <ul class="empresa-contatos" role="list" aria-label="Canais de contato da empresa">
-            <li role="listitem"><i class="ri-instagram-line" aria-hidden="true"></i><span>@amazon</span></li>
-            <li role="listitem"><i class="ri-linkedin-box-line" aria-hidden="true"></i><span>@amazon</span></li>
-            <li role="listitem"><i class="ri-at-line" aria-hidden="true"></i><span>support@amazon.com</span></li>
-            <li role="listitem"><i class="ri-map-pin-line" aria-hidden="true"></i><span>Rua Plínio Luis de Siqueira Jr</span></li>
-          </ul>
+          <div class="empresa-hero-textos">
+            <h2 id="empresa-nome-exibicao">Amazon</h2>
+            <p class="empresa-hero-desc">
+              Tecnologia, logística e inovação para conectar milhões de clientes e talentos ao redor do mundo.
+            </p>
+            <ul class="empresa-hero-tags" aria-label="Principais áreas de atuação">
+              <li>Cloud &amp; AWS</li>
+              <li>E-commerce</li>
+              <li>Inteligência Artificial</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="empresa-hero-actions" aria-label="Ações do perfil">
+          <a class="empresa-switch-btn" href="selecaoperfil.html">
+            <i class="ri-user-switch-line" aria-hidden="true"></i>
+            Trocar perfil
+          </a>
+          <p class="empresa-hero-note">Visualizando como empresa</p>
+        </aside>
+      </section>
+
+      <div class="empresa-layout">
+        <aside class="empresa-sidebar" role="complementary" aria-label="Informações da empresa">
+          <div class="empresa-meta">
+            <div class="meta-item">
+              <span class="meta-label">Setor</span>
+              <span class="meta-value">Tecnologia &amp; E-commerce</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Sede</span>
+              <span class="meta-value">Seattle, EUA</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Modelo</span>
+              <span class="meta-value">Global • Híbrido</span>
+            </div>
+          </div>
+
+          <div class="empresa-sidebar-card">
+            <h2 class="sidebar-title">Canais de contato</h2>
+            <ul class="empresa-contatos" role="list" aria-label="Canais de contato da empresa">
+              <li role="listitem"><i class="ri-instagram-line" aria-hidden="true"></i><span>@amazon</span></li>
+              <li role="listitem"><i class="ri-linkedin-box-line" aria-hidden="true"></i><span>@amazon</span></li>
+              <li role="listitem"><i class="ri-at-line" aria-hidden="true"></i><span>support@amazon.com</span></li>
+              <li role="listitem"><i class="ri-map-pin-line" aria-hidden="true"></i><span>Rua Plínio Luis de Siqueira Jr</span></li>
+            </ul>
+          </div>
         </aside>
 
         <section class="empresa-content" aria-label="Conteúdo da empresa">
           <div class="card card-wide" id="curriculos-recebidos" aria-label="Currículos recebidos">
             <div class="card-icon"><i class="ri-folder-2-line" aria-hidden="true"></i></div>
-            <h2 class="card-title" id="titulo-card-curriculos">Currículos recebidos</h2>
+            <div>
+              <h2 class="card-title" id="titulo-card-curriculos">Currículos recebidos</h2>
+              <p class="card-subtitle">Acompanhe as últimas candidaturas e organize avaliações de forma ágil.</p>
+            </div>
+            <button class="card-action" type="button">
+              Gerenciar
+              <i class="ri-arrow-right-line" aria-hidden="true"></i>
+            </button>
           </div>
 
           <div class="empresa-grid">
-            <article class="card" id="bio-empresa" aria-labelledby="titulo-bio-empresa">
+            <article class="card card-highlight" id="bio-empresa" aria-labelledby="titulo-bio-empresa">
               <h2 id="titulo-bio-empresa">Bio da empresa</h2>
               <p>
                 Uma gigante global de tecnologia focada em e-commerce, computação em nuvem (AWS),
@@ -73,18 +120,13 @@
               <h2 id="titulo-agenda">Agenda</h2>
               <h3 class="sub">Entrevistas de hoje</h3>
               <div class="agenda-numero" aria-label="Quantidade de entrevistas hoje">3</div>
+              <p class="card-subtitle">Prepare os recrutadores e envie lembretes automáticos.</p>
             </article>
           </div>
         </section>
       </div>
     </main>
 
-
     <script defer src="../assets/js/perfilempresa.js"></script>
   </body>
 </html>
-
-
-
-
-
