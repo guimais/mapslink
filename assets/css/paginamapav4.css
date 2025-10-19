@@ -686,16 +686,123 @@ h2,
 }
 
 @media (max-width:992px){
+  .nav-fixed{
+    top:12px;
+    padding:0 16px;
+  }
+  .nav-pilula{
+    width:100%;
+    max-width:none;
+    padding:10px 18px;
+    height:56px;
+    border-radius:18px;
+    box-shadow:var(--shadow-lg);
+  }
   .nav-logo{
-    max-height:calc(var(--nav-h) - 20px);
+    max-height:calc(var(--nav-h) - 8px);
+    margin-right:0;
+  }
+  .nav-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    border:none;
+    background:none;
+    color:var(--text);
+    border-radius:12px;
+    transition:background-color .2s ease,color .2s ease;
+  }
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible{
+    background:rgba(16,37,105,.08);
+    color:var(--brand);
   }
   .nav-links{
-    gap:16px;
-    flex-wrap:wrap;
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:300px;
+    height:100vh;
+    background:#ffffff;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:flex-start;
+    padding:96px 0 48px;
+    gap:0;
+    box-shadow:-6px 0 24px rgba(0,0,0,0.18);
+    transition:right .3s ease;
+    z-index:2000;
+    overflow-y:auto;
+  }
+  .nav-links.active,
+  .nav-links.is-open,
+  .nav-pilula.is-open .nav-links{
+    right:0;
+  }
+  .nav-links li{
+    width:100%;
+    border-bottom:1px solid var(--surface);
+  }
+  .nav-links li:last-child{
+    border-bottom:none;
+  }
+  .nav-link{
+    display:flex;
+    align-items:center;
+    padding:18px 24px;
+    font-size:16px;
+    border-radius:0;
+    opacity:1;
+    transform:none;
+  }
+  .nav-link:hover,
+  .nav-link:focus{
+    background:var(--surface);
+    color:var(--brand);
+  }
+  .nav-link.active{
+    background:rgba(16,37,105,.12);
+    box-shadow:none;
+    border-left:4px solid var(--brand);
+  }
+  .nav-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,0.45);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .3s ease;
+    z-index:1900;
+  }
+  .nav-overlay.active{
+    opacity:1;
+    visibility:visible;
+  }
+  .maps-layout{
+    grid-template-columns:minmax(360px,1fr) minmax(0,1fr);
+  }
+  .cards-empresas{
+    max-height:calc(var(--card-h) * var(--cards-visible) + var(--cards-gap) * (var(--cards-visible) - 1));
   }
 }
 
 @media (max-width:768px){
+  .nav-fixed{
+    top:10px;
+    padding:0 12px;
+  }
+  .nav-pilula{
+    padding:8px 16px;
+    height:52px;
+    border-radius:16px;
+  }
+  .nav-links{
+    width:280px;
+    padding:88px 0 40px;
+    box-shadow:-4px 0 20px rgba(0,0,0,0.16);
+  }
   .maps-layout{
     grid-template-columns:1fr;
   }
@@ -705,61 +812,22 @@ h2,
   .mapa-area{
     order:1;
   }
+  .busca-mapa{
+    width:92%;
+  }
+  .cards-empresas{
+    max-height:none;
+    overflow:visible;
+  }
+  .painel-filtros[hidden]{
+    display:none !important;
+  }
   .btn-filtro{
     position:fixed;
     right:16px;
-    top:18px;
-    z-index:1001;
+    top:16px;
+    z-index:2100;
   }
-  .nav-toggle{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:40px;
-    height:40px;
-    border-radius:var(--radius-pill);
-    background:#ececec;
-    border:1px solid rgba(0,0,0,.25);
-    margin-left:auto;
-    cursor:pointer;
-  }
-  .nav-links{
-    position:absolute;
-    top:calc(100% + 8px);
-    left:50%;
-    transform:translateX(-50%);
-    width:92%;
-    background:var(--surface);
-    border-radius:16px;
-    border:1px solid rgba(16,37,105,.10);
-    box-shadow:var(--shadow-lg);
-    padding:0;
-    flex-direction:column;
-    gap:8px;
-    overflow:hidden;
-    white-space:normal;
-    max-height:0;
-    opacity:0;
-    pointer-events:none;
-    transition:max-height .3s, padding .25s, opacity .25s;
-    z-index:1001;
-  }
-  .nav-links.is-open{
-    max-height:320px;
-    padding:12px;
-    opacity:1;
-    pointer-events:auto;
-  }
-  .nav-link{
-    font-weight:700;
-    padding:10px 6px;
-    font-size:16px;
-  }
-
-.cards-empresas{
-  max-height:none;
-  overflow:visible;
-}
 }
 
 .leaflet-popup.ml-popup-wrapper{
@@ -1015,6 +1083,15 @@ h2,
 }
 
 @media (max-width:480px){
+  .nav-links{
+    padding-top:74px;
+  }
+  .nav-pilula{
+    padding:6px 10px;
+  }
+  .nav-link{
+    padding:15px 18px;
+  }
   .busca-mapa{
     width:94%;
   }
@@ -1023,5 +1100,41 @@ h2,
   }
   .empresa-endereco{
     font-size:13px;
+  }
+}
+
+@media (pointer:coarse){
+  .nav-toggle{
+    min-width:44px;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .nav-link{
+    min-height:48px;
+  }
+  .btn-filtro{
+    min-height:48px;
+  }
+}
+@media (max-width:560px){
+  .nav-pilula{
+    padding:6px 12px;
+    height:48px;
+  }
+  .nav-links{
+    width:100%;
+    padding-top:80px;
+  }
+  .nav-link{
+    padding:16px 20px;
+    font-size:15px;
+  }
+  .nav-logo{
+    max-height:calc(var(--nav-h) - 16px);
+  }
+  .busca-mapa{
+    width:94%;
   }
 }

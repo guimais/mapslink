@@ -476,6 +476,98 @@ h2,
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    top: 12px;
+    padding: 0 12px;
+  }
+  .nav-pilula {
+    width: 100%;
+    max-width: none;
+    padding: 8px 16px;
+    height: 52px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+  .nav-logo {
+    height: 72px;
+    margin-right: 0;
+  }
+  .nav-toggle {
+    display: block;
+    font-size: 22px;
+    padding: 6px;
+    border: none;
+    background: none;
+    color: var(--text);
+    border-radius: 10px;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background: rgba(16,37,105,.08);
+    color: var(--brand);
+  }
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 88px 0 40px;
+    gap: 0;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  .nav-links.active,
+  .nav-links.is-open,
+  .nav-pilula.is-open .nav-links {
+    right: 0;
+  }
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--surface);
+  }
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 18px 24px;
+    font-size: 16px;
+    border-radius: 0;
+    opacity: 1;
+    transform: none;
+  }
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--surface);
+    color: var(--brand);
+  }
+  .nav-link.active {
+    background: rgba(16,37,105,.12);
+    box-shadow: none;
+    border-left: 4px solid var(--brand);
+  }
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease;
+    z-index: 999;
+  }
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
   .loginempresarial {
     padding: 80px 16px 32px;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
@@ -534,7 +626,71 @@ h2,
   }
 }
 
+@media (max-width: 560px) {
+  .nav-container {
+    top: 10px;
+    padding: 0 10px;
+  }
+  .nav-pilula {
+    padding: 6px 12px;
+    height: 48px;
+    border-radius: 14px;
+  }
+  .nav-links {
+    width: 100%;
+    padding-top: 78px;
+  }
+  .nav-link {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+  .loginempresarial {
+    padding: 76px 14px 28px;
+  }
+  .login-card {
+    padding: 24px 18px;
+  }
+  .form-input {
+    padding: 16px 16px 16px 46px;
+  }
+  .password-toggle {
+    right: 14px;
+    font-size: 18px;
+  }
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .forgot-password {
+    align-self: flex-start;
+  }
+  .personal-login-link {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    border-radius: 10px;
+  }
+}
+
 @media (max-width: 480px) {
+  .nav-container {
+    top: 8px;
+    padding: 0 8px;
+  }
+  .nav-pilula {
+    padding: 6px 10px;
+    height: 46px;
+    border-radius: 14px;
+  }
+  .nav-links {
+    padding-top: 72px;
+  }
+  .nav-link {
+    padding: 15px 18px;
+    font-size: 15px;
+  }
   .loginempresarial {
     padding: 72px 12px 24px;
     min-height: 100vh;
@@ -659,6 +815,16 @@ h2,
 }
 
 @media (pointer: coarse) {
+  .nav-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-link {
+    min-height: 48px;
+  }
   .form-input {
     min-height: 48px;
   }
