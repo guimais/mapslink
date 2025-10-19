@@ -15,6 +15,8 @@
       { "title": "Estágio em UX/UI", "type": "Estágio", "url": "https://techcampinas.com.br/vagas/ux-stg" }
     ],
     "tags": ["React", "JavaScript", "Figma"],
+    "size": "Media",
+    "work_modes": ["Hibrido", "Remoto"],
     "updated_at": "2025-10-14T12:00:00Z"
   },
   {
@@ -32,6 +34,8 @@
       { "title": "Engenheiro de Software", "type": "PJ", "url": "https://innovatesp.com.br/oportunidades/engenheiro-software" }
     ],
     "tags": ["Python", "IA", "Cloud"],
+    "size": "Grande",
+    "work_modes": ["Hibrido"],
     "updated_at": "2025-10-12T09:30:00Z"
   },
   {
@@ -50,6 +54,8 @@
       { "title": "Analista de Dados Júnior", "type": "CLT", "url": "https://datario.labs.br/carreiras/analista-dados" }
     ],
     "tags": ["SQL", "Machine Learning", "Analytics"],
+    "size": "Media",
+    "work_modes": ["Presencial", "Hibrido"],
     "updated_at": "2025-10-10T15:45:00Z"
   },
   {
@@ -65,6 +71,8 @@
     "is_hiring": false,
     "jobs": [],
     "tags": ["IoT", "Mobilidade", "Sustentabilidade"],
+    "size": "Startup",
+    "work_modes": ["Presencial"],
     "updated_at": "2025-10-11T18:00:00Z"
   },
   {
@@ -82,6 +90,8 @@
       { "title": "Analista de Energia Solar", "type": "CLT", "url": "https://greentechsolutions.com.br/carreiras/energia-solar" }
     ],
     "tags": ["Sustentabilidade", "Energia Solar", "Inovação"],
+    "size": "Grande",
+    "work_modes": ["Presencial", "Hibrido"],
     "updated_at": "2025-10-13T11:20:00Z"
   },
   {
@@ -99,6 +109,8 @@
       { "title": "Pesquisador em IA Generativa", "type": "CLT", "url": "https://neuralworks.ai/jobs/ia-generativa" }
     ],
     "tags": ["Deep Learning", "Python", "TensorFlow"],
+    "size": "Startup",
+    "work_modes": ["Hibrido", "Remoto"],
     "updated_at": "2025-10-15T09:00:00Z"
   },
   {
@@ -114,6 +126,8 @@
     "is_hiring": false,
     "jobs": [],
     "tags": ["Smart Cities", "IoT", "Infraestrutura Urbana"],
+    "size": "Grande",
+    "work_modes": ["Presencial"],
     "updated_at": "2025-10-09T14:00:00Z"
   },
   {
@@ -132,6 +146,8 @@
       { "title": "Cientista de Dados Agrícolas", "type": "CLT", "url": "https://agroconnect.com.br/carreiras/data" }
     ],
     "tags": ["IoT", "Sensores", "Agricultura de Precisão"],
+    "size": "Media",
+    "work_modes": ["Presencial", "Hibrido"],
     "updated_at": "2025-10-13T16:45:00Z"
   },
   {
@@ -150,6 +166,8 @@
       { "title": "Pentester", "type": "PJ", "url": "https://cyberlinksec.com/carreiras/pentester" }
     ],
     "tags": ["Cybersecurity", "Red Team", "Network"],
+    "size": "Media",
+    "work_modes": ["Hibrido", "Remoto"],
     "updated_at": "2025-10-15T08:20:00Z"
   },
   {
@@ -167,6 +185,8 @@
       { "title": "Pesquisador em Bioinformática", "type": "CLT", "url": "https://biohealthresearch.com.br/carreiras/bioinfo" }
     ],
     "tags": ["BioTech", "Saúde", "Genética"],
+    "size": "Pequena",
+    "work_modes": ["Presencial", "Hibrido"],
     "updated_at": "2025-10-15T13:00:00Z"
   }
 ]

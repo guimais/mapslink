@@ -14,15 +14,34 @@
   const getIndustry = c => c?.industry ?? c?.sector ?? "";
 
   function filterCompanies(data, filters = {}) {
-    const q = norm(filters.q || "");
+    const q = norm(filters.q || filters.search || "");
+    const location = norm(filters.location || "");
     const city = norm(filters.city || "");
     const state = norm(filters.state || "");
-    const industry = norm(filters.industry || filters.sector || "");
+
+    const industries =
+      arr(filters.industries || filters.industry || filters.sector)
+        .map(norm)
+        .filter(Boolean);
+
+    const sizes =
+      arr(filters.sizes || filters.size || filters.companySize)
+        .map(norm)
+        .filter(Boolean);
+
+    const workModes =
+      arr(filters.workModes || filters.workMode || filters.modalities)
+        .map(norm)
+        .filter(Boolean);
+
     const isHiringRaw = filters.isHiring;
     const wantHiring =
-      typeof isHiringRaw === "string"
+      isHiringRaw == null
+        ? null
+        : typeof isHiringRaw === "string"
         ? isHiringRaw.toLowerCase() === "true"
-        : !!isHiringRaw;
+        : Boolean(isHiringRaw);
+
     const tagsWanted = arr(filters.tags).map(norm).filter(Boolean);
 
     return (data || []).filter(c => {
@@ -32,12 +51,32 @@
       const stateVal = c?.state || "";
       const tags = arr(c?.tags);
       const jobs = arr(c?.jobs);
+      const sizeVal = c?.size ?? c?.company_size ?? "";
+      const workModesVal = arr(c?.work_modes ?? c?.workModes);
 
-      const byCity = !city || norm(cityVal) === city;
-      const byState = !state || norm(stateVal) === state;
-      const byIndustry = !industry || norm(ind) === industry;
+      const cityNorm = norm(cityVal);
+      const stateNorm = norm(stateVal);
+      const industryNorm = norm(ind);
+      const sizeNorm = norm(sizeVal);
+      const workModesNorm = workModesVal.map(norm);
+
+      const locationMatch =
+        !location ||
+        cityNorm.includes(location) ||
+        stateNorm.includes(location) ||
+        norm(`${cityVal} ${stateVal}`).includes(location);
+
+      const byCity = !city || cityNorm === city;
+      const byState = !state || stateNorm === state;
+      const byIndustry =
+        industries.length === 0 || industries.includes(industryNorm);
+      const bySize = sizes.length === 0 || sizes.includes(sizeNorm);
+      const byWorkModes =
+        workModes.length === 0 ||
+        workModes.every(mode => workModesNorm.includes(mode));
+
       const byHiring =
-        isHiringRaw == null ? true : Boolean(c?.is_hiring) === wantHiring;
+        wantHiring == null ? true : Boolean(c?.is_hiring) === wantHiring;
 
       const companyTagsNorm = tags.map(norm);
       const byTags =
@@ -50,6 +89,8 @@
         ind,
         cityVal,
         stateVal,
+        sizeVal,
+        ...workModesVal,
         ...tags,
         ...jobs.map(j => (typeof j === "string" ? j : j?.title || ""))
       ]
@@ -58,7 +99,17 @@
 
       const byText = !q || norm(blob).includes(q);
 
-      return byCity && byState && byIndustry && byHiring && byTags && byText;
+      return (
+        locationMatch &&
+        byCity &&
+        byState &&
+        byIndustry &&
+        bySize &&
+        byWorkModes &&
+        byHiring &&
+        byTags &&
+        byText
+      );
     });
   }
 
@@ -67,7 +118,13 @@
     const values =
       key === "industry" || key === "sector"
         ? (list || []).map(i => getIndustry(i)).filter(Boolean)
-        : (list || []).map(i => i?.[key]).filter(Boolean);
+        : (list || []).flatMap(i => {
+            const value = i?.[key];
+            if (Array.isArray(value)) {
+              return value.filter(Boolean);
+            }
+            return value != null ? [value] : [];
+          });
 
     const seen = new Map();
     for (const v of values) {
@@ -85,13 +142,13 @@
   }
 
   function buildFilterOptions(list) {
-    const allTags = (list || []).flatMap(i => arr(i?.tags)).filter(Boolean);
-    const tagsUnique = uniqueValues(allTags.map(t => ({ t })), "t");
     return {
       cities: uniqueValues(list, "city"),
       states: uniqueValues(list, "state"),
       industries: uniqueValues(list, "industry"),
-      tags: tagsUnique
+      sizes: uniqueValues(list, "size"),
+      workModes: uniqueValues(list, "work_modes"),
+      tags: uniqueValues(list, "tags")
     };
   }
 
