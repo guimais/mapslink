@@ -1,104 +1,153 @@
 (() => {
-  "use strict";
-
   if (window.__ml_perfilusuario_init__) return;
   window.__ml_perfilusuario_init__ = true;
 
-  const $ = (s, ctx = document) => ctx.querySelector(s);
-  const $$ = (s, ctx = document) => Array.from(ctx.querySelectorAll(s));
+  const ACCENTS = /[\u0300-\u036f]/g;
+  const sectionIds = ["#home", "#planos", "#maps", "#profile", "#about", "#contact"];
 
-  const header = $(".nav-container");
+  const selectors = {
+    header: ".nav-container",
+    heroDesc: ".perfil-hero-desc",
+    heroTags: ".perfil-hero-tags",
+    metaValues: ".perfil-meta .meta-value",
+    bio: "#perfil-bio p",
+    status: "#perfil-status .agenda-numero",
+    contacts: ".perfil-contatos span",
+    experiences: ".perfil-experiencias-list",
+    contactLinks: ".perfil-contatos a",
+    revealTargets: ".card, .bloco, .curriculo-card",
+    cards: ".card",
+    miniCards: ".curriculo-experiencias li"
+  };
 
-  const navLinksAll =
-    (window.MapsApp && typeof window.MapsApp.navLinks === "function")
-      ? (window.MapsApp.navLinks() || [])
-      : $$(".nav-link");
+  const state = {
+    navLinks: [],
+    sections: [],
+    toast: null
+  };
 
-  const highlightNav = (target) => {
-    if (window.MapsApp && typeof window.MapsApp.highlightNav === "function") {
-      try { window.MapsApp.highlightNav(target); return true; } catch {}
+  function query(selector, root) {
+    return (root || document).querySelector(selector);
+  }
+
+  function queryAll(selector, root) {
+    return Array.from((root || document).querySelectorAll(selector));
+  }
+
+  function navLinks() {
+    if (window.MapsApp?.navLinks) {
+      try {
+        return window.MapsApp.navLinks() || [];
+      } catch {
+        return queryAll(".nav-link");
+      }
+    }
+    return queryAll(".nav-link");
+  }
+
+  function highlightNav(target) {
+    if (window.MapsApp?.highlightNav) {
+      try {
+        window.MapsApp.highlightNav(target);
+        return true;
+      } catch {
+        return false;
+      }
     }
     return false;
-  };
+  }
 
-  const closeMenu = () => {
-    if (window.MapsApp && typeof window.MapsApp.closeNav === "function") {
-      try { window.MapsApp.closeNav(); } catch {}
+  function closeMenu() {
+    if (window.MapsApp?.closeNav) {
+      try {
+        window.MapsApp.closeNav();
+      } catch {
+        /* no-op */
+      }
     }
-  };
+  }
 
-  const toggleMenu = () => {
-    if (window.MapsNav && typeof window.MapsNav.toggle === "function") {
-      try { window.MapsNav.toggle(); } catch {}
+  function toggleMenu() {
+    if (window.MapsNav?.toggle) {
+      try {
+        window.MapsNav.toggle();
+      } catch {
+        /* no-op */
+      }
     }
-  };
+  }
 
-  const onScroll = () => {
+  function setupScrollHeader() {
+    const header = query(selectors.header);
     if (!header) return;
-    if (window.scrollY > 6) header.classList.add("is-scrolled");
-    else header.classList.remove("is-scrolled");
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+    const handleScroll = () => {
+      header.classList.toggle("is-scrolled", window.scrollY > 6);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+  }
 
-  navLinksAll
-    .filter((a) => (a.getAttribute("href") || "").startsWith("#"))
-    .forEach((a) => {
-      if (a.__pu_bound) return;
-      a.__pu_bound = true;
-      a.addEventListener("click", (e) => {
-        const hash = a.getAttribute("href");
-        const target = hash ? document.querySelector(hash) : null;
-        if (!target) return;
-        e.preventDefault();
-        closeMenu();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        history.pushState(null, "", hash);
+  function setupNav() {
+    state.navLinks = navLinks();
+    state.sections = sectionIds.map(id => query(id)).filter(Boolean);
+
+    state.navLinks
+      .filter(link => (link.getAttribute("href") || "").startsWith("#"))
+      .forEach(link => {
+        if (link.dataset.bound) return;
+        link.dataset.bound = "true";
+        link.addEventListener("click", event => {
+          const hash = link.getAttribute("href");
+          const target = hash ? document.querySelector(hash) : null;
+          if (!target) return;
+          event.preventDefault();
+          closeMenu();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.pushState(null, "", hash);
+        });
       });
-    });
 
-  const markActiveByPath = () => {
+    if (!state.sections.length) {
+      markActiveLink();
+      return;
+    }
+
+    const sectionLinks = state.navLinks.filter(link => (link.getAttribute("href") || "").startsWith("#"));
+    const map = new Map(sectionLinks.map(link => [link.getAttribute("href"), link]));
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = `#${entry.target.id}`;
+        if (highlightNav(id)) return;
+        sectionLinks.forEach(link => link.classList.remove("active"));
+        map.get(id)?.classList.add("active");
+      });
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 });
+
+    state.sections.forEach(section => observer.observe(section));
+
+    const start = location.hash && map.get(location.hash) ? location.hash : "#profile";
+    if (!highlightNav(start)) map.get(start)?.classList.add("active");
+  }
+
+  function markActiveLink() {
     const path = (location.pathname.split("/").pop() || "index.html").split("?")[0];
     if (highlightNav(path)) return;
-    navLinksAll.forEach((link) => {
+    state.navLinks.forEach(link => {
       const href = (link.getAttribute("href") || "").split("?")[0];
       if (!href || href.startsWith("#")) return;
       link.classList.toggle("active", href === path);
     });
-  };
-
-  const sectionLinks = navLinksAll.filter((a) => (a.getAttribute("href") || "").startsWith("#"));
-  const sectionIds = ["#home", "#planos", "#maps", "#profile", "#about", "#contact"];
-  const sections = sectionIds.map((id) => $(id)).filter(Boolean);
-
-  if (sectionLinks.length && sections.length) {
-    const map = new Map(sectionLinks.map((l) => [l.getAttribute("href"), l]));
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const id = "#" + entry.target.id;
-          if (highlightNav(id)) return;
-          sectionLinks.forEach((l) => l.classList.remove("active"));
-          map.get(id)?.classList.add("active");
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 }
-    );
-    sections.forEach((sec) => io.observe(sec));
-    const start = location.hash && map.get(location.hash) ? location.hash : "#profile";
-    if (!highlightNav(start)) map.get(start)?.classList.add("active");
-  } else {
-    markActiveByPath();
   }
 
-  const toast = (() => {
+  function createToast() {
     const id = "perfiluser-toast";
-    let el = document.getElementById(id);
-    if (!el) {
-      el = document.createElement("div");
-      el.id = id;
-      Object.assign(el.style, {
+    let element = document.getElementById(id);
+    if (!element) {
+      element = document.createElement("div");
+      element.id = id;
+      Object.assign(element.style, {
         position: "fixed",
         left: "50%",
         bottom: "28px",
@@ -112,245 +161,255 @@
         opacity: "0",
         pointerEvents: "none",
         transition: "opacity .2s ease",
-        zIndex: "9999",
+        zIndex: "9999"
       });
-      document.body.appendChild(el);
+      document.body.appendChild(element);
     }
-    let t;
-    return (msg) => {
-      clearTimeout(t);
-      el.textContent = msg;
-      el.style.opacity = "1";
-      t = setTimeout(() => (el.style.opacity = "0"), 1400);
+    let timer;
+    return message => {
+      clearTimeout(timer);
+      element.textContent = message;
+      element.style.opacity = "1";
+      timer = setTimeout(() => {
+        element.style.opacity = "0";
+      }, 1400);
     };
-  })();
+  }
 
   function hydrateFromAuth(data) {
     if (!data || data.type !== "personal") return;
     const profile = data.profile || {};
-    const nameEl = $("#perfil-nome");
-    if (nameEl && data.name) nameEl.textContent = data.name;
-    const descEl = $(".perfil-hero-desc");
-    if (descEl && profile.headline) descEl.textContent = profile.headline;
-    const tagsEl = $(".perfil-hero-tags");
-    if (tagsEl && Array.isArray(profile.skills) && profile.skills.length) tagsEl.innerHTML = profile.skills.map(skill => `<li>${skill}</li>`).join("");
-    const metaValues = $$(".perfil-meta .meta-value");
-    if (metaValues[0] && (profile.specialty || (profile.skills && profile.skills.length))) metaValues[0].textContent = profile.specialty || profile.skills[0];
-    if (metaValues[1] && profile.location) metaValues[1].textContent = profile.location;
-    if (metaValues[2] && profile.experience) metaValues[2].textContent = profile.experience;
-    if (metaValues[3] && profile.availability) metaValues[3].textContent = profile.availability;
-    const bioEl = $("#perfil-bio p");
-    if (bioEl && profile.bio) bioEl.textContent = profile.bio;
-    const statusNum = $("#perfil-status .agenda-numero");
-    if (statusNum && (profile.interviewsToday || profile.interviewsToday === 0)) statusNum.textContent = profile.interviewsToday;
+    const name = query("#perfil-nome");
+    if (name && data.name) name.textContent = data.name;
+    const desc = query(selectors.heroDesc);
+    if (desc && profile.headline) desc.textContent = profile.headline;
+    const tags = query(selectors.heroTags);
+    if (tags && Array.isArray(profile.skills) && profile.skills.length) {
+      tags.innerHTML = profile.skills.map(skill => `<li>${skill}</li>`).join("");
+    }
+    const meta = queryAll(selectors.metaValues);
+    if (meta[0] && (profile.specialty || (profile.skills && profile.skills.length))) meta[0].textContent = profile.specialty || profile.skills[0];
+    if (meta[1] && profile.location) meta[1].textContent = profile.location;
+    if (meta[2] && profile.experience) meta[2].textContent = profile.experience;
+    if (meta[3] && profile.availability) meta[3].textContent = profile.availability;
+    const bio = query(selectors.bio);
+    if (bio && profile.bio) bio.textContent = profile.bio;
+    const status = query(selectors.status);
+    if (status && (profile.interviewsToday || profile.interviewsToday === 0)) status.textContent = profile.interviewsToday;
+    const contactSpans = queryAll(selectors.contacts);
     const contact = profile.contact || {};
-    const contactSpans = $$(".perfil-contatos span");
     if (contactSpans[0] && contact.instagram) contactSpans[0].textContent = contact.instagram;
     if (contactSpans[1] && contact.linkedin) contactSpans[1].textContent = contact.linkedin;
     if (contactSpans[2] && contact.email) contactSpans[2].textContent = contact.email;
     if (contactSpans[3] && contact.phone) contactSpans[3].textContent = contact.phone;
-    const expList = $(".perfil-experiencias-list");
-    if (expList && Array.isArray(profile.experiences) && profile.experiences.length) {
-      expList.innerHTML = profile.experiences.map(item => {
-        const parts = item.split(" - ");
-        const role = parts.shift()?.trim() || item;
-        const detail = parts.join(" - ").trim();
-        return `<li><span class="perfil-exp-role">${role}</span><span class="perfil-exp-detail">${detail}</span></li>`;
-      }).join("");
+    const experiences = query(selectors.experiences);
+    if (experiences && Array.isArray(profile.experiences) && profile.experiences.length) {
+      experiences.innerHTML = profile.experiences
+        .map(item => {
+          const parts = item.split(" - ");
+          const role = parts.shift()?.trim() || item;
+          const detail = parts.join(" - ").trim();
+          return `<li><span class="perfil-exp-role">${role}</span><span class="perfil-exp-detail">${detail}</span></li>`;
+        })
+        .join("");
     }
   }
 
-  const auth = window.MapsAuth;
-  if (auth && typeof auth.ready === "function") {
+  function hydrateFromStorage() {
+    try {
+      const raw = localStorage.getItem("perfilCurriculoData");
+      if (!raw) return;
+      hydrateFromAuth({ type: "personal", profile: JSON.parse(raw) });
+    } catch {
+      /* ignore corrupted data */
+    }
+  }
+
+  function bindContactCopies() {
+    const links = queryAll(selectors.contactLinks);
+    links.forEach(link => {
+      if (link.dataset.copyBound) return;
+      link.dataset.copyBound = "true";
+      link.addEventListener("click", async event => {
+        const href = link.getAttribute("href") || "";
+        const text = (() => {
+          if (href.startsWith("mailto:")) return href.replace(/^mailto:/, "");
+          if (href.startsWith("tel:")) return href.replace(/^tel:/, "");
+          return (link.textContent || "").trim();
+        })();
+        try {
+          await navigator.clipboard?.writeText?.(text);
+          state.toast(`Copiado: ${text}`);
+          if (/^https?:\/\//i.test(href)) {
+            event.preventDefault();
+            window.open(href, "_blank", "noopener");
+          }
+        } catch {
+          state.toast("Não foi possível copiar");
+        }
+      });
+    });
+  }
+
+  function setupReveal() {
+    const nodes = queryAll(selectors.revealTargets);
+    if (!nodes.length) return;
+    nodes.forEach(node => {
+      node.style.opacity = "0";
+      node.style.transform = "translateY(8px)";
+      node.style.transition = "opacity .35s ease, transform .35s ease";
+    });
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    nodes.forEach(node => observer.observe(node));
+  }
+
+  function setupShortcuts() {
+    document.addEventListener("keydown", event => {
+      if (event.altKey && event.key.toLowerCase() === "m") {
+        event.preventDefault();
+        toggleMenu();
+      }
+    });
+  }
+
+  function prefersReducedMotion() {
+    try {
+      return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    } catch {
+      return false;
+    }
+  }
+
+  function ensureStyle(id, css) {
+    if (document.getElementById(id)) return;
+    const style = document.createElement("style");
+    style.id = id;
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function initCardAnimations() {
+    ensureStyle(
+      "cards-anim-styles",
+      [
+        ".js-card-hover{transition:transform .18s ease, box-shadow .18s ease, opacity .32s ease;}",
+        ".js-card-init{opacity:0;transform:translateY(14px);}",
+        ".js-card-in{opacity:1;transform:translateY(0);}",
+        ".js-card-in.js-card-elevate:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.08)!important;}",
+        ".js-card-pressed{transform:translateY(0) scale(.995)!important;}"
+      ].join("")
+    );
+
+    const cards = queryAll(selectors.cards);
+    if (!cards.length) return;
+    const reduced = prefersReducedMotion();
+
+    cards.forEach(card => {
+      if (card.dataset.cardBound) return;
+      card.dataset.cardBound = "true";
+      card.classList.add("js-card-hover", "js-card-elevate");
+      if (!reduced) card.classList.add("js-card-init");
+      card.addEventListener("pointerdown", () => card.classList.add("js-card-pressed"));
+      ["pointerup", "pointercancel", "pointerleave"].forEach(evt => {
+        card.addEventListener(evt, () => card.classList.remove("js-card-pressed"));
+      });
+    });
+
+    if (reduced) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("js-card-in");
+        entry.target.classList.remove("js-card-init");
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -10% 0px" });
+
+    cards.forEach(card => observer.observe(card));
+  }
+
+  function initMiniAnimations() {
+    ensureStyle(
+      "mini-cards-anim-styles",
+      [
+        ".js-mini{transition:transform .2s ease, box-shadow .25s ease, opacity .35s ease, background-position .25s ease;position:relative;overflow:hidden;}",
+        ".js-mini-light{background-image:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.10),rgba(255,255,255,0) 45%);background-repeat:no-repeat;}",
+        ".js-mini-init{opacity:0;transform:translateX(12px);}",
+        ".js-mini-in{opacity:1;transform:none;}",
+        ".js-mini:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.22);}",
+        ".js-mini-press{transform:translateY(0) scale(.995)!important;}"
+      ].join("")
+    );
+
+    const items = queryAll(selectors.miniCards);
+    if (!items.length) return;
+    const reduced = prefersReducedMotion();
+
+    items.forEach((item, index) => {
+      if (item.dataset.miniBound) return;
+      item.dataset.miniBound = "true";
+      item.dataset.idx = String(index);
+      item.classList.add("js-mini", "js-mini-light");
+      if (!reduced) item.classList.add("js-mini-init");
+      item.addEventListener("pointermove", event => {
+        const rect = item.getBoundingClientRect();
+        item.style.setProperty("--mx", `${Math.round(event.clientX - rect.left)}px`);
+        item.style.setProperty("--my", `${Math.round(event.clientY - rect.top)}px`);
+      });
+      item.addEventListener("pointerdown", () => item.classList.add("js-mini-press"));
+      ["pointerup", "pointercancel", "pointerleave"].forEach(evt => {
+        item.addEventListener(evt, () => item.classList.remove("js-mini-press"));
+      });
+    });
+
+    if (reduced) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const delay = (parseInt(el.dataset.idx || "0", 10) % 8) * 70;
+        setTimeout(() => {
+          el.classList.add("js-mini-in");
+          el.classList.remove("js-mini-init");
+        }, delay);
+        obs.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
+
+    items.forEach(item => observer.observe(item));
+  }
+
+  function initAuth() {
+    const auth = window.MapsAuth;
+    if (!auth?.ready) {
+      hydrateFromStorage();
+      return;
+    }
     auth.ready().then(() => hydrateFromAuth(auth.current()));
     if (auth.onSession) auth.onSession(hydrateFromAuth);
   }
 
-  $$(".perfil-contatos a").forEach((a) => {
-    if (a.__pu_copy_bound) return;
-    a.__pu_copy_bound = true;
-
-    a.addEventListener("click", async (e) => {
-      const href = a.getAttribute("href") || "";
-      const toCopy = (() => {
-        if (href.startsWith("mailto:")) return href.replace(/^mailto:/, "");
-        if (href.startsWith("tel:")) return href.replace(/^tel:/, "");
-        return (a.textContent || "").trim();
-      })();
-
-      try {
-        await (navigator.clipboard?.writeText?.(toCopy));
-        toast("Copiado: " + toCopy);
-        if (/^https?:\/\//i.test(href)) {
-          e.preventDefault();
-          window.open(href, "_blank", "noopener");
-        }
-      } catch {
-        toast("Não foi possível copiar");
-      }
-    });
-  });
-
-  // reveal simples (cards/blocos/curriculo-card)
-  const revealTargets = $$(".card, .bloco, .curriculo-card");
-  if (revealTargets.length) {
-    revealTargets.forEach((el) => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(8px)";
-      el.style.transition = "opacity .35s ease, transform .35s ease";
-    });
-    const revealer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    revealTargets.forEach((el) => revealer.observe(el));
+  function init() {
+    state.toast = createToast();
+    setupScrollHeader();
+    setupNav();
+    markActiveLink();
+    initAuth();
+    bindContactCopies();
+    setupReveal();
+    setupShortcuts();
+    initCardAnimations();
+    initMiniAnimations();
   }
-
-  document.addEventListener("keydown", (e) => {
-    if (e.altKey && e.key.toLowerCase() === "m") {
-      e.preventDefault();
-      toggleMenu();
-    }
-  });
-})();
-
-(() => {
-  if (document.getElementById("cards-anim-styles")) {
-  } else {
-    const style = document.createElement("style");
-    style.id = "cards-anim-styles";
-    style.textContent = [
-      ".js-card-hover{transition:transform .18s ease, box-shadow .18s ease, opacity .32s ease;}",
-      ".js-card-init{opacity:0;transform:translateY(14px);}",
-      ".js-card-in{opacity:1;transform:translateY(0);}",
-      ".js-card-in.js-card-elevate:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.08)!important;}",
-      ".js-card-pressed{transform:translateY(0) scale(.995)!important;}"
-    ].join("");
-    document.head.appendChild(style);
-  }
-
-  const init = () => {
-    const cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
-    if (!cards.length) return;
-
-    let prefersReduced = false;
-    try {
-      prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    } catch {}
-
-    cards.forEach((el) => {
-      if (el.__card_bound) return;
-      el.__card_bound = true;
-
-      el.classList.add("js-card-hover", "js-card-elevate");
-      if (!prefersReduced) el.classList.add("js-card-init");
-
-      el.addEventListener("pointerdown", () => el.classList.add("js-card-pressed"));
-      ["pointerup", "pointercancel", "pointerleave"].forEach((evt) => {
-        el.addEventListener(evt, () => el.classList.remove("js-card-pressed"));
-      });
-    });
-
-    if (prefersReduced) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("js-card-in");
-            entry.target.classList.remove("js-card-init");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    cards.forEach((el) => obs.observe(el));
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
-})();
-
-(() => {
-  const styleId = "mini-cards-anim-styles";
-  if (!document.getElementById(styleId)) {
-    const style = document.createElement("style");
-    style.id = styleId;
-    style.textContent = [
-      ".js-mini{transition:transform .2s ease, box-shadow .25s ease, opacity .35s ease, background-position .25s ease; position:relative; overflow:hidden;}",
-      ".js-mini-light{background-image: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,.10), rgba(255,255,255,0) 45%); background-repeat:no-repeat;}",
-      ".js-mini-init{opacity:0; transform:translateX(12px);}",
-      ".js-mini-in{opacity:1; transform:none;}",
-      ".js-mini:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,.22);}",
-      ".js-mini-press{transform:translateY(0) scale(.995)!important;}"
-    ].join("");
-    document.head.appendChild(style);
-  }
-
-  const init = () => {
-    const minis = Array.prototype.slice.call(document.querySelectorAll(".curriculo-experiencias li"));
-    if (!minis.length) return;
-
-    let prefersReduced = false;
-    try {
-      prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    } catch {}
-
-    minis.forEach((el, idx) => {
-      if (el.__mini_bound) return;
-      el.__mini_bound = true;
-
-      el.classList.add("js-mini", "js-mini-light");
-      if (!prefersReduced) el.classList.add("js-mini-init");
-      el.dataset.idx = idx;
-
-      el.addEventListener("pointermove", (e) => {
-        const r = el.getBoundingClientRect();
-        const x = Math.round(e.clientX - r.left);
-        const y = Math.round(e.clientY - r.top);
-        el.style.setProperty("--mx", x + "px");
-        el.style.setProperty("--my", y + "px");
-      });
-
-      el.addEventListener("pointerdown", () => el.classList.add("js-mini-press"));
-      ["pointerup", "pointercancel", "pointerleave"].forEach((evt) => {
-        el.addEventListener(evt, () => el.classList.remove("js-mini-press"));
-      });
-    });
-
-    if (prefersReduced) return;
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target;
-          const delay = (parseInt(el.dataset.idx || "0", 10) % 8) * 70;
-          setTimeout(() => {
-            el.classList.add("js-mini-in");
-            el.classList.remove("js-mini-init");
-          }, delay);
-          obs.unobserve(el);
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    minis.forEach((el) => obs.observe(el));
-  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init, { once: true });

@@ -1,21 +1,4 @@
-(function () {
-  "use strict";
-
-  function ensureStyles() {
-    if (document.getElementById("ml-envio-styles")) return;
-    const s = document.createElement("style");
-    s.id = "ml-envio-styles";
-    s.textContent = `
-#result-count.envio-result {
-  margin: 8px 0 0;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--muted);
-}
-`;
-    document.head.appendChild(s);
-  }
-
+(() => {
   const page = document.getElementById("envio-cv");
   if (!page) return;
 
@@ -24,151 +7,163 @@
   const tbody = table?.tBodies?.[0];
   if (!table || !thead || !tbody) return;
 
-  ensureStyles();
-
-  const empresaTituloEl = document.getElementById("empresa-titulo");
-  const empresaNome = (empresaTituloEl?.textContent || "empresa").trim();
+  const companyTitle = document.getElementById("empresa-titulo");
+  const companyName = (companyTitle?.textContent || "empresa").trim();
 
   const searchInput = page.querySelector(".search-input input");
-  const live = createLiveRegion();
-  document.body.appendChild(live);
+  const actionsBar = page.querySelector(".actions-bar");
 
-  const slugify = s =>
-    (s || "")
+  const ACCENTS = /[\u0300-\u036f]/g;
+  const slug = value =>
+    (value || "")
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(ACCENTS, "")
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
 
-  const LS_KEY = `mapslink_envio_cv_${slugify(empresaNome)}_v1`;
-  const LS_SORT = `${LS_KEY}_sort`;
+  const STORAGE_KEY = `mapslink_envio_cv_${slug(companyName)}_v1`;
+  const STORAGE_SORT = `${STORAGE_KEY}_sort`;
 
-  let applied = new Set();
+  const state = {
+    applied: new Set(),
+    sort: null,
+    liveRegion: null,
+    debounceTimer: null,
+    resetTimer: null
+  };
+
+  function ensureStyles() {
+    if (document.getElementById("ml-envio-styles")) return;
+    const style = document.createElement("style");
+    style.id = "ml-envio-styles";
+    style.textContent = `
+#result-count.envio-result{margin:8px 0 0;font-size:13px;font-weight:800;color:var(--muted);}
+`;
+    document.head.appendChild(style);
+  }
 
   function createLiveRegion() {
-    const el = document.createElement("div");
-    el.className = "sr-only";
-    el.setAttribute("aria-live", "polite");
-    el.setAttribute("aria-atomic", "true");
-    return el;
+    const region = document.createElement("div");
+    region.className = "sr-only";
+    region.setAttribute("aria-live", "polite");
+    region.setAttribute("aria-atomic", "true");
+    document.body.appendChild(region);
+    return region;
   }
 
-  function announce(msg) {
-    live.textContent = "";
-    setTimeout(() => (live.textContent = msg), 10);
+  function announce(message) {
+    if (!state.liveRegion) return;
+    state.liveRegion.textContent = "";
+    setTimeout(() => {
+      state.liveRegion.textContent = message;
+    }, 10);
   }
 
-  function load() {
+  function loadApplied() {
     try {
-      const raw = localStorage.getItem(LS_KEY);
-      if (raw) applied = new Set(JSON.parse(raw));
-    } catch {}
-  }
-
-  function save() {
-    try {
-      localStorage.setItem(LS_KEY, JSON.stringify([...applied]));
-    } catch {}
-  }
-
-  function ensureRowIds() {
-    [...tbody.rows].forEach((tr, idx) => {
-      const btn = tr.querySelector(".prestar-vaga");
-      if (!btn) return;
-      if (!btn.dataset.id) {
-        const titulo = tr.querySelector("td:first-child .cell-text")?.textContent?.trim() || `vaga-${idx + 1}`;
-        const modelo = tr.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
-        btn.dataset.id = `${slugify(empresaNome)}-${slugify(titulo)}-${slugify(modelo)}-${idx}`;
-      }
-      btn.setAttribute("type", "button");
-      btn.setAttribute("aria-pressed", "false");
-    });
-  }
-
-  function markAsApplied(btn, titulo) {
-    btn.classList.add("btn-prestado");
-    btn.setAttribute("aria-pressed", "true");
-    btn.setAttribute("disabled", "true");
-    btn.innerHTML = `<i class="ri-check-line" aria-hidden="true"></i> Aplicado`;
-    btn.title = titulo ? `Você já se candidatou a "${titulo}"` : "Você já se candidatou";
-  }
-
-  function unmark(btn, titulo) {
-    btn.classList.remove("btn-prestado");
-    btn.removeAttribute("disabled");
-    btn.setAttribute("aria-pressed", "false");
-    btn.innerHTML = `<i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga`;
-    btn.title = titulo ? `Enviar currículo para "${titulo}"` : "Enviar currículo";
-  }
-
-  function updateButtonsState() {
-    const buttons = tbody.querySelectorAll(".prestar-vaga");
-    buttons.forEach(btn => {
-      const id = btn.dataset.id || "";
-      const tr = btn.closest("tr");
-      const titulo = tr?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
-      if (applied.has(id)) {
-        markAsApplied(btn, titulo);
-      } else {
-        unmark(btn, titulo);
-      }
-    });
-  }
-
-  function handleApplyClick(e) {
-    const btn = e.target.closest(".prestar-vaga");
-    if (!btn) return;
-
-    const id = btn.dataset.id || "";
-    if (!id) return;
-    if (applied.has(id)) return;
-
-    const tr = btn.closest("tr");
-    const titulo = tr?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
-    const modelo = tr?.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
-
-    const ok = confirm(
-      titulo
-        ? `Confirmar envio de currículo para a vaga "${titulo}" (${empresaNome}, ${modelo || "—"})?`
-        : "Confirmar envio de currículo para esta vaga?"
-    );
-    if (!ok) return;
-
-    applied.add(id);
-    save();
-    markAsApplied(btn, titulo);
-    announce(`Currículo enviado para "${titulo}".`);
-  }
-
-  function handleKeydown(e) {
-    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("prestar-vaga")) {
-      e.preventDefault();
-      handleApplyClick(e);
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state.applied = new Set(JSON.parse(raw));
+    } catch {
+      state.applied = new Set();
     }
   }
 
-  function debounce(fn, ms = 250) {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(() => fn(...args), ms);
-    };
+  function saveApplied() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(state.applied)));
+    } catch {
+      /* ignore quota errors */
+    }
   }
 
-  function filterRows(query) {
-    const q = (query || "").trim().toLowerCase();
-    let visible = 0;
-    [...tbody.rows].forEach(tr => {
-      const t1 = tr.cells[0]?.innerText?.toLowerCase() || "";
-      const t2 = tr.cells[1]?.innerText?.toLowerCase() || "";
-      const t3 = tr.cells[2]?.innerText?.toLowerCase() || "";
-      const match = !q || t1.includes(q) || t2.includes(q) || t3.includes(q);
-      tr.style.display = match ? "" : "none";
-      if (match) visible++;
+  function saveSort(info) {
+    state.sort = info;
+    try {
+      localStorage.setItem(STORAGE_SORT, JSON.stringify(info));
+    } catch {}
+  }
+
+  function loadSort() {
+    try {
+      const raw = localStorage.getItem(STORAGE_SORT);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
+
+  function ensureRowIds() {
+    Array.from(tbody.rows).forEach((row, index) => {
+      const button = row.querySelector(".prestar-vaga");
+      if (!button) return;
+      if (!button.dataset.id) {
+        const title = row.querySelector("td:first-child .cell-text")?.textContent?.trim() || `vaga-${index + 1}`;
+        const modality = row.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
+        button.dataset.id = `${slug(companyName)}-${slug(title)}-${slug(modality)}-${index}`;
+      }
+      button.type = "button";
+      button.setAttribute("aria-pressed", "false");
     });
-    updateCounter(visible);
-    announce(visible ? `${visible} vaga(s) encontrada(s)` : `Nenhuma vaga encontrada`);
+  }
+
+  function setButtonState(button, applied, title) {
+    if (!button) return;
+    const label = title ? `"${title}"` : "essa vaga";
+    if (applied) {
+      button.classList.add("btn-prestado");
+      button.setAttribute("aria-pressed", "true");
+      button.disabled = true;
+      button.innerHTML = '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
+      button.title = `Você já se candidatou para ${label}`;
+    } else {
+      button.classList.remove("btn-prestado");
+      button.setAttribute("aria-pressed", "false");
+      button.disabled = false;
+      button.innerHTML = '<i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga';
+      button.title = `Enviar currículo para ${label}`;
+    }
+  }
+
+  function refreshButtons() {
+    Array.from(tbody.querySelectorAll(".prestar-vaga")).forEach(button => {
+      const row = button.closest("tr");
+      const title = row?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
+      const applied = state.applied.has(button.dataset.id || "");
+      setButtonState(button, applied, title);
+    });
+  }
+
+  function applyFor(button) {
+    const id = button.dataset.id || "";
+    if (!id || state.applied.has(id)) return;
+    const row = button.closest("tr");
+    const title = row?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
+    state.applied.add(id);
+    saveApplied();
+    setButtonState(button, true, title);
+    announce(`Currículo enviado para ${title || "a vaga selecionada"}.`);
+  }
+
+  function handleApply(event) {
+    const button = event.target.closest(".prestar-vaga");
+    if (!button) return;
+    applyFor(button);
+  }
+
+  function handleApplyKey(event) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const button = event.target.closest(".prestar-vaga");
+    if (!button) return;
+    event.preventDefault();
+    applyFor(button);
+  }
+
+  function matches(term, row) {
+    if (!term) return true;
+    const value = row.textContent || "";
+    return value.toLowerCase().includes(term);
   }
 
   function updateCounter(count) {
@@ -177,120 +172,146 @@
       badge = document.createElement("div");
       badge.id = "result-count";
       badge.className = "envio-result";
-      page.querySelector(".actions-bar")?.appendChild(badge);
+      actionsBar?.appendChild(badge);
     }
     badge.textContent = `${count} resultado(s)`;
   }
 
-  if (searchInput) {
+  function filterRows(term) {
+    const value = (term || "").trim().toLowerCase();
+    let visible = 0;
+    Array.from(tbody.rows).forEach(row => {
+      const show = matches(value, row);
+      row.style.display = show ? "" : "none";
+      if (show) visible += 1;
+    });
+    updateCounter(visible);
+    announce(visible ? `${visible} vaga(s) encontrada(s)` : "Nenhuma vaga encontrada");
+    return visible;
+  }
+
+  function debounce(fn, delay) {
+    return event => {
+      clearTimeout(state.debounceTimer);
+      state.debounceTimer = setTimeout(() => fn(event), delay);
+    };
+  }
+
+  function toggleSortState(state) {
+    if (state === "ascending") return "descending";
+    return "ascending";
+  }
+
+  function sortRows(columnIndex, direction) {
+    const rows = Array.from(tbody.rows);
+    const visible = rows.filter(row => row.style.display !== "none");
+    const hidden = rows.filter(row => row.style.display === "none");
+
+    visible.sort((a, b) => {
+      const valueA = (a.cells[columnIndex]?.innerText || "").trim().toLowerCase();
+      const valueB = (b.cells[columnIndex]?.innerText || "").trim().toLowerCase();
+      if (valueA < valueB) return direction === "ascending" ? -1 : 1;
+      if (valueA > valueB) return direction === "ascending" ? 1 : -1;
+      return 0;
+    });
+
+    [...visible, ...hidden].forEach(row => tbody.appendChild(row));
+  }
+
+  function setupSorting() {
+    const headers = Array.from(thead.rows[0].cells);
+    headers.forEach((header, index) => {
+      const isActionsColumn = index === headers.length - 1;
+      if (isActionsColumn) return;
+
+      header.style.cursor = "pointer";
+      header.tabIndex = 0;
+      header.setAttribute("role", "columnheader");
+      header.setAttribute("aria-sort", "none");
+      header.title = `Ordenar por ${header.textContent.trim()}`;
+
+      const triggerSort = () => {
+        const nextDirection = toggleSortState(header.getAttribute("aria-sort"));
+        headers.forEach((other, idx) => {
+          if (idx !== index) other.setAttribute("aria-sort", "none");
+        });
+        header.setAttribute("aria-sort", nextDirection);
+        sortRows(index, nextDirection);
+        saveSort({ index, dir: nextDirection });
+      };
+
+      header.addEventListener("click", triggerSort);
+      header.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          triggerSort();
+        }
+      });
+    });
+
+    const savedSort = loadSort();
+    if (savedSort) {
+      const header = headers[savedSort.index];
+      if (header) {
+        header.setAttribute("aria-sort", savedSort.dir);
+        sortRows(savedSort.index, savedSort.dir);
+      }
+    }
+  }
+
+  function resetHistory() {
+    if (!state.resetTimer) {
+      state.resetTimer = setTimeout(() => {
+        const ok = confirm(`Limpar histórico de vagas aplicadas para "${companyName}"?`);
+        if (ok) {
+          state.applied.clear();
+          saveApplied();
+          refreshButtons();
+          announce("Histórico de aplicações limpo.");
+        }
+        state.resetTimer = null;
+      }, 1000);
+    }
+  }
+
+  function cancelReset() {
+    if (!state.resetTimer) return;
+    clearTimeout(state.resetTimer);
+    state.resetTimer = null;
+  }
+
+  function bindResetShortcut() {
+    window.addEventListener("keydown", event => {
+      if (event.altKey && event.key.toLowerCase() === "r") resetHistory();
+    });
+    window.addEventListener("keyup", cancelReset);
+  }
+
+  function initSearch() {
+    if (!searchInput) return;
     searchInput.addEventListener(
       "input",
-      debounce(e => {
-        filterRows(e.target.value);
+      debounce(event => {
+        filterRows(event.target.value);
         const wrapper = page.querySelector(".table-wrapper");
         if (wrapper) wrapper.scrollTop = 0;
       }, 200)
     );
   }
 
-  const sortState = loadSortState();
-  initHeadSort();
-  if (sortState) applySort(sortState.index, sortState.dir);
-
-  function initHeadSort() {
-    [...thead.rows[0].cells].forEach((th, index) => {
-      const isActions = index === thead.rows[0].cells.length - 1;
-      if (isActions) return;
-
-      th.style.cursor = "pointer";
-      th.tabIndex = 0;
-      th.setAttribute("role", "columnheader");
-      th.setAttribute("aria-sort", "none");
-
-      const label = th.textContent.trim();
-      th.title = `Ordenar por ${label}`;
-
-      const triggerSort = () => {
-        const dir = toggleDir(th.getAttribute("aria-sort"));
-        [...thead.rows[0].cells].forEach((oth, i) => {
-          if (i !== index) oth.setAttribute("aria-sort", "none");
-        });
-        th.setAttribute("aria-sort", dir);
-        applySort(index, dir);
-        saveSortState(index, dir);
-      };
-
-      th.addEventListener("click", triggerSort);
-      th.addEventListener("keydown", e => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          triggerSort();
-        }
-      });
-    });
+  function init() {
+    ensureStyles();
+    state.liveRegion = createLiveRegion();
+    loadApplied();
+    ensureRowIds();
+    refreshButtons();
+    filterRows(searchInput?.value || "");
+    setupSorting();
+    initSearch();
+    bindResetShortcut();
+    tbody.addEventListener("click", handleApply);
+    tbody.addEventListener("keydown", handleApplyKey);
   }
 
-  function toggleDir(state) {
-    if (state === "ascending") return "descending";
-    return "ascending";
-  }
-
-  function applySort(colIndex, dir = "ascending") {
-    const rows = [...tbody.rows].filter(r => r.style.display !== "none");
-    rows.sort((a, b) => {
-      const ta = (a.cells[colIndex]?.innerText || "").trim().toLowerCase();
-      const tb = (b.cells[colIndex]?.innerText || "").trim().toLowerCase();
-      if (ta < tb) return dir === "ascending" ? -1 : 1;
-      if (ta > tb) return dir === "ascending" ? 1 : -1;
-      return 0;
-    });
-    rows.forEach(r => tbody.appendChild(r));
-    [...tbody.rows].filter(r => r.style.display === "none").forEach(r => tbody.appendChild(r));
-  }
-
-  function saveSortState(index, dir) {
-    try {
-      localStorage.setItem(LS_SORT, JSON.stringify({ index, dir }));
-    } catch {}
-  }
-
-  function loadSortState() {
-    try {
-      const raw = localStorage.getItem(LS_SORT);
-      if (raw) return JSON.parse(raw);
-    } catch {}
-    return null;
-  }
-
-  let resetTimer = null;
-  window.addEventListener("keydown", e => {
-    if (e.key.toLowerCase() === "r" && e.altKey) {
-      if (resetTimer) return;
-      resetTimer = setTimeout(() => {
-        const ok = confirm(`Limpar histórico de vagas aplicadas para "${empresaNome}"?`);
-        if (ok) {
-          applied.clear();
-          save();
-          updateButtonsState();
-          announce("Histórico de aplicações limpo.");
-        }
-        resetTimer = null;
-      }, 1000);
-    }
-  });
-
-  window.addEventListener("keyup", () => {
-    if (resetTimer) {
-      clearTimeout(resetTimer);
-      resetTimer = null;
-    }
-  });
-
-  load();
-  ensureRowIds();
-  updateButtonsState();
-  filterRows(searchInput?.value || "");
-
-  tbody.addEventListener("click", handleApplyClick);
-  tbody.addEventListener("keydown", handleKeydown);
+  init();
 })();

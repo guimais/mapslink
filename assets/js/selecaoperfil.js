@@ -1,101 +1,105 @@
 (() => {
-  "use strict";
-
   if (window.__ml_selecaoperfil_init__) return;
   window.__ml_selecaoperfil_init__ = true;
 
-  const $ = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
-
-  const nav = $(".nav-pilula");
-
-  const onScroll = () => {
-    if (!nav) return;
-    const scrolled = window.scrollY > 8;
-    nav.dataset.scrolled = scrolled ? "1" : "0";
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-
-  const navLinks =
-    (window.MapsApp && typeof window.MapsApp.navLinks === "function")
-      ? (window.MapsApp.navLinks() || [])
-      : $$(".nav-link");
-
-  const markActive = () => {
-    const path = (location.pathname.split("/").pop() || "index.html").split("?")[0];
-    if (window.MapsApp && typeof window.MapsApp.highlightNav === "function") {
-      try { window.MapsApp.highlightNav(path); return; } catch {}
-    }
-    navLinks.forEach(a => {
-      const href = (a.getAttribute("href") || "").split("?")[0];
-      const isHashOnly = href.startsWith("#");
-      const matches =
-        (!isHashOnly && (href.endsWith(path) || href === path)) ||
-        (path === "index.html" && href.includes("#home"));
-      a.classList.toggle("active", !!matches);
-      if (!isHashOnly) a.setAttribute("aria-current", matches ? "page" : "false");
-    });
-  };
-  markActive();
-  window.addEventListener("popstate", markActive);
-
   const PERFIL_KEY = "mapslink:perfil";
-  const safeSet = (k, v) => {
-    try { localStorage.setItem(k, v); } catch {}
-  };
 
-  const escolherPerfil = tipo => {
-    safeSet(PERFIL_KEY, tipo);
-    const destino = tipo === "empresarial" ? "loginempresa.html" : "loginpessoal.html";
-    window.location.href = destino;
-  };
-
-  const btnEmp = $('[data-action="escolher-empresarial"]');
-  const btnPes = $('[data-action="escolher-pessoal"]');
-  if (btnEmp && !btnEmp.__sp_bound) {
-    btnEmp.__sp_bound = true;
-    btnEmp.setAttribute("type", "button");
-    btnEmp.addEventListener("click", () => escolherPerfil("empresarial"));
-  }
-  if (btnPes && !btnPes.__sp_bound) {
-    btnPes.__sp_bound = true;
-    btnPes.setAttribute("type", "button");
-    btnPes.addEventListener("click", () => escolherPerfil("pessoal"));
+  function query(selector, root) {
+    return (root || document).querySelector(selector);
   }
 
-  $$(".perfil-card").forEach(card => {
-    if (card.__sp_bound) return;
-    card.__sp_bound = true;
+  function queryAll(selector, root) {
+    return Array.from((root || document).querySelectorAll(selector));
+  }
 
+  function highlightNav() {
+    const path = (location.pathname.split("/").pop() || "index.html").split("?")[0];
+    if (window.MapsApp?.highlightNav) {
+      try {
+        window.MapsApp.highlightNav(path);
+        return;
+      } catch {
+        /* noop */
+      }
+    }
+    const links = window.MapsApp?.navLinks ? window.MapsApp.navLinks() : queryAll(".nav-link");
+    links.forEach(link => {
+      const href = (link.getAttribute("href") || "").split("?")[0];
+      const isHash = href.startsWith("#");
+      const active = (!isHash && (href.endsWith(path) || href === path)) || (path === "index.html" && href.includes("#home"));
+      link.classList.toggle("active", active);
+      if (!isHash) link.setAttribute("aria-current", active ? "page" : "false");
+    });
+  }
+
+  function storeProfile(type) {
+    try {
+      localStorage.setItem(PERFIL_KEY, type);
+    } catch {
+      /* storage not available */
+    }
+  }
+
+  function goTo(type) {
+    storeProfile(type);
+    window.location.href = type === "empresarial" ? "loginempresa.html" : "loginpessoal.html";
+  }
+
+  function bindButton(button, type) {
+    if (!button || button.dataset.bound) return;
+    button.dataset.bound = "true";
+    button.type = "button";
+    button.addEventListener("click", () => goTo(type));
+  }
+
+  function bindCard(card) {
+    if (!card || card.dataset.bound) return;
+    card.dataset.bound = "true";
     card.setAttribute("tabindex", "0");
     card.setAttribute("role", "button");
     card.setAttribute("aria-pressed", "false");
-
-    const go = () => {
-      const tipo = card.dataset.perfil === "empresarial" ? "empresarial" : "pessoal";
-      escolherPerfil(tipo);
+    const type = card.dataset.perfil === "empresarial" ? "empresarial" : "pessoal";
+    const activate = event => {
+      if (event?.target?.closest && event.target.closest(".perfil-cta")) return;
+      goTo(type);
     };
-
-    card.addEventListener("click", e => {
-      if (e.target.closest(".perfil-cta")) return;
-      go();
-    });
-    card.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        go();
+    card.addEventListener("click", activate);
+    card.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        activate(event);
       }
     });
-  });
+  }
 
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const applyMotion = () => {
-    document.documentElement.style.setProperty("--ml-motion-scale", prefersReduced.matches ? "0" : "1");
-  };
-  try {
-    applyMotion();
-    prefersReduced.addEventListener?.("change", applyMotion);
-  } catch {}
+  function initNavShadow() {
+    const nav = query(".nav-pilula");
+    if (!nav) return;
+    const handler = () => {
+      nav.dataset.scrolled = window.scrollY > 8 ? "1" : "0";
+    };
+    window.addEventListener("scroll", handler, { passive: true });
+    handler();
+  }
 
+  function initMotionToggle() {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => {
+      document.documentElement.style.setProperty("--ml-motion-scale", media.matches ? "0" : "1");
+    };
+    apply();
+    media.addEventListener?.("change", apply);
+  }
+
+  function init() {
+    initNavShadow();
+    highlightNav();
+    window.addEventListener("popstate", highlightNav);
+    bindButton(query('[data-action="escolher-empresarial"]'), "empresarial");
+    bindButton(query('[data-action="escolher-pessoal"]'), "pessoal");
+    queryAll(".perfil-card").forEach(bindCard);
+    initMotionToggle();
+  }
+
+  init();
 })();

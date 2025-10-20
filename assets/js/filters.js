@@ -1,147 +1,117 @@
-(function () {
-  "use strict";
+(() => {
+  const ACCENTS = /[\u0300-\u036f]/g;
 
-  const norm = v =>
-    (v ?? "")
+  function normalize(value) {
+    return (value ?? "")
       .toString()
       .trim()
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .replace(ACCENTS, "");
+  }
 
-  const arr = v => (v == null ? [] : Array.isArray(v) ? v : [v]);
+  function toArray(value) {
+    if (value == null) return [];
+    return Array.isArray(value) ? value : [value];
+  }
 
-  const getIndustry = c => c?.industry ?? c?.sector ?? "";
+  function industryOf(company) {
+    return company?.industry ?? company?.sector ?? "";
+  }
 
-  function filterCompanies(data, filters = {}) {
-    const q = norm(filters.q || filters.search || "");
-    const location = norm(filters.location || "");
-    const city = norm(filters.city || "");
-    const state = norm(filters.state || "");
+  function collectTags(company) {
+    return toArray(company?.tags).map(normalize);
+  }
 
-    const industries =
-      arr(filters.industries || filters.industry || filters.sector)
-        .map(norm)
-        .filter(Boolean);
+  function collectWorkModes(company) {
+    return toArray(company?.work_modes ?? company?.workModes).map(normalize);
+  }
 
-    const sizes =
-      arr(filters.sizes || filters.size || filters.companySize)
-        .map(norm)
-        .filter(Boolean);
+  function collectBlob(company) {
+    const jobs = toArray(company?.jobs).map(job =>
+      typeof job === "string" ? job : job?.title || ""
+    );
+    return [
+      company?.name,
+      industryOf(company),
+      company?.city,
+      company?.state,
+      company?.size ?? company?.company_size,
+      ...toArray(company?.work_modes ?? company?.workModes),
+      ...toArray(company?.tags),
+      ...jobs
+    ]
+      .filter(Boolean)
+      .join(" ");
+  }
 
-    const workModes =
-      arr(filters.workModes || filters.workMode || filters.modalities)
-        .map(norm)
-        .filter(Boolean);
+  function parseBoolean(value) {
+    if (value == null) return null;
+    if (typeof value === "boolean") return value;
+    return value.toString().toLowerCase() === "true";
+  }
 
-    const isHiringRaw = filters.isHiring;
-    const wantHiring =
-      isHiringRaw == null
-        ? null
-        : typeof isHiringRaw === "string"
-        ? isHiringRaw.toLowerCase() === "true"
-        : Boolean(isHiringRaw);
+  function filterCompanies(list = [], filters = {}) {
+    const query = normalize(filters.q || filters.search || "");
+    const location = normalize(filters.location || "");
+    const city = normalize(filters.city || "");
+    const state = normalize(filters.state || "");
+    const industries = toArray(filters.industries || filters.industry || filters.sector).map(normalize).filter(Boolean);
+    const sizes = toArray(filters.sizes || filters.size || filters.companySize).map(normalize).filter(Boolean);
+    const workModes = toArray(filters.workModes || filters.workMode || filters.modalities).map(normalize).filter(Boolean);
+    const tags = toArray(filters.tags).map(normalize).filter(Boolean);
+    const wantsHiring = parseBoolean(filters.isHiring);
 
-    const tagsWanted = arr(filters.tags).map(norm).filter(Boolean);
+    return list.filter(company => {
+      const companyCity = normalize(company?.city);
+      const companyState = normalize(company?.state);
+      const companyIndustry = normalize(industryOf(company));
+      const companySize = normalize(company?.size ?? company?.company_size);
+      const companyModes = collectWorkModes(company);
+      const companyTags = collectTags(company);
 
-    return (data || []).filter(c => {
-      const name = c?.name || "";
-      const ind = getIndustry(c);
-      const cityVal = c?.city || "";
-      const stateVal = c?.state || "";
-      const tags = arr(c?.tags);
-      const jobs = arr(c?.jobs);
-      const sizeVal = c?.size ?? c?.company_size ?? "";
-      const workModesVal = arr(c?.work_modes ?? c?.workModes);
-
-      const cityNorm = norm(cityVal);
-      const stateNorm = norm(stateVal);
-      const industryNorm = norm(ind);
-      const sizeNorm = norm(sizeVal);
-      const workModesNorm = workModesVal.map(norm);
-
-      const locationMatch =
+      const matchesLocation =
         !location ||
-        cityNorm.includes(location) ||
-        stateNorm.includes(location) ||
-        norm(`${cityVal} ${stateVal}`).includes(location);
+        companyCity.includes(location) ||
+        companyState.includes(location) ||
+        normalize(`${company?.city} ${company?.state}`).includes(location);
 
-      const byCity = !city || cityNorm === city;
-      const byState = !state || stateNorm === state;
-      const byIndustry =
-        industries.length === 0 || industries.includes(industryNorm);
-      const bySize = sizes.length === 0 || sizes.includes(sizeNorm);
-      const byWorkModes =
-        workModes.length === 0 ||
-        workModes.every(mode => workModesNorm.includes(mode));
+      if (!matchesLocation) return false;
+      if (city && companyCity !== city) return false;
+      if (state && companyState !== state) return false;
+      if (industries.length && !industries.includes(companyIndustry)) return false;
+      if (sizes.length && !sizes.includes(companySize)) return false;
+      if (workModes.length && !workModes.every(mode => companyModes.includes(mode))) return false;
 
-      const byHiring =
-        wantHiring == null ? true : Boolean(c?.is_hiring) === wantHiring;
+      if (wantsHiring != null && Boolean(company?.is_hiring) !== wantsHiring) return false;
+      if (tags.length && !tags.every(tag => companyTags.includes(tag))) return false;
+      if (query && !normalize(collectBlob(company)).includes(query)) return false;
 
-      const companyTagsNorm = tags.map(norm);
-      const byTags =
-        tagsWanted.length === 0
-          ? true
-          : tagsWanted.every(t => companyTagsNorm.includes(t));
-
-      const blob = [
-        name,
-        ind,
-        cityVal,
-        stateVal,
-        sizeVal,
-        ...workModesVal,
-        ...tags,
-        ...jobs.map(j => (typeof j === "string" ? j : j?.title || ""))
-      ]
-        .join(" ")
-        .toString();
-
-      const byText = !q || norm(blob).includes(q);
-
-      return (
-        locationMatch &&
-        byCity &&
-        byState &&
-        byIndustry &&
-        bySize &&
-        byWorkModes &&
-        byHiring &&
-        byTags &&
-        byText
-      );
+      return true;
     });
   }
 
-  function uniqueValues(list, key) {
-    if (!list || !key) return [];
-    const values =
-      key === "industry" || key === "sector"
-        ? (list || []).map(i => getIndustry(i)).filter(Boolean)
-        : (list || []).flatMap(i => {
-            const value = i?.[key];
-            if (Array.isArray(value)) {
-              return value.filter(Boolean);
-            }
-            return value != null ? [value] : [];
-          });
-
+  function uniqueValues(list = [], key) {
+    const values = list.flatMap(item => {
+      if (!item) return [];
+      if (key === "industry" || key === "sector") return [industryOf(item)];
+      const value = item[key];
+      if (Array.isArray(value)) return value;
+      return value != null ? [value] : [];
+    });
     const seen = new Map();
-    for (const v of values) {
-      const n = norm(v);
-      if (!seen.has(n)) seen.set(n, v);
-    }
-
+    values.forEach(value => {
+      const normalized = normalize(value);
+      if (!seen.has(normalized)) seen.set(normalized, value);
+    });
     try {
-      return Array.from(seen.values()).sort((a, b) =>
-        a.toString().localeCompare(b.toString(), "pt-BR")
-      );
+      return Array.from(seen.values()).sort((a, b) => a.toString().localeCompare(b.toString(), "pt-BR"));
     } catch {
       return Array.from(seen.values()).sort();
     }
   }
 
-  function buildFilterOptions(list) {
+  function buildFilterOptions(list = []) {
     return {
       cities: uniqueValues(list, "city"),
       states: uniqueValues(list, "state"),

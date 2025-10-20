@@ -1,9 +1,7 @@
-(function () {
-  "use strict";
+(() => {
+  if (Array.isArray(window.mapsLinkCompanies)) return;
 
-  if (window.mapsLinkCompanies && Array.isArray(window.mapsLinkCompanies)) return;
-
-  const companies = [
+  const companies = Object.freeze([
     {
       id: "sidi",
       name: "SIDI",
@@ -37,12 +35,7 @@
       porte: "large",
       modalities: ["presencial"]
     }
-  ];
+  ]);
 
-  Object.defineProperty(window, "mapsLinkCompanies", {
-    value: companies,
-    writable: false,
-    configurable: false,
-    enumerable: true
-  });
+  window.mapsLinkCompanies = companies;
 })();

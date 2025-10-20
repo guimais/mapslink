@@ -1,614 +1,437 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
-    const registerForm = document.getElementById('registerForm');
-    const firstNameInput = document.getElementById('firstName');
-    const lastNameInput = document.getElementById('lastName');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const birthDateInput = document.getElementById('birthDate');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const passwordToggle = document.getElementById('passwordToggle');
-    const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
-    const registerButton = document.getElementById('registerButton');
-    const agreeTermsCheckbox = document.getElementById('agreeTerms');
-    const agreeMarketingCheckbox = document.getElementById('agreeMarketing');
-    
-    const firstNameError = document.getElementById('firstNameError');
-    const lastNameError = document.getElementById('lastNameError');
-    const emailError = document.getElementById('emailError');
-    const phoneError = document.getElementById('phoneError');
-    const birthDateError = document.getElementById('birthDateError');
-    const passwordError = document.getElementById('passwordError');
-    const confirmPasswordError = document.getElementById('confirmPasswordError');
-    const termsError = document.getElementById('termsError');
-    
-    const strengthFill = document.getElementById('strengthFill');
-    const strengthText = document.getElementById('strengthText');
-    
-    passwordToggle.addEventListener('click', function() {
-        const isPasswordHidden = passwordInput.type === 'password';
-        
-        if (isPasswordHidden) {
-            passwordInput.type = 'text';
-            const icon = this.querySelector('i');
-            icon.className = 'ri-eye-off-line';
-            this.setAttribute('aria-label', 'Ocultar senha');
-        } else {
-            passwordInput.type = 'password';
-            const icon = this.querySelector('i');
-            icon.className = 'ri-eye-line';
-            this.setAttribute('aria-label', 'Mostrar senha');
-        }
+(() => {
+  if (window.__ml_registropessoal_init__) return;
+  window.__ml_registropessoal_init__ = true;
+
+  const selectors = {
+    form: "#registerForm",
+    button: "#registerButton",
+    passwordToggle: "#passwordToggle",
+    confirmToggle: "#confirmPasswordToggle",
+    terms: "#agreeTerms",
+    marketing: "#agreeMarketing",
+    strengthFill: "#strengthFill",
+    strengthText: "#strengthText",
+    loginLink: ".login-link",
+    businessLink: ".business-register-link",
+    termsLink: ".terms-link",
+    registerCard: ".register-card"
+  };
+
+  const fields = {
+    firstName: { input: "#firstName", error: "#firstNameError" },
+    lastName: { input: "#lastName", error: "#lastNameError" },
+    email: { input: "#email", error: "#emailError" },
+    phone: { input: "#phone", error: "#phoneError" },
+    birthDate: { input: "#birthDate", error: "#birthDateError" },
+    password: { input: "#password", error: "#passwordError" },
+    confirmPassword: { input: "#confirmPassword", error: "#confirmPasswordError" },
+    terms: { input: "#agreeTerms", error: "#termsError" }
+  };
+
+  const state = {
+    form: null,
+    button: null,
+    strengthFill: null,
+    strengthText: null,
+    elements: {},
+    errors: {}
+  };
+
+  function query(selector) {
+    return document.querySelector(selector);
+  }
+
+  function getValue(field) {
+    const element = state.elements[field];
+    if (!element) return "";
+    if (element.type === "checkbox") return element.checked;
+    return element.value;
+  }
+
+  function digits(value) {
+    return (value || "").replace(/\D/g, "");
+  }
+
+  function setError(field, message) {
+    const element = state.elements[field];
+    const error = state.errors[field];
+    if (!element || !error) return false;
+    element.classList.add("error");
+    error.textContent = message;
+    error.classList.add("show");
+    return false;
+  }
+
+  function clearError(field) {
+    const element = state.elements[field];
+    const error = state.errors[field];
+    if (!element || !error) return true;
+    element.classList.remove("error");
+    error.classList.remove("show");
+    error.textContent = "";
+    return true;
+  }
+
+  function formatPhone(input) {
+    let value = digits(input.value).slice(0, 11);
+    if (value.length >= 11) value = value.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    else if (value.length >= 7) value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    else if (value.length >= 3) value = value.replace(/(\d{2})(\d{0,5})/, "($1) $2");
+    else if (value.length) value = value.replace(/(\d{0,2})/, "($1");
+    input.value = value;
+  }
+
+  function validateFirstName() {
+    const value = getValue("firstName").trim();
+    if (!value) return setError("firstName", "Nome é obrigatório");
+    if (value.length < 2) return setError("firstName", "Nome deve ter pelo menos 2 caracteres");
+    if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(value)) return setError("firstName", "Nome deve conter apenas letras");
+    return clearError("firstName");
+  }
+
+  function validateLastName() {
+    const value = getValue("lastName").trim();
+    if (!value) return setError("lastName", "Sobrenome é obrigatório");
+    if (value.length < 2) return setError("lastName", "Sobrenome deve ter pelo menos 2 caracteres");
+    if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(value)) return setError("lastName", "Sobrenome deve conter apenas letras");
+    return clearError("lastName");
+  }
+
+  function validateEmail() {
+    const value = getValue("email").trim();
+    if (!value) return setError("email", "E-mail é obrigatório");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return setError("email", "Informe um e-mail válido");
+    return clearError("email");
+  }
+
+  function validatePhone() {
+    const value = digits(getValue("phone"));
+    if (!value) return setError("phone", "Telefone é obrigatório");
+    if (value.length < 10) return setError("phone", "Telefone deve ter pelo menos 10 dígitos");
+    if (value.length > 11) return setError("phone", "Telefone deve ter no máximo 11 dígitos");
+    return clearError("phone");
+  }
+
+  function validateBirthDate() {
+    const value = getValue("birthDate");
+    if (!value) return setError("birthDate", "Data de nascimento é obrigatória");
+    const today = new Date();
+    const birth = new Date(value);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age -= 1;
+    if (age < 14) return setError("birthDate", "Você deve ter pelo menos 14 anos");
+    if (age > 120) return setError("birthDate", "Data de nascimento inválida");
+    return clearError("birthDate");
+  }
+
+  function checkPasswordStrength() {
+    const password = getValue("password");
+    if (!state.strengthFill || !state.strengthText) return;
+    let score = 0;
+    if (password.length >= 8) score += 1;
+    if (/[a-z]/.test(password)) score += 1;
+    if (/[A-Z]/.test(password)) score += 1;
+    if (/[0-9]/.test(password)) score += 1;
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
+    const map = [
+      { label: "Digite uma senha", cls: "" },
+      { label: "Fraca", cls: "weak" },
+      { label: "Média", cls: "medium" },
+      { label: "Forte", cls: "strong" }
+    ];
+    const level = password ? Math.min(3, score <= 2 ? 1 : score <= 3 ? 2 : 3) : 0;
+    state.strengthFill.className = `strength-fill ${map[level].cls}`;
+    state.strengthText.className = `strength-text ${map[level].cls}`;
+    state.strengthText.textContent = map[level].label;
+  }
+
+  function validatePassword() {
+    const password = getValue("password");
+    if (!password) return setError("password", "Senha é obrigatória");
+    if (password.length < 8) return setError("password", "A senha deve ter pelo menos 8 caracteres");
+    if (!/[a-z]/.test(password)) return setError("password", "A senha deve conter pelo menos uma letra minúscula");
+    if (!/[A-Z]/.test(password)) return setError("password", "A senha deve conter pelo menos uma letra maiúscula");
+    if (!/[0-9]/.test(password)) return setError("password", "A senha deve conter pelo menos um número");
+    return clearError("password");
+  }
+
+  function validateConfirmPassword() {
+    const password = getValue("password");
+    const confirm = getValue("confirmPassword");
+    if (!confirm) return setError("confirmPassword", "Confirmação de senha é obrigatória");
+    if (password !== confirm) return setError("confirmPassword", "As senhas não coincidem");
+    return clearError("confirmPassword");
+  }
+
+  function validateTerms() {
+    const agreed = !!state.elements.terms?.checked;
+    if (!agreed) return setError("terms", "Você deve aceitar os termos de uso");
+    return clearError("terms");
+  }
+
+  function validateAll() {
+    const results = [
+      validateFirstName(),
+      validateLastName(),
+      validateEmail(),
+      validatePhone(),
+      validateBirthDate(),
+      validatePassword(),
+      validateConfirmPassword(),
+      validateTerms()
+    ];
+    return results.every(Boolean);
+  }
+
+  function buttonState(stateName, message) {
+    if (!state.button) return;
+    if (stateName === "loading") {
+      state.button.innerHTML = '<div class="loading-spinner"></div><span class="button-text">Criando conta...</span>';
+      state.button.disabled = true;
+      return;
+    }
+    if (stateName === "success") {
+      state.button.innerHTML = `<i class="ri-check-line button-icon"></i><span class="button-text">${message}</span>`;
+      state.button.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+      state.button.disabled = true;
+      return;
+    }
+    if (stateName === "error") {
+      state.button.innerHTML = '<i class="ri-error-warning-line button-icon"></i><span class="button-text">Erro</span>';
+      state.button.style.background = "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)";
+      state.button.disabled = true;
+      setTimeout(() => resetButton(), 3000);
+      return;
+    }
+    resetButton();
+  }
+
+  function resetButton() {
+    state.button.innerHTML = '<span class="button-text">Criar Conta</span><i class="ri-arrow-right-line button-icon"></i>';
+    state.button.style.background = "linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%)";
+    state.button.disabled = false;
+  }
+
+  async function submit(event) {
+    event.preventDefault();
+    if (!validateAll()) return;
+    buttonState("loading");
+    const phone = getValue("phone").trim();
+    const payload = {
+      type: "personal",
+      email: getValue("email").trim(),
+      password: getValue("password"),
+      name: `${getValue("firstName").trim()} ${getValue("lastName").trim()}`.trim(),
+      phone,
+      profile: {
+        firstName: getValue("firstName").trim(),
+        lastName: getValue("lastName").trim(),
+        birthDate: getValue("birthDate"),
+        marketingOptIn: !!state.elements.marketing?.checked,
+        phone,
+        phoneDigits: digits(phone),
+        createdAt: new Date().toISOString()
+      }
+    };
+    try {
+      await MapsAuth.register(payload);
+      buttonState("success", "Conta criada com sucesso!");
+      setTimeout(() => { window.location.href = "../index.html"; }, 1800);
+    } catch (error) {
+      const message =
+        error?.message === "EMAIL_TAKEN" ? "Este e-mail já está em uso" :
+        error?.message === "PASSWORD_REQUIRED" ? "Informe uma senha válida" :
+        error?.message === "STORAGE_UNAVAILABLE" ? "Não foi possível salvar seus dados neste navegador. Verifique permissões de armazenamento e tente novamente." :
+        (error?.message || "Erro ao criar conta. Tente novamente.");
+      buttonState("error");
+      alert(message);
+    }
+  }
+
+  function showMobileAlert(message) {
+    if (window.innerWidth > 768) {
+      alert(message);
+      return;
+    }
+    const toast = document.createElement("div");
+    toast.style.cssText = `
+      position:fixed;bottom:20px;left:20px;right:20px;background:var(--brand);
+      color:#fff;padding:16px;border-radius:12px;font-size:14px;font-weight:500;
+      text-align:center;z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,0.2);
+      transform:translateY(100px);opacity:0;transition:all .3s ease;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => {
+      toast.style.transform = "translateY(0)";
+      toast.style.opacity = "1";
     });
-    
-    confirmPasswordToggle.addEventListener('click', function() {
-        const isPasswordHidden = confirmPasswordInput.type === 'password';
-        
-        if (isPasswordHidden) {
-            confirmPasswordInput.type = 'text';
-            const icon = this.querySelector('i');
-            icon.className = 'ri-eye-off-line';
-            this.setAttribute('aria-label', 'Ocultar senha');
-        } else {
-            confirmPasswordInput.type = 'password';
-            const icon = this.querySelector('i');
-            icon.className = 'ri-eye-line';
-            this.setAttribute('aria-label', 'Mostrar senha');
-        }
+    setTimeout(() => {
+      toast.style.transform = "translateY(100px)";
+      toast.style.opacity = "0";
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  function navigateWithFeedback(url, message) {
+    if (window.innerWidth <= 768) {
+      showMobileAlert(message);
+      setTimeout(() => { window.location.href = url; }, 800);
+    } else {
+      window.location.href = url;
+    }
+  }
+
+  function bindToggles() {
+    const togglePassword = query(selectors.passwordToggle);
+    const toggleConfirm = query(selectors.confirmToggle);
+    if (togglePassword) {
+      togglePassword.addEventListener("click", () => {
+        const input = state.elements.password;
+        if (!input) return;
+        const visible = input.type === "text";
+        input.type = visible ? "password" : "text";
+        const icon = togglePassword.querySelector("i");
+        if (icon) icon.className = visible ? "ri-eye-line" : "ri-eye-off-line";
+        togglePassword.setAttribute("aria-label", visible ? "Mostrar senha" : "Ocultar senha");
+      });
+    }
+    if (toggleConfirm) {
+      toggleConfirm.addEventListener("click", () => {
+        const input = state.elements.confirmPassword;
+        if (!input) return;
+        const visible = input.type === "text";
+        input.type = visible ? "password" : "text";
+        const icon = toggleConfirm.querySelector("i");
+        if (icon) icon.className = visible ? "ri-eye-line" : "ri-eye-off-line";
+        toggleConfirm.setAttribute("aria-label", visible ? "Mostrar senha" : "Ocultar senha");
+      });
+    }
+  }
+
+  function setupMobileExperience() {
+    if (window.innerWidth > 768) return;
+    document.body.style.overflowX = "hidden";
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => {
+      input.addEventListener("focus", () => {
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport) viewport.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+        setTimeout(() => input.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" }), 300);
+      });
+      input.addEventListener("blur", () => {
+        setTimeout(() => {
+          const viewport = document.querySelector('meta[name="viewport"]');
+          if (viewport) viewport.content = "width=device-width, initial-scale=1";
+        }, 300);
+      });
     });
-    
-    firstNameInput.addEventListener('input', function() {
-        validateFirstName();
+    if ("ontouchstart" in window) {
+      const touchables = document.querySelectorAll(".register-button, .password-toggle, .checkbox-container, .business-register-link, .login-link");
+      touchables.forEach(element => {
+        element.addEventListener("touchstart", () => {
+          element.style.transform = "scale(0.95)";
+          element.style.transition = "transform 0.1s ease";
+        }, { passive: true });
+        const reset = () => { element.style.transform = "scale(1)"; };
+        element.addEventListener("touchend", reset);
+        element.addEventListener("touchcancel", reset);
+      });
+      if ("vibrate" in navigator) {
+        document.querySelectorAll(".register-button, .password-toggle").forEach(button => {
+          button.addEventListener("click", () => navigator.vibrate(50));
+        });
+      }
+    }
+    const card = query(selectors.registerCard);
+    const adjustPadding = () => {
+      if (!card) return;
+      card.style.padding = window.innerHeight < window.innerWidth ? "20px 24px" : "28px 20px";
+    };
+    window.addEventListener("orientationchange", () => setTimeout(adjustPadding, 100));
+    window.addEventListener("resize", adjustPadding);
+    adjustPadding();
+  }
+
+  function bindLinks() {
+    const login = query(selectors.loginLink);
+    if (login) {
+      login.addEventListener("click", event => {
+        event.preventDefault();
+        navigateWithFeedback("loginpessoal.html", "Redirecionando para login pessoal...");
+      });
+    }
+    queryAll(selectors.termsLink).forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        showMobileAlert("Abrindo termos de uso...");
+      });
     });
-    
-    lastNameInput.addEventListener('input', function() {
-        validateLastName();
-    });
-    
-    emailInput.addEventListener('input', function() {
-        validateEmail();
-    });
-    
-    phoneInput.addEventListener('input', function() {
-        formatPhoneNumber();
+    const business = query(selectors.businessLink);
+    if (business) {
+      business.addEventListener("click", event => {
+        event.preventDefault();
+        navigateWithFeedback("registroempresa.html", "Redirecionando para registro empresarial...");
+      });
+    }
+  }
+
+  function bindFieldEvents() {
+    state.elements.firstName?.addEventListener("input", validateFirstName);
+    state.elements.lastName?.addEventListener("input", validateLastName);
+    state.elements.email?.addEventListener("input", validateEmail);
+    if (state.elements.phone) {
+      state.elements.phone.addEventListener("input", () => {
+        formatPhone(state.elements.phone);
         validatePhone();
-    });
-    
-    birthDateInput.addEventListener('change', function() {
-        validateBirthDate();
-    });
-    
-    passwordInput.addEventListener('input', function() {
+      });
+    }
+    state.elements.birthDate?.addEventListener("change", validateBirthDate);
+    if (state.elements.password) {
+      state.elements.password.addEventListener("input", () => {
         validatePassword();
         checkPasswordStrength();
-    });
-    
-    confirmPasswordInput.addEventListener('input', function() {
-        validateConfirmPassword();
-    });
-    
-    agreeTermsCheckbox.addEventListener('change', function() {
-        validateTerms();
-    });
-    
-    function validateFirstName() {
-        const firstName = firstNameInput.value.trim();
-        
-        if (firstName === '') {
-            showError(firstNameInput, firstNameError, 'Nome é obrigatório');
-            return false;
-        } else if (firstName.length < 2) {
-            showError(firstNameInput, firstNameError, 'Nome deve ter pelo menos 2 caracteres');
-            return false;
-        } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(firstName)) {
-            showError(firstNameInput, firstNameError, 'Nome deve conter apenas letras');
-            return false;
-        } else {
-            hideError(firstNameInput, firstNameError);
-            return true;
-        }
+      });
     }
-    
-    function validateLastName() {
-        const lastName = lastNameInput.value.trim();
-        
-        if (lastName === '') {
-            showError(lastNameInput, lastNameError, 'Sobrenome é obrigatório');
-            return false;
-        } else if (lastName.length < 2) {
-            showError(lastNameInput, lastNameError, 'Sobrenome deve ter pelo menos 2 caracteres');
-            return false;
-        } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(lastName)) {
-            showError(lastNameInput, lastNameError, 'Sobrenome deve conter apenas letras');
-            return false;
-        } else {
-            hideError(lastNameInput, lastNameError);
-            return true;
-        }
-    }
-    
-    function validateEmail() {
-        const email = emailInput.value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
-        if (email === '') {
-            showError(emailInput, emailError, 'E-mail é obrigatório');
-            return false;
-        } else if (!emailRegex.test(email)) {
-            showError(emailInput, emailError, 'Por favor, insira um e-mail válido');
-            return false;
-        } else {
-            hideError(emailInput, emailError);
-            return true;
-        }
-    }
-    
-    function formatPhoneNumber() {
-        let phone = phoneInput.value.replace(/\D/g, '');
-        
-        if (phone.length >= 11) {
-            phone = phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-        } else if (phone.length >= 7) {
-            phone = phone.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-        } else if (phone.length >= 3) {
-            phone = phone.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-        } else if (phone.length >= 1) {
-            phone = phone.replace(/(\d{0,2})/, '($1');
-        }
-        
-        phoneInput.value = phone;
-    }
-    
-    function validatePhone() {
-        const phone = phoneInput.value.replace(/\D/g, '');
-        
-        if (phone === '') {
-            showError(phoneInput, phoneError, 'Telefone é obrigatório');
-            return false;
-        } else if (phone.length < 10) {
-            showError(phoneInput, phoneError, 'Telefone deve ter pelo menos 10 dígitos');
-            return false;
-        } else if (phone.length > 11) {
-            showError(phoneInput, phoneError, 'Telefone deve ter no máximo 11 dígitos');
-            return false;
-        } else {
-            hideError(phoneInput, phoneError);
-            return true;
-        }
-    }
-    
-    function validateBirthDate() {
-        const birthDate = birthDateInput.value;
-        
-        if (birthDate === '') {
-            showError(birthDateInput, birthDateError, 'Data de nascimento é obrigatória');
-            return false;
-        }
-        
-        const today = new Date();
-        const birth = new Date(birthDate);
-        const age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
-        
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-            age--;
-        }
-        
-        if (age < 14) {
-            showError(birthDateInput, birthDateError, 'Você deve ter pelo menos 14 anos');
-            return false;
-        } else if (age > 120) {
-            showError(birthDateInput, birthDateError, 'Data de nascimento inválida');
-            return false;
-        } else {
-            hideError(birthDateInput, birthDateError);
-            return true;
-        }
-    }
-    
-    function checkPasswordStrength() {
-        const password = passwordInput.value;
-        let strength = 0;
-        let strengthLabel = '';
-        let strengthClass = '';
-        
-        if (password.length >= 8) strength++;
-        if (/[a-z]/.test(password)) strength++;
-        if (/[A-Z]/.test(password)) strength++;
-        if (/[0-9]/.test(password)) strength++;
-        if (/[^A-Za-z0-9]/.test(password)) strength++;
-        
-        if (password === '') {
-            strengthLabel = 'Digite uma senha';
-            strengthClass = '';
-        } else if (strength <= 2) {
-            strengthLabel = 'Fraca';
-            strengthClass = 'weak';
-        } else if (strength <= 3) {
-            strengthLabel = 'Média';
-            strengthClass = 'medium';
-        } else {
-            strengthLabel = 'Forte';
-            strengthClass = 'strong';
-        }
-        
-        strengthFill.className = `strength-fill ${strengthClass}`;
-        strengthText.className = `strength-text ${strengthClass}`;
-        strengthText.textContent = strengthLabel;
-    }
-    
-    function validatePassword() {
-        const password = passwordInput.value;
-        
-        if (password === '') {
-            showError(passwordInput, passwordError, 'Senha é obrigatória');
-            return false;
-        } else if (password.length < 8) {
-            showError(passwordInput, passwordError, 'A senha deve ter pelo menos 8 caracteres');
-            return false;
-        } else if (!/(?=.*[a-z])/.test(password)) {
-            showError(passwordInput, passwordError, 'A senha deve conter pelo menos uma letra minúscula');
-            return false;
-        } else if (!/(?=.*[A-Z])/.test(password)) {
-            showError(passwordInput, passwordError, 'A senha deve conter pelo menos uma letra maiúscula');
-            return false;
-        } else if (!/(?=.*\d)/.test(password)) {
-            showError(passwordInput, passwordError, 'A senha deve conter pelo menos um número');
-            return false;
-        } else {
-            hideError(passwordInput, passwordError);
-            return true;
-        }
-    }
-    
-    function validateConfirmPassword() {
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-        
-        if (confirmPassword === '') {
-            showError(confirmPasswordInput, confirmPasswordError, 'Confirmação de senha é obrigatória');
-            return false;
-        } else if (password !== confirmPassword) {
-            showError(confirmPasswordInput, confirmPasswordError, 'As senhas não coincidem');
-            return false;
-        } else {
-            hideError(confirmPasswordInput, confirmPasswordError);
-            return true;
-        }
-    }
-    
-    function validateTerms() {
-        if (!agreeTermsCheckbox.checked) {
-            showError(agreeTermsCheckbox, termsError, 'Você deve aceitar os termos de uso');
-            return false;
-        } else {
-            hideError(agreeTermsCheckbox, termsError);
-            return true;
-        }
-    }
-    
-    function showError(input, errorElement, message) {
-        input.classList.add('error');
-        errorElement.textContent = message;
-        errorElement.classList.add('show');
-    }
-    
-    function hideError(input, errorElement) {
-        input.classList.remove('error');
-        errorElement.classList.remove('show');
-        errorElement.textContent = '';
-    }
-    
-    function clearAllErrors() {
-        hideError(firstNameInput, firstNameError);
-        hideError(lastNameInput, lastNameError);
-        hideError(emailInput, emailError);
-        hideError(phoneInput, phoneError);
-        hideError(birthDateInput, birthDateError);
-        hideError(passwordInput, passwordError);
-        hideError(confirmPasswordInput, confirmPasswordError);
-        hideError(agreeTermsCheckbox, termsError);
-    }
-    
-    async function performRegister(formData) {
-        try {
-            await MapsAuth.register({
-                type: 'personal',
-                email: formData.email,
-                password: formData.password,
-                name: `${formData.firstName} ${formData.lastName}`.trim(),
-                phone: formData.phone || formData.phoneDigits,
-                profile: {
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    birthDate: formData.birthDate,
-                    marketingOptIn: !!formData.agreeMarketing,
-                    phone: formData.phone,
-                    phoneDigits: formData.phoneDigits,
-                    createdAt: new Date().toISOString()
-                }
-            });
-            showSuccessMessage('Conta criada com sucesso!');
-            setTimeout(() => {
-                window.location.href = '../index.html';
-            }, 1800);
-        } catch (error) {
-            const code = error?.message;
-            const message =
-                code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' :
-                code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' :
-                code === 'STORAGE_UNAVAILABLE' ? 'Nao foi possivel salvar seus dados neste navegador. Verifique permissoes de armazenamento e tente novamente.' :
-                (code || 'Erro ao criar conta. Tente novamente.');
-            showErrorMessage(message);
-        }
-    }
+    state.elements.confirmPassword?.addEventListener("input", validateConfirmPassword);
+    state.elements.terms?.addEventListener("change", validateTerms);
+  }
 
-    function showSuccessMessage(message) {
-        registerButton.innerHTML = `
-            <i class="ri-check-line button-icon"></i>
-            <span class="button-text">${message}</span>
-        `;
-        registerButton.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-        registerButton.disabled = true;
-    }
-    
-    function showErrorMessage(message) {
-        registerButton.innerHTML = `
-            <i class="ri-error-warning-line button-icon"></i>
-            <span class="button-text">Erro</span>
-        `;
-        registerButton.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
-        registerButton.disabled = true;
-        
-        setTimeout(() => {
-            registerButton.innerHTML = `
-                <span class="button-text">Criar Conta</span>
-                <i class="ri-arrow-right-line button-icon"></i>
-            `;
-            registerButton.style.background = 'linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%)';
-            registerButton.disabled = false;
-        }, 3000);
-        
-        alert(message);
-    }
-    
-    function showLoadingButton() {
-        registerButton.innerHTML = `
-            <div class="loading-spinner"></div>
-            <span class="button-text">Criando conta...</span>
-        `;
-        registerButton.disabled = true;
-    }
-    
-    registerForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        clearAllErrors();
-        
-        const isFirstNameValid = validateFirstName();
-        const isLastNameValid = validateLastName();
-        const isEmailValid = validateEmail();
-        const isPhoneValid = validatePhone();
-        const isBirthDateValid = validateBirthDate();
-        const isPasswordValid = validatePassword();
-        const isConfirmPasswordValid = validateConfirmPassword();
-        const isTermsValid = validateTerms();
-        
-        if (!isFirstNameValid || !isLastNameValid || !isEmailValid || 
-            !isPhoneValid || !isBirthDateValid || !isPasswordValid || 
-            !isConfirmPasswordValid || !isTermsValid) {
-            return;
-        }
-        
-        showLoadingButton();
-        
-        const rawPhone = phoneInput.value.trim();
-        const formData = {
-            firstName: firstNameInput.value.trim(),
-            lastName: lastNameInput.value.trim(),
-            email: emailInput.value.trim(),
-            phone: rawPhone,
-            phoneDigits: rawPhone.replace(/\D/g, ''),
-            birthDate: birthDateInput.value,
-            password: passwordInput.value,
-            agreeMarketing: agreeMarketingCheckbox.checked
-        };
-        
-        await performRegister(formData);
-    });
-    
-    const style = document.createElement('style');
+  function injectSpinnerStyles() {
+    if (document.getElementById("register-spinner-styles")) return;
+    const style = document.createElement("style");
+    style.id = "register-spinner-styles";
     style.textContent = `
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      .loading-spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top:2px solid #fff;border-radius:50%;animation:spin 1s linear infinite;}
+      @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
     `;
     document.head.appendChild(style);
-    
-    if (window.innerWidth > 768) {
-        firstNameInput.focus();
-    }
-    
-    if (window.innerWidth <= 768) {
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                if (window.innerWidth <= 768) {
-                    const viewport = document.querySelector('meta[name="viewport"]');
-                    if (viewport) {
-                        viewport.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
-                    }
-                }
-            });
-            
-            input.addEventListener('blur', function() {
-                setTimeout(() => {
-                    const viewport = document.querySelector('meta[name="viewport"]');
-                    if (viewport) {
-                        viewport.content = 'width=device-width, initial-scale=1';
-                    }
-                }, 300);
-            });
-        });
-    }
-});
+  }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const loginLink = document.querySelector('.login-link');
-    if (loginLink) {
-        loginLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            navigateWithFeedback('loginpessoal.html', 'Redirecionando para login pessoal...');
-        });
-    }
-    
-    const termsLinks = document.querySelectorAll('.terms-link');
-    termsLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            showMobileAlert('Abrindo termos de uso...');
-        });
+  function init() {
+    state.form = query(selectors.form);
+    state.button = query(selectors.button);
+    state.strengthFill = query(selectors.strengthFill);
+    state.strengthText = query(selectors.strengthText);
+    if (!state.form || !state.button) return;
+    Object.keys(fields).forEach(key => {
+      const cfg = fields[key];
+      state.elements[key] = query(cfg.input);
+      state.errors[key] = query(cfg.error);
     });
-    
-    const businessRegisterLink = document.querySelector('.business-register-link');
-    if (businessRegisterLink) {
-        businessRegisterLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            navigateWithFeedback('registroempresa.html', 'Redirecionando para registro empresarial...');
-        });
-    }
-    
-    function navigateWithFeedback(url, message) {
-        if (window.innerWidth <= 768) {
-            showMobileAlert(message);
-            setTimeout(() => {
-                window.location.href = url;
-            }, 800);
-        } else {
-            window.location.href = url;
-        }
-    }
-    
-    function showMobileAlert(message) {
-        if (window.innerWidth <= 768) {
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                right: 20px;
-                background: var(--brand);
-                color: white;
-                padding: 16px;
-                border-radius: 12px;
-                font-size: 14px;
-                font-weight: 500;
-                text-align: center;
-                z-index: 10000;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-                transform: translateY(100px);
-                opacity: 0;
-                transition: all 0.3s ease;
-            `;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.transform = 'translateY(0)';
-                toast.style.opacity = '1';
-            }, 100);
-            
-            setTimeout(() => {
-                toast.style.transform = 'translateY(100px)';
-                toast.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 3000);
-        } else {
-            alert(message);
-        }
-    }
+    injectSpinnerStyles();
+    bindFieldEvents();
+    bindToggles();
+    bindLinks();
+    setupMobileExperience();
+    state.form.addEventListener("submit", submit);
+    if (window.innerWidth > 768) state.elements.firstName?.focus();
+  }
 
-    if ('ontouchstart' in window) {
-        const touchElements = document.querySelectorAll('.register-button, .password-toggle, .checkbox-container, .business-register-link, .login-link');
-        
-        touchElements.forEach(element => {
-            element.addEventListener('touchstart', function() {
-                this.style.transform = 'scale(0.95)';
-                this.style.transition = 'transform 0.1s ease';
-            });
-            
-            element.addEventListener('touchend', function() {
-                this.style.transform = 'scale(1)';
-            });
-            
-            element.addEventListener('touchcancel', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-    }
-    
-    function handleOrientationChange() {
-        if (window.innerWidth <= 768) {
-            const registerCard = document.querySelector('.register-card');
-            if (registerCard) {
-                if (window.innerHeight < window.innerWidth) {
-                    registerCard.style.padding = '20px 24px';
-                } else {
-                    registerCard.style.padding = '28px 20px';
-                }
-            }
-        }
-    }
-    
-    window.addEventListener('orientationchange', function() {
-        setTimeout(handleOrientationChange, 100);
-    });
-    
-    window.addEventListener('resize', handleOrientationChange);
-    
-    if (window.innerWidth <= 768) {
-        document.body.style.overflowX = 'hidden';
-        
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                setTimeout(() => {
-                    this.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center',
-                        inline: 'nearest'
-                    });
-                }, 300);
-            });
-        });
-    }
-    
-    function addHapticFeedback() {
-        const buttons = document.querySelectorAll('.register-button, .password-toggle');
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                if ('vibrate' in navigator) {
-                    navigator.vibrate(50);
-                }
-            });
-        });
-    }
-    
-    if (window.innerWidth <= 768) {
-        addHapticFeedback();
-    }
-});
-
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
