@@ -522,32 +522,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function performRegister(formData) {
         try {
-            await new Promise(resolve => setTimeout(resolve, 2500));
-            
-            
-            const isEmailAvailable = formData.companyEmail !== 'empresa@exemplo.com';
-            
-            if (isEmailAvailable) {
-                localStorage.setItem('authToken', 'simulated-company-token-' + Date.now());
-                localStorage.setItem('userType', 'company');
-                localStorage.setItem('userEmail', formData.companyEmail);
-                localStorage.setItem('userName', formData.companyName);
-                localStorage.setItem('companyCNPJ', formData.cnpj);
-                
-                showSuccessMessage('Conta empresarial criada com sucesso!');
-                setTimeout(() => {
-                    window.location.href = '../index.html';
-                }, 2000);
-                
-            } else {
-                throw new Error('Este e-mail já está em uso');
-            }
-            
+            await MapsAuth.register({
+                type: 'business',
+                email: formData.companyEmail,
+                password: formData.password,
+                name: formData.companyName,
+                company: formData.companyName,
+                phone: formData.companyPhone,
+                cnpj: formData.cnpj,
+                profile: {
+                    caption: 'Responsavel: ' + formData.responsibleName,
+                    tags: formData.businessCategory ? [formData.businessCategory] : [],
+                    sector: formData.businessCategory,
+                    contact: {
+                        instagram: '@' + (formData.companyName || '').replace(/\s+/g, '').toLowerCase(),
+                        linkedin: formData.companyName,
+                        email: formData.responsibleEmail,
+                        phone: formData.responsiblePhone
+                    }
+                }
+            });
+            showSuccessMessage('Conta empresarial criada com sucesso!');
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 1800);
         } catch (error) {
-            showErrorMessage(error.message || 'Erro ao criar conta empresarial. Tente novamente.');
+            const code = error?.message;
+            const message = code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' : code === 'CNPJ_TAKEN' ? 'Este CNPJ ja esta em uso' : code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' : (code || 'Erro ao criar conta empresarial. Tente novamente.');
+            showErrorMessage(message);
         }
     }
-    
+
     function showSuccessMessage(message) {
         registerButton.innerHTML = `
             <i class="ri-check-line button-icon"></i>

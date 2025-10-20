@@ -134,8 +134,6 @@ const LoginEmpresa = (() => {
       localStorage.removeItem('businessLoginIdentifier');
       localStorage.removeItem('rememberBusiness');
     }
-    localStorage.setItem('authToken', 'business-token-' + Date.now());
-    localStorage.setItem('userType', 'business');
     setButtonState('success', 'Login aprovado!');
     showToast('Login realizado com sucesso. Redirecionando...', 'success', 2600);
     setTimeout(() => {
@@ -309,13 +307,9 @@ const LoginEmpresa = (() => {
   }
 
   function fakeAuthenticate(identifierValue, passwordValue) {
-    return new Promise((resolve, reject) => {
-      const normalized = identifierValue.includes('@') ? identifierValue.trim().toLowerCase() : identifierValue.replace(/\D/g, '');
-      setTimeout(() => {
-        const validUser = (normalized === 'empresa@teste.com' || normalized === '11222333000144') && passwordValue === 'SenhaForte123';
-        if (validUser) resolve(true);
-        else reject(new Error('E-mail/CNPJ ou senha incorretos.'));
-      }, 1200);
+    return MapsAuth.login({ identifier: identifierValue, password: passwordValue, type: 'business' }).catch(error => {
+      if (error?.message === 'INVALID') throw new Error('E-mail/CNPJ ou senha incorretos.');
+      throw error;
     });
   }
 

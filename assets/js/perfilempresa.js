@@ -65,6 +65,50 @@
   const agendaEl = $("#agenda-entrevistas .agenda-numero");
   const curriculosCard = $("#curriculos-recebidos");
 
+  function hydrateFromAuth(data) {
+    if (!data || data.type !== "business") return;
+    const profile = data.profile || {};
+    const nameEl = $("#empresa-nome-exibicao");
+    if (nameEl && (data.company || data.name)) nameEl.textContent = data.company || data.name;
+    const descEl = $(".empresa-hero-desc");
+    if (descEl && profile.caption) descEl.textContent = profile.caption;
+    const tagsEl = $(".empresa-hero-tags");
+    if (tagsEl && Array.isArray(profile.tags) && profile.tags.length) {
+      tagsEl.innerHTML = profile.tags.map(tag => `<li>${tag}</li>`).join("");
+    }
+    const metaValues = $$(".empresa-meta .meta-value");
+    if (metaValues[0] && profile.sector) metaValues[0].textContent = profile.sector;
+    if (metaValues[1] && profile.headquarters) metaValues[1].textContent = profile.headquarters;
+    if (metaValues[2] && profile.model) metaValues[2].textContent = profile.model;
+    const contact = profile.contact || {};
+    const contactSpans = $$(".empresa-contatos span");
+    if (contactSpans[0] && (contact.instagram || data.company)) contactSpans[0].textContent = contact.instagram || data.company;
+    if (contactSpans[1] && (contact.linkedin || profile.caption)) contactSpans[1].textContent = contact.linkedin || profile.caption;
+    if (contactSpans[2] && contact.email) contactSpans[2].textContent = contact.email;
+    if (contactSpans[3] && (contact.address || contact.phone)) contactSpans[3].textContent = contact.address || contact.phone;
+    const bioEl = $("#bio-empresa p");
+    if (bioEl && profile.bio) bioEl.textContent = profile.bio;
+    if (profile.agendaToday || profile.agendaToday === 0) {
+      if (agendaEl) agendaEl.textContent = profile.agendaToday;
+      if (window.localStorage) {
+        try { localStorage.setItem("mapslink_agenda_hoje", JSON.stringify(profile.agendaToday)); } catch {}
+      }
+    }
+    if (curriculosCard) {
+      const badge = curriculosCard.querySelector(".badge-count");
+      if (badge && (profile.curriculos || profile.curriculos === 0)) badge.textContent = profile.curriculos;
+      if (profile.curriculos || profile.curriculos === 0) {
+        try { localStorage.setItem("mapslink_curriculos_recebidos", JSON.stringify(profile.curriculos)); } catch {}
+      }
+    }
+  }
+
+  const auth = window.MapsAuth;
+  if (auth && typeof auth.ready === "function") {
+    auth.ready().then(() => hydrateFromAuth(auth.current()));
+    if (auth.onSession) auth.onSession(data => hydrateFromAuth(data));
+  }
+
   const store = {
     get(key, fallback) {
       try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }

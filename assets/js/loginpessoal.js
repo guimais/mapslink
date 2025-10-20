@@ -137,27 +137,21 @@
 
     async function performLogin(email, password, rememberMe) {
       try {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        const isValidUser = email === "teste@exemplo.com" && password === "123456";
-        if (isValidUser) {
-          if (rememberMe) {
-            localStorage.setItem("userEmail", email);
-            localStorage.setItem("rememberMe", "true");
-          } else {
-            localStorage.removeItem("userEmail");
-            localStorage.removeItem("rememberMe");
-          }
-          localStorage.setItem("authToken", "simulated-token-" + Date.now());
-          localStorage.setItem("userType", "personal");
-          showSuccessMessage("Login realizado com sucesso!");
-          setTimeout(() => {
-            window.location.href = getRedirectTarget(loginForm);
-          }, 1500);
+        await MapsAuth.login({ identifier: email, password, type: "personal" });
+        if (rememberMe) {
+          localStorage.setItem("userEmail", email);
+          localStorage.setItem("rememberMe", "true");
         } else {
-          throw new Error("E-mail ou senha incorretos");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("rememberMe");
         }
+        showSuccessMessage("Login realizado com sucesso!");
+        setTimeout(() => {
+          window.location.href = getRedirectTarget(loginForm);
+        }, 1200);
       } catch (error) {
-        showErrorMessage(error.message || "Erro ao fazer login. Tente novamente.");
+        const message = error?.message === "INVALID" ? "E-mail ou senha incorretos" : (error?.message || "Erro ao fazer login. Tente novamente.");
+        showErrorMessage(message);
       }
     }
 

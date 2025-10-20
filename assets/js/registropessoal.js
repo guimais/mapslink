@@ -313,31 +313,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function performRegister(formData) {
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            
-            const isEmailAvailable = formData.email !== 'teste@exemplo.com';
-            
-            if (isEmailAvailable) {
-                localStorage.setItem('authToken', 'simulated-token-' + Date.now());
-                localStorage.setItem('userType', 'personal');
-                localStorage.setItem('userEmail', formData.email);
-                localStorage.setItem('userName', `${formData.firstName} ${formData.lastName}`);
-                
-                showSuccessMessage('Conta criada com sucesso!');
-                setTimeout(() => {
-                    window.location.href = '../index.html';
-                }, 2000);
-                
-            } else {
-                throw new Error('Este e-mail já está em uso');
-            }
-            
+            await MapsAuth.register({
+                type: 'personal',
+                email: formData.email,
+                password: formData.password,
+                name: `${formData.firstName} ${formData.lastName}`.trim(),
+                phone: formData.phone,
+                profile: {}
+            });
+            showSuccessMessage('Conta criada com sucesso!');
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 1800);
         } catch (error) {
-            showErrorMessage(error.message || 'Erro ao criar conta. Tente novamente.');
+            const code = error?.message;
+            const message = code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' : code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' : (code || 'Erro ao criar conta. Tente novamente.');
+            showErrorMessage(message);
         }
     }
-    
+
     function showSuccessMessage(message) {
         registerButton.innerHTML = `
             <i class="ri-check-line button-icon"></i>

@@ -125,6 +125,47 @@
     };
   })();
 
+  function hydrateFromAuth(data) {
+    if (!data || data.type !== "personal") return;
+    const profile = data.profile || {};
+    const nameEl = $("#perfil-nome");
+    if (nameEl && data.name) nameEl.textContent = data.name;
+    const descEl = $(".perfil-hero-desc");
+    if (descEl && profile.headline) descEl.textContent = profile.headline;
+    const tagsEl = $(".perfil-hero-tags");
+    if (tagsEl && Array.isArray(profile.skills) && profile.skills.length) tagsEl.innerHTML = profile.skills.map(skill => `<li>${skill}</li>`).join("");
+    const metaValues = $$(".perfil-meta .meta-value");
+    if (metaValues[0] && (profile.specialty || (profile.skills && profile.skills.length))) metaValues[0].textContent = profile.specialty || profile.skills[0];
+    if (metaValues[1] && profile.location) metaValues[1].textContent = profile.location;
+    if (metaValues[2] && profile.experience) metaValues[2].textContent = profile.experience;
+    if (metaValues[3] && profile.availability) metaValues[3].textContent = profile.availability;
+    const bioEl = $("#perfil-bio p");
+    if (bioEl && profile.bio) bioEl.textContent = profile.bio;
+    const statusNum = $("#perfil-status .agenda-numero");
+    if (statusNum && (profile.interviewsToday || profile.interviewsToday === 0)) statusNum.textContent = profile.interviewsToday;
+    const contact = profile.contact || {};
+    const contactSpans = $$(".perfil-contatos span");
+    if (contactSpans[0] && contact.instagram) contactSpans[0].textContent = contact.instagram;
+    if (contactSpans[1] && contact.linkedin) contactSpans[1].textContent = contact.linkedin;
+    if (contactSpans[2] && contact.email) contactSpans[2].textContent = contact.email;
+    if (contactSpans[3] && contact.phone) contactSpans[3].textContent = contact.phone;
+    const expList = $(".perfil-experiencias-list");
+    if (expList && Array.isArray(profile.experiences) && profile.experiences.length) {
+      expList.innerHTML = profile.experiences.map(item => {
+        const parts = item.split(" - ");
+        const role = parts.shift()?.trim() || item;
+        const detail = parts.join(" - ").trim();
+        return `<li><span class="perfil-exp-role">${role}</span><span class="perfil-exp-detail">${detail}</span></li>`;
+      }).join("");
+    }
+  }
+
+  const auth = window.MapsAuth;
+  if (auth && typeof auth.ready === "function") {
+    auth.ready().then(() => hydrateFromAuth(auth.current()));
+    if (auth.onSession) auth.onSession(hydrateFromAuth);
+  }
+
   $$(".perfil-contatos a").forEach((a) => {
     if (a.__pu_copy_bound) return;
     a.__pu_copy_bound = true;

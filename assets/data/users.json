@@ -1,0 +1,60 @@
+[
+  {
+    "id": "usr-001",
+    "type": "personal",
+    "email": "gelado@gmail.com",
+    "cpf": "12345678909",
+    "name": "Gelado da Silva",
+    "phone": "+55 19 99297-2688",
+    "pass": "U2VuaGFAMTIz",
+    "profile": {
+      "headline": "Desenvolvedor full stack apaixonado por criar experiencias uteis, acessiveis e escalaveis.",
+      "specialty": "Engenharia Full Stack",
+      "location": "Campinas, SP",
+      "experience": "12 anos em tecnologia",
+      "availability": "Hibrido - Imediata",
+      "skills": ["Full-stack", "Node.js", "React", "Arquitetura Cloud"],
+      "bio": "Desenvolvedor senior com mais de 10 anos de experiencia em solucoes escalaveis. Focado em resultados, entrega produtos que impactam usuarios e negocios, liderando times multidisciplinares com boas praticas de engenharia.",
+      "experiences": [
+        "Tech Lead - InovaTech - 2019-2024",
+        "Engenheiro de Software Senior - Conecta Dados - 2015-2019",
+        "Desenvolvedor Pleno - Digital Way - 2012-2015",
+        "Desenvolvedor Junior - Digital Way - 2011-2012",
+        "Estagiario de Desenvolvimento - Tech Start - 2010-2011"
+      ],
+      "contact": {
+        "email": "gelado@gmail.com",
+        "phone": "+55 19 99297-2688",
+        "instagram": "@gelado.tech",
+        "linkedin": "/in/geladodasilva"
+      },
+      "interviewsToday": 2
+    }
+  },
+  {
+    "id": "biz-001",
+    "type": "business",
+    "email": "contato@amazon.com",
+    "cnpj": "12345678000199",
+    "name": "Amazon",
+    "company": "Amazon Brasil",
+    "phone": "+55 11 4002-8922",
+    "pass": "RW1wcmVzYUAxMjM=",
+    "profile": {
+      "caption": "Tecnologia, logistica e inovacao para conectar milhoes de clientes e talentos ao redor do mundo.",
+      "tags": ["Cloud & AWS", "E-commerce", "Inteligencia Artificial"],
+      "sector": "Tecnologia & E-commerce",
+      "headquarters": "Seattle, EUA",
+      "model": "Global - Hibrido",
+      "contact": {
+        "instagram": "@amazon",
+        "linkedin": "@amazon",
+        "email": "support@amazon.com",
+        "address": "Rua Plinio Luis de Siqueira Jr"
+      },
+      "agendaToday": 3,
+      "curriculos": 12,
+      "bio": "Uma gigante global de tecnologia focada em e-commerce, computacao em nuvem (AWS), streaming digital e inteligencia artificial. Reconhecida por inovacao constante e por ser uma das marcas mais valiosas do mundo."
+    }
+  }
+]
