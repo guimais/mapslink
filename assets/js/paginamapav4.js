@@ -27,12 +27,22 @@
 
   function ensureDesktopState() {
     if (!painelFiltros) return;
-    painelFiltros.hidden = !mqDrawer.matches ? false : true;
+    const isDrawer = mqDrawer.matches;
     painelFiltros.classList.remove("is-open");
     btnFiltro?.setAttribute("aria-expanded", "false");
+    btnFiltro?.classList.remove("is-active");
     if (overlay) overlay.remove();
     overlay = null;
     document.documentElement.style.removeProperty("overflow");
+    if (isDrawer) {
+      painelFiltros.hidden = true;
+      layout?.classList.remove("filters-closed");
+    } else {
+      painelFiltros.hidden = false;
+      if (layout && !layout.classList.contains("filters-closed")) {
+        layout.classList.add("filters-closed");
+      }
+    }
   }
 
   function createOverlay() {

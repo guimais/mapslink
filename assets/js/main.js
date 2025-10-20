@@ -6,21 +6,173 @@
   const USERS_KEY = "mapslink:users";
   const SESSION_KEY = "mapslink:session";
   const watchers = new Set();
+  const storageState = {
+    users: null,
+    session: null
+  };
+  const storageLogged = {
+    local: false,
+    session: false
+  };
+  const logWarn = (...args) => {
+    if (win && win.console && typeof win.console.warn === "function") {
+      win.console.warn(...args);
+    }
+  };
   let cache = null;
   let loading = null;
   const encode = v => btoa(unescape(encodeURIComponent(v || "")));
   const normalize = v => (v || "").replace(/\D/g, "").toLowerCase();
-  const persist = () => localStorage.setItem(USERS_KEY, JSON.stringify(cache));
-  const read = key => {
+  const storageCandidates = () => {
+    const items = [];
+    const add = (label, getter, flag) => {
+      try {
+        const store = getter();
+        if (store && typeof store.getItem === "function" && !items.some(entry => entry.store === store)) {
+          items.push({ label, store });
+        }
+      } catch (error) {
+        if (!storageLogged[flag]) {
+          logWarn(`MapsAuth: ${label} indisponivel.`, error);
+          storageLogged[flag] = true;
+        }
+      }
+    };
+    add("localStorage", () => win.localStorage, "local");
+    add("sessionStorage", () => win.sessionStorage, "session");
+    return items;
+  };
+  const storesFor = type => {
+    const stores = storageCandidates();
+    const preferred = storageState[type];
+    if (preferred) {
+      const found = stores.find(item => item.store === preferred.store);
+      if (found) {
+        return [found, ...stores.filter(item => item !== found)];
+      }
+    }
+    return stores;
+  };
+  const writeStore = (type, key, value) => {
+    const stores = storesFor(type);
+    for (const { label, store } of stores) {
+      try {
+        store.setItem(key, value);
+        storageState[type] = { label, store };
+        return true;
+      } catch (error) {
+        logWarn(`MapsAuth: falha ao salvar em ${label}.`, error);
+      }
+    }
+    return false;
+  };
+  const readStore = (type, key) => {
+    const stores = storesFor(type);
+    for (const { label, store } of stores) {
+      try {
+        const raw = store.getItem(key);
+        if (raw !== null && raw !== undefined) {
+          storageState[type] = { label, store };
+          return raw;
+        }
+      } catch (error) {
+        logWarn(`MapsAuth: falha ao ler de ${label}.`, error);
+      }
+    }
+    return null;
+  };
+  const clearStore = (type, key) => {
+    const stores = storageCandidates();
+    let removed = false;
+    stores.forEach(({ label, store }) => {
+      try {
+        store.removeItem(key);
+        removed = true;
+      } catch (error) {
+        logWarn(`MapsAuth: falha ao remover de ${label}.`, error);
+      }
+    });
+    if (type) storageState[type] = null;
+    return removed;
+  };
+  const fallbackUsers = () => ([
+    {
+      id: "usr-001",
+      type: "personal",
+      email: "gelado@gmail.com",
+      cpf: "12345678909",
+      name: "Gelado da Silva",
+      phone: "+55 19 99297-2688",
+      pass: "U2VuaGFAMTIz",
+      profile: {
+        headline: "Desenvolvedor full stack apaixonado por criar experiencias uteis, acessiveis e escalaveis.",
+        specialty: "Engenharia Full Stack",
+        location: "Campinas, SP",
+        experience: "12 anos em tecnologia",
+        availability: "Hibrido - Imediata",
+        skills: ["Full-stack", "Node.js", "React", "Arquitetura Cloud"],
+        bio: "Desenvolvedor senior com mais de 10 anos de experiencia em solucoes escalaveis. Focado em resultados, entrega produtos que impactam usuarios e negocios, liderando times multidisciplinares com boas praticas de engenharia.",
+        experiences: [
+          "Tech Lead - InovaTech - 2019-2024",
+          "Engenheiro de Software Senior - Conecta Dados - 2015-2019",
+          "Desenvolvedor Pleno - Digital Way - 2012-2015",
+          "Desenvolvedor Junior - Digital Way - 2011-2012",
+          "Estagiario de Desenvolvimento - Tech Start - 2010-2011"
+        ],
+        contact: {
+          email: "gelado@gmail.com",
+          phone: "+55 19 99297-2688",
+          instagram: "@gelado.tech",
+          linkedin: "/in/geladodasilva"
+        },
+        interviewsToday: 2
+      }
+    },
+    {
+      id: "biz-001",
+      type: "business",
+      email: "contato@amazon.com",
+      cnpj: "12345678000199",
+      name: "Amazon",
+      company: "Amazon Brasil",
+      phone: "+55 11 4002-8922",
+      pass: "RW1wcmVzYUAxMjM=",
+      profile: {
+        caption: "Tecnologia, logistica e inovacao para conectar milhoes de clientes e talentos ao redor do mundo.",
+        tags: ["Cloud & AWS", "E-commerce", "Inteligencia Artificial"],
+        sector: "Tecnologia & E-commerce",
+        headquarters: "Seattle, EUA",
+        model: "Global - Hibrido",
+        contact: {
+          instagram: "@amazon",
+          linkedin: "@amazon",
+          email: "support@amazon.com",
+          address: "Rua Plinio Luis de Siqueira Jr"
+        },
+        agendaToday: 3,
+        curriculos: 12,
+        bio: "Uma gigante global de tecnologia focada em e-commerce, computacao em nuvem (AWS), streaming digital e inteligencia artificial. Reconhecida por inovacao constante e por ser uma das marcas mais valiosas do mundo."
+      }
+    }
+  ]);
+  const persist = () => {
+    if (!Array.isArray(cache)) return false;
+    return writeStore("users", USERS_KEY, JSON.stringify(cache));
+  };
+  const readSession = () => {
+    const raw = readStore("session", SESSION_KEY);
+    if (raw === null) return null;
     try {
-      return JSON.parse(localStorage.getItem(key) || "null");
+      return JSON.parse(raw);
     } catch {
       return null;
     }
   };
   const setSession = data => {
-    if (!data) localStorage.removeItem(SESSION_KEY);
-    else localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+    if (!data) clearStore("session", SESSION_KEY);
+    else if (!writeStore("session", SESSION_KEY, JSON.stringify(data))) {
+      logWarn("MapsAuth: nao foi possivel persistir a sessao do usuario.");
+    }
     watchers.forEach(fn => fn(data));
     return data;
   };
@@ -38,26 +190,34 @@
     if (cache) return cache;
     if (loading) return loading;
     loading = (async () => {
-      const raw = localStorage.getItem(USERS_KEY);
-      if (raw) {
+      const raw = readStore("users", USERS_KEY);
+      if (raw !== null) {
         try {
           cache = JSON.parse(raw) || [];
         } catch {
-          cache = [];
+          logWarn("MapsAuth: dados corrompidos no localStorage, recriando lista de usuarios.");
+          cache = fallbackUsers();
+          if (!persist()) logWarn("MapsAuth: nao foi possivel salvar usuarios de fallback.");
         }
         return cache;
       }
-      const res = await fetch(usersUrl, { cache: "no-store" });
-      const data = await res.json();
-      cache = Array.isArray(data) ? data : [];
-      persist();
+      try {
+        const res = await fetch(usersUrl, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        cache = Array.isArray(data) ? data : [];
+      } catch (error) {
+        logWarn("MapsAuth: nao foi possivel carregar users.json, usando lista local.", error);
+        cache = cache && Array.isArray(cache) && cache.length ? cache : fallbackUsers();
+      }
+      if (!persist()) logWarn("MapsAuth: nao foi possivel salvar a lista de usuarios carregada.");
       return cache;
     })();
     return loading;
   }
   const MapsAuth = {
     ready: () => load(),
-    current: () => read(SESSION_KEY),
+    current: () => readSession(),
     onSession(fn) {
       if (typeof fn === "function") watchers.add(fn);
       return () => watchers.delete(fn);
@@ -77,7 +237,7 @@
       });
       if (!user) throw new Error("INVALID");
       user.lastLogin = new Date().toISOString();
-      persist();
+      if (!persist()) logWarn("MapsAuth: nao foi possivel atualizar informacoes do usuario.");
       return setSession(base(user));
     },
     async register(payload) {
@@ -105,11 +265,14 @@
         profile: payload.profile || {}
       };
       list.push(entry);
-      persist();
+      if (!persist()) {
+        list.pop();
+        throw new Error("STORAGE_UNAVAILABLE");
+      }
       return setSession(base(entry));
     },
     require(type, redirect) {
-      const data = read(SESSION_KEY);
+      const data = readSession();
       if (!data || (type && data.type !== type)) {
         if (redirect) win.location.href = redirect;
         return null;
@@ -128,7 +291,7 @@
         user.profile = user.profile || {};
         Object.assign(user.profile, values.profile);
       }
-      persist();
+      if (!persist()) logWarn("MapsAuth: nao foi possivel salvar alteracoes de perfil.");
       return setSession({ ...base(user), token: data.token });
     }
   };
@@ -159,8 +322,10 @@
   doc.addEventListener("DOMContentLoaded", () => {
     MapsAuth.ready();
     hydrate();
+    const active = doc.body?.dataset?.navActive;
+    if (active) highlight(active);
     const gate = doc.body?.dataset?.page;
     if (gate === "perfilusuario") MapsAuth.require("personal", "loginpessoal.html");
-    if (gate === "perfilempresa" || gate === "paginadashboard") MapsAuth.require("business", "loginempresa.html");
+    if (gate === "perfilempresa") MapsAuth.require("business", "loginempresa.html");
   });
 })();

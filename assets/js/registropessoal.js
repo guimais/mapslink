@@ -318,8 +318,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 email: formData.email,
                 password: formData.password,
                 name: `${formData.firstName} ${formData.lastName}`.trim(),
-                phone: formData.phone,
-                profile: {}
+                phone: formData.phone || formData.phoneDigits,
+                profile: {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    birthDate: formData.birthDate,
+                    marketingOptIn: !!formData.agreeMarketing,
+                    phone: formData.phone,
+                    phoneDigits: formData.phoneDigits,
+                    createdAt: new Date().toISOString()
+                }
             });
             showSuccessMessage('Conta criada com sucesso!');
             setTimeout(() => {
@@ -327,7 +335,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1800);
         } catch (error) {
             const code = error?.message;
-            const message = code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' : code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' : (code || 'Erro ao criar conta. Tente novamente.');
+            const message =
+                code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' :
+                code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' :
+                code === 'STORAGE_UNAVAILABLE' ? 'Nao foi possivel salvar seus dados neste navegador. Verifique permissoes de armazenamento e tente novamente.' :
+                (code || 'Erro ao criar conta. Tente novamente.');
             showErrorMessage(message);
         }
     }
@@ -391,11 +403,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showLoadingButton();
         
+        const rawPhone = phoneInput.value.trim();
         const formData = {
             firstName: firstNameInput.value.trim(),
             lastName: lastNameInput.value.trim(),
             email: emailInput.value.trim(),
-            phone: phoneInput.value.replace(/\D/g, ''),
+            phone: rawPhone,
+            phoneDigits: rawPhone.replace(/\D/g, ''),
             birthDate: birthDateInput.value,
             password: passwordInput.value,
             agreeMarketing: agreeMarketingCheckbox.checked

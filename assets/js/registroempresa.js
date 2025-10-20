@@ -522,24 +522,53 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function performRegister(formData) {
         try {
+            const normalizeDigits = value => (value || '').replace(/\D/g, '');
+            const beautifyPhone = (value, fallback) => {
+                const digits = normalizeDigits(value);
+                if (digits.length === 11) {
+                    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+                }
+                if (digits.length === 10) {
+                    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+                }
+                return fallback || value || digits;
+            };
+            const beautifyCnpj = digits => {
+                const clean = (digits || '').replace(/\D/g, '');
+                if (clean.length !== 14) return clean || digits;
+                return `${clean.slice(0, 2)}.${clean.slice(2, 5)}.${clean.slice(5, 8)}/${clean.slice(8, 12)}-${clean.slice(12)}`;
+            };
+            const categoryRaw = (formData.businessCategoryLabel || formData.businessCategory || '').trim();
+            const categoryTag = categoryRaw
+                ? categoryRaw.replace(/\s+/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+                : '';
             await MapsAuth.register({
                 type: 'business',
                 email: formData.companyEmail,
                 password: formData.password,
                 name: formData.companyName,
                 company: formData.companyName,
-                phone: formData.companyPhone,
+                phone: formData.companyPhoneRaw || beautifyPhone(formData.companyPhone),
                 cnpj: formData.cnpj,
                 profile: {
-                    caption: 'Responsavel: ' + formData.responsibleName,
-                    tags: formData.businessCategory ? [formData.businessCategory] : [],
-                    sector: formData.businessCategory,
+                    caption: `Responsavel: ${formData.responsibleName}`,
+                    tags: categoryTag ? [categoryTag] : [],
+                    sector: categoryTag,
+                    model: categoryTag ? `Atuacao em ${categoryTag}` : 'Sob demanda',
+                    headquarters: 'Brasil',
+                    marketingOptIn: !!formData.agreeMarketing,
+                    createdAt: new Date().toISOString(),
                     contact: {
                         instagram: '@' + (formData.companyName || '').replace(/\s+/g, '').toLowerCase(),
                         linkedin: formData.companyName,
                         email: formData.responsibleEmail,
-                        phone: formData.responsiblePhone
-                    }
+                        phone: beautifyPhone(formData.responsiblePhoneRaw || formData.responsiblePhone),
+                        manager: formData.responsibleName,
+                        role: formData.responsiblePosition,
+                        document: beautifyCnpj(formData.cnpj)
+                    },
+                    agendaToday: 0,
+                    curriculos: 0
                 }
             });
             showSuccessMessage('Conta empresarial criada com sucesso!');
@@ -548,7 +577,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1800);
         } catch (error) {
             const code = error?.message;
-            const message = code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' : code === 'CNPJ_TAKEN' ? 'Este CNPJ ja esta em uso' : code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' : (code || 'Erro ao criar conta empresarial. Tente novamente.');
+            const message =
+                code === 'EMAIL_TAKEN' ? 'Este e-mail ja esta em uso' :
+                code === 'CNPJ_TAKEN' ? 'Este CNPJ ja esta em uso' :
+                code === 'PASSWORD_REQUIRED' ? 'Informe uma senha valida' :
+                code === 'STORAGE_UNAVAILABLE' ? 'Nao foi possivel salvar seus dados neste navegador. Verifique permissoes de armazenamento e tente novamente.' :
+                (code || 'Erro ao criar conta empresarial. Tente novamente.');
             showErrorMessage(message);
         }
     }
@@ -618,16 +652,25 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showLoadingButton();
         
+        const companyPhoneRaw = companyPhoneInput.value.trim();
+        const responsiblePhoneRaw = responsiblePhoneInput.value.trim();
+        const categoryValue = businessCategoryInput.value;
+        const categoryLabel = categoryValue === 'outros'
+            ? otherCategoryInput.value.trim()
+            : (businessCategoryInput.options[businessCategoryInput.selectedIndex]?.text || '').trim();
         const formData = {
             companyName: companyNameInput.value.trim(),
             cnpj: cnpjInput.value.replace(/\D/g, ''),
-            companyPhone: companyPhoneInput.value.replace(/\D/g, ''),
+            companyPhone: companyPhoneRaw.replace(/\D/g, ''),
+            companyPhoneRaw,
             companyEmail: companyEmailInput.value.trim(),
-            businessCategory: businessCategoryInput.value === 'outros' ? otherCategoryInput.value.trim() : businessCategoryInput.value,
+            businessCategory: categoryValue === 'outros' ? otherCategoryInput.value.trim() : categoryValue,
+            businessCategoryLabel: categoryLabel || (categoryValue === 'outros' ? otherCategoryInput.value.trim() : categoryValue),
             responsibleName: responsibleNameInput.value.trim(),
             responsiblePosition: responsiblePositionInput.value.trim(),
             responsibleEmail: responsibleEmailInput.value.trim(),
-            responsiblePhone: responsiblePhoneInput.value.replace(/\D/g, ''),
+            responsiblePhone: responsiblePhoneRaw.replace(/\D/g, ''),
+            responsiblePhoneRaw,
             password: passwordInput.value,
             agreeMarketing: agreeMarketingCheckbox.checked
         };
@@ -656,11 +699,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.innerWidth > 768) {
         companyNameInput.focus();
     }
-    
-    console.log('businessCategoryInput:', businessCategoryInput);
-    console.log('otherCategoryGroup:', otherCategoryGroup);
-    console.log('otherCategoryInput:', otherCategoryInput);
-    
     toggleOtherCategoryField();
     
     if (window.innerWidth <= 768) {

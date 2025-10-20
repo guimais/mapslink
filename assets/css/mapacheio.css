@@ -115,6 +115,7 @@ h2,
   outline-offset:2px;
 }
 
+
 .map-wrapper{
   position:fixed;
   inset:0;
@@ -237,6 +238,42 @@ h2,
 .filter-toggle[aria-expanded="true"] i,
 .filter-toggle.applied i{
   color:#fff;
+}
+
+.map-exit-control{
+  position:absolute;
+  right:32px;
+  bottom:32px;
+  z-index:1600;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:52px;
+  height:52px;
+  border-radius:20px;
+  background:#f8faff;
+  border:1px solid rgba(16,37,105,.12);
+  box-shadow:0 12px 28px rgba(15,23,42,.18);
+  color:var(--brand);
+  text-decoration:none;
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+}
+
+.map-exit-control i{
+  font-size:22px;
+}
+
+.map-exit-control:hover,
+.map-exit-control:focus-visible{
+  background:#102569;
+  color:#fff;
+  box-shadow:0 16px 36px rgba(16,37,105,.26);
+  transform:translateY(-1px);
+  outline:none;
+}
+
+.map-exit-control:active{
+  transform:translateY(1px);
 }
 
 .filter-panel{
@@ -478,6 +515,12 @@ h2,
     width:94%;
     max-width:1040px;
   }
+  .map-exit-control{
+    width:48px;
+    height:48px;
+    right:28px;
+    bottom:28px;
+  }
   .filter-panel{
     width:min(380px,90vw);
   }
@@ -498,6 +541,10 @@ h2,
   }
   .nav-logo{
     height:78px;
+  }
+  .map-exit-control{
+    right:24px;
+    bottom:24px;
   }
   .nav-toggle{
     display:flex;
@@ -623,6 +670,13 @@ h2,
     padding:88px 0 40px;
     box-shadow:-4px 0 20px rgba(0,0,0,0.16);
   }
+  .map-exit-control{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    right:20px;
+    bottom:20px;
+  }
   .search-ui{
     bottom:20px;
     gap:8px;
@@ -662,6 +716,12 @@ h2,
     padding:16px 20px;
     font-size:15px;
   }
+  .map-exit-control{
+    width:42px;
+    height:42px;
+    right:18px;
+    bottom:18px;
+  }
   .search-ui{
     bottom:16px;
     gap:10px;
@@ -687,6 +747,10 @@ h2,
   }
   .nav-logo{
     height:58px;
+  }
+  .map-exit-control{
+    right:14px;
+    bottom:16px;
   }
   .search-bar{
     height:44px;
