@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="utf-8">
@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#102569">
     <link rel="manifest" href="../manifest.json">
     <link href="../assets/css/main.css" rel="stylesheet">
-<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Agenda semanal do projeto Maps Link">
     <title>Agenda - Maps Link</title>
     <link rel="stylesheet" href="../assets/css/agenda.css">
@@ -18,7 +18,7 @@
   <body data-page="agenda" data-nav-active="agenda.html">
     <header class="site-header" role="banner">
       <nav class="nav-pilula" role="navigation" aria-label="Principal">
-        <a href="../index.html" class="nav-logo-link" aria-label="Maps Link - Início">
+        <a href="../index.html" class="nav-logo-link" aria-label="Maps Link - Inicio">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
@@ -30,7 +30,7 @@
           <li role="none"><a role="menuitem" class="nav-link" href="perfilempresa.html">Profile</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginadashboard.html">Dashboard</a></li>
           <li role="none"><a role="menuitem" class="nav-link active" href="vagas.html" aria-current="page">Vagas</a></li>
-          <li role="none"><a role="menuitem" class="nav-link active" href="paginacurriculo.html" aria-current="page">Currículos</a></li>
+          <li role="none"><a role="menuitem" class="nav-link active" href="paginacurriculo.html" aria-current="page">Curriculos</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="agenda.html">Agenda</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="paginaplanos.html">Planos</a></li>
           <li role="none"><a role="menuitem" class="nav-link" href="about.html">About</a></li>
@@ -43,52 +43,28 @@
       <section class="agenda-container">
         <h1 class="agenda-title">Agenda</h1>
 
-        <div class="agenda-week">
-          <span>Seg<br>1</span>
-          <span class="active-day">Ter<br>2</span>
-          <span>Qua<br>3</span>
-          <span>Qui<br>4</span>
-          <span>Sex<br>5</span>
+        <div class="agenda-week" role="tablist" aria-label="Selecionar dia da semana">
+          <noscript>Habilite o JavaScript para visualizar os compromissos da semana.</noscript>
         </div>
 
-        <div class="agenda-timeline">
-          <div class="agenda-hour">09:00</div>
-          <div class="agenda-event azul">
-            <i class="ri-video-chat-line"></i>
-            <span>Reunião de Alinhamento Semanal</span>
-          </div>
+        <p class="agenda-day-summary" data-role="day-summary"></p>
 
-          <div class="agenda-hour">11:00</div>
-          <div class="agenda-event verde">
-            <i class="ri-user-line"></i>
-            <span>Entrevista Gelado da Silva</span>
-          </div>
-
-          <div class="agenda-hour">14:00</div>
-          <div class="agenda-event amarelo">
-            <i class="ri-lightbulb-line"></i>
-            <span>Brainstorming - Projeto MapsLink</span>
-          </div>
-
-          <div class="agenda-hour">16:00</div>
-          <div class="agenda-event roxo">
-            <i class="ri-presentation-line"></i>
-            <span>Apresentação de Resultados</span>
-          </div>
-
-          <div class="agenda-hour">18:00</div>
-          <div class="agenda-event laranja">
-            <i class="ri-cup-line"></i>
-            <span>Happy Hour da Equipe</span>
-          </div>
+        <div class="agenda-toolbar" aria-label="Ferramentas da agenda">
+          <button type="button" class="agenda-action agenda-action--add">
+            <i class="ri-add-line" aria-hidden="true"></i>
+            <span>Novo compromisso</span>
+          </button>
+          <button type="button" class="agenda-action agenda-action--reset">
+            <i class="ri-refresh-line" aria-hidden="true"></i>
+            <span>Restaurar padrao</span>
+          </button>
         </div>
+
+        <div class="agenda-timeline" data-role="timeline" aria-live="polite"></div>
       </section>
     </main>
-
 
     <script defer src="../assets/js/agenda.js"></script>
   </body>
 </html>
-
-
 

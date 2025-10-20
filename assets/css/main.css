@@ -62,3 +62,62 @@ h2,
 h3 {
     font-family: "Montserrat", "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", sans-serif;
 }
+
+/* Base navigation positioning */
+:where(.site-header),
+:where(.nav-container) {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 900;
+}
+
+:root {
+    --nav-anim-duration: 0.45s;
+    --nav-anim-delay: 0.05s;
+}
+
+@keyframes navWrapIntro {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -14px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes navBarIntro {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -8px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+:where(.site-header),
+:where(.nav-container) {
+    animation: navWrapIntro var(--nav-anim-duration) ease var(--nav-anim-delay) both;
+    will-change: opacity, transform;
+}
+
+:where(.nav-pilula) {
+    animation: navBarIntro var(--nav-anim-duration) ease calc(var(--nav-anim-delay) + 0.05s) both;
+    will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(.site-header),
+    :where(.nav-container),
+    :where(.nav-pilula) {
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}

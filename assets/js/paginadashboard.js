@@ -16,6 +16,36 @@
     bar: "#1e90ff"
   };
 
+  const reduceMotionQuery = typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false };
+
+  const FIRST_RENDER_ANIMATION = false;
+
+  function wantsAnimation(canvas) {
+    if (!FIRST_RENDER_ANIMATION) return false;
+    if (reduceMotionQuery.matches) return false;
+    if (!canvas) return false;
+    return canvas.dataset.chartRendered !== "true";
+  }
+
+  function getFallback(canvas) {
+    if (!canvas) return null;
+    const next = canvas.nextElementSibling;
+    if (next && next.classList && next.classList.contains("chart-fallback")) {
+      return next;
+    }
+    const box = canvas.closest ? canvas.closest(".chart-box") : null;
+    return box ? box.querySelector(".chart-fallback") : null;
+  }
+
+  function markRendered(canvas) {
+    if (!canvas) return;
+    canvas.dataset.chartRendered = "true";
+    const fallback = getFallback(canvas);
+    if (fallback) fallback.hidden = true;
+  }
+
   function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
   }
@@ -44,7 +74,8 @@
       : 260;
 
     const rect = canvas.getBoundingClientRect();
-    const cssW = Math.max(320, Math.floor(rect.width || 320));
+    const baseWidth = rect.width || (parent ? parent.clientWidth : 0) || 320;
+    const cssW = Math.max(320, Math.floor(baseWidth));
     const cssH = Math.floor(availH);
     const dpr = window.devicePixelRatio || 1;
 
@@ -58,51 +89,38 @@
     const w = cssW - margin.left - margin.right;
     const h = cssH - margin.top - margin.bottom;
 
-    ctx.clearRect(0, 0, cssW, cssH);
-
-    const maxVal = Math.max.apply(null, dataset.map(d => d.value));
+    const values = dataset.map(d => (d && typeof d.value === "number") ? d.value : 0);
+    const maxVal = values.length ? Math.max.apply(null, values) : 0;
     let yMax = Math.max(4, Math.ceil(maxVal / 4) * 4);
     if (yMax < 12) yMax = 12;
     const tick = yMax / 5;
     const yScale = v => margin.top + h - (v / yMax) * h;
 
-    ctx.strokeStyle = "rgba(0,0,0,0.12)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(margin.left, margin.top);
-    ctx.lineTo(margin.left, margin.top + h);
-    ctx.lineTo(margin.left + w, margin.top + h);
-    ctx.stroke();
-
-    ctx.fillStyle = COLORS.muted;
-    ctx.font = '12px "Open Sans", system-ui, -apple-system, sans-serif';
-    ctx.textAlign = "right";
-    ctx.textBaseline = "middle";
-    for (let v = 0; v <= yMax + 0.0001; v += tick) {
-      const yy = yScale(v);
-      ctx.strokeStyle = "rgba(0,0,0,0.08)";
-      ctx.beginPath();
-      ctx.moveTo(margin.left, yy);
-      ctx.lineTo(margin.left + w, yy);
-      ctx.stroke();
-      ctx.fillStyle = COLORS.muted;
-      ctx.fillText(String(Math.round(v)), margin.left - 6, yy);
-    }
-
-    const n = dataset.length;
+    const n = Math.max(1, dataset.length);
     const gapRatio = 0.28;
     const band = w / n;
     const barW = Math.max(24, Math.floor(band * (1 - gapRatio)));
     const barColor = COLORS.bar;
 
-    const start = performance.now();
-    const duration = 500;
+    const animate = wantsAnimation(canvas);
+    const start = animate ? performance.now() : 0;
+    const duration = animate ? 420 : 0;
 
-    function drawFrame(now) {
-      const t = Math.min(1, (now - start) / duration);
-      const p = easeOutCubic(t);
+    function render(progress) {
+      ctx.clearRect(0, 0, cssW, cssH);
 
-      ctx.clearRect(margin.left + 1, margin.top + 1, w - 2, h - 2);
+      ctx.strokeStyle = "rgba(0,0,0,0.12)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(margin.left, margin.top);
+      ctx.lineTo(margin.left, margin.top + h);
+      ctx.lineTo(margin.left + w, margin.top + h);
+      ctx.stroke();
+
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '12px "Open Sans", system-ui, -apple-system, sans-serif';
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
       for (let v = 0; v <= yMax + 0.0001; v += tick) {
         const yy = yScale(v);
         ctx.strokeStyle = "rgba(0,0,0,0.06)";
@@ -110,11 +128,14 @@
         ctx.moveTo(margin.left, yy);
         ctx.lineTo(margin.left + w, yy);
         ctx.stroke();
+        ctx.fillText(String(Math.round(v)), margin.left - 6, yy);
       }
 
       dataset.forEach((d, i) => {
+        const value = (d && typeof d.value === "number") ? d.value : 0;
+        const label = d && d.label ? d.label : "";
         const x = margin.left + i * band + (band - barW) / 2;
-        const yTop = yScale(d.value * p);
+        const yTop = yScale(value * progress);
         const barH = margin.top + h - yTop;
 
         ctx.fillStyle = barColor;
@@ -125,18 +146,30 @@
         ctx.font = 'bold 12px "Montserrat", system-ui, -apple-system, sans-serif';
         ctx.textBaseline = "bottom";
         ctx.textAlign = "center";
-        ctx.fillText(String(d.value), x + barW / 2, yTop - 4);
+        ctx.fillText(String(value), x + barW / 2, yTop - 4);
 
         ctx.fillStyle = "#1f2937";
         ctx.font = '12px "Open Sans", system-ui, -apple-system, sans-serif';
         ctx.textBaseline = "top";
-        ctx.fillText(d.label, x + barW / 2, margin.top + h + 8);
+        ctx.fillText(label, x + barW / 2, margin.top + h + 8);
       });
-
-      if (t < 1) requestAnimationFrame(drawFrame);
     }
 
-    requestAnimationFrame(drawFrame);
+    if (animate) {
+      const step = now => {
+        const t = Math.min(1, (now - start) / duration || 1);
+        render(easeOutCubic(t));
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          markRendered(canvas);
+        }
+      };
+      requestAnimationFrame(step);
+    } else {
+      render(1);
+      markRendered(canvas);
+    }
   }
 
   function drawDonutChart(canvas, dataset) {
@@ -173,38 +206,23 @@
     canvas.style.height = cssH + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    ctx.clearRect(0, 0, cssW, cssH);
-
     const cx = Math.floor(cssW / 2);
     const cy = Math.floor(cssH / 2);
     const radius = Math.floor(Math.min(cssW, cssH) * 0.38);
     const thickness = Math.max(22, Math.min(52, Math.floor(radius * 0.5)));
 
-    ctx.lineWidth = thickness;
-    ctx.strokeStyle = "rgba(0,0,0,0.06)";
-    ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.stroke();
-
-    const total = dataset.reduce((s, d) => s + d.value, 0) || 1;
+    const totalValue = dataset.reduce((s, d) => s + ((d && typeof d.value === "number") ? d.value : 0), 0);
+    const denom = totalValue || 1;
     const full = Math.PI * 2;
-    const start = -Math.PI / 2;
+    const baseStart = -Math.PI / 2;
     const gap = 0.06;
 
-    const t0 = performance.now();
-    const dur = 600;
+    const animate = wantsAnimation(canvas);
+    const start = animate ? performance.now() : 0;
+    const duration = animate ? 520 : 0;
 
-    function frame(now) {
-      const p = easeOutCubic(Math.min(1, (now - t0) / dur));
-      const progressed = full * p;
-
-      ctx.clearRect(
-        cx - radius - thickness,
-        cy - radius - thickness,
-        (radius + thickness) * 2,
-        (radius + thickness) * 2
-      );
+    function render(progress) {
+      ctx.clearRect(0, 0, cssW, cssH);
 
       ctx.lineWidth = thickness;
       ctx.strokeStyle = "rgba(0,0,0,0.06)";
@@ -214,14 +232,17 @@
       ctx.stroke();
 
       let acc = 0;
+      const sweep = full * progress;
       dataset.forEach(seg => {
-        const segAngle = (seg.value / total) * full;
-        const target = Math.max(0, segAngle - gap);
-        const drawAngle = Math.min(target, Math.max(0, progressed - acc));
-        if (drawAngle > 0.0001) {
-          ctx.strokeStyle = seg.color;
+        const value = (seg && typeof seg.value === "number") ? seg.value : 0;
+        const segAngle = (value / denom) * full;
+        const usable = Math.max(0, segAngle - gap);
+        const startAngle = baseStart + acc + gap / 2;
+        const endAngle = Math.min(startAngle + usable, baseStart + sweep);
+        if (endAngle > startAngle) {
+          ctx.strokeStyle = seg.color || COLORS.bar;
           ctx.beginPath();
-          ctx.arc(cx, cy, radius, start + acc + gap / 2, start + acc + gap / 2 + drawAngle);
+          ctx.arc(cx, cy, radius, startAngle, endAngle);
           ctx.stroke();
         }
         acc += segAngle;
@@ -231,15 +252,27 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.font = '900 26px "Montserrat", system-ui, -apple-system, sans-serif';
-      ctx.fillText(String(total), cx, cy - 6);
+      ctx.fillText(String(totalValue), cx, cy - 6);
       ctx.fillStyle = COLORS.muted;
       ctx.font = '600 12px "Open Sans", system-ui, -apple-system, sans-serif';
       ctx.fillText("Total", cx, cy + 14);
-
-      if (p < 1) requestAnimationFrame(frame);
     }
 
-    requestAnimationFrame(frame);
+    if (animate) {
+      const step = now => {
+        const t = Math.min(1, (now - start) / duration || 1);
+        render(easeOutCubic(t));
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          markRendered(canvas);
+        }
+      };
+      requestAnimationFrame(step);
+    } else {
+      render(1);
+      markRendered(canvas);
+    }
   }
 
   function renderCandidatos() {
@@ -290,6 +323,20 @@
   function boot() {
     if (booted) return;
     booted = true;
+
+    const handlePrefChange = () => {
+      const charts = document.querySelectorAll("#chartCandidatos, #chartStatus");
+      charts.forEach(canvas => {
+        if (canvas) delete canvas.dataset.chartRendered;
+      });
+      renderAll();
+    };
+
+    if (typeof reduceMotionQuery.addEventListener === "function") {
+      reduceMotionQuery.addEventListener("change", handlePrefChange);
+    } else if (typeof reduceMotionQuery.addListener === "function") {
+      reduceMotionQuery.addListener(handlePrefChange);
+    }
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", renderAll, { once: true });
