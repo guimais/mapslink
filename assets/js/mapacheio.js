@@ -40,7 +40,7 @@
       try {
         return window.getFilterOptions() || {};
       } catch (error) {
-        console.error("Maps Link: falha ao carregar opções de filtro", error);
+        console.error("Maps Link: falha ao carregar opcoes de filtro", error);
       }
     }
     if (
@@ -87,7 +87,7 @@
 
   function buildCheckboxList(items, selectedSet, name) {
     if (!items.length) {
-      return `<span class="fp-subtle">Nenhuma opção disponível.</span>`;
+      return `<span class="fp-subtle">Nenhuma opcao disponivel.</span>`;
     }
     return items
       .map(item => {
@@ -106,7 +106,7 @@
       .map(item => {
         const label = escapeHtml(item);
         const active = selectedSet.has(toLower(item)) ? " active" : "";
-        return `<button type="button" class="pill${active}" ${attr}="${label}">${label}</button>`;
+        return `<button type="button" class="chip${active}" ${attr}="${label}">${label}</button>`;
       })
       .join("");
   }
@@ -132,64 +132,58 @@
     const locationValue = currentFilters.location ?? currentFilters.q ?? "";
 
     filterPanel.innerHTML = `
-      <form class="fp" aria-label="Filtros do mapa">
-        <header class="fp-header">
+      <form class="fp filtros-conteudo" aria-label="Filtrar vagas">
+        <div class="fp-header filtros-header">
           <div class="fp-header-text">
-            <span class="fp-title">Filtros</span>
-            <p class="fp-subtitle">Cidade, Estado ou Região</p>
+            <span class="fp-title filtros-title">Filtros</span>
+            <p class="fp-subtitle filtros-subtitle">Cidade, Estado ou Regiao</p>
           </div>
-          <button type="button" class="fp-close" aria-label="Fechar filtros">
+          <button type="button" class="fp-close btn-fechar" aria-label="Fechar filtros">
             <i class="ri-close-line" aria-hidden="true"></i>
           </button>
-        </header>
-
-        <div class="fp-group">
-          <label class="fp-input">
-            <i class="ri-map-pin-line" aria-hidden="true"></i>
-            <input type="search" name="location" placeholder="Cidade, Estado ou Região" value="${escapeHtml(locationValue)}">
-          </label>
         </div>
 
-        <div class="fp-section">
-          <p class="fp-heading">Área de Atuação</p>
+        <label for="mapa-filtro-local" class="label-campo">Cidade, Estado ou Regiao</label>
+        <div class="fp-input campo-icone">
+          <i class="ri-map-pin-2-line" aria-hidden="true"></i>
+          <input id="mapa-filtro-local" type="search" name="location" placeholder="Cidade, Estado ou Regiao" value="${escapeHtml(locationValue)}">
+        </div>
+
+        <fieldset class="fp-section grupo-cbx">
+          <legend>Area de Atuacao</legend>
           <div class="fp-checklist">
             ${buildCheckboxList(industries, selectedIndustries, "industries")}
           </div>
+        </fieldset>
+
+        <fieldset class="fp-section grupo-chips" data-size-group>
+          <legend>Porte da Empresa</legend>
+          ${buildPillGroup(sizes, selectedSizes, "data-size")}
+        </fieldset>
+
+        <fieldset class="fp-section grupo-chips" data-mode-group>
+          <legend>Modalidade de Trabalho</legend>
+          ${buildPillGroup(workModes, selectedModes, "data-mode")}
+        </fieldset>
+
+        <div class="fp-section linha-toggle">
+          <span>Apenas com Vagas Abertas</span>
+          <span class="toggle-wrapper">
+            <button type="button" class="toggle" data-toggle="hiring" aria-pressed="${hiringActive ? 'true' : 'false'}"></button>
+            <input type="hidden" name="isHiring" value="${hiringActive ? 'true' : ''}">
+          </span>
         </div>
 
-        <div class="fp-section">
-          <p class="fp-heading">Porte da Empresa</p>
-          <div class="fp-pills" data-size-group>
-            ${buildPillGroup(sizes, selectedSizes, "data-size")}
-          </div>
-        </div>
-
-        <div class="fp-section">
-          <p class="fp-heading">Modalidade de Trabalho</p>
-          <div class="fp-pills" data-mode-group>
-            ${buildPillGroup(workModes, selectedModes, "data-mode")}
-          </div>
-        </div>
-
-        <div class="fp-section fp-section--toggles">
-          <label class="fp-switch-row">
-            <span>Apenas com Vagas Abertas</span>
-            <span class="fp-switch">
-              <input type="checkbox" name="isHiring" value="true"${hiringActive ? " checked" : ""}>
-              <span class="fp-slider" aria-hidden="true"></span>
-            </span>
-          </label>
-          <label class="fp-switch-row">
-            <span>Mapa de Calor</span>
-            <span class="fp-switch">
-              <input type="checkbox" name="heatmap" value="true"${heatEnabled ? " checked" : ""}>
-              <span class="fp-slider" aria-hidden="true"></span>
-            </span>
-          </label>
+        <div class="fp-section linha-toggle">
+          <span>Mapa de Calor</span>
+          <span class="toggle-wrapper">
+            <button type="button" class="toggle" data-toggle="heatmap" aria-pressed="${heatEnabled ? 'true' : 'false'}"></button>
+            <input type="hidden" name="heatmap" value="${heatEnabled ? 'true' : ''}">
+          </span>
         </div>
 
         <div class="fp-actions">
-          <button type="submit" class="fp-apply">Aplicar Filtros</button>
+          <button type="submit" class="fp-apply btn-aplicar">Aplicar Filtros</button>
         </div>
       </form>
     `;
@@ -199,6 +193,9 @@
     const searchField = filterPanel.querySelector('input[name="location"]');
     const sizeButtons = Array.from(filterPanel.querySelectorAll("[data-size]"));
     const modeButtons = Array.from(filterPanel.querySelectorAll("[data-mode]"));
+    const toggleButtons = Array.from(filterPanel.querySelectorAll(".toggle"));
+    const hiringInput = form?.querySelector('input[name="isHiring"]');
+    const heatInput = form?.querySelector('input[name="heatmap"]');
 
     closeBtn?.addEventListener("click", () => {
       closeFilterPanel();
@@ -206,14 +203,30 @@
     });
 
     sizeButtons.forEach(btn => {
+      if (!btn.dataset.size) btn.dataset.size = btn.textContent.trim();
       btn.addEventListener("click", () => {
         btn.classList.toggle("active");
       });
     });
 
     modeButtons.forEach(btn => {
+      if (!btn.dataset.mode) btn.dataset.mode = btn.textContent.trim();
       btn.addEventListener("click", () => {
         btn.classList.toggle("active");
+      });
+    });
+
+    toggleButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const pressed = btn.getAttribute("aria-pressed") === "true";
+        const next = !pressed;
+        btn.setAttribute("aria-pressed", next ? "true" : "false");
+        if (btn.dataset.toggle === "hiring" && hiringInput) {
+          hiringInput.value = next ? "true" : "";
+        }
+        if (btn.dataset.toggle === "heatmap" && heatInput) {
+          heatInput.value = next ? "true" : "";
+        }
       });
     });
 
@@ -259,6 +272,8 @@
     if (!filterPanel || filterPanelOpen) return;
     renderFilterPanel();
     filterPanel.hidden = false;
+    filterPanel.classList.add("is-open", "filters-opening");
+    setTimeout(() => filterPanel.classList.remove("filters-opening"), 280);
     filterPanelOpen = true;
     filterToggle?.setAttribute("aria-expanded", "true");
     document.addEventListener("keydown", handleFilterKeydown, true);
@@ -267,6 +282,7 @@
   function closeFilterPanel() {
     if (!filterPanel || !filterPanelOpen) return;
     filterPanel.hidden = true;
+    filterPanel.classList.remove("is-open");
     filterPanelOpen = false;
     filterToggle?.setAttribute("aria-expanded", "false");
     document.removeEventListener("keydown", handleFilterKeydown, true);
@@ -318,7 +334,7 @@
       company?.address ? company.address : "",
       [company?.city, company?.state].filter(Boolean).join(" - ")
     ].filter(Boolean);
-    const address = addressParts.join(" · ");
+    const address = addressParts.join("  ");
     const website = company?.website
       ? company.website.replace(/^https?:\/\//, "")
       : "";
