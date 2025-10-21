@@ -1,6 +1,6 @@
-# 🌍 MapsLink
+# 🌍 NEXUS CAREER
 
-**MapsLink** is an interactive web platform that helps users discover **companies, job opportunities, and events directly on a map** — starting with **Campinas (SP, Brazil)** and expanding further.
+**NEXUS CAREER** is an interactive web platform that helps users discover **companies, job opportunities, and events directly on a map** — starting with **Campinas (SP, Brazil)** and expanding further.
 
 It connects people and businesses through geolocation, smart filters, and a clean, responsive interface built with simplicity and performance in mind.
 
@@ -185,5 +185,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](./LICEN
 
 ---
 
-> *“MapsLink connects more than locations — it connects people, ideas, and opportunities.”*  
+> *“NEXUS CAREER connects more than locations — it connects people, ideas, and opportunities.”*  
 > — The MapsLink Team
