@@ -185,5 +185,5 @@ This project is licensed under the **MIT License** see the [LICENSE](./LICENSE) 
 
 ---
 
-> *“NEXUS CAREER connects more than locations, it connects people, ideas, and opportunities.”*  
+> *“MAPS LINK connects more than locations, it connects people, ideas, and opportunities.”*  
 > — The MapsLink Team
