@@ -72,9 +72,7 @@
   function saveApplied() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(state.applied)));
-    } catch {
-      /* ignore quota errors */
-    }
+    } catch {}
   }
 
   function saveSort(info) {

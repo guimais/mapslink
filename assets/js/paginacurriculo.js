@@ -171,9 +171,7 @@
       if (elements.start) elements.start.value = saved.start || "";
       if (elements.end) elements.end.value = saved.end || "";
       if (elements.search) elements.search.value = saved.search || "";
-    } catch {
-      /* ignore parse errors */
-    }
+    } catch {}
   }
 
   function handleOutsideClick(event) {

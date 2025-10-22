@@ -61,9 +61,7 @@
     if (window.MapsApp?.closeNav) {
       try {
         window.MapsApp.closeNav();
-      } catch {
-        /* no-op */
-      }
+      } catch {}
     }
   }
 
@@ -71,9 +69,7 @@
     if (window.MapsNav?.toggle) {
       try {
         window.MapsNav.toggle();
-      } catch {
-        /* no-op */
-      }
+      } catch {}
     }
   }
 
@@ -220,9 +216,7 @@
       const raw = localStorage.getItem("perfilCurriculoData");
       if (!raw) return;
       hydrateFromAuth({ type: "personal", profile: JSON.parse(raw) });
-    } catch {
-      /* ignore corrupted data */
-    }
+    } catch {}
   }
 
   function bindContactCopies() {

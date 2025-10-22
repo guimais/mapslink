@@ -79,9 +79,7 @@
           if (window.MapsApp?.closeNav) {
             try {
               window.MapsApp.closeNav();
-            } catch {
-              /* ignore */
-            }
+            } catch {}
           }
         });
       });
@@ -136,9 +134,7 @@
     set(key, value) {
       try {
         localStorage.setItem(key, JSON.stringify(value));
-      } catch {
-        /* ignore quota */
-      }
+      } catch {}
     }
   };
 

@@ -242,8 +242,8 @@ h2,
 
 .map-exit-control{
   position:absolute;
-  right:32px;
-  bottom:32px;
+  top:calc(20px + 68px + 12px);
+  right:calc((100vw - min(1100px, 92vw)) / 2 + 12px);
   z-index:1600;
   display:inline-flex;
   align-items:center;
@@ -518,8 +518,8 @@ h2,
   .map-exit-control{
     width:48px;
     height:48px;
-    right:28px;
-    bottom:28px;
+    right:calc((100vw - min(1040px, 94vw)) / 2 + 12px);
+    top:calc(20px + 68px + 10px);
   }
   .filter-panel{
     width:min(380px,90vw);
@@ -543,8 +543,8 @@ h2,
     height:78px;
   }
   .map-exit-control{
-    right:24px;
-    bottom:24px;
+    right:18px;
+    top:calc(14px + 60px + 12px);
   }
   .nav-toggle{
     display:flex;
@@ -674,8 +674,8 @@ h2,
     width:46px;
     height:46px;
     border-radius:16px;
-    right:20px;
-    bottom:20px;
+    right:18px;
+    top:calc(12px + 54px + 12px);
   }
   .search-ui{
     bottom:20px;
@@ -719,8 +719,8 @@ h2,
   .map-exit-control{
     width:42px;
     height:42px;
-    right:18px;
-    bottom:18px;
+    right:16px;
+    top:calc(10px + 50px + 10px);
   }
   .search-ui{
     bottom:16px;
@@ -749,8 +749,8 @@ h2,
     height:58px;
   }
   .map-exit-control{
-    right:14px;
-    bottom:16px;
+    right:12px;
+    top:calc(10px + 50px + 8px);
   }
   .search-bar{
     height:44px;

@@ -18,9 +18,7 @@
       try {
         window.MapsApp.highlightNav(path);
         return;
-      } catch {
-        /* noop */
-      }
+      } catch {}
     }
     const links = window.MapsApp?.navLinks ? window.MapsApp.navLinks() : queryAll(".nav-link");
     links.forEach(link => {
@@ -35,9 +33,7 @@
   function storeProfile(type) {
     try {
       localStorage.setItem(PERFIL_KEY, type);
-    } catch {
-      /* storage not available */
-    }
+    } catch {}
   }
 
   function goTo(type) {

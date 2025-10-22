@@ -50,9 +50,7 @@
         section.setAttribute("tabindex", "-1");
         try {
           section.focus({ preventScroll: true });
-        } catch {
-          /* ignore focus errors */
-        }
+        } catch {}
         section.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
       }
     });
@@ -70,9 +68,7 @@
     if (window.MapsApp && typeof window.MapsApp.highlightNav === "function") {
       try {
         window.MapsApp.highlightNav(`#${id}`);
-      } catch {
-        /* no-op */
-      }
+      } catch {}
     }
   }
 
@@ -100,9 +96,7 @@
         if (window.MapsApp && typeof window.MapsApp.closeNav === "function") {
           try {
             window.MapsApp.closeNav();
-          } catch {
-            /* no-op */
-          }
+          } catch {}
         }
       });
     });

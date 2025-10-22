@@ -201,9 +201,7 @@
     if (bounds.length) {
       try {
         state.map.fitBounds(bounds, { padding: [24, 24] });
-      } catch {
-        /* no-op */
-      }
+      } catch {}
     }
   }
 

@@ -41,6 +41,10 @@
     return document.querySelector(selector);
   }
 
+  function queryAll(selector) {
+    return Array.from(document.querySelectorAll(selector || ""));
+  }
+
   function getValue(field) {
     const element = state.elements[field];
     if (!element) return "";

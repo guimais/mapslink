@@ -317,11 +317,15 @@
     const current = (target || "").toLowerCase();
     navLinks().forEach(link => {
       const href = (link.getAttribute("href") || "").toLowerCase();
+      const key = (link.dataset?.navKey || "").toLowerCase();
+      const label = (link.textContent || "").trim().toLowerCase();
       const match =
         current &&
         (href === current ||
           href.endsWith(current) ||
-          href === current.replace(window.location.origin.toLowerCase(), ""));
+          href === current.replace(window.location.origin.toLowerCase(), "") ||
+          key === current ||
+          label === current);
       link.classList.toggle("active", !!match);
       if (match) link.setAttribute("aria-current", "page");
     });

@@ -1,4 +1,3 @@
-/* ---------- Icons Section (divisor com margens iguais) ---------- */
 .icons-section {
   --icons-vertical-space: 10px;
   margin: var(--icons-vertical-space) 0;
@@ -57,7 +56,7 @@
   .icon-pill { width: 78px; height: 78px; }
   .icon-pill i { font-size: 30px; }
 }
-/* ---------- NAVBAR responsivo: mostra hamburger e esconde links no mobile ---------- */
+
 .nav-toggle { display: none; }
 @media (max-width: 768px) {
   .nav-links { display: none; }

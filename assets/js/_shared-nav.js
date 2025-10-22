@@ -123,9 +123,7 @@ window.injectSharedNav = function injectSharedNav() {
     state.changeListeners.forEach(listener => {
       try {
         listener(open);
-      } catch {
-        /* ignore listener errors */
-      }
+      } catch {}
     });
   }
 

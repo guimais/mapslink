@@ -388,9 +388,7 @@
     if (bounds.length) {
       try {
         map.fitBounds(bounds, { padding: [24, 24] });
-      } catch {
-        /* noop */
-      }
+      } catch {}
     }
   }
 
