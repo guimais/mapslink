@@ -121,7 +121,6 @@
     });
   }
 
-  // ==================== ANIMAÇÃO FLUTUANTE DOS ÍCONES ====================
   function initIconFloating() {
     const icons = Array.from(document.querySelectorAll(".icon-pill"));
     if (!icons.length) return;
@@ -129,13 +128,12 @@
     let animationFrameId = null;
     let isAnimating = false;
 
-    // Cria dados únicos para cada ícone
     const iconData = icons.map(icon => ({
       el: icon,
-      amplitude: 8 + Math.random() * 6, // Amplitude da flutuação (8-14px)
-      speed: 0.8 + Math.random() * 0.7, // Velocidade (0.8-1.5)
-      phase: Math.random() * Math.PI * 2, // Fase inicial aleatória
-      delay: Math.random() * 2 // Delay inicial (0-2s)
+      amplitude: 8 + Math.random() * 6, 
+      speed: 0.8 + Math.random() * 0.7,
+      phase: Math.random() * Math.PI * 2, 
+      delay: Math.random() * 2 
     }));
 
     function shouldAnimate() {
@@ -163,7 +161,6 @@
         const elapsed = (timestamp - startTime) / 1000;
 
         iconData.forEach(item => {
-          // Apenas anima após o delay inicial
           if (elapsed > item.delay) {
             const adjustedTime = elapsed - item.delay;
             const offsetY = Math.sin(adjustedTime * item.speed + item.phase) * item.amplitude;
@@ -184,7 +181,6 @@
       }
       isAnimating = false;
 
-      // Reset dos ícones para posição original
       iconData.forEach(item => {
         item.el.style.transition = "transform 0.3s ease-out";
         item.el.style.transform = "translateY(0)";
@@ -192,12 +188,10 @@
       });
     }
 
-    // Inicia animação se estiver no breakpoint correto
     if (shouldAnimate()) {
       startAnimation();
     }
 
-    // Observa mudanças no tamanho da janela
     let resizeTimeout;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimeout);
@@ -210,7 +204,6 @@
       }, 150);
     });
 
-    // Pausa animação quando a aba não está visível (otimização)
     document.addEventListener("visibilitychange", () => {
       if (document.hidden && isAnimating) {
         stopAnimation();
@@ -257,8 +250,7 @@
       initCardTilt(cardList);
     }
     initFloatingIcons();
-    
-    // Inicializa a animação flutuante dos ícones principais
+
     initIconFloating();
   }
 

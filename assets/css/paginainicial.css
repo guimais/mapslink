@@ -81,7 +81,6 @@ h2 {
   margin-bottom: 12px;
 }
 
-/* ==================== NAVEGAÇÃO ==================== */
 .nav-container {
   position: fixed;
   top: 16px;
@@ -158,7 +157,6 @@ h2 {
   box-shadow: inset 0 0 0 1px rgba(16,37,105,.18);
 }
 
-/* ==================== CONTAINER PRINCIPAL ==================== */
 .container {
   max-width: var(--container);
   width: 100%;
@@ -166,7 +164,6 @@ h2 {
   padding: 100px 32px 40px;
 }
 
-/* ==================== HERO SECTION ==================== */
 .hero {
   width: 100%;
   display: grid;
@@ -243,7 +240,6 @@ h2 {
   object-fit: contain;
 }
 
-/* ==================== SEÇÃO DE ÍCONES ==================== */
 .icons-section {
   width: 100%;
   margin: -56px 0 60px 0;
@@ -293,7 +289,6 @@ h2 {
   color: var(--text);
 }
 
-/* ==================== SEÇÃO SOBRE ==================== */
 .segundo-subtitulo {
   width: 100%;
   max-width: var(--container);
@@ -365,9 +360,6 @@ h2 {
   height: 56px;
 }
 
-/* ==================== RESPONSIVIDADE ==================== */
-
-/* Tablets grandes (≤1200px) */
 @media (max-width: 1200px) {
   .container,
   .icons-container,
@@ -396,7 +388,6 @@ h2 {
   }
 }
 
-/* Tablets (≤1000px) */
 @media (max-width: 1000px) {
   .hero {
     grid-template-columns: 1fr;
@@ -430,9 +421,6 @@ h2 {
   }
 }
 
-
-
-/* Tablets menores e mobile landscape (≤999px) */
 @media (max-width: 999px) {
   .container {
     padding-top: 70px;
@@ -540,7 +528,6 @@ h2 {
   }
 }
 
-/* Mobile landscape e tablets pequenos (≤900px) */
 @media (max-width: 900px) {
   .icons-container,
   .segundo-subtitulo,
@@ -565,7 +552,6 @@ h2 {
   }
 }
 
-/* Mobile (≤768px) */
 @media (max-width: 768px) {
   .container {
     padding-top: 120px;
@@ -619,7 +605,6 @@ h2 {
   }
 }
 
-/* Mobile pequeno (≤560px) */
 @media (max-width: 560px) {
   .nav-container {
     top: 8px;
@@ -700,7 +685,6 @@ h2 {
   }
 }
 
-/* Mobile extra pequeno (≤420px) */
 @media (max-width: 420px) {
   .hero__logo img {
     max-width: 220px;
