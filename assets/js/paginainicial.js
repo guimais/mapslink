@@ -4,6 +4,7 @@
 
   const sectionIds = ["home", "sobre", "planos", "maps", "profile", "about", "contact"];
   const maxTilt = 6;
+  const ICON_ANIMATION_BREAKPOINT = 900;
 
   function navLinks() {
     if (window.MapsApp && typeof window.MapsApp.navLinks === "function") {
@@ -120,6 +121,105 @@
     });
   }
 
+  // ==================== ANIMAÇÃO FLUTUANTE DOS ÍCONES ====================
+  function initIconFloating() {
+    const icons = Array.from(document.querySelectorAll(".icon-pill"));
+    if (!icons.length) return;
+
+    let animationFrameId = null;
+    let isAnimating = false;
+
+    // Cria dados únicos para cada ícone
+    const iconData = icons.map(icon => ({
+      el: icon,
+      amplitude: 8 + Math.random() * 6, // Amplitude da flutuação (8-14px)
+      speed: 0.8 + Math.random() * 0.7, // Velocidade (0.8-1.5)
+      phase: Math.random() * Math.PI * 2, // Fase inicial aleatória
+      delay: Math.random() * 2 // Delay inicial (0-2s)
+    }));
+
+    function shouldAnimate() {
+      return window.innerWidth > ICON_ANIMATION_BREAKPOINT;
+    }
+
+    function startAnimation() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      iconData.forEach(item => {
+        item.el.style.willChange = "transform";
+        item.el.style.transition = "none";
+      });
+
+      let startTime = null;
+
+      function animate(timestamp) {
+        if (!shouldAnimate()) {
+          stopAnimation();
+          return;
+        }
+
+        if (startTime === null) startTime = timestamp;
+        const elapsed = (timestamp - startTime) / 1000;
+
+        iconData.forEach(item => {
+          // Apenas anima após o delay inicial
+          if (elapsed > item.delay) {
+            const adjustedTime = elapsed - item.delay;
+            const offsetY = Math.sin(adjustedTime * item.speed + item.phase) * item.amplitude;
+            item.el.style.transform = `translateY(${offsetY.toFixed(2)}px)`;
+          }
+        });
+
+        animationFrameId = requestAnimationFrame(animate);
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    function stopAnimation() {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      isAnimating = false;
+
+      // Reset dos ícones para posição original
+      iconData.forEach(item => {
+        item.el.style.transition = "transform 0.3s ease-out";
+        item.el.style.transform = "translateY(0)";
+        item.el.style.willChange = "auto";
+      });
+    }
+
+    // Inicia animação se estiver no breakpoint correto
+    if (shouldAnimate()) {
+      startAnimation();
+    }
+
+    // Observa mudanças no tamanho da janela
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (shouldAnimate() && !isAnimating) {
+          startAnimation();
+        } else if (!shouldAnimate() && isAnimating) {
+          stopAnimation();
+        }
+      }, 150);
+    });
+
+    // Pausa animação quando a aba não está visível (otimização)
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && isAnimating) {
+        stopAnimation();
+      } else if (!document.hidden && shouldAnimate()) {
+        startAnimation();
+      }
+    });
+  }
+
   function initFloatingIcons() {
     const icons = Array.from(document.querySelectorAll(".icones-flutuantes-grid .icone-flutuante"));
     if (!icons.length) return;
@@ -157,6 +257,9 @@
       initCardTilt(cardList);
     }
     initFloatingIcons();
+    
+    // Inicializa a animação flutuante dos ícones principais
+    initIconFloating();
   }
 
   if (document.readyState === "loading") {
