@@ -246,7 +246,7 @@ h2 {
 /* ==================== SEÇÃO DE ÍCONES ==================== */
 .icons-section {
   width: 100%;
-  margin: 32px 0 64px 0;
+  margin: 24px 0 48px 0;
 }
 
 .icons-container {
@@ -260,7 +260,7 @@ h2 {
   list-style: none;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(98px, 1fr));
+  grid-template-columns: repeat(8, 1fr);
   justify-items: start;
   align-items: center;
   gap: 24px;
@@ -377,6 +377,12 @@ h2 {
     padding-right: 24px;
   }
   
+  .icons-list {
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 20px;
+  }
+  
   .cards-sobre {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -384,6 +390,56 @@ h2 {
 
 /* Tablets (≤992px) */
 @media (max-width: 992px) {
+  .container,
+  .icons-container,
+  .segundo-subtitulo,
+  .cards-sobre {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  
+  .icons-list {
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 20px;
+  }
+  
+  .cards-sobre {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  .hero__title,
+  .hero__subtitle {
+    text-align: center;
+  }
+  
+  .hero__subtitle {
+    max-width: 100%;
+  }
+  
+  .hero__actions {
+    justify-content: center;
+  }
+  
+  .hero__logo img {
+    max-width: 280px;
+  }
+  
+  .icons-section {
+    margin: 24px 0;
+  }
+  
+  .nav-container {
+    top: 12px;
+    padding: 0 12px;
+  }
+  
+  
   .hero {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -400,6 +456,37 @@ h2 {
 
 /* Tablets menores e mobile landscape (≤960px) */
 @media (max-width: 960px) {
+
+  .container {
+    padding-top: 70px;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  .hero__title,
+  .hero__subtitle {
+    text-align: center;
+  }
+  
+  .hero__subtitle {
+    max-width: 100%;
+  }
+  
+  .hero__actions {
+    justify-content: center;
+  }
+  
+  .hero__logo img {
+    max-width: 280px;
+  }
+  
+  .icons-section {
+    margin: 24px 0;
+  }
+  
   .nav-container {
     top: 12px;
     padding: 0 12px;
@@ -486,8 +573,9 @@ h2 {
   }
   
   .icons-list {
-    grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 18px;
   }
   
   .icon-pill {
@@ -597,7 +685,7 @@ h2 {
   }
   
   .icons-section {
-    margin: 24px 0;
+    margin: 16px 0 32px 0;
   }
   
   .icons-container,
@@ -608,13 +696,299 @@ h2 {
   }
   
   .icons-list {
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
     gap: 16px;
   }
   
   .icon-pill {
     width: 80px;
     height: 80px;
+  }
+  
+  .icon-pill i {
+    font-size: 28px;
+  }
+  
+  .titulo-sobre {
+    margin: 32px 0 20px;
+  }
+  
+  .card-sobre {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .icone-sobre {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+  }
+  
+  .icone-sobre i {
+    font-size: 38px;
+  }
+}
+
+
+
+/* Tablets (≤992px) */
+@media (max-width: 992px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .hero__logo {
+    order: -1;
+  }
+  
+  .hero__logo img {
+    max-width: 360px;
+  }
+}
+
+/* Tablets menores e mobile landscape (≤960px) */
+@media (max-width: 960px) {
+  .nav-container {
+    top: 12px;
+    padding: 0 12px;
+  }
+  
+  .nav-pilula {
+    width: 100%;
+    max-width: none;
+    padding: 10px 18px;
+    height: 56px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .nav-logo {
+    max-height: 44px;
+  }
+  
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-toggle:hover {
+    color: var(--brand);
+  }
+  
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 88px 0 40px;
+    gap: 0;
+    box-shadow: -4px 0 22px rgba(0,0,0,0.16);
+    transition: right .3s var(--ease);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  
+  .nav-links.active,
+  .nav-links.is-open {
+    right: 0;
+  }
+  
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--surface);
+  }
+  
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+  
+  .nav-link {
+    padding: 18px 24px;
+    border-radius: 0;
+    transform: none;
+  }
+  
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--surface);
+  }
+  
+  .nav-link.active {
+    box-shadow: none;
+  }
+}
+
+/* Mobile landscape e tablets pequenos (≤900px) */
+@media (max-width: 900px) {
+
+  .container {
+    padding-top: 70px;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  .hero__title,
+  .hero__subtitle {
+    text-align: center;
+  }
+  
+  .hero__subtitle {
+    max-width: 100%;
+  }
+  
+  .hero__actions {
+    justify-content: center;
+  }
+  
+  .hero__logo img {
+    max-width: 280px;
+  }
+  
+  
+  .icons-container,
+  .segundo-subtitulo,
+  .cards-sobre {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  
+  .icons-list {
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 18px;
+  }
+  
+  .icon-pill {
+    width: 88px;
+    height: 88px;
+  }
+  
+  .icon-pill i {
+    font-size: 32px;
+  }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+  .container {
+    padding-top: 120px;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 20px 0;
+  }
+  
+  .hero__title,
+  .hero__subtitle {
+    text-align: center;
+  }
+  
+  .hero__subtitle {
+    max-width: 100%;
+  }
+  
+  .hero__actions {
+    justify-content: center;
+  }
+  
+  .hero__logo img {
+    max-width: 280px;
+  }
+  
+  
+  .icons-list {
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 18px;
+  }
+  
+  .icon-pill {
+    width: 88px;
+    height: 88px;
+  }
+  
+  .icon-pill i {
+    font-size: 32px;
+  }
+  
+  .cards-sobre {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .titulo-sobre {
+    text-align: center;
+    margin: 40px 0 24px;
+  }
+}
+
+/* Mobile pequeno (≤560px) */
+@media (max-width: 560px) {
+  .nav-container {
+    top: 8px;
+    padding: 0 8px;
+  }
+  
+  .nav-pilula {
+    padding: 8px 12px;
+    height: 50px;
+    border-radius: 16px;
+  }
+  
+  .nav-logo {
+    max-height: 38px;
+  }
+  
+  .nav-links {
+    width: 100%;
+    padding-top: 80px;
+  }
+  
+  .nav-link {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+  
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .hero {
+    padding: 16px 0;
+  }
+  
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .icons-section {
+    margin: 24px 0;
+  }
+  
+  .icons-list {
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    gap: 18px;
+  }
+  
+  .icon-pill {
+    width: 78px;
+    height: 78px;
   }
   
   .icon-pill i {
@@ -649,7 +1023,8 @@ h2 {
   }
   
   .icons-list {
-    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
     gap: 12px;
   }
   
