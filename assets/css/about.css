@@ -221,7 +221,7 @@ main.about-section {
   margin-top:26px;
 }
 
-@media (max-width:1024px) {
+@media (max-width:1000px) {
   .nav-pilula {
     padding:0 22px;
   }
@@ -240,7 +240,7 @@ main.about-section {
   }
 }
 
-@media (max-width:896px) {
+@media (max-width:900px) {
   .about-title {
     font-size:30px;
   }

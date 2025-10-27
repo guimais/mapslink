@@ -354,7 +354,7 @@ main{
   padding:14px 24px;
 }
 
-@media (max-width:960px){
+@media (max-width:1000px){
   .nav-container{
     top:12px;
     padding:0 12px;

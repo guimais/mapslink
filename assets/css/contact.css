@@ -242,7 +242,7 @@ h1,h2,.titulo-principal{
   font-size:20px;
 }
 
-@media (max-width:1024px){
+@media (max-width:1000px){
   .nav-pilula{
     padding:12px 24px;
   }
@@ -258,7 +258,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-@media (max-width:896px){
+@media (max-width:900px){
   .contact-section{
     padding-top:110px;
   }
@@ -445,7 +445,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-@media (min-width:992px){
+@media (min-width:1000px){
   .contact-wrap{
     position:relative;
     transform:none;

@@ -322,7 +322,7 @@ h2,
   height: auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1000px) {
   .site-header {
     top: 14px;
   }

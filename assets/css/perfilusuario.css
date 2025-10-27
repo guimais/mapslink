@@ -723,7 +723,7 @@ main,
   text-align:left;
 }
 
-@media (max-width:1024px){
+@media (max-width:1000px){
   .perfil-layout{
     grid-template-columns:1fr;
     gap:32px;
@@ -760,7 +760,7 @@ main,
   }
 }
 
-@media (max-width:520px){
+@media (max-width:560px){
   .perfil-hero{
     padding:22px 20px;
   }

@@ -573,7 +573,7 @@ body.agenda-editor-open{
   box-shadow:0 3px 10px rgba(15,23,42,.24);
 }
 
-@media (max-width:1024px){
+@media (max-width:1000px){
   .site-header{
     top:14px;
   }
@@ -605,7 +605,7 @@ body.agenda-editor-open{
   }
 }
 
-@media (max-width:896px){
+@media (max-width:900px){
   .agenda-container{
     padding:34px 30px;
   }

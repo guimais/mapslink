@@ -486,7 +486,7 @@ h2,
   margin-top:6px;
 }
 
-@media (max-width:1100px){
+@media (max-width:1000px){
   .page-wrapper{
     padding:110px 24px 56px;
   }
@@ -672,7 +672,7 @@ h2,
   }
 }
 
-@media (max-width:600px){
+@media (max-width:560px){
   .nav-container{
     top:10px;
     padding:0 10px;
@@ -709,7 +709,7 @@ h2,
   }
 }
 
-@media (max-width:460px){
+@media (max-width:420px){
   .nav-links{
     padding-top:74px;
   }

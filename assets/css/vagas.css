@@ -395,7 +395,7 @@ h2,
   justify-content:flex-start;
 }
 
-@media (max-width:960px){
+@media (max-width:1000px){
   .nav-pilula{
     padding:12px 20px;
   }
@@ -446,13 +446,13 @@ h2,
   }
 }
 
-@media (max-width:980px){
+@media (max-width:1000px){
   .filter-form{
     grid-template-columns:1fr 1fr;
   }
 }
 
-@media (max-width:720px){
+@media (max-width:768px){
   .filter-form{
     grid-template-columns:1fr;
   }

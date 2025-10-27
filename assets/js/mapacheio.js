@@ -136,7 +136,6 @@
         <div class="fp-header filtros-header">
           <div class="fp-header-text">
             <span class="fp-title filtros-title">Filtros</span>
-            <p class="fp-subtitle filtros-subtitle">Cidade, Estado ou Regiao</p>
           </div>
           <button type="button" class="fp-close btn-fechar" aria-label="Fechar filtros">
             <i class="ri-close-line" aria-hidden="true"></i>

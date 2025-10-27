@@ -469,7 +469,7 @@ h2,
 
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1000px) {
   .login-container {
     max-width: 480px;
   }
@@ -674,7 +674,7 @@ h2,
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .nav-container {
     top: 8px;
     padding: 0 8px;

@@ -371,7 +371,7 @@
     try {
       await MapsAuth.register(createPayload());
       buttonState("success", "Conta empresarial criada com sucesso!");
-      setTimeout(() => { window.location.href = "../index.html"; }, 1800);
+      setTimeout(() => { window.location.href = "loginempresa.html"; }, 1800);
     } catch (error) {
       const message =
         error?.message === "EMAIL_TAKEN" ? "Este e-mail já está em uso" :

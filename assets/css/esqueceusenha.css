@@ -294,7 +294,7 @@ body{
   }
 }
 
-@media (max-width:600px){
+@media (max-width:560px){
   .forgot{
     padding:28px 18px 44px;
   }
@@ -325,7 +325,7 @@ body{
   }
 }
 
-@media (max-width:480px){
+@media (max-width:420px){
   .forgot{
     padding:24px 14px 40px;
   }

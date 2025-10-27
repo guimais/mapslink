@@ -211,7 +211,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .nav-container {
     top: 8px;
     padding: 0 8px;
@@ -277,7 +277,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .registropessoal {
     padding-top: 72px;
   }
@@ -739,7 +739,7 @@ h1,h2,.titulo-principal{
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .registropessoal {
     padding: 40px 12px 24px;
     min-height: 100vh;
