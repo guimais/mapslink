@@ -346,6 +346,15 @@
     if (companyNode && data.company) companyNode.textContent = data.company;
   }
 
+  function ensureFooterScript() {
+    if (document.querySelector('script[data-site-footer="true"]')) return;
+    const footerScript = document.createElement("script");
+    footerScript.defer = true;
+    footerScript.src = script ? new URL("./_shared-footer.js", script.src).href : "assets/js/_shared-footer.js";
+    footerScript.dataset.siteFooter = "true";
+    (document.body || document.head || document.documentElement).appendChild(footerScript);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     MapsAuth.ready();
     hydrate();
@@ -354,5 +363,6 @@
     const gate = document.body?.dataset?.page;
     if (gate === "perfilusuario") MapsAuth.require("personal", "loginpessoal.html");
     if (gate === "perfilempresa") MapsAuth.require("business", "loginempresa.html");
+    ensureFooterScript();
   });
 })();

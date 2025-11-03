@@ -177,6 +177,7 @@ h2,
 
 main{
   padding-top:calc(16px + var(--nav-h) + 36px);
+  padding-bottom:clamp(180px, 28vh, 320px);
 }
 
 .planos-hero{
