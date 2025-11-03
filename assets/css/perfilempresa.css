@@ -394,6 +394,45 @@ h2,
   gap:8px;
 }
 
+.empresa-hero-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  row-gap:8px;
+}
+
+.empresa-edit-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.20);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+  text-decoration:none;
+  transition:background-color .2s ease, color .2s ease, transform .15s ease, box-shadow .2s ease;
+}
+
+.empresa-edit-link i{
+  font-size:20px;
+}
+
+.empresa-edit-link:hover,
+.empresa-edit-link:focus-visible{
+  background:rgba(255,255,255,.28);
+  color:#fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,.30) inset;
+  text-decoration:none;
+}
+
+.empresa-edit-link:focus-visible{
+  outline:none;
+  transform:translateY(-1px);
+}
+
 .empresa-hero-textos h2{
   margin:0;
   font-size:38px;
