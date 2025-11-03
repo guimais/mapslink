@@ -242,6 +242,27 @@ h1,h2,.titulo-principal{
   font-size:20px;
 }
 
+@media (max-width: 1200px){
+  .nav-pilula{
+    max-width:1080px;
+    padding:12px 24px;
+  }
+  .contact-section{
+    padding:128px 0 72px;
+  }
+  .contact-wrap{
+    padding:0 20px;
+    gap:22px;
+  }
+  .contact-card{
+    width:260px;
+  }
+  .contact-form .two-cols{
+    grid-template-columns:repeat(2,minmax(260px,1fr));
+    gap:18px;
+  }
+}
+
 @media (max-width:1000px){
   .nav-pilula{
     padding:12px 24px;
@@ -502,4 +523,46 @@ h1,h2,.titulo-principal{
   }
   .social-item{font-size:20px}
   .social-item i{font-size:26px}
+}
+
+@media (min-width: 1500px){
+  :root{
+    --nav-h:72px;
+  }
+  html{
+    font-size:17px;
+  }
+  .nav-pilula{
+    max-width:1320px;
+    padding:16px 36px;
+  }
+  .nav-link{
+    font-size:16px;
+    padding:12px 18px;
+  }
+  .contact-section{
+    padding:140px 0 88px;
+  }
+  .contact-wrap{
+    max-width:1320px;
+    padding:0 48px;
+    gap:32px;
+  }
+  .contact-card{
+    width:300px;
+    padding:24px 28px 36px;
+  }
+  .contact-main{
+    padding-right:24px;
+  }
+  #contact .titulo-principal{
+    font-size:32px;
+  }
+  .contact-form .two-cols{
+    grid-template-columns:repeat(2,minmax(320px,1fr));
+    gap:24px;
+  }
+  .social-bar{
+    max-width:1180px;
+  }
 }

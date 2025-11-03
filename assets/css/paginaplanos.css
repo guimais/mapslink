@@ -354,6 +354,24 @@ main{
   padding:14px 24px;
 }
 
+@media (max-width: 1200px){
+  .nav-pilula{
+    max-width:1080px;
+    padding:12px 24px;
+  }
+  .nav-links{
+    gap:12px;
+  }
+  .planos-hero{
+    max-width:1080px;
+    padding:0 20px;
+  }
+  .planos-grid{
+    gap:24px;
+    padding:0 20px;
+  }
+}
+
 @media (max-width:1000px){
   .nav-container{
     top:12px;
@@ -527,6 +545,47 @@ main{
   }
   .planos-cta{
     margin-bottom:72px;
+  }
+}
+
+@media (min-width: 1500px){
+  :root{
+    --nav-h:72px;
+  }
+  html{
+    font-size:17px;
+  }
+  .nav-container{
+    top:24px;
+  }
+  .nav-pilula{
+    width:94%;
+    max-width:1320px;
+    padding:16px 36px;
+    height:var(--nav-h);
+  }
+  .nav-link{
+    font-size:16px;
+    padding:12px 18px;
+  }
+  .planos-hero{
+    max-width:1240px;
+    padding:0 32px;
+  }
+  .titulo-principal{
+    font-size:48px;
+  }
+  .subtitulo-principal{
+    font-size:18px;
+    max-width:680px;
+  }
+  .planos-grid{
+    max-width:1260px;
+    gap:32px;
+  }
+  .plano-card{
+    padding:32px 28px;
+    min-height:360px;
   }
 }
 

@@ -102,6 +102,21 @@ h1,h2,.titulo-principal{
 .nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
 .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 
+@media (max-width: 1200px) {
+  .nav-pilula {
+    max-width: 1080px;
+    padding: 12px 24px;
+  }
+  .nav-links {
+    gap: 12px;
+  }
+  .registroempresarial {
+    padding: 108px 24px 52px;
+  }
+  .register-container {
+    max-width: 560px;
+  }
+}
 
 @media (max-width: 768px) {
   .nav-container {
@@ -245,6 +260,55 @@ h1,h2,.titulo-principal{
   }
 }
 
+
+@media (min-width: 1500px) {
+  :root {
+    --nav-h: 72px;
+  }
+  html {
+    font-size: 17px;
+  }
+  .nav-container {
+    top: 24px;
+  }
+  .nav-pilula {
+    width: 94%;
+    max-width: 1320px;
+    padding: 16px 36px;
+    height: var(--nav-h);
+  }
+  .nav-link {
+    font-size: 16px;
+    padding: 12px 18px;
+  }
+  .registroempresarial {
+    padding: 132px 48px 72px;
+  }
+  .register-container {
+    max-width: 640px;
+  }
+  .register-card {
+    padding: 48px;
+    box-shadow: 0 28px 80px rgba(16, 37, 105, 0.18);
+  }
+  .register-title {
+    font-size: 32px;
+  }
+  .register-subtitle {
+    font-size: 17px;
+  }
+  .register-form {
+    gap: 28px;
+  }
+  .form-input {
+    font-size: 17px;
+    padding: 16px 16px 16px 48px;
+  }
+  .register-button {
+    font-size: 17px;
+    padding: 16px;
+  }
+}
 
 @media (pointer: coarse) {
   .nav-toggle {

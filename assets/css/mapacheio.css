@@ -540,11 +540,20 @@ fieldset.fp-section::before{
     width:94%;
     max-width:1040px;
   }
+  .nav-links{
+    gap:12px;
+  }
   .map-exit-control{
     width:48px;
     height:48px;
     right:calc((100vw - min(1040px, 94vw)) / 2 + 12px);
     top:calc(20px + 68px + 10px);
+  }
+  .search-ui{
+    gap:8px;
+  }
+  .search-bar{
+    width:min(620px,78vw);
   }
   .filter-panel{
     width:min(380px,90vw);
@@ -782,6 +791,48 @@ fieldset.fp-section::before{
   }
   .filter-panel{
     height:62vh;
+  }
+}
+
+@media (min-width: 1500px){
+  :root{
+    --nav-h:72px;
+  }
+  html{
+    font-size:17px;
+  }
+  .nav-container{
+    top:24px;
+  }
+  .nav-pilula{
+    width:94%;
+    max-width:1380px;
+    padding:16px 36px;
+    height:var(--nav-h);
+  }
+  .nav-links{
+    gap:14px;
+  }
+  .nav-link{
+    font-size:16px;
+    padding:12px 18px;
+  }
+  .map-exit-control{
+    width:56px;
+    height:56px;
+    right:calc((100vw - min(1380px, 94vw)) / 2 + 16px);
+    top:calc(24px + var(--nav-h) + 12px);
+  }
+  .search-ui{
+    gap:12px;
+  }
+  .search-bar{
+    width:min(820px,76vw);
+    height:60px;
+    padding:0 16px;
+  }
+  .filter-panel{
+    width:420px;
   }
 }
 

@@ -788,9 +788,19 @@ h2,
 @media (max-width:1200px){
   .nav-pilula{
     max-width:960px;
+    padding:12px 24px;
+  }
+  .nav-links{
+    gap:12px;
+  }
+  .empresa-page{
+    padding-top:calc(24px + var(--nav-h) + 32px);
   }
   .empresa-layout{
     column-gap:64px;
+  }
+  .empresa-hero{
+    padding:30px 28px;
   }
 }
 
@@ -988,6 +998,48 @@ h2,
   .card,
   .card-wide{
     padding:22px 18px;
+  }
+}
+
+@media (min-width: 1500px){
+  :root{
+    --nav-h:72px;
+  }
+  html{
+    font-size:17px;
+  }
+  .nav-container{
+    top:24px;
+  }
+  .nav-pilula{
+    width:94%;
+    max-width:1380px;
+    padding:16px 36px;
+    height:var(--nav-h);
+  }
+  .nav-link{
+    font-size:16px;
+    padding:12px 18px;
+  }
+  .empresa-page{
+    max-width:1320px;
+    margin:0 auto;
+    padding-top:calc(36px + var(--nav-h) + 48px);
+  }
+  .empresa-layout{
+    column-gap:96px;
+  }
+  .empresa-hero{
+    padding:36px 40px;
+  }
+  .empresa-hero h1{
+    font-size:42px;
+  }
+  .empresa-hero p{
+    font-size:18px;
+  }
+  .empresa-grid{
+    gap:32px;
   }
 }
 

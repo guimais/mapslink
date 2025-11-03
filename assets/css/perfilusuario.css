@@ -723,6 +723,25 @@ main,
   text-align:left;
 }
 
+@media (max-width: 1200px){
+  .nav-pilula{
+    max-width:1080px;
+    padding:12px 24px;
+  }
+  .nav-links{
+    gap:12px;
+  }
+  .perfil-page{
+    padding-top:calc(26px + var(--nav-h) + 36px);
+  }
+  .perfil-layout{
+    column-gap:72px;
+  }
+  .perfil-hero{
+    padding:32px 28px;
+  }
+}
+
 @media (max-width:1000px){
   .perfil-layout{
     grid-template-columns:1fr;
@@ -777,5 +796,47 @@ main,
   }
   .card-action{
     margin-left:0;
+  }
+}
+
+@media (min-width: 1500px){
+  :root{
+    --nav-h:72px;
+  }
+  html{
+    font-size:17px;
+  }
+  .nav-container{
+    top:24px;
+  }
+  .nav-pilula{
+    width:94%;
+    max-width:1380px;
+    padding:16px 36px;
+    height:var(--nav-h);
+  }
+  .nav-link{
+    font-size:16px;
+    padding:12px 18px;
+  }
+  .perfil-page{
+    max-width:1320px;
+    margin:0 auto;
+    padding-top:calc(36px + var(--nav-h) + 48px);
+  }
+  .perfil-layout{
+    column-gap:96px;
+  }
+  .perfil-hero{
+    padding:36px 40px;
+  }
+  .perfil-hero-textos h2{
+    font-size:32px;
+  }
+  .perfil-hero-desc{
+    font-size:17px;
+  }
+  .card{
+    padding:32px 30px;
   }
 }
