@@ -15,10 +15,54 @@
     contacts: ".perfil-contatos span",
     experiences: ".perfil-experiencias-list",
     contactLinks: ".perfil-contatos a",
+    avatar: ".perfil-hero-avatar img",
+    avatarWrapper: ".perfil-hero-avatar",
     revealTargets: ".card, .bloco, .curriculo-card",
     cards: ".card",
     miniCards: ".curriculo-experiencias li"
   };
+
+  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+  function valueToString(value) {
+    if (value === 0) return "0";
+    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (!value) return "";
+    return String(value).trim();
+  }
+
+  function setText(node, value) {
+    if (!node) return;
+    const text = valueToString(value);
+    node.textContent = text;
+    if (node.classList) node.classList.toggle("is-empty", !text);
+  }
+
+  function setList(node, values, formatter) {
+    if (!node) return;
+    const items = Array.isArray(values)
+      ? values
+          .map(item => (typeof item === "string" ? item.trim() : item))
+          .filter(item => item || item === 0)
+      : [];
+    if (!items.length) {
+      node.innerHTML = "";
+      node.dataset.empty = "true";
+      return;
+    }
+    node.innerHTML = items.map(formatter).join("");
+    node.dataset.empty = "false";
+  }
+
+  function setAvatar(src) {
+    const wrapper = query(selectors.avatarWrapper);
+    const img = query(selectors.avatar);
+    if (!wrapper || !img) return;
+    const has = !!src;
+    img.src = has ? src : EMPTY_IMAGE;
+    img.alt = has ? "Foto do perfil" : "";
+    wrapper.classList.toggle("is-empty", !has);
+  }
 
   const state = {
     navLinks: [],
@@ -173,41 +217,43 @@
   }
 
   function hydrateFromAuth(data) {
-    if (!data || data.type !== "personal") return;
-    const profile = data.profile || {};
-    const name = query("#perfil-nome");
-    if (name && data.name) name.textContent = data.name;
-    const desc = query(selectors.heroDesc);
-    if (desc && profile.headline) desc.textContent = profile.headline;
-    const tags = query(selectors.heroTags);
-    if (tags && Array.isArray(profile.skills) && profile.skills.length) {
-      tags.innerHTML = profile.skills.map(skill => `<li>${skill}</li>`).join("");
-    }
-    const meta = queryAll(selectors.metaValues);
-    if (meta[0] && (profile.specialty || (profile.skills && profile.skills.length))) meta[0].textContent = profile.specialty || profile.skills[0];
-    if (meta[1] && profile.location) meta[1].textContent = profile.location;
-    if (meta[2] && profile.experience) meta[2].textContent = profile.experience;
-    if (meta[3] && profile.availability) meta[3].textContent = profile.availability;
-    const bio = query(selectors.bio);
-    if (bio && profile.bio) bio.textContent = profile.bio;
-    const status = query(selectors.status);
-    if (status && (profile.interviewsToday || profile.interviewsToday === 0)) status.textContent = profile.interviewsToday;
-    const contactSpans = queryAll(selectors.contacts);
+    const valid = data?.type === "personal";
+    const profile = valid && data.profile ? data.profile : {};
+    setAvatar(profile.avatar && valid ? profile.avatar : "");
+    setText(query("#perfil-nome"), valid ? data.name || profile.fullName : "");
+    setText(query(selectors.heroDesc), profile.headline);
+    setList(query(selectors.heroTags), profile.skills, skill => `<li>${skill}</li>`);
+    const metaValues = queryAll(selectors.metaValues);
+    [
+      profile.specialty,
+      profile.location,
+      profile.experience,
+      profile.availability
+    ].forEach((value, index) => setText(metaValues[index], value));
+    setText(query(selectors.bio), profile.bio);
+    setText(query(selectors.status), profile.interviewsToday ?? "");
     const contact = profile.contact || {};
-    if (contactSpans[0] && contact.instagram) contactSpans[0].textContent = contact.instagram;
-    if (contactSpans[1] && contact.linkedin) contactSpans[1].textContent = contact.linkedin;
-    if (contactSpans[2] && contact.email) contactSpans[2].textContent = contact.email;
-    if (contactSpans[3] && contact.phone) contactSpans[3].textContent = contact.phone;
-    const experiences = query(selectors.experiences);
-    if (experiences && Array.isArray(profile.experiences) && profile.experiences.length) {
-      experiences.innerHTML = profile.experiences
-        .map(item => {
-          const parts = item.split(" - ");
-          const role = parts.shift()?.trim() || item;
-          const detail = parts.join(" - ").trim();
-          return `<li><span class="perfil-exp-role">${role}</span><span class="perfil-exp-detail">${detail}</span></li>`;
-        })
-        .join("");
+    const contacts = [contact.instagram, contact.linkedin, contact.email, contact.phone];
+    queryAll(selectors.contacts).forEach((node, index) => setText(node, contacts[index]));
+    const list = query(selectors.experiences);
+    if (list) {
+      const experiences = Array.isArray(profile.experiences)
+        ? profile.experiences.map(item => String(item).trim()).filter(Boolean)
+        : [];
+      if (!experiences.length) {
+        list.innerHTML = "";
+        list.dataset.empty = "true";
+      } else {
+        list.innerHTML = experiences
+          .map(item => {
+            const [role, ...rest] = item.split(" - ");
+            const title = role.trim();
+            const detail = rest.join(" - ").trim();
+            return `<li><span class="perfil-exp-role">${title}</span><span class="perfil-exp-detail">${detail}</span></li>`;
+          })
+          .join("");
+        list.dataset.empty = "false";
+      }
     }
   }
 
@@ -393,6 +439,7 @@
   }
 
   function init() {
+    hydrateFromAuth(null);
     state.toast = createToast();
     setupScrollHeader();
     setupNav();

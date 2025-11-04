@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="utf-8">
@@ -8,7 +8,7 @@
     <link href="../assets/css/main.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Atualize os dados do seu perfil de usuario ou empresa no Maps Link.">
-    <title>Maps Link - Edição de Perfil</title>
+    <title>Maps Link - EdiÃ§Ã£o de Perfil</title>
     <link rel="stylesheet" href="../assets/css/edicaoperfil.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <script defer src="../assets/js/edicaoperfil.js"></script>
@@ -21,14 +21,14 @@
             <i class="ri-arrow-left-line" aria-hidden="true"></i>
             Voltar para perfis
           </a>
-          <h1 id="titulo-edicao">Edição de perfil</h1>
+          <h1 id="titulo-edicao">EdiÃ§Ã£o de perfil</h1>
           <p>
-            Atualize rapidamente os dados principais do seu perfil como candidato ou empresa para manter as informações sempre em dia.
+            Atualize rapidamente os dados principais do seu perfil como candidato ou empresa para manter as informaÃ§Ãµes sempre em dia.
           </p>
         </div>
-        <nav class="edicao-mode-switch" aria-label="Alternar edição de perfil">
+        <nav class="edicao-mode-switch" aria-label="Alternar ediÃ§Ã£o de perfil">
           <a class="edicao-mode-link is-active" href="edicaoperfil.html" aria-current="page">
-            Perfil do usuário
+            Perfil do usuÃ¡rio
           </a>
           <a class="edicao-mode-link" href="edicaoperfilempresa.html">
             Perfil da empresa
@@ -38,49 +38,86 @@
 
       <div class="edicao-layout">
         <section class="edicao-form-wrapper">
-          <form id="edicao-form-usuario" class="edicao-form is-active" data-edicao-form="usuario" data-storage-key="mapslink_perfil_usuario" role="tabpanel" aria-label="Formulário de edição do usuário" aria-hidden="false" novalidate>
+          <form id="edicao-form-usuario" class="edicao-form is-active" data-edicao-form="usuario" data-storage-key="mapslink:perfil:usuario" role="tabpanel" aria-label="Formulário de edição do usuário" aria-hidden="false" novalidate>
+            <div class="edicao-field edicao-field--avatar">
+              <label for="usuario-avatar">Foto do perfil</label>
+              <div class="edicao-avatar-control">
+                <img src="" alt="" data-avatar-preview class="edicao-avatar-preview">
+                <div class="edicao-avatar-actions">
+                  <input id="usuario-avatar" type="file" accept="image/*" data-avatar-input hidden>
+                  <button type="button" class="edicao-avatar-upload" data-avatar-trigger>Trocar foto</button>
+                  <button type="button" class="edicao-avatar-remove" data-avatar-remove>Remover</button>
+                </div>
+              </div>
+            </div>
+
             <div class="edicao-field-grid">
               <div class="edicao-field">
                 <label for="usuario-nome">Nome completo</label>
-                <input id="usuario-nome" name="usuario-nome" type="text" placeholder="Digite o nome completo" data-preview="usuario-nome" autocomplete="name">
+                <input id="usuario-nome" type="text" placeholder="Digite o nome completo" autocomplete="name" data-field="name" data-preview="name">
               </div>
               <div class="edicao-field">
-                <label for="usuario-cargo">Cargo desejado</label>
-                <input id="usuario-cargo" name="usuario-cargo" type="text" placeholder="Ex.: Tech Lead, Desenvolvedor Full Stack" data-preview="usuario-cargo" autocomplete="organization-title">
+                <label for="usuario-headline">Resumo profissional</label>
+                <input id="usuario-headline" type="text" placeholder="Apresente seu foco em uma frase" data-field="profile.headline" data-preview="headline">
+              </div>
+              <div class="edicao-field">
+                <label for="usuario-especialidade">Especialidade</label>
+                <input id="usuario-especialidade" type="text" placeholder="Ex.: Engenharia Full Stack" data-field="profile.specialty" data-preview="specialty">
               </div>
               <div class="edicao-field">
                 <label for="usuario-local">Localização</label>
-                <input id="usuario-local" name="usuario-local" type="text" placeholder="Cidade, Estado" data-preview="usuario-local" autocomplete="address-level2">
+                <input id="usuario-local" type="text" placeholder="Cidade, Estado" autocomplete="address-level2" data-field="profile.location" data-preview="location">
               </div>
               <div class="edicao-field">
-                <label for="usuario-email">E-mail principal</label>
-                <input id="usuario-email" name="usuario-email" type="email" placeholder="nome@email.com" data-preview="usuario-email" autocomplete="email">
-              </div>
-              <div class="edicao-field">
-                <label for="usuario-telefone">Telefone</label>
-                <input id="usuario-telefone" name="usuario-telefone" type="tel" placeholder="+55 00 00000-0000" data-preview="usuario-telefone" autocomplete="tel">
+                <label for="usuario-experiencia">Experiência total</label>
+                <input id="usuario-experiencia" type="text" placeholder="Ex.: 12 anos em tecnologia" data-field="profile.experience" data-preview="experience">
               </div>
               <div class="edicao-field">
                 <label for="usuario-disponibilidade">Disponibilidade</label>
-                <select id="usuario-disponibilidade" name="usuario-disponibilidade" data-preview="usuario-disponibilidade">
+                <select id="usuario-disponibilidade" data-field="profile.availability" data-preview="availability">
                   <option value="">Selecione uma opção</option>
-                  <option value="imediata">Imediata • Híbrido</option>
-                  <option value="remoto">Pronto para remoto</option>
-                  <option value="presencial">Disponível para presencial</option>
-                  <option value="em-ate-30-dias">Disponível em até 30 dias</option>
+                  <option value="Imediata - Híbrido">Imediata - Híbrido</option>
+                  <option value="Pronto para remoto">Pronto para remoto</option>
+                  <option value="Disponível para presencial">Disponível para presencial</option>
+                  <option value="Disponível em até 30 dias">Disponível em até 30 dias</option>
                 </select>
+              </div>
+              <div class="edicao-field">
+                <label for="usuario-email">E-mail principal</label>
+                <input id="usuario-email" type="email" placeholder="nome@email.com" autocomplete="email" data-field="profile.contact.email" data-preview="email">
+              </div>
+              <div class="edicao-field">
+                <label for="usuario-telefone">Telefone</label>
+                <input id="usuario-telefone" type="tel" placeholder="+55 00 00000-0000" autocomplete="tel" data-field="profile.contact.phone" data-sync="phone" data-preview="phone">
+              </div>
+              <div class="edicao-field">
+                <label for="usuario-instagram">Instagram</label>
+                <input id="usuario-instagram" type="text" placeholder="@usuario" data-field="profile.contact.instagram" data-preview="instagram">
+              </div>
+              <div class="edicao-field">
+                <label for="usuario-linkedin">LinkedIn</label>
+                <input id="usuario-linkedin" type="text" placeholder="/in/usuario" data-field="profile.contact.linkedin" data-preview="linkedin">
+              </div>
+              <div class="edicao-field">
+                <label for="usuario-entrevistas">Entrevistas de hoje</label>
+                <input id="usuario-entrevistas" type="number" min="0" step="1" data-field="profile.interviewsToday" data-type="number" data-preview="interviews">
               </div>
             </div>
 
             <div class="edicao-field">
               <label for="usuario-bio">Bio profissional</label>
-              <textarea id="usuario-bio" name="usuario-bio" rows="4" placeholder="Resuma sua trajetória profissional com seus destaques" data-preview="usuario-bio"></textarea>
+              <textarea id="usuario-bio" rows="4" placeholder="Resuma sua trajetória profissional com seus destaques" data-field="profile.bio" data-preview="bio"></textarea>
             </div>
 
             <div class="edicao-field">
               <label for="usuario-competencias">Competências principais</label>
-              <input id="usuario-competencias" name="usuario-competencias" type="text" placeholder="Separe por vírgulas • Ex.: Node.js, React, Cloud" data-preview="usuario-competencias">
+              <input id="usuario-competencias" type="text" placeholder="Separe por vírgulas" data-field="profile.skills" data-format="csv" data-preview="skills">
               <span class="edicao-field-helper">Sugestão: adicione entre 3 e 5 competências para manter o destaque objetivo.</span>
+            </div>
+
+            <div class="edicao-field">
+              <label for="usuario-experiencias">Experiências recentes</label>
+              <textarea id="usuario-experiencias" rows="4" placeholder="Uma experiência por linha (Cargo - Empresa - Período)" data-field="profile.experiences" data-format="lines" data-preview="experiences"></textarea>
             </div>
 
             <div class="edicao-actions">
@@ -89,28 +126,80 @@
             </div>
             <div class="edicao-feedback" role="status" aria-live="polite" data-edicao-feedback></div>
           </form>
-
         </section>
 
         <aside class="edicao-side-panel" aria-label="Resumo do perfil editado">
           <section class="edicao-preview" data-edicao-preview="usuario">
             <div class="edicao-preview-header">
-              <h2>Pré-visualização</h2>
-              <p>Veja rapidamente como as principais informações do perfil do usuário serão apresentadas.</p>
+              <h2>PrÃ©-visualizaÃ§Ã£o</h2>
+              <p>Veja rapidamente como as principais informaÃ§Ãµes do perfil do usuÃ¡rio serÃ£o apresentadas.</p>
             </div>
 
             <div class="edicao-preview-card">
               <dl class="edicao-preview-list">
                 <div>
                   <dt>Nome</dt>
-                  <dd data-preview-field="usuario-nome">Gelado da Silva</dd>
+                  <dd data-preview-field="name">--</dd>
                 </div>
                 <div>
+                  <dt>Resumo</dt>
+                  <dd data-preview-field="headline">--</dd>
+                </div>
+                <div>
+                  <dt>Especialidade</dt>
+                  <dd data-preview-field="specialty">--</dd>
+                </div>
+                <div>
+                  <dt>Localização</dt>
+                  <dd data-preview-field="location">--</dd>
+                </div>
+                <div>
+                  <dt>Experiência</dt>
+                  <dd data-preview-field="experience">--</dd>
+                </div>
+                <div>
+                  <dt>Disponibilidade</dt>
+                  <dd data-preview-field="availability">--</dd>
+                </div>
+                <div>
+                  <dt>E-mail</dt>
+                  <dd data-preview-field="email">--</dd>
+                </div>
+                <div>
+                  <dt>Telefone</dt>
+                  <dd data-preview-field="phone">--</dd>
+                </div>
+                <div>
+                  <dt>Instagram</dt>
+                  <dd data-preview-field="instagram">--</dd>
+                </div>
+                <div>
+                  <dt>LinkedIn</dt>
+                  <dd data-preview-field="linkedin">--</dd>
+                </div>
+                <div>
+                  <dt>Entrevistas hoje</dt>
+                  <dd data-preview-field="interviews">--</dd>
+                </div>
+                <div>
+                  <dt>Bio profissional</dt>
+                  <dd data-preview-field="bio">--</dd>
+                </div>
+                <div>
+                  <dt>Competências</dt>
+                  <dd data-preview-field="skills">--</dd>
+                </div>
+                <div>
+                  <dt>Experiências</dt>
+                  <dd data-preview-field="experiences">--</dd>
+                </div>
+              </dl>
+            </div>                <div>
                   <dt>Cargo desejado</dt>
                   <dd data-preview-field="usuario-cargo">Tech Lead</dd>
                 </div>
                 <div>
-                  <dt>Localização</dt>
+                  <dt>LocalizaÃ§Ã£o</dt>
                   <dd data-preview-field="usuario-local">Campinas, SP</dd>
                 </div>
                 <div>
@@ -122,14 +211,14 @@
                 </div>
                 <div>
                   <dt>Disponibilidade</dt>
-                  <dd data-preview-field="usuario-disponibilidade">Imediata • Híbrido</dd>
+                  <dd data-preview-field="usuario-disponibilidade">Imediata â€¢ HÃ­brido</dd>
                 </div>
                 <div>
                   <dt>Bio profissional</dt>
-                  <dd data-preview-field="usuario-bio">Desenvolvedor sênior especializado em soluções escaláveis, focado em entregar produtos que conectam tecnologia e impacto real para usuários.</dd>
+                  <dd data-preview-field="usuario-bio">Desenvolvedor sÃªnior especializado em soluÃ§Ãµes escalÃ¡veis, focado em entregar produtos que conectam tecnologia e impacto real para usuÃ¡rios.</dd>
                 </div>
                 <div>
-                  <dt>Competências</dt>
+                  <dt>CompetÃªncias</dt>
                   <dd data-preview-field="usuario-competencias">Node.js, React, Arquitetura Cloud</dd>
                 </div>
               </dl>
@@ -140,3 +229,4 @@
     </main>
   </body>
 </html>
+

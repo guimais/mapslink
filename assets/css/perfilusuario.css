@@ -279,6 +279,14 @@ main,
   background:#fff;
   box-shadow:0 16px 32px rgba(15,23,42,.28);
 }
+.perfil-hero-avatar.is-empty{
+  background:var(--surface);
+  border:1px dashed rgba(15,23,42,.18);
+  box-shadow:none;
+}
+.perfil-hero-avatar.is-empty img{
+  opacity:0;
+}
 
 .perfil-hero-avatar img{
   width:100%;

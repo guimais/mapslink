@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="utf-8">
@@ -8,7 +8,7 @@
     <link href="../assets/css/main.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Atualize os dados do perfil da empresa no Maps Link.">
-    <title>Maps Link - Edição de Perfil da Empresa</title>
+    <title>Maps Link - EdiÃ§Ã£o de Perfil da Empresa</title>
     <link rel="stylesheet" href="../assets/css/edicaoperfilempresa.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <script defer src="../assets/js/edicaoperfilempresa.js"></script>
@@ -20,13 +20,13 @@
           <i class="ri-arrow-left-line" aria-hidden="true"></i>
           Voltar para perfis
         </a>
-        <h1 id="titulo-edicao-empresa">Edição de perfil da empresa</h1>
+        <h1 id="titulo-edicao-empresa">EdiÃ§Ã£o de perfil da empresa</h1>
         <p>
-          Mantenha os dados da sua organização atualizados para atrair talentos e parceiros alinhados ao propósito da empresa.
+          Mantenha os dados da sua organizaÃ§Ã£o atualizados para atrair talentos e parceiros alinhados ao propÃ³sito da empresa.
         </p>
-        <nav class="edicao-mode-switch" aria-label="Alternar edição de perfil">
+        <nav class="edicao-mode-switch" aria-label="Alternar ediÃ§Ã£o de perfil">
           <a class="edicao-mode-link" href="edicaoperfil.html">
-            Perfil do usuário
+            Perfil do usuÃ¡rio
           </a>
           <a class="edicao-mode-link is-active" href="edicaoperfilempresa.html" aria-current="page">
             Perfil da empresa
@@ -36,58 +36,92 @@
 
       <div class="edicao-layout">
         <section class="edicao-form-wrapper">
-          <form id="edicao-form-empresa" class="edicao-form is-active" data-preview-context="empresa" data-storage-key="mapslink_perfil_empresa" novalidate>
+          <form id="edicao-form-empresa" class="edicao-form is-active" data-preview-context="empresa" data-storage-key="mapslink:perfil:empresa" novalidate>
+            <div class="edicao-field edicao-field--avatar">
+              <label for="empresa-avatar">Foto da empresa</label>
+              <div class="edicao-avatar-control">
+                <img src="" alt="" data-avatar-preview class="edicao-avatar-preview">
+                <div class="edicao-avatar-actions">
+                  <input id="empresa-avatar" type="file" accept="image/*" data-avatar-input hidden>
+                  <button type="button" class="edicao-avatar-upload" data-avatar-trigger>Trocar foto</button>
+                  <button type="button" class="edicao-avatar-remove" data-avatar-remove>Remover</button>
+                </div>
+              </div>
+            </div>
+
             <div class="edicao-field-grid">
               <div class="edicao-field">
                 <label for="empresa-nome">Nome da empresa</label>
-                <input id="empresa-nome" name="empresa-nome" type="text" placeholder="Digite o nome fantasia" data-preview="empresa-nome" autocomplete="organization">
+                <input id="empresa-nome" type="text" placeholder="Digite o nome fantasia" autocomplete="organization" data-field="company" data-sync="name" data-preview="company">
+              </div>
+              <div class="edicao-field">
+                <label for="empresa-caption">Resumo principal</label>
+                <input id="empresa-caption" type="text" placeholder="Resuma o posicionamento da empresa" data-field="profile.caption" data-preview="caption">
+              </div>
+              <div class="edicao-field">
+                <label for="empresa-tags">Áreas de atuação</label>
+                <input id="empresa-tags" type="text" placeholder="Separe por vírgulas" data-field="profile.tags" data-format="csv" data-preview="tags">
               </div>
               <div class="edicao-field">
                 <label for="empresa-setor">Setor</label>
-                <input id="empresa-setor" name="empresa-setor" type="text" placeholder="Ex.: Tecnologia, E-commerce" data-preview="empresa-setor">
+                <input id="empresa-setor" type="text" placeholder="Ex.: Tecnologia, E-commerce" data-field="profile.sector" data-preview="sector">
               </div>
               <div class="edicao-field">
                 <label for="empresa-sede">Sede</label>
-                <input id="empresa-sede" name="empresa-sede" type="text" placeholder="Cidade, País" data-preview="empresa-sede" autocomplete="address-level2">
+                <input id="empresa-sede" type="text" placeholder="Cidade, País" autocomplete="address-level2" data-field="profile.headquarters" data-preview="headquarters">
               </div>
               <div class="edicao-field">
                 <label for="empresa-modelo">Modelo de trabalho</label>
-                <select id="empresa-modelo" name="empresa-modelo" data-preview="empresa-modelo">
+                <select id="empresa-modelo" data-field="profile.model" data-preview="model">
                   <option value="">Selecione uma opção</option>
-                  <option value="global-hibrido">Global • Híbrido</option>
-                  <option value="remoto">Remoto</option>
-                  <option value="presencial">Presencial</option>
-                  <option value="flex">Modelo flexível</option>
+                  <option value="Global - Híbrido">Global - Híbrido</option>
+                  <option value="Remoto">Remoto</option>
+                  <option value="Presencial">Presencial</option>
+                  <option value="Modelo flexível">Modelo flexível</option>
                 </select>
               </div>
               <div class="edicao-field">
+                <label for="empresa-instagram">Instagram</label>
+                <input id="empresa-instagram" type="text" placeholder="@empresa" data-field="profile.contact.instagram" data-preview="instagram">
+              </div>
+              <div class="edicao-field">
+                <label for="empresa-linkedin">LinkedIn</label>
+                <input id="empresa-linkedin" type="text" placeholder="/in/empresa" data-field="profile.contact.linkedin" data-preview="linkedin">
+              </div>
+              <div class="edicao-field">
                 <label for="empresa-email">E-mail de contato</label>
-                <input id="empresa-email" name="empresa-email" type="email" placeholder="contato@empresa.com" data-preview="empresa-email" autocomplete="email">
+                <input id="empresa-email" type="email" placeholder="contato@empresa.com" autocomplete="email" data-field="profile.contact.email" data-preview="email">
               </div>
               <div class="edicao-field">
                 <label for="empresa-telefone">Telefone</label>
-                <input id="empresa-telefone" name="empresa-telefone" type="tel" placeholder="+55 00 00000-0000" data-preview="empresa-telefone" autocomplete="tel">
+                <input id="empresa-telefone" type="tel" placeholder="+55 00 00000-0000" autocomplete="tel" data-field="profile.contact.phone" data-sync="phone" data-preview="phone">
+              </div>
+              <div class="edicao-field">
+                <label for="empresa-endereco">Endereço principal</label>
+                <input id="empresa-endereco" type="text" placeholder="Rua, número, cidade" data-field="profile.contact.address" data-preview="address">
               </div>
               <div class="edicao-field">
                 <label for="empresa-site">Site institucional</label>
-                <input id="empresa-site" name="empresa-site" type="url" placeholder="https://empresa.com" data-preview="empresa-site" autocomplete="url">
+                <input id="empresa-site" type="url" placeholder="https://empresa.com" autocomplete="url" data-field="profile.site" data-preview="site">
+              </div>
+              <div class="edicao-field">
+                <label for="empresa-agenda">Entrevistas do dia</label>
+                <input id="empresa-agenda" type="number" min="0" step="1" data-field="profile.agendaToday" data-type="number" data-preview="agenda">
+              </div>
+              <div class="edicao-field">
+                <label for="empresa-curriculos">Currículos recebidos</label>
+                <input id="empresa-curriculos" type="number" min="0" step="1" data-field="profile.curriculos" data-type="number" data-preview="curriculos">
               </div>
             </div>
 
             <div class="edicao-field">
               <label for="empresa-sobre">Sobre a empresa</label>
-              <textarea id="empresa-sobre" name="empresa-sobre" rows="4" placeholder="Descreva a missão e visão da empresa" data-preview="empresa-sobre"></textarea>
+              <textarea id="empresa-sobre" rows="4" placeholder="Descreva a missão e visão da empresa" data-field="profile.bio" data-preview="bio"></textarea>
             </div>
 
             <div class="edicao-field">
               <label for="empresa-beneficios">Benefícios oferecidos</label>
-              <textarea id="empresa-beneficios" name="empresa-beneficios" rows="3" placeholder="Separe por vírgulas ou quebre linhas para listar benefícios" data-preview="empresa-beneficios"></textarea>
-            </div>
-
-            <div class="edicao-field">
-              <label for="empresa-redes">Canais de contato oficiais</label>
-              <input id="empresa-redes" name="empresa-redes" type="text" placeholder="Ex.: @empresa, /in/empresa" data-preview="empresa-redes">
-              <span class="edicao-field-helper">Utilize identificadores que facilitem encontrar a empresa nos principais canais.</span>
+              <textarea id="empresa-beneficios" rows="3" placeholder="Separe por vírgulas ou quebre linhas" data-field="profile.benefits" data-format="lines" data-preview="benefits"></textarea>
             </div>
 
             <div class="edicao-actions">
@@ -98,19 +132,80 @@
           </form>
         </section>
 
-        <aside class="edicao-side-panel" aria-label="Pré-visualização do perfil da empresa">
+        <aside class="edicao-side-panel" aria-label="PrÃ©-visualizaÃ§Ã£o do perfil da empresa">
           <section class="edicao-preview" data-edicao-preview="empresa">
             <div class="edicao-preview-header">
-              <h2>Pré-visualização</h2>
-              <p>Acompanhe como as informações serão exibidas no perfil corporativo.</p>
+              <h2>PrÃ©-visualizaÃ§Ã£o</h2>
+              <p>Acompanhe como as informaÃ§Ãµes serÃ£o exibidas no perfil corporativo.</p>
             </div>
             <div class="edicao-preview-card">
               <dl class="edicao-preview-list">
                 <div>
                   <dt>Empresa</dt>
-                  <dd data-preview-field="empresa-nome">Amazon</dd>
+                  <dd data-preview-field="company">--</dd>
                 </div>
                 <div>
+                  <dt>Resumo</dt>
+                  <dd data-preview-field="caption">--</dd>
+                </div>
+                <div>
+                  <dt>Áreas</dt>
+                  <dd data-preview-field="tags">--</dd>
+                </div>
+                <div>
+                  <dt>Setor</dt>
+                  <dd data-preview-field="sector">--</dd>
+                </div>
+                <div>
+                  <dt>Sede</dt>
+                  <dd data-preview-field="headquarters">--</dd>
+                </div>
+                <div>
+                  <dt>Modelo</dt>
+                  <dd data-preview-field="model">--</dd>
+                </div>
+                <div>
+                  <dt>Instagram</dt>
+                  <dd data-preview-field="instagram">--</dd>
+                </div>
+                <div>
+                  <dt>LinkedIn</dt>
+                  <dd data-preview-field="linkedin">--</dd>
+                </div>
+                <div>
+                  <dt>E-mail</dt>
+                  <dd data-preview-field="email">--</dd>
+                </div>
+                <div>
+                  <dt>Telefone</dt>
+                  <dd data-preview-field="phone">--</dd>
+                </div>
+                <div>
+                  <dt>Endereço</dt>
+                  <dd data-preview-field="address">--</dd>
+                </div>
+                <div>
+                  <dt>Site</dt>
+                  <dd data-preview-field="site">--</dd>
+                </div>
+                <div>
+                  <dt>Bio</dt>
+                  <dd data-preview-field="bio">--</dd>
+                </div>
+                <div>
+                  <dt>Benefícios</dt>
+                  <dd data-preview-field="benefits">--</dd>
+                </div>
+                <div>
+                  <dt>Entrevistas hoje</dt>
+                  <dd data-preview-field="agenda">--</dd>
+                </div>
+                <div>
+                  <dt>Currículos</dt>
+                  <dd data-preview-field="curriculos">--</dd>
+                </div>
+              </dl>
+            </div>                <div>
                   <dt>Setor</dt>
                   <dd data-preview-field="empresa-setor">Tecnologia &amp; E-commerce</dd>
                 </div>
@@ -120,7 +215,7 @@
                 </div>
                 <div>
                   <dt>Modelo de trabalho</dt>
-                  <dd data-preview-field="empresa-modelo">Global • Híbrido</dd>
+                  <dd data-preview-field="empresa-modelo">Global â€¢ HÃ­brido</dd>
                 </div>
                 <div>
                   <dt>Contato</dt>
@@ -135,15 +230,15 @@
                 </div>
                 <div>
                   <dt>Sobre</dt>
-                  <dd data-preview-field="empresa-sobre">Tecnologia, logística e inovação para conectar milhões de clientes e talentos ao redor do mundo.</dd>
+                  <dd data-preview-field="empresa-sobre">Tecnologia, logÃ­stica e inovaÃ§Ã£o para conectar milhÃµes de clientes e talentos ao redor do mundo.</dd>
                 </div>
                 <div>
-                  <dt>Benefícios</dt>
-                  <dd data-preview-field="empresa-beneficios">Plano de saúde internacional, Programas de desenvolvimento, Incentivo à educação</dd>
+                  <dt>BenefÃ­cios</dt>
+                  <dd data-preview-field="empresa-beneficios">Plano de saÃºde internacional, Programas de desenvolvimento, Incentivo Ã  educaÃ§Ã£o</dd>
                 </div>
                 <div>
                   <dt>Canais oficiais</dt>
-                  <dd data-preview-field="empresa-redes">@amazon • /in/amazon</dd>
+                  <dd data-preview-field="empresa-redes">@amazon â€¢ /in/amazon</dd>
                 </div>
               </dl>
             </div>
@@ -153,3 +248,5 @@
     </main>
   </body>
 </html>
+
+

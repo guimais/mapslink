@@ -1,8 +1,51 @@
-(() => {
+﻿(() => {
   if (window.__ml_perfilempresa_init__) return;
   window.__ml_perfilempresa_init__ = true;
 
   const ACCENTS = /[\u0300-\u036f]/g;
+  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const AVATAR_SELECTOR = ".empresa-hero-avatar img";
+  const AVATAR_WRAPPER_SELECTOR = ".empresa-hero-avatar";
+
+  function valueToString(value) {
+    if (value === 0) return "0";
+    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (!value) return "";
+    return String(value).trim();
+  }
+
+  function setText(node, value) {
+    if (!node) return;
+    const text = valueToString(value);
+    node.textContent = text;
+    if (node.classList) node.classList.toggle("is-empty", !text);
+  }
+
+  function setList(node, values, formatter) {
+    if (!node) return;
+    const items = Array.isArray(values)
+      ? values
+          .map(item => (typeof item === "string" ? item.trim() : item))
+          .filter(item => item || item === 0)
+      : [];
+    if (!items.length) {
+      node.innerHTML = "";
+      node.dataset.empty = "true";
+      return;
+    }
+    node.innerHTML = items.map(formatter).join("");
+    node.dataset.empty = "false";
+  }
+
+  function setAvatar(src) {
+    const wrapper = query(AVATAR_WRAPPER_SELECTOR);
+    const img = query(AVATAR_SELECTOR);
+    if (!wrapper || !img) return;
+    const has = !!src;
+    img.src = has ? src : EMPTY_IMAGE;
+    img.alt = has ? "Logo ou foto da empresa" : "";
+    wrapper.classList.toggle("is-empty", !has);
+  }
 
   function query(selector, root) {
     return (root || document).querySelector(selector);
@@ -86,40 +129,45 @@
   }
 
   function hydrateFromAuth(data) {
-    if (!data || data.type !== "business") return;
-    const profile = data.profile || {};
-    const name = query("#empresa-nome-exibicao");
-    if (name && (data.company || data.name)) name.textContent = data.company || data.name;
-    const desc = query(".empresa-hero-desc");
-    if (desc && profile.caption) desc.textContent = profile.caption;
-    const tags = query(".empresa-hero-tags");
-    if (tags && Array.isArray(profile.tags) && profile.tags.length) {
-      tags.innerHTML = profile.tags.map(tag => `<li>${tag}</li>`).join("");
-    }
+    const valid = data?.type === "business";
+    const profile = valid && data.profile ? data.profile : {};
+    setAvatar(valid && profile.avatar ? profile.avatar : "");
+    setText(query("#empresa-nome-exibicao"), valid ? data.company || data.name : "");
+    setText(query(".empresa-hero-desc"), profile.caption);
+    const tagList = Array.isArray(profile.tags)
+      ? profile.tags
+      : typeof profile.tags === "string"
+        ? profile.tags.split(",").map(tag => tag.trim()).filter(Boolean)
+        : [];
+    setList(query(".empresa-hero-tags"), tagList, tag => `<li>${tag}</li>`);
     const meta = queryAll(".empresa-meta .meta-value");
-    if (meta[0] && profile.sector) meta[0].textContent = profile.sector;
-    if (meta[1] && profile.headquarters) meta[1].textContent = profile.headquarters;
-    if (meta[2] && profile.model) meta[2].textContent = profile.model;
+    [profile.sector, profile.headquarters, profile.model].forEach((value, index) => setText(meta[index], value));
     const contact = profile.contact || {};
-    const contactSpans = queryAll(".empresa-contatos span");
-    if (contactSpans[0] && (contact.instagram || data.company)) contactSpans[0].textContent = contact.instagram || data.company;
-    if (contactSpans[1] && (contact.linkedin || profile.caption)) contactSpans[1].textContent = contact.linkedin || profile.caption;
-    if (contactSpans[2] && contact.email) contactSpans[2].textContent = contact.email;
-    if (contactSpans[3] && (contact.address || contact.phone)) contactSpans[3].textContent = contact.address || contact.phone;
-    const bio = query("#bio-empresa p");
-    if (bio && profile.bio) bio.textContent = profile.bio;
-    if (profile.agendaToday || profile.agendaToday === 0) {
-      const agenda = query("#agenda-entrevistas .agenda-numero");
-      if (agenda) agenda.textContent = profile.agendaToday;
-      storage.set("mapslink_agenda_hoje", profile.agendaToday);
-    }
-    if (profile.curriculos || profile.curriculos === 0) {
-      const card = query("#curriculos-recebidos");
-      if (card) {
-        ensureBadge(card).textContent = profile.curriculos;
+    const contacts = [
+      contact.instagram || "",
+      contact.linkedin || "",
+      contact.email || "",
+      contact.address || contact.phone || "",
+      profile.site || ""
+    ];
+    queryAll(".empresa-contatos span").forEach((node, index) => setText(node, contacts[index]));
+    setText(query("#bio-empresa p"), profile.bio);
+    const agenda = query("#agenda-entrevistas .agenda-numero");
+    setText(agenda, profile.agendaToday ?? "");
+    storage.set("mapslink_agenda_hoje", profile.agendaToday ?? null);
+    const card = query("#curriculos-recebidos");
+    if (card) {
+      const badge = ensureBadge(card);
+      const amount = valueToString(profile.curriculos ?? "");
+      if (amount) {
+        badge.textContent = amount;
+        badge.style.display = "inline-block";
+      } else {
+        badge.textContent = "";
+        badge.style.display = "none";
       }
-      storage.set("mapslink_curriculos_recebidos", profile.curriculos);
     }
+    storage.set("mapslink_curriculos_recebidos", profile.curriculos ?? null);
   }
 
   const storage = {
@@ -133,7 +181,8 @@
     },
     set(key, value) {
       try {
-        localStorage.setItem(key, JSON.stringify(value));
+        if (value === null || value === undefined) localStorage.removeItem(key);
+        else localStorage.setItem(key, JSON.stringify(value));
       } catch {}
     }
   };
@@ -158,15 +207,20 @@
   }
 
   function hydrateFromStorage() {
-    const agenda = storage.get("mapslink_agenda_hoje", null);
-    if (agenda != null) {
-      const el = query("#agenda-entrevistas .agenda-numero");
-      if (el) el.textContent = agenda;
-    }
-    const curriculos = storage.get("mapslink_curriculos_recebidos", null);
-    if (curriculos != null) {
-      const card = query("#curriculos-recebidos");
-      if (card) ensureBadge(card).textContent = curriculos;
+    const agendaValue = storage.get("mapslink_agenda_hoje", null);
+    setText(query("#agenda-entrevistas .agenda-numero"), agendaValue ?? "");
+    const curriculosValue = storage.get("mapslink_curriculos_recebidos", null);
+    const card = query("#curriculos-recebidos");
+    if (card) {
+      const badge = ensureBadge(card);
+      const amount = valueToString(curriculosValue ?? "");
+      if (amount) {
+        badge.textContent = amount;
+        badge.style.display = "inline-block";
+      } else {
+        badge.textContent = "";
+        badge.style.display = "none";
+      }
     }
   }
 
@@ -197,6 +251,7 @@
   }
 
   function init() {
+    hydrateFromAuth(null);
     setActiveLink(location.href);
     bindAnchors();
     window.addEventListener("popstate", () => setActiveLink(location.href));
@@ -207,15 +262,18 @@
         const num = Number(value);
         if (!Number.isFinite(num)) return;
         storage.set("mapslink_agenda_hoje", num);
-        const el = query("#agenda-entrevistas .agenda-numero");
-        if (el) el.textContent = num;
+        setText(query("#agenda-entrevistas .agenda-numero"), num);
       },
       setCurriculos(value) {
         const num = Number(value);
         if (!Number.isFinite(num)) return;
         storage.set("mapslink_curriculos_recebidos", num);
         const card = query("#curriculos-recebidos");
-        if (card) ensureBadge(card).textContent = num;
+        if (card) {
+          const badge = ensureBadge(card);
+          badge.textContent = valueToString(num);
+          badge.style.display = "inline-block";
+        }
       }
     });
   }
@@ -226,3 +284,8 @@
     init();
   }
 })();
+
+
+
+
+

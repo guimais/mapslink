@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
   const script = document.currentScript || Array.from(document.scripts).find(s => (s.src || "").includes("/main.js"));
   const usersUrl = script ? new URL("../data/users.json", script.src).href : "assets/data/users.json";
   const USERS_KEY = "mapslink:users";
@@ -103,6 +103,7 @@
         phone: "+55 19 99297-2688",
         pass: "U2VuaGFAMTIz",
         profile: {
+          avatar: "../assets/images/3d_avatar_21.png",
           headline: "Desenvolvedor full stack apaixonado por criar experiencias uteis, acessiveis e escalaveis.",
           specialty: "Engenharia Full Stack",
           location: "Campinas, SP",
@@ -122,7 +123,8 @@
             phone: "+55 19 99297-2688",
             instagram: "@gelado.tech",
             linkedin: "/in/geladodasilva"
-          },
+                    },
+          site: "https://amazon.com",
           interviewsToday: 2
         }
       },
@@ -136,6 +138,7 @@
         phone: "+55 11 4002-8922",
         pass: "RW1wcmVzYUAxMjM=",
         profile: {
+          avatar: "../assets/images/image 4.png",
           caption: "Tecnologia, logistica e inovacao para conectar milhoes de clientes e talentos ao redor do mundo.",
           tags: ["Cloud & AWS", "E-commerce", "Inteligencia Artificial"],
           sector: "Tecnologia & E-commerce",
@@ -147,6 +150,7 @@
             email: "support@amazon.com",
             address: "Rua Plinio Luis de Siqueira Jr"
           },
+          site: "https://amazon.com",
           agendaToday: 3,
           curriculos: 12,
           bio: "Uma gigante global de tecnologia focada em e-commerce, computacao em nuvem (AWS), streaming digital e inteligencia artificial. Reconhecida por inovacao constante e por ser uma das marcas mais valiosas do mundo."
@@ -296,11 +300,19 @@
       const list = await loadUsers();
       const user = list.find(u => u.id === session.id);
       if (!user) throw new Error("NOT_FOUND");
-      if (values.name) user.name = values.name;
-      if (values.phone) user.phone = values.phone;
+      if (Object.prototype.hasOwnProperty.call(values, "name")) user.name = values.name || "";
+      if (Object.prototype.hasOwnProperty.call(values, "phone")) user.phone = values.phone || "";
+      if (Object.prototype.hasOwnProperty.call(values, "company")) user.company = values.company || "";
       if (values.profile) {
-        user.profile = user.profile || {};
-        Object.assign(user.profile, values.profile);
+        const current = user.profile && typeof user.profile === "object" ? { ...user.profile } : {};
+        Object.entries(values.profile).forEach(([key, value]) => {
+          if (key === "contact" && value && typeof value === "object") {
+            current.contact = { ...value };
+          } else {
+            current[key] = value;
+          }
+        });
+        user.profile = current;
       }
       if (!persist()) warn("MapsAuth: nao foi possivel salvar alteracoes de perfil.");
       return setSession({ ...baseUser(user), token: session.token });
@@ -366,3 +378,8 @@
     ensureFooterScript();
   });
 })();
+
+
+
+
+
