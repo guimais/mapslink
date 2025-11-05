@@ -99,61 +99,55 @@
         type: "personal",
         email: "gelado@gmail.com",
         cpf: "12345678909",
-        name: "Gelado da Silva",
-        phone: "+55 19 99297-2688",
+        name: "",
+        phone: "",
         pass: "U2VuaGFAMTIz",
         profile: {
-          avatar: "../assets/images/3d_avatar_21.png",
-          headline: "Desenvolvedor full stack apaixonado por criar experiencias uteis, acessiveis e escalaveis.",
-          specialty: "Engenharia Full Stack",
-          location: "Campinas, SP",
-          experience: "12 anos em tecnologia",
-          availability: "Hibrido - Imediata",
-          skills: ["Full-stack", "Node.js", "React", "Arquitetura Cloud"],
-          bio: "Desenvolvedor senior com mais de 10 anos de experiencia em solucoes escalaveis. Focado em resultados, entrega produtos que impactam usuarios e negocios, liderando times multidisciplinares com boas praticas de engenharia.",
-          experiences: [
-            "Tech Lead - InovaTech - 2019-2024",
-            "Engenheiro de Software Senior - Conecta Dados - 2015-2019",
-            "Desenvolvedor Pleno - Digital Way - 2012-2015",
-            "Desenvolvedor Junior - Digital Way - 2011-2012",
-            "Estagiario de Desenvolvimento - Tech Start - 2010-2011"
-          ],
+          avatar: "",
+          headline: "",
+          specialty: "",
+          location: "",
+          experience: "",
+          availability: "",
+          skills: [],
+          bio: "",
+          experiences: [],
           contact: {
-            email: "gelado@gmail.com",
-            phone: "+55 19 99297-2688",
-            instagram: "@gelado.tech",
-            linkedin: "/in/geladodasilva"
-                    },
-          site: "https://amazon.com",
-          interviewsToday: 2
+            email: "",
+            phone: "",
+            instagram: "",
+            linkedin: ""
+          },
+          interviewsToday: null
         }
       },
       {
         id: "biz-001",
         type: "business",
         email: "contato@amazon.com",
-        cnpj: "12345678000199",
-        name: "Amazon",
-        company: "Amazon Brasil",
-        phone: "+55 11 4002-8922",
+        cnpj: "",
+        name: "",
+        company: "",
+        phone: "",
         pass: "RW1wcmVzYUAxMjM=",
         profile: {
-          avatar: "../assets/images/image 4.png",
-          caption: "Tecnologia, logistica e inovacao para conectar milhoes de clientes e talentos ao redor do mundo.",
-          tags: ["Cloud & AWS", "E-commerce", "Inteligencia Artificial"],
-          sector: "Tecnologia & E-commerce",
-          headquarters: "Seattle, EUA",
-          model: "Global - Hibrido",
+          avatar: "",
+          caption: "",
+          tags: [],
+          sector: "",
+          headquarters: "",
+          model: "",
           contact: {
-            instagram: "@amazon",
-            linkedin: "@amazon",
-            email: "support@amazon.com",
-            address: "Rua Plinio Luis de Siqueira Jr"
+            instagram: "",
+            linkedin: "",
+            email: "",
+            phone: "",
+            address: ""
           },
-          site: "https://amazon.com",
-          agendaToday: 3,
-          curriculos: 12,
-          bio: "Uma gigante global de tecnologia focada em e-commerce, computacao em nuvem (AWS), streaming digital e inteligencia artificial. Reconhecida por inovacao constante e por ser uma das marcas mais valiosas do mundo."
+          site: "",
+          agendaToday: null,
+          curriculos: null,
+          bio: ""
         }
       }
     ];
@@ -372,10 +366,10 @@
     hydrate();
     const active = document.body?.dataset?.navActive;
     if (active) highlight(active);
-    const gate = document.body?.dataset?.page;
+    const gate = (document.body?.dataset?.page || "").toLowerCase();
     if (gate === "perfilusuario") MapsAuth.require("personal", "loginpessoal.html");
     if (gate === "perfilempresa") MapsAuth.require("business", "loginempresa.html");
-    ensureFooterScript();
+    if (gate !== "mapacheio") ensureFooterScript();
   });
 })();
 

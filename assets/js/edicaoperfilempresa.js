@@ -1,4 +1,4 @@
-ï»¿(function () {
+(function () {
   const SELECTORS = {
     form: '#edicao-form-empresa',
     preview: '[data-edicao-preview="empresa"]',
@@ -15,7 +15,7 @@
     default: '--',
     company: 'Informe o nome da empresa',
     caption: 'Adicione uma frase de impacto sobre a empresa',
-    tags: 'Inclua as principais Ã¡reas de atuaÃ§Ã£o',
+    tags: 'Inclua as principais áreas de atuação',
     sector: 'Informe o setor principal',
     headquarters: 'Informe a sede',
     model: 'Defina o modelo de trabalho',
@@ -23,16 +23,16 @@
     linkedin: 'Informe o LinkedIn corporativo',
     email: 'Informe um e-mail de contato',
     phone: 'Informe um telefone',
-    address: 'Adicione o endereÃ§o principal',
+    address: 'Adicione o endereço principal',
     site: 'Adicione o site institucional',
-    bio: 'Descreva a atuaÃ§Ã£o da empresa',
-    benefits: 'Liste os benefÃ­cios oferecidos',
+    bio: 'Descreva a atuação da empresa',
+    benefits: 'Liste os benefícios oferecidos',
     agenda: '--',
     curriculos: '--'
   };
 
   const state = {
-    avatar: '',
+    avatar: ',
     owner: null,
     storageKey: null,
     feedbackTimer: null
@@ -60,8 +60,8 @@
   }
 
   function getInputValue(input) {
-    if (!input) return '';
-    const raw = (input.value || '').trim();
+    if (!input) return ';
+    const raw = (input.value || ').trim();
     const format = input.dataset.format;
     if (format === 'csv') {
       if (!raw) return [];
@@ -81,21 +81,21 @@
 
   function getPreviewText(input, value) {
     if (Array.isArray(value)) {
-      if (!value.length) return '';
+      if (!value.length) return ';
       return input.dataset.format === 'lines' ? value.join('\n') : value.join(', ');
     }
     if (typeof value === 'number') {
-      return Number.isFinite(value) ? String(value) : '';
+      return Number.isFinite(value) ? String(value) : ';
     }
     if (value === null || value === undefined) {
-      return '';
+      return ';
     }
     return String(value).trim();
   }
 
   function applyAvatar(node, src) {
     if (!node) return;
-    const value = src || '';
+    const value = src || ';
     node.src = value || EMPTY_IMAGE;
     node.classList.toggle('is-empty', !value);
   }
@@ -123,7 +123,7 @@
       if (stored.owner && state.owner && stored.owner !== state.owner) return null;
       return stored.payload || null;
     } catch (error) {
-      console.warn('NÃ£o foi possÃ­vel ler os dados salvos.', error);
+      console.warn('Não foi possível ler os dados salvos.', error);
       return null;
     }
   }
@@ -133,7 +133,7 @@
     try {
       localStorage.setItem(state.storageKey, JSON.stringify({ owner: state.owner, payload }));
     } catch (error) {
-      console.warn('NÃ£o foi possÃ­vel salvar os dados.', error);
+      console.warn('Não foi possível salvar os dados.', error);
     }
   }
 
@@ -142,14 +142,14 @@
     try {
       localStorage.removeItem(state.storageKey);
     } catch (error) {
-      console.warn('NÃ£o foi possÃ­vel remover os dados salvos.', error);
+      console.warn('Não foi possível remover os dados salvos.', error);
     }
   }
 
   function readFile(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve(reader.result || '');
+      reader.onload = () => resolve(reader.result || ');
       reader.onerror = () => reject(reader.error || new Error('Falha ao ler o arquivo.'));
       reader.readAsDataURL(file);
     });
@@ -186,7 +186,7 @@
     }
 
     function fillForm(data) {
-      state.avatar = (data && data.profile && data.profile.avatar) || '';
+      state.avatar = (data && data.profile && data.profile.avatar) || ';
       applyAvatar(avatarPreview, state.avatar);
       inputs.forEach(input => {
         const path = input.dataset.field;
@@ -195,7 +195,7 @@
         if (Array.isArray(value)) {
           input.value = input.dataset.format === 'lines' ? value.join('\n') : value.join(', ');
         } else if (value === null || value === undefined) {
-          input.value = '';
+          input.value = ';
         } else if (input.dataset.type === 'number') {
           input.value = String(value);
         } else {
@@ -214,13 +214,13 @@
         let final;
         if (Array.isArray(value)) final = value;
         else if (value === null) final = null;
-        else final = value === undefined ? '' : value;
+        else final = value === undefined ? ' : value;
         setByPath(payload, path, final);
-        const extras = (input.dataset.sync || '').split(',').map(item => item.trim()).filter(Boolean);
+        const extras = (input.dataset.sync || ').split(',').map(item => item.trim()).filter(Boolean);
         extras.forEach(extra => setByPath(payload, extra, final));
       });
       if (!payload.profile) payload.profile = {};
-      payload.profile.avatar = state.avatar || '';
+      payload.profile.avatar = state.avatar || ';
       return payload;
     }
 
@@ -248,31 +248,41 @@
       event.preventDefault();
       const payload = collectPayload();
       const auth = window.MapsAuth;
-      try {
-        if (auth && typeof auth.updateProfile === 'function') {
+      let message = 'Alteracoes salvas neste dispositivo.';
+      let isError = false;
+      if (auth && typeof auth.updateProfile === 'function') {
+        try {
           const request = { profile: payload.profile };
           if (own.call(payload, 'company')) request.company = payload.company || '';
           if (own.call(payload, 'name')) request.name = payload.name || '';
           if (own.call(payload, 'phone')) request.phone = payload.phone || '';
           const result = await auth.updateProfile(request);
           applySession(result || auth.current?.());
+          message = 'Alteracoes salvas!';
+        } catch (error) {
+          console.error(error);
+          const code = (error && error.message) || '';
+          if (code && !/NO_SESSION/i.test(code)) {
+            message = 'Nao foi possivel salvar. Tente novamente.';
+            isError = true;
+          } else {
+            message = 'Alteracoes salvas neste dispositivo. Faca login para sincronizar.';
+          }
         }
-        saveDraft(payload);
-        showFeedback(feedback, 'AlteraÃ§Ãµes salvas!', false);
-      } catch (error) {
-        showFeedback(feedback, 'NÃ£o foi possÃ­vel salvar. Tente novamente.', true);
-        console.error(error);
       }
+      saveDraft(payload);
+      updatePreview();
+      showFeedback(feedback, message, isError);
     });
 
     form.addEventListener('reset', () => {
       window.setTimeout(() => {
         inputs.forEach(input => {
-          input.value = '';
+          input.value = ';
         });
-        state.avatar = '';
-        if (avatarInput) avatarInput.value = '';
-        applyAvatar(avatarPreview, '');
+        state.avatar = ';
+        if (avatarInput) avatarInput.value = ';
+        applyAvatar(avatarPreview, ');
         clearDraft();
         updatePreview();
         showFeedback(feedback, 'Valores redefinidos.', false);
@@ -292,7 +302,7 @@
           applyAvatar(avatarPreview, state.avatar);
           updatePreview();
         } catch (error) {
-          showFeedback(feedback, 'NÃ£o foi possÃ­vel carregar a foto.', true);
+          showFeedback(feedback, 'Não foi possível carregar a foto.', true);
           console.error(error);
         }
       });
@@ -300,9 +310,9 @@
 
     if (avatarRemove && avatarPreview && avatarInput) {
       avatarRemove.addEventListener('click', () => {
-        state.avatar = '';
-        avatarInput.value = '';
-        applyAvatar(avatarPreview, '');
+        state.avatar = ';
+        avatarInput.value = ';
+        applyAvatar(avatarPreview, ');
         updatePreview();
       });
     }
@@ -316,4 +326,6 @@
     }
   });
 })();
+
+
 

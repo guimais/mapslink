@@ -31,11 +31,25 @@
     return String(value).trim();
   }
 
+  function hasContent(value) {
+    return valueToString(value) !== "";
+  }
+
   function setText(node, value) {
     if (!node) return;
     const text = valueToString(value);
-    node.textContent = text;
-    if (node.classList) node.classList.toggle("is-empty", !text);
+    const has = text !== "";
+    if (has) {
+      node.textContent = text;
+      if (node.classList) node.classList.remove("is-placeholder");
+    } else if (node.dataset?.placeholder) {
+      node.textContent = node.dataset.placeholder;
+      if (node.classList) node.classList.add("is-placeholder");
+    } else {
+      node.textContent = "";
+      if (node.classList) node.classList.remove("is-placeholder");
+    }
+    if (node.classList) node.classList.toggle("is-empty", !has);
   }
 
   function setList(node, values, formatter) {
@@ -46,12 +60,21 @@
           .filter(item => item || item === 0)
       : [];
     if (!items.length) {
-      node.innerHTML = "";
+      const placeholder = node.dataset?.placeholder || "";
+      node.innerHTML = placeholder ? `<li class="placeholder-item">${placeholder}</li>` : "";
       node.dataset.empty = "true";
+      if (node.classList) {
+        node.classList.add("is-empty");
+        node.classList.toggle("is-placeholder", !!placeholder);
+      }
       return;
     }
     node.innerHTML = items.map(formatter).join("");
     node.dataset.empty = "false";
+    if (node.classList) {
+      node.classList.remove("is-empty");
+      node.classList.remove("is-placeholder");
+    }
   }
 
   function setAvatar(src) {
@@ -222,7 +245,12 @@
     setAvatar(profile.avatar && valid ? profile.avatar : "");
     setText(query("#perfil-nome"), valid ? data.name || profile.fullName : "");
     setText(query(selectors.heroDesc), profile.headline);
-    setList(query(selectors.heroTags), profile.skills, skill => `<li>${skill}</li>`);
+    const skillList = Array.isArray(profile.skills)
+      ? profile.skills
+      : typeof profile.skills === "string"
+        ? profile.skills.split(",").map(item => item.trim()).filter(Boolean)
+        : [];
+    setList(query(selectors.heroTags), skillList, skill => `<li>${skill}</li>`);
     const metaValues = queryAll(selectors.metaValues);
     [
       profile.specialty,
@@ -241,8 +269,10 @@
         ? profile.experiences.map(item => String(item).trim()).filter(Boolean)
         : [];
       if (!experiences.length) {
-        list.innerHTML = "";
+        const placeholder = list.dataset?.placeholder || "";
+        list.innerHTML = placeholder ? `<li class="placeholder-item">${placeholder}</li>` : "";
         list.dataset.empty = "true";
+        if (list.classList) list.classList.toggle("is-placeholder", !!placeholder);
       } else {
         list.innerHTML = experiences
           .map(item => {
@@ -253,16 +283,33 @@
           })
           .join("");
         list.dataset.empty = "false";
+        if (list.classList) list.classList.remove("is-placeholder");
       }
     }
   }
 
   function hydrateFromStorage() {
-    try {
-      const raw = localStorage.getItem("perfilCurriculoData");
-      if (!raw) return;
-      hydrateFromAuth({ type: "personal", profile: JSON.parse(raw) });
-    } catch {}
+    const sources = ["mapslink:perfil:usuario", "perfilCurriculoData"];
+    for (const key of sources) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        const payload =
+          parsed && typeof parsed === "object"
+            ? parsed.payload && typeof parsed.payload === "object"
+              ? parsed.payload
+              : parsed
+            : null;
+        if (!payload || typeof payload !== "object") continue;
+        const profile = payload.profile && typeof payload.profile === "object" ? payload.profile : payload;
+        const name = payload.name || "";
+        hydrateFromAuth({ type: "personal", name, profile });
+        return;
+      } catch {
+        continue;
+      }
+    }
   }
 
   function bindContactCopies() {

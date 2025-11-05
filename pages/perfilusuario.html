@@ -8,7 +8,7 @@
     <link href="../assets/css/main.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
     <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
-    <title>Maps Link - Perfil do Usuário</title>
+    <title>Maps Link - Perfil do Usuario</title>
     <link rel="stylesheet" href="../assets/css/perfilusuario.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
     <script defer src="../assets/js/_shared-nav.js"></script>
@@ -17,13 +17,13 @@
   <body data-page="perfilusuario" data-nav-active="profile">
     <header class="nav-container nav-fixed" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
-        <a href="#" class="nav-logo-link" aria-label="Ir para Home">
+        <a href="../index.html" class="nav-logo-link" aria-label="Ir para Home">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo pilula Maps Link" class="nav-logo" loading="lazy" decoding="async">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
-        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
+        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Secoes do site">
           <li><a class="nav-link" href="../index.html">Home</a></li>
           <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
           <li><a class="nav-link" href="selecaoperfil.html" data-nav-key="profile">Profile</a></li>
@@ -37,29 +37,23 @@
     <main id="profile" class="perfil-page" role="main" aria-labelledby="perfil-nome">
       <section class="perfil-hero" aria-labelledby="perfil-nome">
         <div class="perfil-hero-main">
-          <div class="perfil-hero-avatar" aria-hidden="true">
-            <img src="../assets/images/3d_avatar_21.png" alt="" loading="lazy" decoding="async">
+          <div class="perfil-hero-avatar is-empty" aria-hidden="true">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" loading="lazy" decoding="async">
           </div>
           <div class="perfil-hero-textos">
             <div class="perfil-hero-header">
-              <h2 id="perfil-nome">Gelado da Silva</h2>
+              <h2 id="perfil-nome" data-placeholder="Adicione seu nome completo">Adicione seu nome completo</h2>
               <a class="perfil-edit-link" href="edicaoperfil.html" aria-label="Editar perfil do usuario" title="Editar perfil">
                 <i class="ri-settings-3-line" aria-hidden="true"></i>
               </a>
             </div>
-            <p class="perfil-hero-desc">
-              Desenvolvedor full stack apaixonado por criar experiências úteis, acessíveis e escaláveis.
-              Atua liderando squads ágeis, mentorando times e conectando produtos às necessidades de usuários reais.
+            <p class="perfil-hero-desc" data-placeholder="Conte quem voce e em poucas palavras.">
+              Conte quem voce e em poucas palavras.
             </p>
-            <ul class="perfil-hero-tags" aria-label="Principais competências">
-              <li>Full-stack</li>
-              <li>Node.js</li>
-              <li>React</li>
-              <li>Arquitetura Cloud</li>
-            </ul>
+            <ul class="perfil-hero-tags" aria-label="Principais competencias" data-placeholder="Inclua suas principais competencias."></ul>
           </div>
         </div>
-        <aside class="perfil-hero-actions" aria-label="Ações do perfil">
+        <aside class="perfil-hero-actions" aria-label="Acoes do perfil">
           <a class="perfil-switch-btn" href="selecaoperfil.html">
             <i class="ri-user-switch-line" aria-hidden="true"></i>
             Trocar perfil
@@ -73,42 +67,42 @@
           <div class="perfil-meta" aria-label="Dados principais do profissional">
             <div class="meta-item">
               <span class="meta-label">Especialidade</span>
-              <span class="meta-value">Engenharia Full Stack</span>
+              <span class="meta-value" data-placeholder="Informe sua especialidade">Informe sua especialidade</span>
             </div>
             <div class="meta-item">
               <span class="meta-label">Localizacao</span>
-              <span class="meta-value">Campinas, SP</span>
+              <span class="meta-value" data-placeholder="Defina sua cidade e estado">Defina sua cidade e estado</span>
             </div>
             <div class="meta-item">
               <span class="meta-label">Experiencia</span>
-              <span class="meta-value">12 anos em tecnologia</span>
+              <span class="meta-value" data-placeholder="Informe sua experiencia">Informe sua experiencia</span>
             </div>
             <div class="meta-item">
               <span class="meta-label">Disponibilidade</span>
-              <span class="meta-value">Hibrido &bull; Imediata</span>
+              <span class="meta-value" data-placeholder="Defina sua disponibilidade">Defina sua disponibilidade</span>
             </div>
           </div>
 
           <div class="perfil-sidebar-card">
             <h2 class="sidebar-title">Canais de contato</h2>
             <ul class="perfil-contatos" role="list" aria-label="Canais de contato do candidato">
-              <li role="listitem"><i class="ri-instagram-line" aria-hidden="true"></i><span>@gelado.tech</span></li>
-              <li role="listitem"><i class="ri-linkedin-box-line" aria-hidden="true"></i><span>/in/geladodasilva</span></li>
-              <li role="listitem"><i class="ri-mail-line" aria-hidden="true"></i><span>gelado@gmail.com</span></li>
-              <li role="listitem"><i class="ri-phone-line" aria-hidden="true"></i><span>+55 19 99297-2688</span></li>
+              <li role="listitem"><i class="ri-instagram-line" aria-hidden="true"></i><span data-placeholder="Adicione o @ do Instagram">Adicione o @ do Instagram</span></li>
+              <li role="listitem"><i class="ri-linkedin-box-line" aria-hidden="true"></i><span data-placeholder="Informe o LinkedIn">Informe o LinkedIn</span></li>
+              <li role="listitem"><i class="ri-mail-line" aria-hidden="true"></i><span data-placeholder="Informe um email">Informe um email</span></li>
+              <li role="listitem"><i class="ri-phone-line" aria-hidden="true"></i><span data-placeholder="Informe um telefone">Informe um telefone</span></li>
             </ul>
           </div>
         </aside>
 
         <section class="perfil-content" aria-label="Painel principal">
-          <div class="card card-wide perfil-card-cv" aria-label="Curr�culo atualizado">
+          <div class="card card-wide perfil-card-cv" aria-label="Curriculo atualizado">
             <div class="card-icon"><i class="ri-file-user-line" aria-hidden="true"></i></div>
             <div>
-              <h2 class="card-title">Currículo atualizado</h2>
-              <p class="card-subtitle">Compartilhe seu perfil completo e acompanhe aplicações em tempo real.</p>
+              <h2 class="card-title">Curriculo atualizado</h2>
+              <p class="card-subtitle">Compartilhe seu perfil completo e acompanhe aplicacoes em tempo real.</p>
             </div>
             <a class="card-action" href="enviocurriculo.html">
-              Ver currículo
+              Ver curriculo
               <i class="ri-external-link-line" aria-hidden="true"></i>
             </a>
           </div>
@@ -116,29 +110,21 @@
           <div class="perfil-grid">
             <article class="card card-highlight" id="perfil-bio">
               <h2>Bio profissional</h2>
-              <p>
-                Desenvolvedor Sênior com mais de 10 anos de experiência em soluções escaláveis.
-                Focado em resultados, entrega produtos que impactam usuários e negócios, liderando
-                times multidisciplinares com boas práticas de engenharia.
+              <p data-placeholder="Compartilhe sua historia, objetivos e diferencas.">
+                Compartilhe sua historia, objetivos e diferencas.
               </p>
             </article>
 
             <article class="card card-agenda" id="perfil-status" aria-live="polite">
               <h2>Status</h2>
               <h3 class="sub">Entrevistas de hoje</h3>
-              <div class="agenda-numero">2</div>
-              <p class="card-subtitle">Prepare-se com antecedência e acompanhe as próximas etapas.</p>
+              <div class="agenda-numero" aria-label="Quantidade de entrevistas hoje" data-placeholder="0">0</div>
+              <p class="card-subtitle">Monitore seus proximos passos e se prepare com antecedencia.</p>
             </article>
 
             <article class="card perfil-card-experiencias" id="perfil-experiencias">
-              <h2>Experiências recentes</h2>
-              <ul class="perfil-experiencias-list">
-                <li><span class="perfil-exp-role">Tech Lead</span><span class="perfil-exp-detail">InovaTech • 2019-2024</span></li>
-                <li><span class="perfil-exp-role">Engenheiro de Software Sênior</span><span class="perfil-exp-detail">Conecta Dados • 2015-2019</span></li>
-                <li><span class="perfil-exp-role">Desenvolvedor Pleno</span><span class="perfil-exp-detail">Digital Way • 2012-2015</span></li>
-                <li><span class="perfil-exp-role">Desenvolvedor Júnior</span><span class="perfil-exp-detail">Digital Way • 2011-2012</span></li>
-                <li><span class="perfil-exp-role">Estagiário de Desenvolvimento</span><span class="perfil-exp-detail">Tech Start • 2010-2011</span></li>
-              </ul>
+              <h2>Experiencias recentes</h2>
+              <ul class="perfil-experiencias-list" data-placeholder="Adicione suas experiencias e projetos recentes."></ul>
             </article>
           </div>
         </section>

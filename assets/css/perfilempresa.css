@@ -251,6 +251,7 @@ h2,
   gap:24px;
 }
 
+
 .card{
   background:var(--surface);
   border:1px solid rgba(16,37,105,.10);
@@ -461,6 +462,10 @@ h2,
   overflow-wrap:anywhere;
 }
 
+.empresa-hero .is-placeholder{
+  color:rgba(248,250,252,.72);
+}
+
 .empresa-hero-tags{
   display:flex;
   flex-wrap:wrap;
@@ -479,6 +484,18 @@ h2,
   font-weight:600;
   letter-spacing:.03em;
   box-shadow:0 10px 18px rgba(15,23,42,.18) inset;
+}
+
+.empresa-hero-tags.is-placeholder{
+  gap:0;
+}
+
+.empresa-hero-tags.is-placeholder .placeholder-item{
+  padding:0;
+  background:transparent;
+  box-shadow:none;
+  color:rgba(248,250,252,.72);
+  font-style:italic;
 }
 
 .empresa-hero-actions{
@@ -573,6 +590,13 @@ h2,
   color:var(--brand-2);
   word-break:break-word;
   overflow-wrap:anywhere;
+}
+
+.meta-value.is-placeholder,
+.empresa-contatos span.is-placeholder,
+.card .is-placeholder,
+.agenda-numero.is-placeholder{
+  color:var(--muted);
 }
 
 .empresa-sidebar-card{

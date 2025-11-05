@@ -220,6 +220,7 @@ main,
   gap:28px;
 }
 
+
 .bloco{
   padding:calc(var(--pad-card) + 6px) var(--pad-card);
   background:var(--panel-bg, #fff);
@@ -355,6 +356,10 @@ main,
   color:rgba(255,255,255,.88);
 }
 
+.perfil-hero .is-placeholder{
+  color:rgba(248,250,252,.72);
+}
+
 .perfil-hero-tags{
   display:flex;
   flex-wrap:wrap;
@@ -373,6 +378,18 @@ main,
   font-weight:600;
   letter-spacing:.03em;
   box-shadow:0 8px 16px rgba(15,23,42,.18) inset;
+}
+
+.perfil-hero-tags.is-placeholder{
+  gap:0;
+}
+
+.perfil-hero-tags.is-placeholder .placeholder-item{
+  padding:0;
+  background:transparent;
+  box-shadow:none;
+  color:rgba(248,250,252,.72);
+  font-style:italic;
 }
 
 .perfil-hero-actions{
@@ -483,6 +500,12 @@ main,
   font-size:15px;
   font-weight:700;
   color:var(--brand-2);
+}
+
+.meta-value.is-placeholder,
+.perfil-contatos span.is-placeholder,
+.agenda-numero.is-placeholder{
+  color:var(--muted);
 }
 
 .perfil-sidebar-card{
@@ -733,6 +756,17 @@ main,
   border-radius:18px;
   background:var(--panel-bg);
   box-shadow:var(--panel-shadow);
+}
+
+.perfil-experiencias-list.is-placeholder .placeholder-item{
+  display:block;
+  width:100%;
+  padding:0;
+  background:none;
+  border:none;
+  box-shadow:none;
+  color:var(--muted);
+  font-style:italic;
 }
 
 .perfil-exp-role{

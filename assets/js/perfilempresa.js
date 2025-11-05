@@ -17,8 +17,18 @@
   function setText(node, value) {
     if (!node) return;
     const text = valueToString(value);
-    node.textContent = text;
-    if (node.classList) node.classList.toggle("is-empty", !text);
+    const has = text !== "";
+    if (has) {
+      node.textContent = text;
+      if (node.classList) node.classList.remove("is-placeholder");
+    } else if (node.dataset?.placeholder) {
+      node.textContent = node.dataset.placeholder;
+      if (node.classList) node.classList.add("is-placeholder");
+    } else {
+      node.textContent = "";
+      if (node.classList) node.classList.remove("is-placeholder");
+    }
+    if (node.classList) node.classList.toggle("is-empty", !has);
   }
 
   function setList(node, values, formatter) {
@@ -29,12 +39,21 @@
           .filter(item => item || item === 0)
       : [];
     if (!items.length) {
-      node.innerHTML = "";
+      const placeholder = node.dataset?.placeholder || "";
+      node.innerHTML = placeholder ? `<li class="placeholder-item">${placeholder}</li>` : "";
       node.dataset.empty = "true";
+      if (node.classList) {
+        node.classList.add("is-empty");
+        node.classList.toggle("is-placeholder", !!placeholder);
+      }
       return;
     }
     node.innerHTML = items.map(formatter).join("");
     node.dataset.empty = "false";
+    if (node.classList) {
+      node.classList.remove("is-empty");
+      node.classList.remove("is-placeholder");
+    }
   }
 
   function setAvatar(src) {
@@ -147,8 +166,8 @@
       contact.instagram || "",
       contact.linkedin || "",
       contact.email || "",
-      contact.address || contact.phone || "",
-      profile.site || ""
+      profile.site || "",
+      contact.address || contact.phone || ""
     ];
     queryAll(".empresa-contatos span").forEach((node, index) => setText(node, contacts[index]));
     setText(query("#bio-empresa p"), profile.bio);
