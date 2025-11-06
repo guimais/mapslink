@@ -14,8 +14,8 @@
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
   </head>
-  <body data-page="selecaoperfil" data-nav-active="selecaoperfil.html">
-    <header class="nav-container">
+  <body data-page="selecaoperfil" data-nav-active="profile">
+    <header class="nav-container nav-fixed">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
         <a href="../index.html" class="nav-logo-link" aria-label="Ir para a pÃ¡gina inicial">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" loading="lazy" decoding="async">
@@ -23,34 +23,34 @@
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
-        <ul class="nav-links" id="navMenu" role="list">
+        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
           <li><a class="nav-link" href="../index.html">Home</a></li>
           <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
-          <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
+          <li><a class="nav-link" href="selecaoperfil.html" data-nav-key="profile">Profile</a></li>
           <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
-          <li><a class="nav-link active" href="about.html" aria-current="page">About</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
           <li><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </header>
 
     <main id="profile" class="profile-selecao" role="main" aria-label="Seleção de perfil">
-      <h1 style="position:absolute;left:-9999px;">Seleção de perfil</h1>
+      <h1 class="titulo-principal">Bem-vindo! Para começar, escolha seu perfil.</h1>
       <section class="opcoes-perfil" role="list" aria-label="Opções de perfil">
-        <article class="perfil-card" data-perfil="empresarial" role="listitem" aria-labelledby="titulo-perfil-empresarial">
-          <div class="perfil-avatar circulo" aria-hidden="true">
-            <i class="ri-briefcase-line" aria-hidden="true"></i>
-          </div>
-          <h2 class="perfil-titulo" id="titulo-perfil-empresarial">Empresarial</h2>
-          <button class="perfil-cta" type="button" data-action="escolher-empresarial" aria-labelledby="titulo-perfil-empresarial">Empresarial</button>
-        </article>
-
         <article class="perfil-card" data-perfil="pessoal" role="listitem" aria-labelledby="titulo-perfil-pessoal">
           <div class="perfil-avatar circulo" aria-hidden="true">
-            <i class="ri-user-line" aria-hidden="true"></i>
+            <i class="ri-user-3-line" aria-hidden="true"></i>
           </div>
-          <h2 class="perfil-titulo" id="titulo-perfil-pessoal">Pessoal</h2>
-          <button class="perfil-cta" type="button" data-action="escolher-pessoal" aria-labelledby="titulo-perfil-pessoal">Pessoal</button>
+          <h2 class="perfil-titulo" id="titulo-perfil-pessoal">Sou Candidato</h2>
+          <a class="perfil-cta" href="loginpessoal.html" aria-labelledby="titulo-perfil-pessoal">Buscar Vagas</a>
+        </article>
+
+        <article class="perfil-card" data-perfil="empresarial" role="listitem" aria-labelledby="titulo-perfil-empresarial">
+          <div class="perfil-avatar circulo" aria-hidden="true">
+            <i class="ri-building-4-line" aria-hidden="true"></i>
+          </div>
+          <h2 class="perfil-titulo" id="titulo-perfil-empresarial">Sou Empresa</h2>
+          <a class="perfil-cta" href="loginempresa.html" aria-labelledby="titulo-perfil-empresarial">Anunciar Vaga</a>
         </article>
       </section>
     </main>

@@ -114,11 +114,11 @@ h2,
 
 .profile-selecao{
   min-height:100dvh;
-  padding:300px 24px 64px;
+  padding:220px 24px 64px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:48px;
+  gap:32px;
 }
 
 .profile-selecao .titulo-principal{
@@ -130,38 +130,40 @@ h2,
 }
 
 .opcoes-perfil{
-  width:min(1300px,96vw);
+  width:min(1100px,94vw);
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:64px;
-  align-items:center;
-  justify-items:center;
-  margin-top:16px;
+  gap:28px;
+  align-items:stretch;
+  justify-items:stretch;
+  margin-top:8px;
 }
 
 .perfil-card{
-  background:transparent;
+  background:#ffffff;
+  border:1px solid rgba(16,37,105,.10);
+  border-radius:16px;
+  box-shadow:0 6px 20px rgba(0,0,0,.06);
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:24px;
+  padding:32px 28px;
+  gap:16px;
 }
 
 .perfil-avatar.circulo{
-  width:300px;
-  height:300px;
+  width:72px;
+  height:72px;
   border-radius:50%;
-  background:var(--surface-2);
+  background:rgba(16,37,105,.10);
   display:grid;
   place-items:center;
-  border:1px solid rgba(16,37,105,.12);
-  box-shadow:0 6px 16px rgba(0,0,0,.06) inset;
+  border:1px solid rgba(16,37,105,.18);
 }
 
 .perfil-avatar i{
-  font-size:96px;
-  color:#000;
-  opacity:.9;
+  font-size:28px;
+  color:var(--brand);
 }
 
 .perfil-avatar img{
@@ -172,37 +174,46 @@ h2,
 }
 
 .perfil-titulo{
-  margin:0;
-  font-size:0;
+  margin:4px 0 0;
+  font-size:22px;
+  font-family:'Montserrat',sans-serif;
+  font-weight:800;
+  color:#0b1222;
+  text-align:center;
 }
 
 .perfil-cta{
-  background:var(--surface);
-  color:#000;
-  font-weight:700;
-  border:1px solid rgba(16,37,105,.18);
-  border-radius:9999px;
-  padding:18px 40px;
-  font-size:20px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--brand);
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+  border:1px solid rgba(16,37,105,.22);
+  border-radius:12px;
+  padding:14px 22px;
+  font-size:16px;
   cursor:pointer;
-  box-shadow:0 8px 18px rgba(16,37,105,.10);
-  transition:background-color .25s ease, box-shadow .25s ease, transform .15s ease;
-  min-width:320px;
+  box-shadow:0 8px 22px rgba(16,37,105,.18);
+  transition:background-color .2s ease, box-shadow .2s ease, transform .12s ease;
+  width:100%;
+  max-width:340px;
 }
 
 .perfil-cta:hover{
-  background:#e9eef6;
-  box-shadow:0 10px 22px rgba(16,37,105,.16);
+  background:var(--brand-2);
+  box-shadow:0 10px 26px rgba(16,37,105,.22);
   transform:translateY(-1px);
 }
 
 @media (max-width: 1000px){
   .profile-selecao{
-    padding:220px 20px 64px;
+    padding:180px 20px 56px;
   }
   .opcoes-perfil{
     grid-template-columns:1fr;
-    gap:40px;
+    gap:20px;
   }
 }
 
@@ -317,13 +328,9 @@ h2,
   .profile-selecao{
     padding:140px 16px 48px;
   }
-  .perfil-avatar.circulo{
-    width:220px;
-    height:220px;
-  }
   .perfil-cta{
-    padding:16px 28px;
-    font-size:18px;
+    padding:14px 18px;
+    font-size:16px;
   }
 }
 
