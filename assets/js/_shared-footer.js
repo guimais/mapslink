@@ -1,6 +1,9 @@
 (() => {
   const currentScript = document.currentScript;
 
+
+  if (window.location.pathname.endsWith("/pages/esqueceusenha.html")) return;
+
   function ensureBody() {
     if (document.body) return document.body;
     document.addEventListener(
