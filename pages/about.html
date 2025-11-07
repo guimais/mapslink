@@ -15,7 +15,7 @@
     <script defer src="../assets/js/main.js"></script>
   </head>
   <body data-page="about" data-nav-active="about.html">
-    <div class="nav-container">
+    <header class="nav-container nav-fixed" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
         <a href="../index.html" class="nav-logo-link" aria-label="Página inicial">
           <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo pilula Maps Link" class="nav-logo" loading="lazy" decoding="async">
@@ -23,7 +23,7 @@
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
-        <ul class="nav-links" id="navMenu" role="list">
+        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
           <li><a class="nav-link" href="../index.html">Home</a></li>
           <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
           <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
@@ -32,44 +32,89 @@
           <li><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </nav>
-    </div>
+    </header>
 
-    <main class="about-section" role="main" aria-labelledby="about-title">
-      <section class="about-container" role="region" aria-labelledby="about-title">
-        <h1 class="about-title" id="about-title">Quem somos:</h1>
-        <p><strong>Conectando Oportunidades, Mapeando o Futuro.</strong></p>
-        <p>
-          O mercado de trabalho está em constante evolução, mas encontrar a oportunidade certa ou o talento ideal ainda pode parecer uma busca em um labirinto.
-          Foi por isso que criamos o Maps Link: para transformar a maneira como profissionais e empresas se encontram, tornando essa conexão mais simples, visual e geográfica.
-        </p>
-        <p>
-          Nossa missão é quebrar as barreiras geográficas do recrutamento e da busca por emprego. Acreditamos que a vaga perfeita pode estar na sua vizinhança
-          e que o candidato ideal pode estar a poucos quilômetros de distância.
-        </p>
-        <hr role="separator" aria-hidden="true">
-        <h3><strong>O Que Fazemos?</strong></h3>
-        <p>
-          Construímos uma ponte digital entre o talento e a oportunidade, tudo em uma plataforma interativa e fácil de usar.
-        </p>
-        <hr role="separator" aria-hidden="true">
-        <h3><strong>Para Profissionais</strong></h3>
-        <p>
-          Cansado de listas de vagas intermináveis e sem contexto? Com o Maps Link, você explora o mercado de trabalho de uma forma totalmente nova.
-          Navegue pelo mapa da sua cidade ou da região onde deseja trabalhar, descubra empresas que você nem sabia que existiam e encontre vagas abertas perto de você.
-        </p>
-        <hr role="separator" aria-hidden="true">
-        <h3><strong>Para Empresas</strong></h3>
-        <p>
-          Atrair os melhores talentos locais é fundamental para o crescimento. O Maps Link coloca sua empresa no mapa — literalmente.
-          Aumente sua visibilidade, divulgue suas vagas para uma audiência geolocalizada e gerencie seus processos seletivos de forma simplificada com nosso dashboard intuitivo.
-        </p>
-        <hr role="separator" aria-hidden="true">
-        <h3><strong>Nossa Visão</strong></h3>
-        <p>
-          Sonhamos com um ecossistema de trabalho onde cada profissional possa encontrar seu lugar e cada empresa possa construir uma equipe forte
-          com talentos da sua própria comunidade.
-        </p>
-        <h2 class="about-cta"><strong>Junte-se a nós e vamos mapear o futuro do trabalho, juntos!!</strong></h2>
+    <main class="about-page" role="main" aria-labelledby="about-title">
+      <section class="about-hero" role="region" aria-labelledby="about-title">
+        <div class="about-container">
+          <div class="about-hero-card">
+            <span class="about-hero-label">Sobre a Maps Link</span>
+            <h1 class="about-hero-title" id="about-title"><strong>Conectando Oportunidades, Mapeando o Futuro.</strong></h1>
+            <p class="about-hero-text">
+              O mercado de trabalho está em constante evolução, mas encontrar a oportunidade certa ou o talento ideal ainda pode parecer uma busca em um labirinto.
+              Foi por isso que criamos o Maps Link: para transformar a maneira como profissionais e empresas se encontram, tornando essa conexão mais simples, visual e geográfica.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-overview" role="region" aria-labelledby="about-overview-title">
+        <div class="about-container about-overview-grid">
+          <div class="about-overview-text">
+            <h2 class="section-title" id="about-overview-title">Quem somos</h2>
+            <p>
+              Nossa missão é quebrar as barreiras geográficas do recrutamento e da busca por emprego. Acreditamos que a vaga perfeita pode estar na sua vizinhança
+              e que o candidato ideal pode estar a poucos quilômetros de distância.
+            </p>
+          </div>
+          <div class="about-overview-card" role="presentation">
+            <div class="about-overview-icon" aria-hidden="true">
+              <i class="ri-compass-4-line"></i>
+            </div>
+            <p>
+              Construímos uma ponte digital entre o talento e a oportunidade, tudo em uma plataforma interativa e fácil de usar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-panels" role="region" aria-labelledby="about-panels-title">
+        <div class="about-container">
+          <h2 class="section-title" id="about-panels-title">Como guiamos candidatos e empresas</h2>
+          <div class="about-panels-grid" role="list">
+            <article class="about-panel" role="listitem" aria-labelledby="about-profissionais-title">
+              <div class="about-panel-icon" aria-hidden="true">
+                <i class="ri-user-search-line"></i>
+              </div>
+              <h3 class="about-panel-title" id="about-profissionais-title"><strong>Para Profissionais</strong></h3>
+              <p>
+                Cansado de listas de vagas intermináveis e sem contexto? Com o Maps Link, você explora o mercado de trabalho de uma forma totalmente nova.
+                Navegue pelo mapa da sua cidade ou da região onde deseja trabalhar, descubra empresas que você nem sabia que existiam e encontre vagas abertas perto de você.
+              </p>
+            </article>
+
+            <article class="about-panel" role="listitem" aria-labelledby="about-empresas-title">
+              <div class="about-panel-icon" aria-hidden="true">
+                <i class="ri-building-4-line"></i>
+              </div>
+              <h3 class="about-panel-title" id="about-empresas-title"><strong>Para Empresas</strong></h3>
+              <p>
+                Atrair os melhores talentos locais é fundamental para o crescimento. O Maps Link coloca sua empresa no mapa — literalmente.
+                Aumente sua visibilidade, divulgue suas vagas para uma audiência geolocalizada e gerencie seus processos seletivos de forma simplificada com nosso dashboard intuitivo.
+              </p>
+            </article>
+
+            <article class="about-panel" role="listitem" aria-labelledby="about-visao-title">
+              <div class="about-panel-icon" aria-hidden="true">
+                <i class="ri-earth-line"></i>
+              </div>
+              <h3 class="about-panel-title" id="about-visao-title"><strong>Nossa Visão</strong></h3>
+              <p>
+                Sonhamos com um ecossistema de trabalho onde cada profissional possa encontrar seu lugar e cada empresa possa construir uma equipe forte
+                com talentos da sua própria comunidade.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-cta-section" role="region" aria-labelledby="about-cta-title">
+        <div class="about-container">
+          <div class="about-cta-card">
+            <h2 class="about-cta-title" id="about-cta-title"><strong>Junte-se a nós e vamos mapear o futuro do trabalho, juntos!!</strong></h2>
+            <button class="about-cta-button" type="button" onclick="window.location.href='paginamapav4.html'">Ver Vagas no Mapa</button>
+          </div>
+        </div>
       </section>
     </main>
 
