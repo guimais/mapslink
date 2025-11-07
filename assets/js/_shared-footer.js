@@ -57,13 +57,13 @@
             <a class="footer-social-link" role="listitem" aria-label="LinkedIn da MapsLink" href="https://www.linkedin.com/company/mapslink" target="_blank" rel="noopener noreferrer">
               <i class="ri-linkedin-fill" aria-hidden="true"></i>
             </a>
-            <a class="footer-social-link" role="listitem" aria-label="Instagram da MapsLink" href="https://www.instagram.com/mapslink" target="_blank" rel="noopener noreferrer">
+            <a class="footer-social-link" role="listitem" aria-label="Instagram da MapsLink" href="https://www.instagram.com/maps.link?igsh=ZmdpZWt2Nm9xNG1l&utm_source=qr" target="_blank" rel="noopener noreferrer">
               <i class="ri-instagram-line" aria-hidden="true"></i>
             </a>
             <a class="footer-social-link" role="listitem" aria-label="YouTube da MapsLink" href="https://www.youtube.com/@mapslink" target="_blank" rel="noopener noreferrer">
               <i class="ri-youtube-line" aria-hidden="true"></i>
             </a>
-            <a class="footer-social-link" role="listitem" aria-label="GitHub da MapsLink" href="https://github.com/mapslink" target="_blank" rel="noopener noreferrer">
+            <a class="footer-social-link" role="listitem" aria-label="GitHub da MapsLink" href="https://github.com/guimais/mapslink" target="_blank" rel="noopener noreferrer">
               <i class="ri-github-line" aria-hidden="true"></i>
             </a>
           </div>
@@ -74,13 +74,7 @@
             <li><a href="${pageBase}paginamapav4.html">Mapa de Vagas</a></li>
             <li><a href="${pageBase}selecaoperfil.html">Criar Perfil</a></li>
             <li><a href="${pageBase}paginaplanos.html">Planos e preços</a></li>
-            <li>
-              <span class="footer-link footer-link--reserved" role="text" aria-disabled="true" aria-label="Dashboard – área reservada">
-                <i class="ri-lock-line" aria-hidden="true"></i>
-                Dashboard
-                <span class="footer-tag" aria-hidden="true">Reservado</span>
-              </span>
-            </li>
+            
           </ul>
         </div>
         <div class="footer-column">
@@ -88,29 +82,15 @@
           <ul class="footer-links">
             <li><a href="${pageBase}about.html">Sobre nós</a></li>
             <li><a href="${pageBase}contact.html">Contato</a></li>
-            <li>
-              <span class="footer-link footer-link--reserved" role="text" aria-disabled="true" aria-label="Agenda – área reservada">
-                <i class="ri-lock-line" aria-hidden="true"></i>
-                Agenda
-                <span class="footer-tag" aria-hidden="true">Reservado</span>
-              </span>
-            </li>
-            <li>
-              <span class="footer-link footer-link--reserved" role="text" aria-disabled="true" aria-label="Vagas em destaque – área reservada">
-                <i class="ri-lock-line" aria-hidden="true"></i>
-                Vagas em destaque
-                <span class="footer-tag" aria-hidden="true">Reservado</span>
-              </span>
-            </li>
           </ul>
         </div>
         <div class="footer-column">
           <h3>Suporte</h3>
           <div class="footer-contact">
             <span><i class="ri-mail-send-line" aria-hidden="true"></i> <a href="mailto:contato@mapslink.com">contato@mapslink.com</a></span>
-            <span><i class="ri-phone-line" aria-hidden="true"></i> <a href="tel:+551140028922">+55 (11) 4002-8922</a></span>
-            <span><i class="ri-map-pin-line" aria-hidden="true"></i> Avenida das Inovações, 1234 - São Paulo, SP</span>
-            <span><i class="ri-customer-service-2-line" aria-hidden="true"></i> Atendimento: Seg a Sex, 09h - 18h (BRT)</span>
+            <span><i class="ri-phone-line" aria-hidden="true"></i> <a href="tel:+55(19)99740-5660">+55(19)99740-5660</a></span>
+            <span><i class="ri-map-pin-line" aria-hidden="true"></i> H11 - Campus I, PUC-Campinas, Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP</span>
+            <span><i class="ri-customer-service-2-line" aria-hidden="true"></i> Atendimento: Seg a Sex, 09h - 17h (BRT)</span>
           </div>
         </div>
       </div>

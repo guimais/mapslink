@@ -15,15 +15,15 @@
     <script defer src="./assets/js/main.js"></script>
   </head>
   <body data-page="home" data-nav-active="index.html">
-    <div class="nav-container">
+    <header class="nav-container nav-fixed" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
-        <a href="index.html" class="nav-logo-link" aria-label="P&aacute;gina inicial">
-          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo p&iacute;lula Maps Link" class="nav-logo" loading="lazy" decoding="async">
+        <a href="index.html" class="nav-logo-link" aria-label="Página inicial">
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo pílula Maps Link" class="nav-logo" loading="lazy" decoding="async">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
-        <ul class="nav-links" id="navMenu" role="list">
+        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
           <li><a class="nav-link active" href="index.html" aria-current="page">Home</a></li>
           <li><a class="nav-link" href="pages/paginamapav4.html">Maps</a></li>
           <li><a class="nav-link" href="pages/selecaoperfil.html">Profile</a></li>
@@ -32,7 +32,7 @@
           <li><a class="nav-link" href="pages/contact.html">Contact</a></li>
         </ul>
       </nav>
-    </div>
+    </header>
 
     <main id="home" class="container" role="main" aria-labelledby="titulo-principal">
       <section class="hero">
@@ -55,10 +55,10 @@
             <li class="icon-pill" role="listitem" aria-label="Vagas"><i class="ri-briefcase-line" aria-hidden="true"></i></li>
             <li class="icon-pill" role="listitem" aria-label="Tecnologia"><i class="ri-cpu-line" aria-hidden="true"></i></li>
             <li class="icon-pill" role="listitem" aria-label="Explorar"><i class="ri-compass-3-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Localiza&ccedil;&atilde;o"><i class="ri-map-pin-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Usu&aacute;rios"><i class="ri-user-3-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Finan&ccedil;as"><i class="ri-money-dollar-circle-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Organiza&ccedil;&atilde;o"><i class="ri-clipboard-line" aria-hidden="true"></i></li>
+            <li class="icon-pill" role="listitem" aria-label="Localização"><i class="ri-map-pin-line" aria-hidden="true"></i></li>
+            <li class="icon-pill" role="listitem" aria-label="Usuários"><i class="ri-user-3-line" aria-hidden="true"></i></li>
+            <li class="icon-pill" role="listitem" aria-label="Finanças"><i class="ri-money-dollar-circle-line" aria-hidden="true"></i></li>
+            <li class="icon-pill" role="listitem" aria-label="Organização"><i class="ri-clipboard-line" aria-hidden="true"></i></li>
             <li class="icon-pill" role="listitem" aria-label="Dispositivos"><i class="ri-smartphone-line" aria-hidden="true"></i></li>
           </ul>
         </div>

@@ -14,83 +14,139 @@
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
   </head>
-  <body data-page="contact" data-nav-active="contact.html">
-    <div class="nav-container">
+  <body data-page="contact" data-nav-active="contact">
+    <header class="nav-container nav-fixed" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
-        <a href="../index.html" class="nav-logo-link" aria-label="PÃ¡gina inicial">
-          <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo pilula Maps Link" class="nav-logo" loading="lazy" decoding="async">
+        <a href="../index.html" class="nav-logo-link" aria-label="Página inicial">
+          <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" loading="lazy" decoding="async">
         </a>
         <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
-        <ul class="nav-links" id="navMenu" role="list">
+        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
           <li><a class="nav-link" href="../index.html">Home</a></li>
           <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
           <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
           <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
-          <li><a class="nav-link active" href="about.html" aria-current="page">About</a></li>
-          <li><a class="nav-link" href="contact.html">Contact</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
+          <li><a class="nav-link active" href="contact.html" aria-current="page" data-nav-key="contact">Contact</a></li>
         </ul>
       </nav>
-    </div>
+    </header>
 
-    <section id="contact" class="contact-section" role="main" aria-labelledby="titulo-contato">
-      <div class="contact-wrap">
-        <aside class="contact-card" role="complementary" aria-label="Canais de contato">
-          <div class="contact-card__logo">
-            <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" loading="lazy" decoding="async">
+    <main class="contact-page" role="main" aria-labelledby="contact-title">
+      <section class="contact-hero" aria-labelledby="contact-title">
+        <div class="contact-container">
+          <span class="contact-hero-label">Fale Conosco</span>
+          <h1 class="contact-hero-title" id="contact-title">Entre em Contato Conosco</h1>
+          <p class="contact-hero-subtitle">Estamos aqui para ajudar. Escolha a melhor forma de nos contatar.</p>
+        </div>
+      </section>
+
+      <section class="contact-body" aria-label="Formulário e informações de contato">
+        <div class="contact-container contact-grid">
+          <div class="contact-form-card">
+            <h2 class="contact-form-title">Envie uma Mensagem</h2>
+            <p class="contact-form-description">Preencha o formulário e nossa equipe responderá o mais breve possível.</p>
+            <form class="contact-form" action="#" method="post" autocomplete="on">
+              <div class="form-row two-cols" role="group" aria-label="Identificação">
+                <div class="form-field">
+                  <label for="nome">Nome *</label>
+                  <input type="text" id="nome" name="nome" required autocomplete="given-name">
+                </div>
+                <div class="form-field">
+                  <label for="sobrenome">Sobrenome *</label>
+                  <input type="text" id="sobrenome" name="sobrenome" required autocomplete="family-name">
+                </div>
+              </div>
+
+              <div class="form-row" role="group" aria-label="Contato">
+                <div class="form-field">
+                  <label for="email">E-mail *</label>
+                  <input type="email" id="email" name="email" required autocomplete="email" placeholder="voce@email.com">
+                </div>
+              </div>
+
+              <div class="form-row" role="group" aria-label="Assunto">
+                <div class="form-field">
+                  <label for="assunto">Assunto</label>
+                  <select id="assunto" name="assunto">
+                    <option value="suporte" selected>Suporte Técnico</option>
+                    <option value="parcerias">Parcerias e Comercial</option>
+                    <option value="planos">Planos e Assinaturas</option>
+                    <option value="sugestoes">Sugestões</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row" role="group" aria-label="Mensagem">
+                <div class="form-field">
+                  <label for="mensagem">Mensagem *</label>
+                  <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Descreva sua dúvida ou problema aqui..."></textarea>
+                </div>
+              </div>
+
+              <div class="form-actions" role="group" aria-label="Enviar formulário">
+                <button type="submit" class="botao">Enviar Mensagem</button>
+              </div>
+            </form>
           </div>
-          <ul class="contact-card__list" aria-label="Lista de contatos">
-            <li>E-mail: ajuda@mapslink.com</li>
-            <li>E-mail: comercio@mapslink.com</li>
-            <li>E-mail: adm@mapslink.com</li>
-            <li>Telefone: (19) 99111-0000</li>
-            <li>Telefone: 0800 777 2222</li>
-          </ul>
-        </aside>
 
-        <div class="contact-main">
-          <h1 class="titulo-principal" id="titulo-contato">Fale conosco</h1>
-          <form class="contact-form" action="#" method="post" autocomplete="on" aria-labelledby="titulo-contato">
-            <div class="form-row two-cols" role="group" aria-label="Identificação">
-              <div class="form-field">
-                <label for="nome">Nome (Obrigatório)</label>
-                <input type="text" id="nome" name="nome" required placeholder="" autocomplete="given-name" inputmode="text">
-              </div>
-              <div class="form-field">
-                <label for="sobrenome">Sobrenome (Obrigatório)</label>
-                <input type="text" id="sobrenome" name="sobrenome" required placeholder="" autocomplete="family-name" inputmode="text">
-              </div>
+          <aside class="contact-side" role="complementary" aria-label="Canais diretos e dúvidas frequentes">
+            <div class="contact-card contact-card--direct" role="region" aria-labelledby="contact-direct-title">
+              <h3 class="contact-card-title" id="contact-direct-title">Contato Direto</h3>
+              <ul class="contact-card-list">
+                <li><i class="ri-mail-line" aria-hidden="true"></i> suporte@mapslink.com</li>
+                <li><i class="ri-mail-open-line" aria-hidden="true"></i> comercial@mapslink.com</li>
+                <li><i class="ri-mail-send-line" aria-hidden="true"></i> admin@mapslink.com</li>
+                <li><i class="ri-phone-line" aria-hidden="true"></i> +55 (11) 99999-8888</li>
+                <li><i class="ri-phone-fill" aria-hidden="true"></i> +55 (11) 3333-4444</li>
+              </ul>
             </div>
 
-            <div class="form-row" role="group" aria-label="Contato">
-              <div class="form-field">
-                <label for="email">E-mail (Obrigatório)</label>
-                <input type="email" id="email" name="email" required placeholder="" autocomplete="email" inputmode="email">
+            <div class="contact-card contact-card--faq" role="region" aria-labelledby="contact-faq-title">
+              <h3 class="contact-card-title" id="contact-faq-title">Perguntas Frequentes</h3>
+              <ul class="contact-card-list contact-card-list--links">
+                <li><a href="#">Como me candidato a uma vaga?</a></li>
+                <li><a href="#">Como publico uma vaga na minha empresa?</a></li>
+                <li><a href="#">Como altero meus dados de perfil?</a></li>
+                <li><a href="#">Quais são os planos para empresas?</a></li>
+                <li><a href="#">Esqueci minha senha, e agora?</a></li>
+              </ul>
+            </div>
+
+            <div class="social-bar" aria-label="Redes sociais e WhatsApp">
+              <a href="#" class="social-item" rel="noopener"><i class="ri-instagram-line" aria-hidden="true"></i> @Mapslink</a>
+              <a href="#" class="social-item" rel="noopener"><i class="ri-facebook-circle-line" aria-hidden="true"></i> /MapsLink</a>
+              <a href="#" class="social-item" rel="noopener"><i class="ri-linkedin-box-line" aria-hidden="true"></i> MapsLink</a>
+              <a href="https://wa.me/5519912223333" class="social-item" rel="noopener"><i class="ri-whatsapp-line" aria-hidden="true"></i> (11) 91222-3333</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="contact-office" aria-labelledby="office-title">
+        <div class="contact-container contact-office-grid">
+          <div class="contact-office-card" role="region" aria-labelledby="office-title">
+            <h2 class="contact-office-title" id="office-title">Nosso Escritório</h2>
+            <p class="contact-office-description">Estamos localizados em um ponto estratégico de São Paulo para facilitar nossos encontros presenciais com clientes e parceiros.</p>
+            <div class="contact-office-info">
+              <div class="contact-office-item">
+                <i class="ri-map-pin-line" aria-hidden="true"></i>
+                <span>Av. Principal, 123, Centro<br>São Paulo, SP - Brasil</span>
+              </div>
+              <div class="contact-office-item">
+                <i class="ri-time-line" aria-hidden="true"></i>
+                <span>Segunda a Sexta<br>09:00 - 18:00</span>
               </div>
             </div>
-
-            <div class="form-row" role="group" aria-label="Mensagem">
-              <div class="form-field">
-                <label for="mensagem">Mensagem (Obrigatório)</label>
-                <textarea id="mensagem" name="mensagem" rows="4" required placeholder="" autocomplete="on"></textarea>
-              </div>
-            </div>
-
-            <div class="form-actions" role="group" aria-label="Ações do formulário">
-              <button type="submit" class="botao">Enviar</button>
-            </div>
-          </form>
-
-          <div class="social-bar" aria-label="Redes sociais e WhatsApp">
-            <a href="#" class="social-item" rel="noopener"><i class="ri-instagram-line" aria-hidden="true"></i> @Mapslink</a>
-            <a href="#" class="social-item" rel="noopener"><i class="ri-facebook-circle-line" aria-hidden="true"></i> @MapsLink.Fb</a>
-            <a href="#" class="social-item" rel="noopener"><i class="ri-linkedin-box-line" aria-hidden="true"></i> @MapsLink.in</a>
-            <a href="https://wa.me/5519912223333" class="social-item" rel="noopener"><i class="ri-whatsapp-line" aria-hidden="true"></i> (19) 91222-3333</a>
+          </div>
+          <div class="contact-office-map" role="presentation" aria-hidden="true">
+            <iframe title="Mapa do escritório Maps Link" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.7641721529565!2d-46.637222223853906!3d-23.573961162532898!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59cb3656a1f9%3A0x31c22d7b8e2b2047!2sAv.%20Paulista%2C%20123%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001311-904!5e0!3m2!1spt-BR!2sbr!4v1730939999999" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
 
     <script defer src="../assets/js/contact.js"></script>

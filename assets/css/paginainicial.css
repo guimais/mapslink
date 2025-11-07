@@ -88,7 +88,6 @@ h2 {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 0 16px;
   z-index: 1000;
 }
 
@@ -98,25 +97,26 @@ h2 {
   border-radius: 9999px;
   height: var(--nav-h);
   width: 92%;
-  max-width: 1260px;
+  max-width: 1100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 28px;
   box-shadow: 0 6px 20px rgba(0,0,0,.06);
 }
 
 .nav-logo-link {
-  display: flex;
-  align-items: center;
-  height: 100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
 }
 
 .nav-logo {
-  display: block;
-  width: auto;
-  max-height: 56px;
-  object-fit: contain;
+  display:block;
+  width:auto;
+  max-height:calc(var(--nav-h) + 20px);
+  margin-right:8px;
 }
 
 .nav-toggle {
@@ -138,9 +138,9 @@ h2 {
 .nav-link {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   color: #1a1a1a;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 10px;
   transition: all .2s var(--ease);
   display: block;
@@ -304,46 +304,47 @@ h2 {
 .cards-sobre {
   max-width: var(--container);
   width: 100%;
-  margin: 0 auto 56px;
+  margin: 0 auto 60px;
   padding: 0 32px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
 }
 
 .card-sobre {
   background: #0f172a;
-  border: 1px solid #0f172a;
-  border-radius: var(--radius-xl);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(15, 23, 42, 0.85);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 16px;
-  transition: all .25s var(--ease);
-  min-height: 140px;
+  min-height: 160px;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
 }
 
 .card-sobre:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 24px 52px rgba(15, 23, 42, 0.24);
 }
 
 .icone-sobre {
-  width: 74px;
-  height: 74px;
-  min-width: 74px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #0f172a;
   flex-shrink: 0;
 }
 
 .icone-sobre i {
-  font-size: 46px;
-  color: #000000;
+  font-size: 40px;
+  color: inherit;
 }
 
 .texto-sobre {
@@ -351,7 +352,7 @@ h2 {
   color: #ffffff;
   font-weight: 700;
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   text-align: left;
 }
 
@@ -480,24 +481,22 @@ h2 {
   
   .card-sobre {
     padding: 40px;
-    gap: 24px;
-    min-height: 180px;
-    border-radius: 32px;
+    gap: 22px;
+    border-radius: 30px;
   }
   
   .icone-sobre {
-    width: 96px;
-    height: 96px;
-    min-width: 96px;
+    width: 80px;
+    height: 80px;
   }
   
   .icone-sobre i {
-    font-size: 60px;
+    font-size: 34px;
   }
   
   .texto-sobre {
     font-size: 18px;
-    line-height: 1.65;
+    line-height: 1.7;
   }
   
   .footer-spacer {
@@ -606,20 +605,18 @@ h2 {
   }
   
   .card-sobre {
-    padding: 32px;
+    padding: 34px;
     gap: 20px;
-    min-height: 160px;
-    border-radius: 28px;
+    border-radius: 26px;
   }
   
   .icone-sobre {
-    width: 84px;
-    height: 84px;
-    min-width: 84px;
+    width: 72px;
+    height: 72px;
   }
   
   .icone-sobre i {
-    font-size: 52px;
+    font-size: 32px;
   }
   
   .texto-sobre {
@@ -638,6 +635,7 @@ h2 {
   .cards-sobre {
     padding-left: 24px;
     padding-right: 24px;
+    gap: 24px;
   }
   
   .icons-list {
@@ -656,6 +654,20 @@ h2 {
   
   .cards-sobre {
     grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+
+  .card-sobre {
+    padding: 30px;
+  }
+
+  .icone-sobre {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cards-sobre .card-sobre:last-child {
+    grid-column: 1 / -1;
   }
 }
 
@@ -707,6 +719,18 @@ h2 {
   
   .icon-pill i {
     font-size: 32px;
+  }
+
+  .cards-sobre {
+    gap: 24px;
+  }
+
+  .card-sobre {
+    padding: 28px;
+  }
+
+  .cards-sobre .card-sobre:last-child {
+    grid-column: 1 / -1;
   }
 }
 
@@ -798,7 +822,7 @@ h2 {
   
   .cards-sobre {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
   }
   
   .titulo-sobre {
@@ -871,19 +895,23 @@ h2 {
   }
   
   .card-sobre {
-    padding: 20px;
-    flex-direction: column;
+    padding: 24px;
+    align-items: center;
+    gap: 16px;
     text-align: center;
   }
   
   .icone-sobre {
-    width: 64px;
-    height: 64px;
-    min-width: 64px;
+    width: 56px;
+    height: 56px;
   }
   
   .icone-sobre i {
-    font-size: 38px;
+    font-size: 28px;
+  }
+
+  .texto-sobre {
+    font-size: 16px;
   }
 }
 
