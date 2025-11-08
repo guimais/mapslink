@@ -147,7 +147,7 @@ h2,
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:32px 28px;
+  padding:32px 28px 64px;
   gap:16px;
 }
 

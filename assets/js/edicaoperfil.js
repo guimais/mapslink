@@ -94,7 +94,9 @@
 
   function showFeedback(node, message, isError) {
     if (!node) return;
-    node.textContent = message;
+    const textTarget = node.querySelector("[data-edicao-feedback-text]");
+    if (textTarget) textTarget.textContent = message || "";
+    else node.textContent = message;
     node.classList.toggle("is-error", !!isError);
     node.classList.add("is-visible");
     window.clearTimeout(state.feedbackTimer);

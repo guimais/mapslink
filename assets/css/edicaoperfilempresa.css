@@ -321,19 +321,86 @@ body[data-page="edicaoperfilempresa"]{
 }
 
 .edicao-feedback{
-  min-height:20px;
+  position:relative;
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  margin-top:4px;
   font-size:13px;
   font-weight:600;
-  letter-spacing:.02em;
+  letter-spacing:.01em;
   color:var(--edicao-heading);
+  background:rgba(16,37,105,.08);
+  border:1px solid rgba(16,37,105,.18);
+  border-radius:18px;
+  box-shadow:0 12px 24px rgba(15,23,42,.08);
   opacity:0;
-  transition:opacity .2s ease;
+  transform:translateY(4px);
+  transition:opacity .25s ease, transform .25s ease;
+  pointer-events:none;
+}
+.edicao-feedback::before,
+.edicao-feedback::after{
+  content:"";
+  position:absolute;
+  left:38px;
+  bottom:-8px;
+  border-style:solid;
+  border-width:8px 8px 0 8px;
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.edicao-feedback::before{
+  border-color:rgba(16,37,105,.18) transparent transparent transparent;
+}
+.edicao-feedback::after{
+  bottom:-7px;
+  border-color:rgba(16,37,105,.08) transparent transparent transparent;
+}
+.edicao-feedback-icon{
+  width:26px;
+  height:26px;
+  border-radius:9999px;
+  background:var(--edicao-heading);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:#ffffff;
+  font-size:12px;
+  font-weight:700;
+  box-shadow:0 6px 12px rgba(15,23,42,.18);
+  flex-shrink:0;
+}
+.edicao-feedback-icon::before{
+  content:"\2713";
+}
+.edicao-feedback-text{
+  line-height:1.4;
 }
 .edicao-feedback.is-error{
   color:#b91c1c;
+  background:rgba(185,28,28,.08);
+  border-color:rgba(185,28,28,.32);
+  box-shadow:0 12px 24px rgba(185,28,28,.12);
 }
-
+.edicao-feedback.is-error::before{
+  border-color:rgba(185,28,28,.32) transparent transparent transparent;
+}
+.edicao-feedback.is-error::after{
+  border-color:rgba(185,28,28,.08) transparent transparent transparent;
+}
+.edicao-feedback.is-error .edicao-feedback-icon{
+  background:#b91c1c;
+  box-shadow:0 6px 12px rgba(185,28,28,.3);
+}
 .edicao-feedback.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.edicao-feedback.is-visible::before,
+.edicao-feedback.is-visible::after{
   opacity:1;
 }
 
