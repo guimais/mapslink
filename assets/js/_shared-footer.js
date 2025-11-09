@@ -19,6 +19,7 @@
   if (document.querySelector('.site-footer[data-component="site-footer"]')) return;
 
   const pageId = (body.dataset.page || "").toLowerCase();
+  if (pageId === "edicaoperfil") return;
   const navActive = (body.dataset.navActive || "").toLowerCase();
   const path = (window.location.pathname || "").toLowerCase();
   const isRoot = pageId === "home" || navActive === "index.html" || (!path.includes("/pages/") && !path.includes("\\pages\\"));
