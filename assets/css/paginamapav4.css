@@ -171,7 +171,7 @@ h2,
 }
 
 .btn-filtro.is-active{
-  background:#102569;
+  background:#102569; 
   color:#fff;
   border-color:#102569;
 }
@@ -186,7 +186,9 @@ h2,
 }
 
 .maps-layout{
-  width:min(1400px,96vw);
+  /* Alinha o conteúdo com a nav-pilula (92% / max-width:1100px) */
+  width:92%;
+  max-width:1100px;
   margin:0 auto 48px;
   display:grid;
   --filters-col:380px;
@@ -867,11 +869,30 @@ fieldset.grupo-chips::before{
   .painel-filtros[hidden]{
     display:none !important;
   }
+  /* Mover botão de filtro para canto superior ESQUERDO sobre o mapa
+     e melhorar alvo para toque */
   .btn-filtro{
     position:fixed;
-    right:16px;
-    top:16px;
-    z-index:2100;
+    left:16px;
+    right:auto;
+    /* posiciona logo abaixo da navbar para ficar sobre o mapa */
+    top:calc(var(--nav-h) + 16px);
+    z-index:2200;
+    min-width:48px;
+    min-height:48px;
+    padding:0 12px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    box-shadow:var(--shadow-md);
+    pointer-events:auto;
+    touch-action:manipulation;
+  }
+
+  .btn-filtro:focus-visible{
+    outline:3px solid rgba(16,37,105,.14);
+    outline-offset:2px;
   }
 }
 
@@ -1184,5 +1205,18 @@ fieldset.grupo-chips::before{
   }
   .busca-mapa{
     width:94%;
+  }
+}
+
+/* Em monitores grandes, restaurar o comportamento anterior:
+   permitir que o container principal seja maior que a nav (ex: até 1400px)
+   para aproveitar melhor espaço em telas wide. */
+@media (min-width:1400px){
+  .maps-layout{
+    width: min(1400px, 96vw);
+    max-width: none;
+    /* mantém o mesmo grid original */
+    grid-template-columns:440px 1fr var(--filters-col);
+    margin: 0 auto 48px;
   }
 }
