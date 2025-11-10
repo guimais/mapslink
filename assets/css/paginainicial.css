@@ -97,7 +97,7 @@ h2 {
   border-radius: 9999px;
   height: var(--nav-h);
   width: 92%;
-  max-width: 1100px;
+  max-width: var(--container);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -245,11 +245,26 @@ h2 {
   margin: -56px 0 60px 0;
 }
 
+
 .icons-container {
-  max-width: var(--container);
   width: 100%;
-  margin: 0 auto;
-  padding: 0 32px;
+  margin: 0; 
+  padding: 0;
+}
+
+
+.icons-container {
+  display: grid;
+  grid-template-columns: 58% 42%;
+}
+
+.icons-list {
+  grid-column: 1 / -1; 
+  width: 100%;
+  display: grid; 
+  grid-template-columns: repeat(8, 1fr);
+  gap: 24px;
+  justify-items: start;
 }
 
 .icons-list {
@@ -291,9 +306,8 @@ h2 {
 
 .segundo-subtitulo {
   width: 100%;
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 32px;
+  margin: 0; 
+  padding: 0;
 }
 
 .titulo-sobre {
@@ -302,10 +316,9 @@ h2 {
 }
 
 .cards-sobre {
-  max-width: var(--container);
   width: 100%;
-  margin: 0 auto 60px;
-  padding: 0 32px;
+  margin: 0 0 60px 0; 
+  padding: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 28px;
@@ -362,148 +375,6 @@ h2 {
 }
 
 
-@media (min-width: 1850px) {
-  :root {
-    --container: 1650px;
-    --nav-h: 76px;
-  }
-  
-  html {
-    font-size: 18px;
-  }
-  
-  h1 {
-    font-size: clamp(52px, 6vw, 72px);
-    letter-spacing: -0.8px;
-    margin-bottom: 20px;
-  }
-  
-  h2 {
-    font-size: clamp(42px, 5vw, 60px);
-    letter-spacing: -0.5px;
-    margin-bottom: 16px;
-  }
-  
-  
-  p {
-    font-size: 20px;
-    line-height: 1.75;
-  }
-  
-  .container {
-    max-width: 1700px;
-    padding-left: 64px;
-    padding-right: 64px;
-  }
-  
-  .nav-pilula {
-    max-width: 1700px;
-    padding: 0 40px;
-    height: 76px;
-  }
-  
-  .nav-logo {
-    max-height: 64px;
-  }
-  
-  .nav-link {
-    font-size: 17px;
-    padding: 14px 20px;
-    border-radius: 12px;
-  }
-  
-  .hero {
-    gap: 80px;
-    padding: 80px 0;
-  }
-  
-  .hero__title {
-    margin-bottom: 20px;
-  }
-  
-  .hero__subtitle {
-    font-size: clamp(20px, 2.5vw, 24px);
-    max-width: 720px;
-    margin-bottom: 32px;
-  }
-  
-  .hero__actions {
-    gap: 18px;
-  }
-  
-  .btn {
-    padding: 16px 40px;
-    font-size: 18px;
-    border-radius: 36px;
-  }
-  
-  .hero__logo img {
-    max-width: 560px;
-  }
-  
-  .icons-section {
-    margin: -72px 0 80px 0;
-  }
-  
-  .icons-container {
-    max-width: 1700px;
-    padding: 0 64px;
-  }
-  
-  .icons-list {
-    gap: 36px 48px;
-  }
-  
-  .icon-pill {
-    width: 128px;
-    height: 128px;
-  }
-  
-  .icon-pill i {
-    font-size: 50px;
-  }
-  
-  .segundo-subtitulo,
-  .cards-sobre {
-    max-width: 1700px;
-    padding-left: 64px;
-    padding-right: 64px;
-  }
-  
-  .titulo-sobre {
-    margin-bottom: 48px;
-  }
-  
-  .cards-sobre {
-    gap: 40px;
-    margin-bottom: 88px;
-  }
-  
-  .card-sobre {
-    padding: 40px;
-    gap: 22px;
-    border-radius: 30px;
-  }
-  
-  .icone-sobre {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .icone-sobre i {
-    font-size: 34px;
-  }
-  
-  .texto-sobre {
-    font-size: 18px;
-    line-height: 1.7;
-  }
-  
-  .footer-spacer {
-    height: 80px;
-  }
-}
-
 
 @media (min-width: 1500px) {
   :root {
@@ -531,13 +402,13 @@ h2 {
   }
   
   .container {
-    max-width: 1350px;
+    max-width: var(--container);
     padding-left: 48px;
     padding-right: 48px;
   }
   
   .nav-pilula {
-    max-width: 1350px;
+    max-width: var(--container);
     padding: 0 32px;
   }
   
@@ -571,8 +442,10 @@ h2 {
   }
   
   .icons-container {
-    max-width: 1350px;
-    padding: 0 48px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    
   }
   
   .icons-list {
@@ -590,9 +463,9 @@ h2 {
   
   .segundo-subtitulo,
   .cards-sobre {
-    max-width: 1350px;
-    padding-left: 48px;
-    padding-right: 48px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
   
   .titulo-sobre {
@@ -776,6 +649,38 @@ h2 {
   .icon-pill i {
     font-size: 30px;
   }
+
+  /* Mobile navigation: mostrar toggle e esconder links até o usuário abrir o menu */
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-pilula {
+    position: relative;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  /* Mostrar menu quando a UL receber a classe is-open (o script aplica a classe ao menu)
+     ou quando o nav tiver a classe is-open (compatibilidade) */
+  .nav-pilula.is-open .nav-links,
+  .nav-links.is-open,
+  .nav-links[data-nav-open="true"] {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: calc(var(--nav-h) + 12px);
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: var(--shadow-md);
+    gap: 8px;
+    z-index: 1200;
+  }
 }
 
 @media (max-width: 768px) {
@@ -832,36 +737,101 @@ h2 {
 }
 
 @media (max-width: 560px) {
-  .nav-container {
-    top: 8px;
-    padding: 0 8px;
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    background: none;
+    color: var(--text);
+    border-radius: 12px;
+    transition: background-color .2s ease, color .2s ease;
   }
-  
-  .nav-pilula {
-    padding: 8px 12px;
-    height: 50px;
-    border-radius: 16px;
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background: rgba(16,37,105,.08);
+    color: var(--brand);
   }
-  
-  .nav-logo {
-    max-height: 38px;
-  }
-  
   .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 88px 0 40px;
+    gap: 0;
+    box-shadow: -4px 0 22px rgba(0,0,0,0.16);
+    transition: right .3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+  }
+  .nav-links.active,
+  .nav-links.is-open,
+  .nav-pilula.is-open .nav-links,
+  .nav-links[data-nav-open="true"] {
+    right: 0;
+  }
+  .nav-links li {
     width: 100%;
-    padding-top: 80px;
+    border-bottom: 1px solid var(--surface);
   }
-  
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
   .nav-link {
-    padding: 16px 20px;
-    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 18px 24px;
+    font-size: 16px;
+    border-radius: 0;
+    opacity: 1;
+    transform: none;
   }
-  
-  .container {
-    padding-left: 16px;
-    padding-right: 16px;
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--surface);
+    color: var(--brand);
   }
-  
+
+    .nav-link.active {
+      background: rgba(16,37,105,.12);
+      color: var(--brand-2);
+      box-shadow: none;
+      border-left: 4px solid var(--brand);
+      font-weight: 800;
+    }
+    .nav-link {
+      background: none;
+      color: #1a1a1a;
+      font-weight: 700;
+      border-left: 0 solid transparent;
+      transition: color .2s, background-color .2s, border-left .2s;
+    }
+  .nav-link.active {
+    background: rgba(16,37,105,.12);
+    box-shadow: none;
+    border-left: 4px solid var(--brand);
+  }
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease;
+    z-index: 999;
+  }
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
   .hero {
     padding: 16px 0;
   }
