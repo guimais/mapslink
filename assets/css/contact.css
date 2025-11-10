@@ -309,7 +309,7 @@ h3,
 .faq-toggle:last-child {
   border-bottom: none;
 }
-/* Seta curta, espessa e arredondada */
+
 .faq-icon {
   margin-right: 12px;
   display: inline-block;
@@ -324,7 +324,7 @@ h3,
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-/* Roda e muda cor da seta ao abrir */
+
 .faq-toggle[aria-expanded="true"] .faq-icon {
   transform: rotate(180deg);
 }
