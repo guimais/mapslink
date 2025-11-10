@@ -43,66 +43,36 @@
       id: "seg",
       label: "Seg",
       dayNumber: "1",
-      summary: "Segunda de planejamento e alinhamentos.",
-      events: [
-        { time: "09:00", title: "Kick-off da sprint", description: "Alinhamento com todas as squads sobre metas da semana.", icon: "ri-flag-line", color: "azul" },
-        { time: "11:00", title: "1:1 com Ana Martins", description: "Feedback quinzenal e plano de desenvolvimento.", icon: "ri-user-heart-line", color: "verde" },
-        { time: "14:00", title: "Revisao do roadmap Q4", description: "Ajustar milestones nos proximos lancamentos MapsLink.", icon: "ri-map-pin-line", color: "amarelo" },
-        { time: "16:30", title: "Sync produto + marketing", description: "Definir plano de comunicacao para novas rotas.", icon: "ri-team-line", color: "roxo" },
-        { time: "18:30", title: "Mentoria de lideranca", description: "Sessao online com mentora convidada.", icon: "ri-lightbulb-line", color: "laranja" }
-      ]
+      summary: "Sem compromissos cadastrados. Use o botão para começar a semana.",
+      events: []
     },
     {
       id: "ter",
       label: "Ter",
       dayNumber: "2",
-      summary: "Terca dedicada a entrevistas e experimentos.",
-      events: [
-        { time: "08:30", title: "Painel de metricas", description: "Analisar resultados da semana anterior.", icon: "ri-bar-chart-2-line", color: "verde" },
-        { time: "10:30", title: "Entrevista Maps - Produto", description: "Candidato PM Senior.", icon: "ri-user-search-line", color: "azul" },
-        { time: "13:30", title: "Workshop de experimentos UX", description: "Construir backlog de testes para app mobile.", icon: "ri-flask-line", color: "amarelo" },
-        { time: "15:30", title: "Checkpoint Projeto Atlas", description: "Revisar riscos e mitigacoes do trimestre.", icon: "ri-focus-2-line", color: "roxo" },
-        { time: "17:30", title: "Treino funcional", description: "Rotina de 45 minutos para alongar e recarregar.", icon: "ri-run-line", color: "laranja" }
-      ]
+      summary: "Nada marcado ainda para terça-feira.",
+      events: []
     },
     {
       id: "qua",
       label: "Qua",
       dayNumber: "3",
-      summary: "Quarta focada em aprendizado e comunidade.",
-      events: [
-        { time: "09:00", title: "Revisao do backlog", description: "Priorizacao com time de produto.", icon: "ri-todo-line", color: "azul" },
-        { time: "11:30", title: "Almoco com a equipe", description: "Celebrar conquistas da sprint.", icon: "ri-restaurant-2-line", color: "verde" },
-        { time: "14:30", title: "Testes de usabilidade", description: "Sessao com usuarios beta do novo dashboard.", icon: "ri-user-smile-line", color: "amarelo" },
-        { time: "16:00", title: "Atualizacao comunidade", description: "Live mensal com parceiros estrategicos.", icon: "ri-mic-line", color: "roxo" },
-        { time: "19:00", title: "Curso de dataviz", description: "Storytelling com dados - modulo 3.", icon: "ri-graduation-cap-line", color: "laranja" }
-      ]
+      summary: "Adicione reuniões ou entrevistas para a quarta.",
+      events: []
     },
     {
       id: "qui",
       label: "Qui",
       dayNumber: "4",
-      summary: "Quinta de entregas e novas parcerias.",
-      events: [
-        { time: "08:00", title: "Clube do livro Maps", description: "Debate sobre inovacao centrada no cliente.", icon: "ri-book-open-line", color: "verde" },
-        { time: "10:00", title: "Sprint review squads A e B", description: "Apresentacao das principais evolucoes.", icon: "ri-presentation-line", color: "azul" },
-        { time: "13:00", title: "Planejamento financeiro", description: "Revisar previsoes e oportunidades.", icon: "ri-money-dollar-circle-line", color: "amarelo" },
-        { time: "15:00", title: "Reuniao com parceiros", description: "Negociar integracoes e roadmap conjunto.", icon: "ri-handshake-line", color: "roxo" },
-        { time: "18:00", title: "Aula de yoga", description: "Sessao relaxante ao final do dia.", icon: "ri-leaf-line", color: "laranja" }
-      ]
+      summary: "Nenhum compromisso programado para quinta-feira.",
+      events: []
     },
     {
       id: "sex",
       label: "Sex",
       dayNumber: "5",
-      summary: "Sexta de fechamento e celebracao.",
-      events: [
-        { time: "09:30", title: "Retrospectiva da sprint", description: "Revisar aprendizados e melhorias.", icon: "ri-loop-left-line", color: "azul" },
-        { time: "11:00", title: "Reuniao com investidor", description: "Atualizar pipeline de novos clientes.", icon: "ri-bank-line", color: "verde" },
-        { time: "14:00", title: "Demo publica MapsLink", description: "Apresentar novidades a clientes e parceiros.", icon: "ri-slideshow-line", color: "amarelo" },
-        { time: "16:30", title: "Happy hour da equipe", description: "Confraternizacao do time.", icon: "ri-cup-line", color: "roxo" },
-        { time: "20:00", title: "Cinema em familia", description: "Sessao relax com pipoca.", icon: "ri-movie-2-line", color: "laranja" }
-      ]
+      summary: "Sexta-feira livre no momento.",
+      events: []
     }
   ];
 

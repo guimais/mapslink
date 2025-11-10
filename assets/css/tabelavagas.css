@@ -125,7 +125,8 @@ body{
 .wrap{
   width:min(1160px,92vw);
   margin:0 auto;
-  padding:calc(var(--nav-h) + 64px) 0 80px;
+  padding:calc(var(--nav-h) + 64px) 0 320px;
+  min-height:calc(100vh - var(--nav-h) + 160px);
 }
 
 .hero{
@@ -145,6 +146,12 @@ body{
   display:grid;
   place-items:center;
   overflow:hidden;
+}
+.hero-badge.is-empty{
+  background:var(--surface-2);
+}
+.hero-badge.is-empty img{
+  opacity:0;
 }
 
 .hero-badge img{
@@ -280,6 +287,13 @@ body{
   color:#333;
   border-color:rgba(0,0,0,.12);
 }
+.tbl-empty td{
+  text-align:center;
+  padding:36px 16px;
+  font-family:'Montserrat',sans-serif;
+  font-weight:600;
+  color:var(--muted);
+}
 
 @media (min-width: 1500px){
   :root{
@@ -302,7 +316,8 @@ body{
   }
   .wrap{
     width:min(1280px,90vw);
-    padding:calc(var(--nav-h) + 96px) 0 96px;
+    padding:calc(var(--nav-h) + 96px) 0 360px;
+    min-height:calc(100vh - var(--nav-h) + 180px);
   }
   .hero h1{
     font-size:48px;
@@ -412,7 +427,8 @@ body{
   }
   .wrap{
     width:min(92vw,860px);
-    padding:calc(var(--nav-h) + 56px) 16px 72px;
+    padding:calc(var(--nav-h) + 56px) 16px 260px;
+    min-height:calc(100vh - var(--nav-h) + 140px);
   }
   .tbl{
     overflow-x:auto;
@@ -422,7 +438,8 @@ body{
 @media (max-width:900px){
   .wrap{
     width:min(96vw,820px);
-    padding-top:calc(var(--nav-h) + 40px);
+    padding:calc(var(--nav-h) + 40px) 14px 240px;
+    min-height:calc(100vh - var(--nav-h) + 140px);
   }
   .board-header{
     justify-content:center;
@@ -453,7 +470,8 @@ body{
     border-radius:16px;
   }
   .wrap{
-    padding:calc(var(--nav-h) + 40px) 14px 60px;
+    padding:calc(var(--nav-h) + 40px) 14px 220px;
+    min-height:calc(100vh - var(--nav-h) + 140px);
   }
   .hero h1{
     font-size:32px;
@@ -485,7 +503,8 @@ body{
     font-size:15px;
   }
   .wrap{
-    padding:calc(var(--nav-h) + 32px) 12px 48px;
+    padding:calc(var(--nav-h) + 32px) 12px 200px;
+    min-height:calc(100vh - var(--nav-h) + 140px);
   }
   .hero h1{
     font-size:28px;
@@ -504,7 +523,8 @@ body{
     padding-top:72px;
   }
   .wrap{
-    padding:calc(var(--nav-h) + 28px) 10px 40px;
+    padding:calc(var(--nav-h) + 28px) 10px 180px;
+    min-height:calc(100vh - var(--nav-h) + 140px);
   }
   .hero h1{
     font-size:24px;

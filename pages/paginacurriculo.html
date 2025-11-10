@@ -41,14 +41,15 @@
     <main id="curriculo" class="page-wrapper" role="main">
       <section class="page-header" aria-labelledby="titulo-curriculos">
         <div class="page-title-wrap">
-          <span class="avatar-badge"><img src="../assets/images/image 4.png" alt="Foto do usuário"></span>
+          <span class="avatar-badge is-empty"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="" data-company-avatar></span>
           <h1 id="titulo-curriculos">Currículos recebidos</h1>
         </div>
 
         <div class="actions-bar" role="group" aria-label="Ações de currículos">
+          <span id="curriculo-count" class="curriculo-count">0 resultado(s)</span>
           <label class="search-input">
             <i class="ri-search-line" aria-hidden="true"></i>
-            <input type="search" id="busca-cv" name="q" placeholder="Pesquisar" aria-label="Pesquisar currículos">
+            <input type="search" id="busca-cv" name="q" placeholder="Pesquisar" aria-label="Pesquisar currículos" data-search-input>
           </label>
 
           <button class="btn" id="btn-exportar" type="button">Exportar</button>
@@ -109,49 +110,9 @@
                 <th scope="col">Ações</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span class="avatar"><img src="../assets/images/3d_avatar_21.png" alt="Avatar"></span>
-                  <span class="cell-text">Gelado da Silva</span>
-                </td>
-                <td>Desenvolvedor Senior</td>
-                <td><time datetime="2025-08-20">20/08/2025</time></td>
-                <td><span class="status status-aprovado">Aprovado</span></td>
-                <td><button class="btn btn-small ver-cv" data-id="cv-gelado" type="button">Ver CV</button></td>
-              </tr>
-
-              <tr>
-                <td>
-                  <span class="avatar"><img src="../assets/images/10.png" alt="Avatar"></span>
-                  <span class="cell-text">Lívia</span>
-                </td>
-                <td>Secretária</td>
-                <td><time datetime="2023-01-30">30/01/2023</time></td>
-                <td><span class="status status-reprovada">Reprovada</span></td>
-                <td><button class="btn btn-small ver-cv" data-id="cv-livia" type="button">Ver CV</button></td>
-              </tr>
-
-              <tr>
-                <td>
-                  <span class="avatar"><img src="../assets/images/1.png" alt="Avatar"></span>
-                  <span class="cell-text">Mohamed</span>
-                </td>
-                <td>PO</td>
-                <td><time datetime="2025-11-06">06/11/2025</time></td>
-                <td><span class="status status-analise">Em análise</span></td>
-                <td><button class="btn btn-small ver-cv" data-id="cv-mohamed" type="button">Ver CV</button></td>
-              </tr>
-
-              <tr>
-                <td>
-                  <span class="avatar"><img src="../assets/images/13.png" alt="Avatar"></span>
-                  <span class="cell-text">Alberto</span>
-                </td>
-                <td>CFO</td>
-                <td><time datetime="2024-04-10">10/04/2024</time></td>
-                <td><span class="status status-aprovado">Aprovado</span></td>
-                <td><button class="btn btn-small ver-cv" data-id="cv-alberto" type="button">Ver CV</button></td>
+            <tbody id="lista-curriculos" data-empty-text="Nenhuma candidatura recebida ainda.">
+              <tr class="tbl-empty" data-empty-row>
+                <td colspan="5">Nenhuma candidatura recebida ainda.</td>
               </tr>
             </tbody>
           </table>

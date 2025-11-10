@@ -2,28 +2,149 @@
   if (window.__ml_dashboard_init__) return;
   window.__ml_dashboard_init__ = true;
 
-  const DATASETS = {
-    bar: [
-      { label: "Desenvolvedor", value: 13 },
-      { label: "Designer", value: 9 },
-      { label: "Gerente", value: 2 }
-    ],
-    donut: [
-      { label: "Em análise", value: 6, color: "#a5b4fc" },
-      { label: "Aberta", value: 12, color: "#1e90ff" },
-      { label: "Fechada", value: 18, color: "#ef4444" }
-    ]
+  const JOBS_STORAGE = "mapslink:vagas";
+  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const ACCENTS = /[\u0300-\u036f]/g;
+  const DEFAULT_STATS = {
+    accepted: 0,
+    open: 0,
+    received: 0,
+    reviewing: 0,
+    interviews: 0,
+    closed: 0
   };
-
+  const BAR_ITEMS = [
+    { key: "received", label: "Recebidos" },
+    { key: "accepted", label: "Aceitos" },
+    { key: "reviewing", label: "Em análise" }
+  ];
+  const DONUT_ITEMS = [
+    { key: "reviewing", label: "Em análise", color: "#a5b4fc" },
+    { key: "open", label: "Aberta", color: "#1e90ff" },
+    { key: "closed", label: "Fechada", color: "#ef4444" }
+  ];
   const COLORS = {
     brand: getToken("--brand", "#102569"),
     muted: getToken("--muted", "#475569"),
     bar: "#1e90ff"
   };
+  const numberFormatter = new Intl.NumberFormat("pt-BR");
+  const TEXT_NODE = typeof Node !== "undefined" ? Node.TEXT_NODE : 3;
+
+  const state = {
+    stats: { ...DEFAULT_STATS },
+    owner: null,
+    barData: [],
+    donutData: []
+  };
 
   function getToken(name, fallback) {
     const value = getComputedStyle(document.documentElement).getPropertyValue(name);
     return value && value.trim() ? value.trim() : fallback;
+  }
+
+  function toInt(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 0;
+    return Math.max(0, Math.round(num));
+  }
+
+  function normalize(value) {
+    return (value || "")
+      .toString()
+      .normalize("NFD")
+      .replace(ACCENTS, "")
+      .toLowerCase();
+  }
+
+  function loadJobs(owner) {
+    if (!owner) return [];
+    try {
+      const raw = localStorage.getItem(`${JOBS_STORAGE}:${owner}`);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function summarizeJobs(jobs) {
+    return jobs.reduce(
+      (summary, job) => {
+        const status = normalize(job?.status || "aberta");
+        if (status.includes("fech")) summary.closed += 1;
+        else if (status.includes("analise") || status.includes("andamento")) summary.reviewing += 1;
+        else summary.open += 1;
+        return summary;
+      },
+      { open: 0, reviewing: 0, closed: 0 }
+    );
+  }
+
+  function applyAvatar(src) {
+    const img = document.querySelector("[data-dashboard-avatar]");
+    if (!img) return;
+    const has = !!src;
+    img.src = has ? src : EMPTY_IMAGE;
+    img.alt = has ? "Logo da empresa" : "Logo da empresa";
+    const wrapper = img.closest(".empresa-logo");
+    if (wrapper) wrapper.classList.toggle("is-empty", !has);
+  }
+
+  function updateStatNodes() {
+    document.querySelectorAll("[data-stat]").forEach(node => {
+      const key = node.dataset.stat;
+      const value = state.stats[key] ?? 0;
+      node.textContent = numberFormatter.format(value);
+    });
+  }
+
+  function buildDatasets() {
+    state.barData = BAR_ITEMS.map(item => ({
+      label: item.label,
+      value: state.stats[item.key] || 0
+    }));
+    state.donutData = DONUT_ITEMS.map(item => ({
+      label: item.label,
+      value: state.stats[item.key] || 0,
+      color: item.color
+    }));
+  }
+
+  function updateCharts() {
+    buildDatasets();
+    renderCharts();
+  }
+
+  function toggleFallback(canvas, show, message) {
+    const fallback = canvas?.closest(".chart-box")?.querySelector(".chart-fallback");
+    if (!fallback) return;
+    if (show) {
+      fallback.textContent = message || "Sem dados suficientes para exibir o gráfico.";
+      fallback.style.display = "block";
+      fallback.setAttribute("aria-hidden", "false");
+    } else {
+      fallback.textContent = "";
+      fallback.style.display = "none";
+      fallback.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  function updateLegend(legend, data, total) {
+    if (!legend) return;
+    const items = legend.querySelectorAll("li");
+    items.forEach((item, index) => {
+      const segment = data[index];
+      if (!segment) return;
+      const dot = item.querySelector(".legend-dot");
+      if (dot && segment.color) dot.style.background = segment.color;
+      const value = Number(segment.value) || 0;
+      const percent = total > 0 ? Math.round((value / total) * 100) : 0;
+      const text = ` ${segment.label} - ${value} (${percent}%)`;
+      const textNode = Array.from(item.childNodes).find(node => node.nodeType === TEXT_NODE);
+      if (textNode) textNode.textContent = text;
+      else item.append(document.createTextNode(text));
+    });
   }
 
   function measureBarCanvas(canvas) {
@@ -76,18 +197,25 @@
   }
 
   function drawBarChart(canvas, data) {
+    if (!canvas) return;
+    const total = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+    toggleFallback(canvas, total <= 0, "Cadastre currículos para visualizar este gráfico.");
+    if (total <= 0) {
+      configureCanvas(canvas, measureBarCanvas(canvas));
+      return;
+    }
+
     const size = measureBarCanvas(canvas);
     const ctx = configureCanvas(canvas, size);
-    if (!ctx || !data.length) return;
+    if (!ctx) return;
 
     const margin = { top: 12, right: 24, bottom: 56, left: 44 };
     const innerWidth = size.width - margin.left - margin.right;
     const innerHeight = size.height - margin.top - margin.bottom;
     const values = data.map(item => Number(item.value) || 0);
-    const maxValue = values.length ? Math.max(...values) : 0;
-    const yMax = Math.max(12, Math.ceil(maxValue / 4) * 4);
-    const step = yMax / 5;
-
+    const maxValue = Math.max(...values);
+    const yMax = Math.max(4, Math.ceil(maxValue / 4) * 4);
+    const step = yMax / 4;
     const scaleY = value => margin.top + innerHeight - (value / yMax) * innerHeight;
 
     ctx.strokeStyle = "rgba(0,0,0,0.12)";
@@ -140,13 +268,21 @@
   }
 
   function drawDonutChart(canvas, data) {
+    if (!canvas) return;
+    const total = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+    toggleFallback(canvas, total <= 0, "Abra vagas para gerar este gráfico.");
+
+    const legend = canvas.closest(".chart-with-legend")?.querySelector(".chart-legend");
+    updateLegend(legend, data, total);
+    if (total <= 0) {
+      configureCanvas(canvas, measureDonutCanvas(canvas));
+      return;
+    }
+
     const size = measureDonutCanvas(canvas);
     const ctx = configureCanvas(canvas, size);
-    if (!ctx || !data.length) return;
+    if (!ctx) return;
 
-    const group = canvas.closest(".chart-with-legend");
-    const legend = group?.querySelector(".chart-legend");
-    const total = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0) || 1;
     const cx = Math.floor(size.width / 2);
     const cy = Math.floor(size.height / 2);
     const radius = Math.floor(Math.min(size.width, size.height) * 0.38);
@@ -162,8 +298,8 @@
     let start = -Math.PI / 2;
     data.forEach(segment => {
       const value = Number(segment.value) || 0;
-      const slice = Math.max(0, value / total) * Math.PI * 2;
-      if (!slice) return;
+      if (!value) return;
+      const slice = (value / total) * Math.PI * 2;
       ctx.strokeStyle = segment.color || COLORS.bar;
       ctx.beginPath();
       ctx.arc(cx, cy, radius, start, start + slice - 0.04);
@@ -179,23 +315,13 @@
     ctx.fillStyle = COLORS.muted;
     ctx.font = '600 12px "Open Sans", system-ui, -apple-system, sans-serif';
     ctx.fillText("Total", cx, cy + 14);
-
-    if (legend) {
-      const items = legend.querySelectorAll("li");
-      items.forEach((item, index) => {
-        const segment = data[index];
-        if (!segment) return;
-        const percent = Math.round((segment.value / total) * 100);
-        item.innerHTML = `<span class="legend-dot" style="background:${segment.color}"></span> ${segment.label} - ${segment.value} (${percent}%)`;
-      });
-    }
   }
 
-  function render() {
+  function renderCharts() {
     const barCanvas = document.querySelector("#chartCandidatos");
     const donutCanvas = document.querySelector("#chartStatus");
-    if (barCanvas) drawBarChart(barCanvas, DATASETS.bar);
-    if (donutCanvas) drawDonutChart(donutCanvas, DATASETS.donut);
+    drawBarChart(barCanvas, state.barData);
+    drawDonutChart(donutCanvas, state.donutData);
   }
 
   function debounce(fn, delay) {
@@ -206,9 +332,104 @@
     };
   }
 
+  function pick(metrics, profile, ...keys) {
+    for (const key of keys) {
+      if (metrics && Object.prototype.hasOwnProperty.call(metrics, key)) {
+        const value = toInt(metrics[key]);
+        if (value) return value;
+      }
+      if (profile && Object.prototype.hasOwnProperty.call(profile, key)) {
+        const value = toInt(profile[key]);
+        if (value) return value;
+      }
+    }
+    return 0;
+  }
+
+  function deriveStats(session) {
+    const profile = session?.profile || {};
+    const metrics = (profile.dashboard && typeof profile.dashboard === "object" ? profile.dashboard : null) || profile.metrics || {};
+    const stats = { ...DEFAULT_STATS };
+    stats.accepted = pick(metrics, profile, "accepted", "curriculosAceitos", "aceitos");
+    stats.open = pick(metrics, profile, "open", "vagasAbertas", "abertas");
+    stats.received = pick(metrics, profile, "received", "curriculos", "curriculosRecebidos");
+    stats.reviewing = pick(metrics, profile, "reviewing", "emAnalise", "analise");
+    stats.interviews = pick(metrics, profile, "interviews", "entrevistas", "agendaToday");
+    stats.closed = pick(metrics, profile, "closed", "vagasFechadas", "fechadas");
+
+    const owner = session?.id || null;
+    const summary = summarizeJobs(loadJobs(owner));
+    if (!stats.open && summary.open) stats.open = summary.open;
+    if (!stats.reviewing && summary.reviewing) stats.reviewing = summary.reviewing;
+    if (!stats.closed && summary.closed) stats.closed = summary.closed;
+
+    const derivedTotal = stats.accepted + stats.reviewing + stats.closed;
+    if (!stats.received && derivedTotal) stats.received = derivedTotal;
+    stats.received = Math.max(0, stats.received);
+
+    if (stats.received && !stats.accepted && stats.reviewing) {
+      const rest = stats.received - stats.reviewing - stats.closed;
+      stats.accepted = Math.max(0, rest);
+    }
+    if (stats.received && !stats.reviewing && stats.accepted) {
+      const rest = stats.received - stats.accepted - stats.closed;
+      stats.reviewing = Math.max(0, rest);
+    }
+    if (stats.received && !stats.closed) {
+      const rest = stats.received - stats.accepted - stats.reviewing;
+      stats.closed = Math.max(0, rest);
+    }
+
+    stats.interviews = stats.interviews || 0;
+    return stats;
+  }
+
+  function applyStats(session) {
+    const stats = session ? deriveStats(session) : { ...DEFAULT_STATS };
+    state.stats = stats;
+    state.owner = session?.id || null;
+    applyAvatar(session?.profile?.avatar || "");
+    updateStatNodes();
+    updateCharts();
+  }
+
+  function initAuth() {
+    const auth = window.MapsAuth;
+    if (!auth) {
+      applyStats(null);
+      return;
+    }
+    const refresh = () => applyStats(auth.current ? auth.current() : null);
+    if (typeof auth.ready === "function") {
+      auth
+        .ready()
+        .then(refresh)
+        .catch(() => applyStats(null));
+    } else {
+      refresh();
+    }
+    if (typeof auth.onSession === "function") auth.onSession(applyStats);
+  }
+
   function init() {
-    render();
-    window.addEventListener("resize", debounce(render, 120));
+    applyStats(null);
+    initAuth();
+    window.addEventListener("resize", debounce(renderCharts, 120));
+    window.MapsDashboard = Object.assign({}, window.MapsDashboard, {
+      setStats(partial) {
+        if (!partial || typeof partial !== "object") return;
+        Object.entries(partial).forEach(([key, value]) => {
+          if (Object.prototype.hasOwnProperty.call(state.stats, key)) {
+            state.stats[key] = toInt(value);
+          }
+        });
+        updateStatNodes();
+        updateCharts();
+      },
+      setAvatar(src) {
+        applyAvatar(src || "");
+      }
+    });
   }
 
   if (document.readyState === "loading") {

@@ -1,314 +1,322 @@
 (() => {
-  const page = document.getElementById("envio-cv");
-  if (!page) return;
+  if (window.__ml_enviocv_init__) return;
+  window.__ml_enviocv_init__ = true;
 
-  const table = page.querySelector(".table-empresa");
-  const thead = table?.tHead;
-  const tbody = table?.tBodies?.[0];
-  if (!table || !thead || !tbody) return;
-
-  const companyTitle = document.getElementById("empresa-titulo");
-  const companyName = (companyTitle?.textContent || "empresa").trim();
-
-  const searchInput = page.querySelector(".search-input input");
-  const actionsBar = page.querySelector(".actions-bar");
-
+  const JOBS_STORAGE = "mapslink:vagas";
+  const APPLICATION_PREFIX = "mapslink:applications";
+  const APPLIED_PREFIX = "mapslink_envio_aplicado";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const ACCENTS = /[\u0300-\u036f]/g;
-  const slug = value =>
-    (value || "")
-      .normalize("NFD")
-      .replace(ACCENTS, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
 
-  const STORAGE_KEY = `mapslink_envio_cv_${slug(companyName)}_v1`;
-  const STORAGE_SORT = `${STORAGE_KEY}_sort`;
-
-  const state = {
-    applied: new Set(),
-    sort: null,
-    liveRegion: null,
-    debounceTimer: null,
-    resetTimer: null
+  const dom = {
+    root: document.getElementById("envio-cv"),
+    avatar: document.querySelector("[data-company-avatar]"),
+    name: document.querySelector("[data-company-name]"),
+    caption: document.querySelector("[data-company-caption]"),
+    search: document.querySelector('[data-search-input]'),
+    count: document.getElementById("result-count"),
+    tbody: document.getElementById("lista-vagas-disponiveis")
   };
 
-  function ensureStyles() {
-    if (document.getElementById("ml-envio-styles")) return;
-    const style = document.createElement("style");
-    style.id = "ml-envio-styles";
-    style.textContent = `
-#result-count.envio-result{margin:8px 0 0;font-size:13px;font-weight:800;color:var(--muted);}
-`;
-    document.head.appendChild(style);
-  }
+  if (!dom.root || !dom.tbody) return;
 
-  function createLiveRegion() {
+  const state = {
+    owner: null,
+    jobs: [],
+    applications: [],
+    filtered: [],
+    applied: new Set(),
+    searchTerm: "",
+    liveRegion: null
+  };
+
+  function ensureLiveRegion() {
+    if (state.liveRegion) return;
     const region = document.createElement("div");
     region.className = "sr-only";
     region.setAttribute("aria-live", "polite");
     region.setAttribute("aria-atomic", "true");
     document.body.appendChild(region);
-    return region;
+    state.liveRegion = region;
   }
 
   function announce(message) {
     if (!state.liveRegion) return;
     state.liveRegion.textContent = "";
-    setTimeout(() => {
+    window.setTimeout(() => {
       state.liveRegion.textContent = message;
-    }, 10);
+    }, 30);
   }
 
-  function loadApplied() {
+  function normalize(value) {
+    return (value || "")
+      .toString()
+      .normalize("NFD")
+      .replace(ACCENTS, "")
+      .toLowerCase();
+  }
+
+  function storageKey(owner) {
+    return owner ? `${JOBS_STORAGE}:${owner}` : null;
+  }
+
+  function appliedKey(owner) {
+    return owner ? `${APPLIED_PREFIX}:${owner}` : `${APPLIED_PREFIX}:anon`;
+  }
+
+  function loadJobs(owner) {
+    const key = storageKey(owner);
+    if (!key) return [];
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) state.applied = new Set(JSON.parse(raw));
+      const raw = localStorage.getItem(key);
+      const list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) return [];
+      return list
+        .slice()
+        .sort((a, b) =>
+          new Date(b.publishedAt || 0).getTime() - new Date(a.publishedAt || 0).getTime()
+        );
     } catch {
-      state.applied = new Set();
+      return [];
+    }
+  }
+
+  function applicationsKey(owner = state.owner) {
+    return owner ? `${APPLICATION_PREFIX}:${owner}` : `${APPLICATION_PREFIX}:anonimo`;
+  }
+
+  function loadApplications(owner = state.owner) {
+    const key = applicationsKey(owner);
+    if (!key) return [];
+    try {
+      const raw = localStorage.getItem(key);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveApplications(list) {
+    const key = applicationsKey();
+    if (!key) return;
+    try {
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch {}
+  }
+
+  function loadApplied(owner) {
+    try {
+      const raw = localStorage.getItem(appliedKey(owner));
+      if (!raw) return new Set();
+      const list = JSON.parse(raw);
+      return new Set(Array.isArray(list) ? list : []);
+    } catch {
+      return new Set();
     }
   }
 
   function saveApplied() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(state.applied)));
+      localStorage.setItem(appliedKey(state.owner), JSON.stringify(Array.from(state.applied)));
     } catch {}
   }
 
-  function saveSort(info) {
-    state.sort = info;
-    try {
-      localStorage.setItem(STORAGE_SORT, JSON.stringify(info));
-    } catch {}
+  function applyAvatar(src) {
+    if (!dom.avatar) return;
+    const has = !!src;
+    dom.avatar.src = has ? src : EMPTY_IMAGE;
+    dom.avatar.alt = has ? "Logo da empresa" : "";
+    const badge = dom.avatar.closest(".avatar-badge");
+    if (badge) badge.classList.toggle("is-empty", !has);
   }
 
-  function loadSort() {
-    try {
-      const raw = localStorage.getItem(STORAGE_SORT);
-      if (!raw) return null;
-      return JSON.parse(raw);
-    } catch {
-      return null;
-    }
+  function setCompanyInfo(session) {
+    const name = session?.company || session?.name || "Nome da empresa";
+    const caption =
+      session?.profile?.caption || "Veja a disponibilidade de vaga!";
+    if (dom.name) dom.name.textContent = name;
+    if (dom.caption) dom.caption.textContent = caption;
   }
 
-  function ensureRowIds() {
-    Array.from(tbody.rows).forEach((row, index) => {
-      const button = row.querySelector(".prestar-vaga");
-      if (!button) return;
-      if (!button.dataset.id) {
-        const title = row.querySelector("td:first-child .cell-text")?.textContent?.trim() || `vaga-${index + 1}`;
-        const modality = row.querySelector("td:nth-child(3)")?.textContent?.trim() || "";
-        button.dataset.id = `${slug(companyName)}-${slug(title)}-${slug(modality)}-${index}`;
-      }
-      button.type = "button";
-      button.setAttribute("aria-pressed", "false");
+  function setCount(value) {
+    if (!dom.count) return;
+    const label = value === 1 ? "resultado" : "resultados";
+    dom.count.textContent = `${value} ${label}`;
+  }
+
+  function escapeHtml(text) {
+    return String(text || "").replace(/[&<>"']/g, chr => {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[chr] || chr;
     });
   }
 
-  function setButtonState(button, applied, title) {
-    if (!button) return;
-    const label = title ? `"${title}"` : "essa vaga";
-    if (applied) {
-      button.classList.add("btn-prestado");
-      button.setAttribute("aria-pressed", "true");
+  function createButton(job, disabled) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-primary btn-small prestar-vaga";
+    button.dataset.applyId = job.id || "";
+    button.dataset.jobTitle = job.title || "Vaga";
+    button.dataset.jobId = job.id || "";
+    button.dataset.jobArea = job.area || "";
+    button.dataset.jobType = job.type || "";
+    if (disabled) {
       button.disabled = true;
+      button.innerHTML = '<i class="ri-lock-line" aria-hidden="true"></i> Encerrada';
+      return button;
+    }
+    if (state.applied.has(job.id)) {
+      button.disabled = true;
+      button.classList.add("btn-prestado");
       button.innerHTML = '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
-      button.title = `Você já se candidatou para ${label}`;
+      button.setAttribute("aria-pressed", "true");
     } else {
-      button.classList.remove("btn-prestado");
-      button.setAttribute("aria-pressed", "false");
       button.disabled = false;
+      button.classList.remove("btn-prestado");
       button.innerHTML = '<i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga';
-      button.title = `Enviar currículo para ${label}`;
+      button.setAttribute("aria-pressed", "false");
+    }
+    return button;
+  }
+
+  function recordApplication(job) {
+    if (!state.owner || !job) return;
+    const viewer = window.MapsAuth?.current?.();
+    const candidateName =
+      viewer && viewer.type === "personal"
+        ? viewer.name || viewer.email || "Candidato"
+        : "Candidato";
+    const candidateAvatar =
+      viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
+    const entry = {
+      id: `app_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+      jobId: job.id || null,
+      title: job.title || "Vaga",
+      area: job.area || "",
+      type: job.type || "",
+      appliedAt: new Date().toISOString(),
+      status: "Em análise",
+      candidate: candidateName,
+      avatar: candidateAvatar
+    };
+    const applications = loadApplications();
+    applications.push(entry);
+    saveApplications(applications);
+    state.applications = applications;
+    try {
+      localStorage.setItem("mapslink_curriculos_recebidos", JSON.stringify(applications.length));
+    } catch {}
+    if (window.MapsLink?.setCurriculos) {
+      try {
+        window.MapsLink.setCurriculos(applications.length);
+      } catch {}
     }
   }
 
-  function refreshButtons() {
-    Array.from(tbody.querySelectorAll(".prestar-vaga")).forEach(button => {
-      const row = button.closest("tr");
-      const title = row?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
-      const applied = state.applied.has(button.dataset.id || "");
-      setButtonState(button, applied, title);
+  function buildRow(job) {
+    const tr = document.createElement("tr");
+    const area = escapeHtml(job.area || "--");
+    const type = escapeHtml(job.type || job.status || "--");
+    const isClosed = normalize(job.status).includes("fech") || normalize(job.status).includes("encerr");
+
+    tr.innerHTML = `
+      <td><span class="cell-text">${escapeHtml(job.title || "Vaga")}</span></td>
+      <td>${area || "--"}</td>
+      <td>${type || "--"}</td>
+      <td></td>
+    `;
+    const actionsCell = tr.lastElementChild;
+    actionsCell.appendChild(createButton(job, isClosed));
+    return tr;
+  }
+
+  function renderJobs(list) {
+    dom.tbody.innerHTML = "";
+    if (!list.length) {
+      const row = document.createElement("tr");
+      row.className = "tbl-empty";
+      const cell = document.createElement("td");
+      cell.colSpan = 4;
+      cell.textContent = dom.tbody.dataset.emptyText || "Nenhuma vaga disponível no momento.";
+      row.appendChild(cell);
+      dom.tbody.appendChild(row);
+      setCount(0);
+      return;
+    }
+    list.forEach(job => dom.tbody.appendChild(buildRow(job)));
+    setCount(list.length);
+  }
+
+  function filterJobs(term) {
+    const normalizedTerm = normalize(term);
+    if (!normalizedTerm) {
+      state.filtered = state.jobs.slice();
+      return;
+    }
+    state.filtered = state.jobs.filter(job => {
+      return [job.title, job.area, job.type, job.description]
+        .some(field => normalize(field).includes(normalizedTerm));
     });
   }
 
-  function applyFor(button) {
-    const id = button.dataset.id || "";
-    if (!id || state.applied.has(id)) return;
-    const row = button.closest("tr");
-    const title = row?.querySelector("td:first-child .cell-text")?.textContent?.trim() || "";
-    state.applied.add(id);
-    saveApplied();
-    setButtonState(button, true, title);
-    announce(`Currículo enviado para ${title || "a vaga selecionada"}.`);
+  function handleSearch(event) {
+    state.searchTerm = event.target.value || "";
+    filterJobs(state.searchTerm);
+    renderJobs(state.filtered);
   }
 
   function handleApply(event) {
-    const button = event.target.closest(".prestar-vaga");
-    if (!button) return;
-    applyFor(button);
+    const button = event.target.closest("[data-apply-id]");
+    if (!button || button.disabled) return;
+    const id = button.dataset.applyId;
+    if (!id) return;
+    state.applied.add(id);
+    saveApplied();
+    button.disabled = true;
+    button.classList.add("btn-prestado");
+    button.innerHTML = '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
+    button.setAttribute("aria-pressed", "true");
+    announce(`Candidatura enviada para ${button.dataset.jobTitle || "a vaga"}.`);
+    recordApplication({
+      id: button.dataset.jobId || id,
+      title: button.dataset.jobTitle || "Vaga",
+      area: button.dataset.jobArea || "",
+      type: button.dataset.jobType || ""
+    });
   }
 
-  function handleApplyKey(event) {
-    if (event.key !== "Enter" && event.key !== " ") return;
-    const button = event.target.closest(".prestar-vaga");
-    if (!button) return;
-    event.preventDefault();
-    applyFor(button);
+  function hydrate(session) {
+    state.owner = session?.id || null;
+    applyAvatar(session?.profile?.avatar || "");
+    setCompanyInfo(session);
+    state.jobs = loadJobs(state.owner);
+    state.applied = loadApplied(state.owner);
+    state.applications = loadApplications(state.owner);
+    filterJobs(state.searchTerm);
+    renderJobs(state.filtered);
   }
 
-  function matches(term, row) {
-    if (!term) return true;
-    const value = row.textContent || "";
-    return value.toLowerCase().includes(term);
-  }
-
-  function updateCounter(count) {
-    let badge = page.querySelector("#result-count");
-    if (!badge) {
-      badge = document.createElement("div");
-      badge.id = "result-count";
-      badge.className = "envio-result";
-      actionsBar?.appendChild(badge);
+  function initAuth() {
+    const auth = window.MapsAuth;
+    if (!auth) {
+      hydrate(null);
+      return;
     }
-    badge.textContent = `${count} resultado(s)`;
-  }
-
-  function filterRows(term) {
-    const value = (term || "").trim().toLowerCase();
-    let visible = 0;
-    Array.from(tbody.rows).forEach(row => {
-      const show = matches(value, row);
-      row.style.display = show ? "" : "none";
-      if (show) visible += 1;
-    });
-    updateCounter(visible);
-    announce(visible ? `${visible} vaga(s) encontrada(s)` : "Nenhuma vaga encontrada");
-    return visible;
-  }
-
-  function debounce(fn, delay) {
-    return event => {
-      clearTimeout(state.debounceTimer);
-      state.debounceTimer = setTimeout(() => fn(event), delay);
-    };
-  }
-
-  function toggleSortState(state) {
-    if (state === "ascending") return "descending";
-    return "ascending";
-  }
-
-  function sortRows(columnIndex, direction) {
-    const rows = Array.from(tbody.rows);
-    const visible = rows.filter(row => row.style.display !== "none");
-    const hidden = rows.filter(row => row.style.display === "none");
-
-    visible.sort((a, b) => {
-      const valueA = (a.cells[columnIndex]?.innerText || "").trim().toLowerCase();
-      const valueB = (b.cells[columnIndex]?.innerText || "").trim().toLowerCase();
-      if (valueA < valueB) return direction === "ascending" ? -1 : 1;
-      if (valueA > valueB) return direction === "ascending" ? 1 : -1;
-      return 0;
-    });
-
-    [...visible, ...hidden].forEach(row => tbody.appendChild(row));
-  }
-
-  function setupSorting() {
-    const headers = Array.from(thead.rows[0].cells);
-    headers.forEach((header, index) => {
-      const isActionsColumn = index === headers.length - 1;
-      if (isActionsColumn) return;
-
-      header.style.cursor = "pointer";
-      header.tabIndex = 0;
-      header.setAttribute("role", "columnheader");
-      header.setAttribute("aria-sort", "none");
-      header.title = `Ordenar por ${header.textContent.trim()}`;
-
-      const triggerSort = () => {
-        const nextDirection = toggleSortState(header.getAttribute("aria-sort"));
-        headers.forEach((other, idx) => {
-          if (idx !== index) other.setAttribute("aria-sort", "none");
-        });
-        header.setAttribute("aria-sort", nextDirection);
-        sortRows(index, nextDirection);
-        saveSort({ index, dir: nextDirection });
-      };
-
-      header.addEventListener("click", triggerSort);
-      header.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          triggerSort();
-        }
-      });
-    });
-
-    const savedSort = loadSort();
-    if (savedSort) {
-      const header = headers[savedSort.index];
-      if (header) {
-        header.setAttribute("aria-sort", savedSort.dir);
-        sortRows(savedSort.index, savedSort.dir);
-      }
+    const refresh = () => hydrate(auth.current ? auth.current() : null);
+    if (typeof auth.ready === "function") {
+      auth.ready().then(refresh).catch(() => hydrate(null));
+    } else {
+      refresh();
     }
-  }
-
-  function resetHistory() {
-    if (!state.resetTimer) {
-      state.resetTimer = setTimeout(() => {
-        const ok = confirm(`Limpar histórico de vagas aplicadas para "${companyName}"?`);
-        if (ok) {
-          state.applied.clear();
-          saveApplied();
-          refreshButtons();
-          announce("Histórico de aplicações limpo.");
-        }
-        state.resetTimer = null;
-      }, 1000);
-    }
-  }
-
-  function cancelReset() {
-    if (!state.resetTimer) return;
-    clearTimeout(state.resetTimer);
-    state.resetTimer = null;
-  }
-
-  function bindResetShortcut() {
-    window.addEventListener("keydown", event => {
-      if (event.altKey && event.key.toLowerCase() === "r") resetHistory();
-    });
-    window.addEventListener("keyup", cancelReset);
-  }
-
-  function initSearch() {
-    if (!searchInput) return;
-    searchInput.addEventListener(
-      "input",
-      debounce(event => {
-        filterRows(event.target.value);
-        const wrapper = page.querySelector(".table-wrapper");
-        if (wrapper) wrapper.scrollTop = 0;
-      }, 200)
-    );
+    if (typeof auth.onSession === "function") auth.onSession(hydrate);
   }
 
   function init() {
-    ensureStyles();
-    state.liveRegion = createLiveRegion();
-    loadApplied();
-    ensureRowIds();
-    refreshButtons();
-    filterRows(searchInput?.value || "");
-    setupSorting();
-    initSearch();
-    bindResetShortcut();
-    tbody.addEventListener("click", handleApply);
-    tbody.addEventListener("keydown", handleApplyKey);
+    ensureLiveRegion();
+    dom.tbody.addEventListener("click", handleApply);
+    if (dom.search) dom.search.addEventListener("input", handleSearch);
+    initAuth();
   }
 
   init();

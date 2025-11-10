@@ -242,9 +242,10 @@
       return payload;
     }
 
-    function applySession(session) {
+    function applySession(session, options) {
+      const preferDraft = !(options && options.useSessionDirectly);
       state.owner = session && session.id ? session.id : null;
-      const draft = loadDraft();
+      const draft = preferDraft ? loadDraft() : null;
       if (draft) {
         fillForm(draft);
       } else if (session) {
@@ -283,7 +284,7 @@
           if (own.call(payload, "name")) request.name = payload.name || "";
           if (own.call(payload, "phone")) request.phone = payload.phone || "";
           const result = await auth.updateProfile(request);
-          applySession(result || (auth.current ? auth.current() : null));
+          applySession(result || (auth.current ? auth.current() : null), { useSessionDirectly: true });
           message = "Alteracoes salvas e sincronizadas.";
         } catch (error) {
           console.error(error);

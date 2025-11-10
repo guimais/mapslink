@@ -2,6 +2,230 @@
   if (window.__ml_vagas_init__) return;
   window.__ml_vagas_init__ = true;
 
+  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const STORAGE_PREFIX = "mapslink:vagas";
+  const DEFAULT_EMPTY = "Nenhuma vaga cadastrada ainda.";
+
+  const state = {
+    owner: null,
+    jobs: []
+  };
+
+  const dom = {
+    form: null,
+    tbody: null,
+    avatar: null,
+    companyMeta: null
+  };
+
+  function initDom() {
+    dom.form = document.getElementById("form-vaga");
+    dom.tbody = document.querySelector(".table-cv tbody");
+    dom.avatar = document.querySelector(".page-header .avatar-badge img");
+    ensureCompanyMeta();
+    if (dom.tbody && !dom.tbody.dataset.emptyText) dom.tbody.dataset.emptyText = DEFAULT_EMPTY;
+  }
+
+  function ensureCompanyMeta() {
+    if (dom.companyMeta && dom.companyMeta.isConnected) return dom.companyMeta;
+    const wrap = document.querySelector(".page-title-wrap");
+    if (!wrap) return null;
+    let container = wrap.querySelector(".page-title-text");
+    if (!container) {
+      container = document.createElement("div");
+      container.className = "page-title-text";
+      const heading = wrap.querySelector("#titulo-vagas");
+      if (heading) {
+        wrap.insertBefore(container, heading);
+        container.appendChild(heading);
+      } else {
+        wrap.appendChild(container);
+      }
+    }
+    let meta = container.querySelector(".page-title-meta");
+    if (!meta) {
+      meta = document.createElement("p");
+      meta.className = "page-title-meta";
+      meta.setAttribute("aria-live", "polite");
+      container.appendChild(meta);
+    }
+    dom.companyMeta = meta;
+    return meta;
+  }
+
+  function setCompanyName(value) {
+    const node = ensureCompanyMeta();
+    if (!node) return;
+    const text = (value || "").trim();
+    node.textContent = text || "Sincronizado com o perfil da empresa";
+    node.classList.toggle("is-placeholder", !text);
+  }
+
+  function setAvatar(src) {
+    if (!dom.avatar) return;
+    const wrapper = dom.avatar.closest(".avatar-badge");
+    if (src) {
+      dom.avatar.src = src;
+      dom.avatar.alt = "Logo ou foto da empresa";
+      if (wrapper) wrapper.classList.remove("is-empty");
+    } else {
+      dom.avatar.src = EMPTY_IMAGE;
+      dom.avatar.alt = "Logo padrão da empresa";
+      if (wrapper) wrapper.classList.add("is-empty");
+    }
+  }
+
+  function storageKey(owner = state.owner) {
+    return owner ? `${STORAGE_PREFIX}:${owner}` : `${STORAGE_PREFIX}:anonimo`;
+  }
+
+  function loadJobs(owner = state.owner) {
+    try {
+      const raw = localStorage.getItem(storageKey(owner));
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function persistJobs() {
+    const key = storageKey();
+    if (!key) return;
+    try {
+      if (!state.jobs.length) localStorage.removeItem(key);
+      else localStorage.setItem(key, JSON.stringify(state.jobs));
+    } catch {}
+  }
+
+  function safe(value) {
+    if (value === null || value === undefined) return "";
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function formatDate(value) {
+    const date = value ? new Date(value) : new Date();
+    if (Number.isNaN(date.getTime())) return "--/--/----";
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  function createRow(job) {
+    const tr = document.createElement("tr");
+    tr.dataset.jobId = job.id;
+    const status = (job.status || "Aberta").trim();
+    const statusClass = status.toLowerCase().includes("fech") ? "status status-fechada" : "status status-aberta";
+    tr.innerHTML = `
+      <td><span class="cell-text">${safe(job.title)}</span></td>
+      <td>${safe(job.area)}</td>
+      <td>${safe(job.type)}</td>
+      <td><time datetime="${safe(job.publishedAt)}">${formatDate(job.publishedAt)}</time></td>
+      <td><span class="${statusClass}">${safe(status)}</span></td>
+      <td><button type="button" class="job-action" data-action="remove" data-id="${safe(job.id)}">Remover</button></td>
+    `;
+    return tr;
+  }
+
+  function renderJobs() {
+    if (!dom.tbody) return;
+    dom.tbody.innerHTML = "";
+    if (!state.jobs.length) {
+      const row = document.createElement("tr");
+      row.className = "empty-row";
+      const cell = document.createElement("td");
+      cell.colSpan = 6;
+      cell.textContent = dom.tbody.dataset.emptyText || DEFAULT_EMPTY;
+      row.appendChild(cell);
+      dom.tbody.appendChild(row);
+      return;
+    }
+    state.jobs.forEach(job => dom.tbody.appendChild(createRow(job)));
+  }
+
+  function createJobId() {
+    return `job_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
+  }
+
+  function handleFormSubmit(event) {
+    if (!dom.form) return;
+    event.preventDefault();
+    const formData = new FormData(dom.form);
+    const job = {
+      id: createJobId(),
+      title: (formData.get("titulo") || "").trim(),
+      area: (formData.get("area") || "").trim(),
+      description: (formData.get("descricao") || "").trim(),
+      type: (formData.get("tipo") || "").trim(),
+      status: "Aberta",
+      publishedAt: new Date().toISOString()
+    };
+    if (!job.title || !job.area || !job.type) return;
+    state.jobs = [job, ...state.jobs];
+    persistJobs();
+    renderJobs();
+    dom.form.reset();
+    const firstInput = dom.form.querySelector("input");
+    if (firstInput) firstInput.focus();
+  }
+
+  function handleTableClick(event) {
+    const action = event.target.closest("[data-action=\"remove\"]");
+    if (!action) return;
+    const id = action.getAttribute("data-id");
+    if (!id) return;
+    const next = state.jobs.filter(job => job.id !== id);
+    if (next.length === state.jobs.length) return;
+    state.jobs = next;
+    persistJobs();
+    renderJobs();
+  }
+
+  function bindEvents() {
+    if (dom.form && !dom.form.dataset.bound) {
+      dom.form.addEventListener("submit", handleFormSubmit);
+      dom.form.dataset.bound = "true";
+    }
+    if (dom.tbody && !dom.tbody.dataset.bound) {
+      dom.tbody.addEventListener("click", handleTableClick);
+      dom.tbody.dataset.bound = "true";
+    }
+  }
+
+  function hydrateFromAuth(session) {
+    const profile = session?.profile || {};
+    const nextOwner = session?.id || null;
+    const ownerChanged = nextOwner !== state.owner;
+    state.owner = nextOwner;
+    setAvatar(profile.avatar || "");
+    setCompanyName(session?.company || session?.name || "");
+    if (ownerChanged) {
+      state.jobs = loadJobs();
+      renderJobs();
+    }
+  }
+
+  function initAuth() {
+    const auth = window.MapsAuth;
+    if (!auth) {
+      hydrateFromAuth(null);
+      return;
+    }
+    if (typeof auth.ready === "function") {
+      auth.ready()
+        .then(() => hydrateFromAuth(auth.current()))
+        .catch(() => hydrateFromAuth(null));
+    } else {
+      hydrateFromAuth(auth.current ? auth.current() : null);
+    }
+    if (typeof auth.onSession === "function") auth.onSession(hydrateFromAuth);
+  }
+
   async function loadCompanies() {
     if (Array.isArray(window.__companies) && window.__companies.length) return window.__companies;
     const response = await fetch("/assets/data/companies.json", { cache: "no-store" });
@@ -38,7 +262,7 @@
     );
   }
 
-  (async () => {
+  async function bootstrapFilters() {
     try {
       const companies = await loadCompanies();
       collectJobs(companies);
@@ -46,5 +270,21 @@
     } catch (error) {
       console.warn("Erro ao carregar jobs:", error);
     }
-  })();
+  }
+
+  function init() {
+    initDom();
+    setAvatar("");
+    setCompanyName("");
+    renderJobs();
+    bindEvents();
+    initAuth();
+    bootstrapFilters();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();
