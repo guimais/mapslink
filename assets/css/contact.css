@@ -282,10 +282,87 @@ h3,
   outline:none;
 }
 
-.form-actions {
-  display:flex;
-  justify-content:flex-end;
+.faq-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 340px;
 }
+.faq-toggle {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14.2px;
+  font-weight: 700;
+  background: none;
+  border: none;
+  color: var(--brand-2);
+  cursor: pointer;
+  padding: 0 0 0 6px;
+  border-bottom: 1px solid #e6eaf2;
+  text-align: left;
+  min-height: 44px;
+  transition: background 0.13s;
+}
+.faq-toggle:last-child {
+  border-bottom: none;
+}
+/* Seta curta, espessa e arredondada */
+.faq-icon {
+  margin-right: 12px;
+  display: inline-block;
+  min-width: 20px;
+  min-height: 20px;
+  vertical-align: middle;
+  transition: transform 0.20s cubic-bezier(.39,1.2,.6,1), color 0.2s;
+}
+.faq-icon path {
+  stroke: var(--brand-2);
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Roda e muda cor da seta ao abrir */
+.faq-toggle[aria-expanded="true"] .faq-icon {
+  transform: rotate(180deg);
+}
+.faq-toggle[aria-expanded="true"] .faq-icon path {
+  stroke: var(--brand);
+}
+.faq-toggle span {
+  flex: 1;
+  text-align: left;
+}
+.faq-toggle:focus {
+  outline: 2px solid var(--brand);
+  background: #f6f8fc;
+}
+.faq-toggle:hover {
+  background: #f6f8fc;
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  color: var(--muted);
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 4px 0 34px;
+  transition: max-height 0.24s cubic-bezier(.42,1.8,.51,1.01), padding 0.16s;
+  box-sizing: border-box;
+}
+.faq-answer.active {
+  padding: 8px 4px 12px 34px;
+  max-height: 200px;
+  background: #f8fafc;
+}
+@media (max-width: 460px) {
+  .faq-list { width: 98%; min-width: 0; max-width: 100%; }
+  .faq-answer, .faq-answer.active { padding-left: 24px; }
+}
+
 
 .contact-side {
   display:flex;

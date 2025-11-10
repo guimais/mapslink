@@ -164,3 +164,17 @@
 
   window.MapsContact = { showToast };
 })();
+
+document.querySelectorAll('.faq-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+    document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded','false'));
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('active'));
+
+    if (!isOpen) {
+      btn.setAttribute('aria-expanded','true');
+      btn.nextElementSibling.classList.add('active');
+    }
+  });
+});
