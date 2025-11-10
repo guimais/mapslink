@@ -25,6 +25,230 @@
     filtered: []
   };
 
+  const GEO_CACHE_PREFIX = "mapslink:geocode:";
+  const GEO_CACHE_TTL = 1000 * 60 * 60 * 24 * 30;
+  const geocodeQueue = new Map();
+
+  function normalizeKey(value) {
+    return (value || "").trim().toLowerCase();
+  }
+
+  function encodeKey(value) {
+    const normalized = normalizeKey(value);
+    if (!normalized) return "";
+    try {
+      return `${GEO_CACHE_PREFIX}${btoa(unescape(encodeURIComponent(normalized))).replace(/=+$/, "")}`;
+    } catch {
+      return `${GEO_CACHE_PREFIX}${encodeURIComponent(normalized)}`;
+    }
+  }
+
+  function readGeocodeCache(address) {
+    const key = encodeKey(address);
+    if (!key) return null;
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data) return null;
+      if (data.cachedAt && Date.now() - data.cachedAt > GEO_CACHE_TTL) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      const { cachedAt, ...value } = data;
+      if (!Number.isFinite(value.lat) || !Number.isFinite(value.lng)) return null;
+      return value;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeGeocodeCache(address, value) {
+    const key = encodeKey(address);
+    if (!key) return;
+    try {
+      localStorage.setItem(key, JSON.stringify({ ...value, cachedAt: Date.now() }));
+    } catch {}
+  }
+
+  function ownerJobsKey(owner) {
+    return owner ? `mapslink:vagas:${owner}` : "";
+  }
+
+  function loadOwnerJobs(owner) {
+    const key = ownerJobsKey(owner);
+    if (!key) return [];
+    try {
+      const raw = localStorage.getItem(key);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function cleanJobs(list) {
+    return (Array.isArray(list) ? list : [])
+      .map(job => ({
+        title: (job?.title || "").trim(),
+        type: (job?.type || "").trim(),
+        status: job?.status || "",
+        url: job?.url || ""
+      }))
+      .filter(job => job.title.length);
+  }
+
+  function jobsAreOpen(list) {
+    if (!list.length) return true;
+    return list.some(job => !/fechad/i.test(job.status || ""));
+  }
+
+  function extractCityState(value) {
+    if (!value) return { city: "", state: "" };
+    const cleaned = value.replace(/\s+/g, " ").trim();
+    if (!cleaned) return { city: "", state: "" };
+    const stateMatch = cleaned.match(/\b([A-Z]{2})\b(?!.*\b[A-Z]{2}\b)/);
+    const state = stateMatch ? stateMatch[1] : "";
+    let city = "";
+    if (state && stateMatch) {
+      const before = cleaned
+        .slice(0, stateMatch.index)
+        .split(/[,|-]/)
+        .map(part => part.trim())
+        .filter(Boolean);
+      city = before.pop() || "";
+    } else {
+      const parts = cleaned
+        .split(/[,|-]/)
+        .map(part => part.trim())
+        .filter(Boolean);
+      city = parts.length > 1 ? parts[parts.length - 1] : parts[0] || "";
+    }
+    return { city, state };
+  }
+
+  function normalizeCoords(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    const lat = Number(raw.lat ?? raw.latitude);
+    const lng = Number(raw.lng ?? raw.lon ?? raw.longitude);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return { lat, lng };
+  }
+
+  function buildCompanyFromUser(user) {
+    if (!user) return null;
+    const profile = user.profile || {};
+    const contact = profile.contact || {};
+    const locationMeta = typeof profile.location === "object" ? profile.location : {};
+    const coords = normalizeCoords(locationMeta);
+    const tags = Array.isArray(profile.tags) ? profile.tags.filter(Boolean) : [];
+    const jobs = cleanJobs(loadOwnerJobs(user.id));
+    const fallbackLocation = extractCityState(locationMeta.formatted || profile.headquarters || contact.address || "");
+    const city = locationMeta.city || locationMeta.town || fallbackLocation.city || "";
+    const state = locationMeta.state || locationMeta.region || fallbackLocation.state || "";
+    const address = contact.address || locationMeta.formatted || profile.headquarters || "";
+    const company = {
+      id: user.id,
+      name: user.company || user.name || "Empresa",
+      industry: profile.sector || "",
+      city,
+      state,
+      address,
+      website: profile.site || contact.website || contact.site || "",
+      logo: profile.avatar || "",
+      tags,
+      is_hiring: jobsAreOpen(jobs),
+      jobs: jobs.slice(0, 4),
+      coordinates: coords,
+      source: "user"
+    };
+    return company;
+  }
+
+  function geocodeQuery(company) {
+    if (!company) return "";
+    const parts = [company.address, [company.city, company.state].filter(Boolean).join(", ")].filter(Boolean);
+    return parts.join(", ").trim();
+  }
+
+  async function geocodeAddress(address) {
+    const normalized = normalizeKey(address);
+    if (!normalized) return null;
+    const cached = readGeocodeCache(normalized);
+    if (cached) return cached;
+    if (geocodeQueue.has(normalized)) return geocodeQueue.get(normalized);
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q=${encodeURIComponent(address)}`;
+    const promise = fetch(url, {
+      headers: { "Accept-Language": "pt-BR" }
+    })
+      .then(async response => {
+        if (!response.ok) throw new Error(`Geocode HTTP ${response.status}`);
+        const data = await response.json();
+        const hit = Array.isArray(data) ? data[0] : null;
+        if (!hit) return null;
+        const lat = Number(hit.lat);
+        const lng = Number(hit.lon);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+        const result = {
+          lat,
+          lng,
+          city:
+            hit.address?.city ||
+            hit.address?.town ||
+            hit.address?.village ||
+            hit.address?.municipality ||
+            hit.address?.county ||
+            "",
+          state: hit.address?.state || hit.address?.region || hit.address?.state_district || "",
+          formatted: hit.display_name || address
+        };
+        writeGeocodeCache(normalized, result);
+        return result;
+      })
+      .catch(() => null)
+      .finally(() => {
+        geocodeQueue.delete(normalized);
+      });
+    geocodeQueue.set(normalized, promise);
+    return promise;
+  }
+
+  async function ensureCompanyCoordinates(company) {
+    if (!company) return null;
+    const hasCoords = Number.isFinite(company?.coordinates?.lat) && Number.isFinite(company?.coordinates?.lng);
+    if (hasCoords) return company;
+    const query = geocodeQuery(company);
+    if (!query) return company;
+    const geo = await geocodeAddress(query);
+    if (!geo) return company;
+    company.coordinates = { lat: geo.lat, lng: geo.lng };
+    if (!company.city && geo.city) company.city = geo.city;
+    if (!company.state && geo.state) company.state = geo.state;
+    if (!company.address && geo.formatted) company.address = geo.formatted;
+    return company;
+  }
+
+  async function loadUserCompanies() {
+    const auth = window.MapsAuth;
+    if (!auth || typeof auth.ready !== "function") return [];
+    try {
+      const users = await auth.ready();
+      const business = (Array.isArray(users) ? users : []).filter(user => user?.type === "business");
+      const mapped = business.map(buildCompanyFromUser).filter(Boolean);
+      const enriched = await Promise.all(mapped.map(company => ensureCompanyCoordinates(company)));
+      return enriched.filter(Boolean);
+    } catch {
+      return [];
+    }
+  }
+
+  function companyKey(company) {
+    if (!company) return "";
+    if (company.id) return `id:${company.id}`;
+    const name = normalizeKey(company.name);
+    return name ? `name:${name}` : "";
+  }
+
   function isDrawerMode() {
     return state.mqDrawer.matches;
   }
@@ -212,7 +436,11 @@
         const open = company.is_hiring;
         const cls = open ? "aberta" : "fechada";
         const text = open ? "Vagas Abertas" : "Vagas Fechadas";
-        const address = `${company.address ? `${company.address} - ` : ""}${company.city || ""}${company.state ? `, ${company.state}` : ""}`;
+        const segments = [];
+        if (company.address) segments.push(company.address);
+        const locality = [company.city, company.state].filter(Boolean).join(", ");
+        if (locality) segments.push(locality);
+        const address = segments.join(" - ") || "Endereco nao informado";
         return `
           <li class="card-empresa" data-id="${company.id}">
             <span class="badge-vagas ${cls}"><i class="ri-briefcase-2-${open ? "fill" : "line"}"></i> ${text}</span>
@@ -279,15 +507,42 @@
     return filtered;
   }
 
-  async function fetchCompanies() {
+  async function fetchStaticCompanies() {
     const dataUrl = location.pathname.includes("/pages/") ? "../assets/data/companies.json" : "assets/data/companies.json";
     try {
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Falha ao carregar companies.json");
-      return await response.json();
+      const data = await response.json();
+      const list = Array.isArray(data) ? data : [];
+      window.__staticCompanies = list;
+      return list;
     } catch {
-      return Array.isArray(window.__companies) ? window.__companies : [];
+      if (Array.isArray(window.__staticCompanies)) return window.__staticCompanies;
+      if (Array.isArray(window.__companies)) {
+        return window.__companies.filter(company => company?.source !== "user");
+      }
+      return [];
     }
+  }
+
+  async function fetchCompanies() {
+    const [base, custom] = await Promise.all([fetchStaticCompanies(), loadUserCompanies()]);
+    const seen = new Set();
+    const merged = [];
+    (custom || []).forEach(company => {
+      if (!company) return;
+      const key = companyKey(company);
+      if (key) seen.add(key);
+      merged.push(company);
+    });
+    (base || []).forEach(company => {
+      if (!company) return;
+      const key = companyKey(company);
+      if (key && seen.has(key)) return;
+      if (key) seen.add(key);
+      merged.push(company);
+    });
+    return merged;
   }
 
   function exposeHelpers() {

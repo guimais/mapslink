@@ -324,6 +324,11 @@ h2,
   height: auto;
 }
 
+.chart-fallback {
+  position: relative;
+  left: -14px;
+}
+
 @media (max-width: 1000px) {
   .site-header {
     top: 14px;
