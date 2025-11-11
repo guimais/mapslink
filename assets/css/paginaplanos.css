@@ -38,6 +38,24 @@ body{
     var(--bg);
 }
 
+body[data-page="planos"]{
+  position:relative;
+  min-height:100%;
+  background:var(--bg);
+}
+
+body[data-page="planos"]::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(16,37,105,.06), transparent 65%),
+    radial-gradient(900px 500px at 110% 10%, rgba(11,27,74,.05), transparent 60%),
+    linear-gradient(180deg, #f8fafc 0%, #edf2fb 40%, #e1e6f3 100%);
+}
+
 h1,
 h2,
 .titulo-principal,
@@ -108,7 +126,7 @@ h2,
   align-items:center;
   justify-content:space-between;
   width:92%;
-  max-width:1100px;
+  max-width:1200px;
   height:var(--nav-h);
   transition:transform .18s, box-shadow .25s;
 }
@@ -178,6 +196,9 @@ h2,
 main{
   padding-top:calc(16px + var(--nav-h) + 36px);
   padding-bottom:clamp(180px, 28vh, 320px);
+  position:relative;
+  z-index:0;
+  isolation:isolate;
 }
 
 .planos-hero{
@@ -357,7 +378,7 @@ main{
 
 @media (max-width: 1200px){
   .nav-pilula{
-    max-width:1080px;
+    max-width:1200px;
     padding:12px 24px;
   }
   .nav-links{
@@ -560,8 +581,8 @@ main{
     top:24px;
   }
   .nav-pilula{
-    width:94%;
-    max-width:1320px;
+    width:92%;
+    max-width:1300px;
     padding:16px 36px;
     height:var(--nav-h);
   }

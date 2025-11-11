@@ -49,8 +49,8 @@ h2,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 92%;
-  max-width: 1100px;
+  width:92%;
+  max-width:1200px;
   height: 60px;
 }
 
@@ -471,7 +471,7 @@ h2,
 
 @media (max-width: 1200px) {
   .nav-pilula {
-    max-width: 1000px;
+    max-width:1200px;
     padding: 12px 24px;
   }
   .loginempresarial {
@@ -838,7 +838,7 @@ h2,
     top: 24px;
   }
   .nav-pilula {
-    max-width: 1320px;
+    max-width:1300px;
     padding: 16px 36px;
     height: var(--nav-h);
   }

@@ -59,7 +59,7 @@ h1,h2{
   align-items:center;
   justify-content:space-between;
   width:92%;
-  max-width:1100px;
+  max-width:1200px;
   height:68px;
   position:relative;
 }
@@ -158,9 +158,10 @@ h1,h2{
   padding-top:120px;
   padding-left:16px;
   padding-right:16px;
-  padding-bottom:220px;
+  padding-bottom:clamp(260px, 35vh, 440px);
   max-width:1200px;
   margin:0 auto;
+  min-height:calc(100vh - var(--nav-h) + 180px);
 }
 
 .agenda-container{
@@ -582,7 +583,7 @@ body.agenda-editor-open{
     font-size:17px;
   }
   .nav-pilula{
-    max-width:1320px;
+    max-width:1300px;
     padding:16px 36px;
   }
   .nav-link{
@@ -614,7 +615,7 @@ body.agenda-editor-open{
 
 @media (max-width: 1200px){
   .nav-pilula{
-    max-width:1080px;
+    max-width:1200px;
     padding:12px 24px;
   }
   .agenda{

@@ -176,6 +176,11 @@
     }
 
     const sectionLinks = state.navLinks.filter(link => (link.getAttribute("href") || "").startsWith("#"));
+    if (!sectionLinks.length) {
+      markActiveLink();
+      return;
+    }
+
     const map = new Map(sectionLinks.map(link => [link.getAttribute("href"), link]));
 
     const observer = new IntersectionObserver(entries => {
@@ -196,11 +201,20 @@
 
   function markActiveLink() {
     const path = (location.pathname.split("/").pop() || "index.html").split("?")[0];
+    const activeKey = (document.body?.dataset?.navActive || "").trim().toLowerCase();
     if (highlightNav(path)) return;
     state.navLinks.forEach(link => {
-      const href = (link.getAttribute("href") || "").split("?")[0];
-      if (!href || href.startsWith("#")) return;
-      link.classList.toggle("active", href === path);
+      const hrefRaw = (link.getAttribute("href") || "").split("?")[0];
+      if (!hrefRaw || hrefRaw.startsWith("#")) return;
+      const href = hrefRaw.split("/").pop();
+      const key = (link.dataset?.navKey || link.textContent || "").trim().toLowerCase();
+      const match = href === path || (activeKey && key === activeKey);
+      link.classList.toggle("active", match);
+      if (match) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
     });
   }
 

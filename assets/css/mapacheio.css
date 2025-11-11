@@ -55,7 +55,7 @@ h2,
   align-items:center;
   justify-content:space-between;
   width:92%;
-  max-width:1100px;
+  max-width:1200px;
   height:68px;
 }
 
@@ -243,7 +243,7 @@ h2,
 .map-exit-control{
   position:absolute;
   top:calc(20px + 68px + 12px);
-  right:calc((100vw - min(1100px, 92vw)) / 2 + 12px);
+  right:calc((100vw - min(1100px, 92vw)) / 2 + 20px);
   z-index:1600;
   display:inline-flex;
   align-items:center;
@@ -537,8 +537,8 @@ fieldset.fp-section::before{
 
 @media (max-width:1200px){
   .nav-pilula{
-    width:94%;
-    max-width:1040px;
+    width:92%;
+    max-width:1200px;
   }
   .nav-links{
     gap:12px;
@@ -546,7 +546,7 @@ fieldset.fp-section::before{
   .map-exit-control{
     width:48px;
     height:48px;
-    right:calc((100vw - min(1040px, 94vw)) / 2 + 12px);
+    right:calc((100vw - min(1040px, 94vw)) / 2 + 18px);
     top:calc(20px + 68px + 10px);
   }
   .search-ui{
@@ -577,7 +577,7 @@ fieldset.fp-section::before{
     height:78px;
   }
   .map-exit-control{
-    right:18px;
+    right:28px;
     top:calc(14px + 60px + 12px);
   }
   .nav-toggle{
@@ -708,7 +708,7 @@ fieldset.fp-section::before{
     width:46px;
     height:46px;
     border-radius:16px;
-    right:18px;
+    right:26px;
     top:calc(12px + 54px + 12px);
   }
   .search-ui{
@@ -753,7 +753,7 @@ fieldset.fp-section::before{
   .map-exit-control{
     width:42px;
     height:42px;
-    right:16px;
+    right:22px;
     top:calc(10px + 50px + 10px);
   }
   .search-ui{
@@ -805,8 +805,8 @@ fieldset.fp-section::before{
     top:24px;
   }
   .nav-pilula{
-    width:94%;
-    max-width:1380px;
+    width:92%;
+    max-width:1300px;
     padding:16px 36px;
     height:var(--nav-h);
   }

@@ -60,7 +60,7 @@ h2,
   justify-content:space-between;
   gap:12px;
   width:92%;
-  max-width:1100px;
+  max-width:1200px;
   height:var(--nav-h);
   min-height:var(--nav-h);
   padding:12px 20px;
@@ -660,16 +660,28 @@ h2,
   border:1px solid var(--panel-border);
   position:relative;
   overflow:hidden;
+  transition:transform .25s, box-shadow .25s, border-color .25s;
+  animation:card-in .6s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.card:hover{
+  transform:translateY(-6px) scale(1.01);
+  box-shadow:0 16px 36px rgba(15,23,42,.18), 0 0 0 1px rgba(16,37,105,.12) inset;
+  border-color:rgba(16,37,105,.18);
 }
 
 .card::after{
   content:"";
   position:absolute;
-  inset:auto -60px -80px 55%;
-  height:180px;
-  background:radial-gradient(circle at center, rgba(16,37,105,.16), transparent 65%);
-  opacity:.3;
+  inset:0;
   pointer-events:none;
+  background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 15%, transparent 30%);
+  transform:translateX(-120%);
+  transition:transform .6s ease;
+}
+
+.card:hover::after{
+  transform:translateX(120%);
 }
 
 .card-wide{
@@ -858,7 +870,7 @@ h2,
  
 @media (max-width:1200px){
   .nav-pilula{
-    max-width:960px;
+    max-width:1200px;
     padding:12px 24px;
   }
   .nav-links{
@@ -1083,8 +1095,8 @@ h2,
     top:24px;
   }
   .nav-pilula{
-    width:94%;
-    max-width:1380px;
+    width:92%;
+    max-width:1300px;
     padding:16px 36px;
     height:var(--nav-h);
   }
