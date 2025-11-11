@@ -2,7 +2,7 @@
   if (window.__ml_perfilempresa_init__) return;
   window.__ml_perfilempresa_init__ = true;
 
-  const ACCENTS = /[\u0300-\u036f]/g;
+  const { normalizeText } = window.MapsUtils || {};
   const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const AVATAR_SELECTOR = ".empresa-hero-avatar img";
   const AVATAR_WRAPPER_SELECTOR = ".empresa-hero-avatar";
@@ -72,10 +72,6 @@
 
   function queryAll(selector, root) {
     return Array.from((root || document).querySelectorAll(selector));
-  }
-
-  function normalize(value) {
-    return (value || "").normalize("NFD").replace(ACCENTS, "").toLowerCase();
   }
 
   function navLinks() {
@@ -261,9 +257,9 @@
     const rows = queryAll(".curriculos-table tbody tr");
     if (!search || !rows.length) return;
     search.addEventListener("input", () => {
-      const term = normalize(search.value);
+      const term = normalizeText(search.value || "");
       rows.forEach(row => {
-        const text = normalize(row.textContent);
+        const text = normalizeText(row.textContent || "");
         row.style.display = term && !text.includes(term) ? "none" : "";
       });
     });

@@ -1,15 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
-
-:root{
-  --bg:#f8fafc;
-  --surface:#edf2f7;
-  --surface-2:#e6edf5;
-  --text:#0f172a;
-  --muted:#475569;
-  --brand:#102569;
-  --brand-2:#0b1b4a;
-}
-
 *{box-sizing:border-box}
 
 body{
@@ -105,7 +93,7 @@ h1,h2,.titulo-principal{
     top: 12px;
     padding: 0 12px;
   }
-  
+
   .nav-pilula {
     width: 100%;
     max-width: none;
@@ -114,12 +102,12 @@ h1,h2,.titulo-principal{
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
-  
+
   .nav-logo {
     height: 70px;
     margin-right: 0;
   }
-  
+
   .nav-toggle {
     display: block;
     font-size: 22px;
@@ -130,7 +118,7 @@ h1,h2,.titulo-principal{
     border-radius: 10px;
     transition: background-color .2s ease, color .2s ease;
   }
-  
+
   .nav-links {
     position: fixed;
     top: 0;
@@ -148,22 +136,22 @@ h1,h2,.titulo-principal{
     z-index: 1000;
     overflow-y: auto;
   }
-  
+
   .nav-links.active,
   .nav-links.is-open,
   .nav-pilula.is-open .nav-links {
     right: 0;
   }
-  
+
   .nav-links li {
     width: 100%;
     border-bottom: 1px solid var(--surface);
   }
-  
+
   .nav-links li:last-child {
     border-bottom: none;
   }
-  
+
   .nav-link{
   font-family:'Montserrat',sans-serif;
   font-weight: 700;
@@ -179,7 +167,7 @@ h1,h2,.titulo-principal{
   opacity: 1;
   transform: none;
 }
-  
+
   .nav-link:hover,
   .nav-link:focus {
     background: var(--surface);
@@ -187,7 +175,7 @@ h1,h2,.titulo-principal{
     transform: none;
     opacity: 1;
   }
-  
+
   .nav-link.active {
   font-weight: 800;
   color: var(--brand-2, #0b1b4a);
@@ -196,8 +184,8 @@ h1,h2,.titulo-principal{
   background: rgba(16, 37, 105, 0.08);
   border-left: 4px solid var(--brand);
 }
-  
-  
+
+
   .nav-overlay {
     position: fixed;
     top: 0;
@@ -210,12 +198,12 @@ h1,h2,.titulo-principal{
     transition: all 0.3s ease;
     z-index: 999;
   }
-  
+
   .nav-overlay.active {
     opacity: 1;
     visibility: visible;
   }
-  
+
 }
 
 @media (max-width: 560px) {
@@ -244,22 +232,22 @@ h1,h2,.titulo-principal{
     top: 8px;
     padding: 0 8px;
   }
-  
+
   .nav-pilula {
     padding: 6px 12px;
     height: 48px;
     border-radius: 14px;
   }
-  
+
   .nav-logo {
     height: 60px;
   }
-  
+
   .nav-toggle {
     font-size: 20px;
     padding: 4px;
   }
-  
+
   .nav-links {
     width: 100%;
     right: -100%;
@@ -276,8 +264,10 @@ h1,h2,.titulo-principal{
 
 @media (min-width: 1500px) {
   :root {
+
     --nav-h: 72px;
-  }
+
+}
   html {
     font-size: 17px;
   }
@@ -702,64 +692,64 @@ h1,h2,.titulo-principal{
     padding: 60px 16px 32px;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   }
-  
+
   .login-card {
     padding: 32px 24px;
     border-radius: 20px;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
     border: none;
   }
-  
+
   .login-title {
     font-size: 26px;
     margin-bottom: 12px;
   }
-  
+
   .login-subtitle {
     font-size: 15px;
     margin-bottom: 28px;
   }
-  
+
   .form-input {
     padding: 18px 18px 18px 52px;
     font-size: 16px;
     border-radius: 14px;
     border: 2px solid #e2e8f0;
   }
-  
+
   .input-icon {
     left: 18px;
     font-size: 18px;
   }
-  
+
   .password-toggle {
     right: 18px;
     padding: 8px;
     font-size: 20px;
   }
-  
+
   .login-button {
     padding: 18px 24px;
     font-size: 17px;
     border-radius: 14px;
     margin-top: 12px;
   }
-  
+
   .form-options {
     margin: 16px 0;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .checkbox-container {
     font-size: 15px;
   }
-  
+
   .forgot-password {
     font-size: 15px;
   }
-  
+
   .business-login-link {
     padding: 16px 24px;
     font-size: 15px;
@@ -772,56 +762,56 @@ h1,h2,.titulo-principal{
     padding: 40px 12px 24px;
     min-height: 100vh;
   }
-  
+
   .login-container {
     max-width: 100%;
   }
-  
+
   .login-card {
     padding: 28px 20px;
     border-radius: 18px;
     margin: 0 8px;
   }
-  
+
   .login-header {
     margin-bottom: 28px;
   }
-  
+
   .login-title {
     font-size: 24px;
     letter-spacing: -0.3px;
   }
-  
+
   .login-subtitle {
     font-size: 14px;
     margin-bottom: 24px;
   }
-  
+
   .login-form {
     gap: 20px;
   }
-  
+
   .form-group {
     gap: 6px;
   }
-  
+
   .form-label {
     font-size: 15px;
     margin-bottom: 6px;
   }
-  
+
   .form-input {
     padding: 16px 16px 16px 48px;
     font-size: 16px;
     border-radius: 12px;
     min-height: 52px;
   }
-  
+
   .input-icon {
     left: 16px;
     font-size: 16px;
   }
-  
+
   .password-toggle {
     right: 16px;
     padding: 6px;
@@ -829,23 +819,23 @@ h1,h2,.titulo-principal{
     min-width: 32px;
     min-height: 32px;
   }
-  
+
   .form-options {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
     margin: 20px 0;
   }
-  
+
   .checkbox-container {
     font-size: 14px;
   }
-  
+
   .forgot-password {
     font-size: 14px;
     align-self: flex-end;
   }
-  
+
   .login-button {
     padding: 16px 20px;
     font-size: 16px;
@@ -853,25 +843,25 @@ h1,h2,.titulo-principal{
     min-height: 52px;
     margin-top: 8px;
   }
-  
+
   .login-footer {
     margin-top: 28px;
   }
-  
+
   .login-footer p {
     font-size: 13px;
     margin-bottom: 16px;
   }
-  
+
   .divider {
     margin: 16px 0;
   }
-  
+
   .divider span {
     font-size: 13px;
     padding: 0 12px;
   }
-  
+
   .business-login-link {
     width: 100%;
     justify-content: center;
@@ -887,29 +877,29 @@ h1,h2,.titulo-principal{
   .loginpessoal {
     padding: 20px 16px;
   }
-  
+
   .login-card {
     padding: 24px 20px;
   }
-  
+
   .login-title {
     font-size: 22px;
     margin-bottom: 8px;
   }
-  
+
   .login-subtitle {
     font-size: 14px;
     margin-bottom: 20px;
   }
-  
+
   .login-form {
     gap: 16px;
   }
-  
+
   .form-input {
     padding: 14px 14px 14px 44px;
   }
-  
+
   .login-button {
     padding: 14px 20px;
     margin-top: 8px;
@@ -921,28 +911,28 @@ h1,h2,.titulo-principal{
   .form-input {
     min-height: 48px;
   }
-  
+
   .login-button {
     min-height: 48px;
   }
-  
+
   .password-toggle {
     min-width: 40px;
     min-height: 40px;
   }
-  
+
   .checkbox-container {
     min-height: 44px;
     padding: 8px 0;
   }
-  
+
   .forgot-password {
     min-height: 44px;
     padding: 8px 0;
     display: flex;
     align-items: center;
   }
-  
+
   .business-login-link {
     min-height: 48px;
   }
@@ -954,12 +944,12 @@ h1,h2,.titulo-principal{
   .loginpessoal {
     min-height: -webkit-fill-available;
   }
-  
+
   .form-input {
     -webkit-appearance: none;
     border-radius: 12px;
   }
-  
+
   .login-button {
     -webkit-appearance: none;
     border-radius: 12px;
@@ -972,5 +962,9 @@ h1,h2,.titulo-principal{
     border-width: 0.5px;
   }
 }
+
+
+
+
 
 

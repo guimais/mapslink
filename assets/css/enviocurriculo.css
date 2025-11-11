@@ -1,25 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
+:root {
 
-:root{
-  --bg:#f8fafc;
-  --surface:#edf2f7;
-  --surface-2:#e6edf5;
-  --text:#0f172a;
-  --muted:#475569;
-  --brand:#102569;
-  --brand-2:#0b1b4a;
   --radius-lg:24px;
+
   --radius-md:16px;
+
   --radius-sm:10px;
+
   --shadow-1:0 6px 20px rgba(0,0,0,.06);
+
   --shadow-2:0 8px 24px rgba(0,0,0,.08);
+
   --fs-body:17px;
+
   --thead-h:52px;
+
   --row-h:74px;
+
   --rows-visible:5;
-  --nav-h:68px;
+
   --container:1100px;
+
   --gutter:20px;
+
 }
 
 *{box-sizing:border-box}
@@ -595,9 +597,11 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
 }
 
 @media (min-width: 1500px){
-  :root{
+  :root {
+
     --nav-h:72px;
-  }
+
+}
   html{
     font-size:17px;
   }
@@ -637,3 +641,7 @@ h1,h2,.titulo-principal,.subtitulo-principal,.titulo-sobre{
     min-height:48px;
   }
 }
+
+
+
+

@@ -1,21 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
+:root {
 
-:root{
-  --bg:#f8fafc;
-  --surface:#edf2f7;
-  --surface-2:#e6edf5;
-  --text:#0f172a;
-  --muted:#475569;
-  --brand:#102569;
-  --brand-2:#0b1b4a;
-  --nav-h:68px;
   --panel-bg:rgba(255,255,255,.88);
+
   --panel-border:rgba(16,37,105,.08);
+
   --panel-shadow:0 18px 42px rgba(15,23,42,.18);
+
   --accent-soft:rgba(16,37,105,.08);
+
   --accent-softer:rgba(16,37,105,.06);
+
   --radius-lg:28px;
+
   --radius-md:20px;
+
 }
 
 *{
@@ -824,7 +822,7 @@ h2,
   }
 }
 
- 
+
 
 @media (min-width:1000px){
   .empresa-sidebar{
@@ -861,13 +859,13 @@ h2,
   }
 }
 
- 
 
- 
 
- 
 
- 
+
+
+
+
 @media (max-width:1200px){
   .nav-pilula{
     max-width:1200px;
@@ -1085,9 +1083,11 @@ h2,
 }
 
 @media (min-width: 1500px){
-  :root{
+  :root {
+
     --nav-h:72px;
-  }
+
+}
   html{
     font-size:17px;
   }
@@ -1142,3 +1142,7 @@ h2,
     min-height:48px;
   }
 }
+
+
+
+

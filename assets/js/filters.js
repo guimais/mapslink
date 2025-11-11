@@ -1,14 +1,5 @@
 (() => {
-  const ACCENTS = /[\u0300-\u036f]/g;
-
-  function normalize(value) {
-    return (value ?? "")
-      .toString()
-      .trim()
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(ACCENTS, "");
-  }
+  const { normalizeText } = window.MapsUtils || {};
 
   function toArray(value) {
     if (value == null) return [];
@@ -20,11 +11,11 @@
   }
 
   function collectTags(company) {
-    return toArray(company?.tags).map(normalize);
+    return toArray(company?.tags).map(value => normalizeText(value || ""));
   }
 
   function collectWorkModes(company) {
-    return toArray(company?.work_modes ?? company?.workModes).map(normalize);
+    return toArray(company?.work_modes ?? company?.workModes).map(value => normalizeText(value || ""));
   }
 
   function collectBlob(company) {
@@ -52,21 +43,21 @@
   }
 
   function filterCompanies(list = [], filters = {}) {
-    const query = normalize(filters.q || filters.search || "");
-    const location = normalize(filters.location || "");
-    const city = normalize(filters.city || "");
-    const state = normalize(filters.state || "");
-    const industries = toArray(filters.industries || filters.industry || filters.sector).map(normalize).filter(Boolean);
-    const sizes = toArray(filters.sizes || filters.size || filters.companySize).map(normalize).filter(Boolean);
-    const workModes = toArray(filters.workModes || filters.workMode || filters.modalities).map(normalize).filter(Boolean);
-    const tags = toArray(filters.tags).map(normalize).filter(Boolean);
+    const query = normalizeText(filters.q || filters.search || "");
+    const location = normalizeText(filters.location || "");
+    const city = normalizeText(filters.city || "");
+    const state = normalizeText(filters.state || "");
+    const industries = toArray(filters.industries || filters.industry || filters.sector).map(value => normalizeText(value || "")).filter(Boolean);
+    const sizes = toArray(filters.sizes || filters.size || filters.companySize).map(value => normalizeText(value || "")).filter(Boolean);
+    const workModes = toArray(filters.workModes || filters.workMode || filters.modalities).map(value => normalizeText(value || "")).filter(Boolean);
+    const tags = toArray(filters.tags).map(value => normalizeText(value || "")).filter(Boolean);
     const wantsHiring = parseBoolean(filters.isHiring);
 
     return list.filter(company => {
-      const companyCity = normalize(company?.city);
-      const companyState = normalize(company?.state);
-      const companyIndustry = normalize(industryOf(company));
-      const companySize = normalize(company?.size ?? company?.company_size);
+      const companyCity = normalizeText(company?.city || "");
+      const companyState = normalizeText(company?.state || "");
+      const companyIndustry = normalizeText(industryOf(company));
+      const companySize = normalizeText(company?.size ?? company?.company_size ?? "");
       const companyModes = collectWorkModes(company);
       const companyTags = collectTags(company);
 
@@ -74,7 +65,7 @@
         !location ||
         companyCity.includes(location) ||
         companyState.includes(location) ||
-        normalize(`${company?.city} ${company?.state}`).includes(location);
+        normalizeText(`${company?.city || ""} ${company?.state || ""}`).includes(location);
 
       if (!matchesLocation) return false;
       if (city && companyCity !== city) return false;
@@ -85,7 +76,7 @@
 
       if (wantsHiring != null && Boolean(company?.is_hiring) !== wantsHiring) return false;
       if (tags.length && !tags.every(tag => companyTags.includes(tag))) return false;
-      if (query && !normalize(collectBlob(company)).includes(query)) return false;
+      if (query && !normalizeText(collectBlob(company)).includes(query)) return false;
 
       return true;
     });
@@ -101,7 +92,7 @@
     });
     const seen = new Map();
     values.forEach(value => {
-      const normalized = normalize(value);
+      const normalized = normalizeText(value || "");
       if (!seen.has(normalized)) seen.set(normalized, value);
     });
     try {

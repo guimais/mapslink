@@ -4,7 +4,7 @@
 
   const JOBS_STORAGE = "mapslink:vagas";
   const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-  const ACCENTS = /[\u0300-\u036f]/g;
+  const { normalizeText } = window.MapsUtils || {};
   const DEFAULT_STATS = {
     accepted: 0,
     open: 0,
@@ -49,14 +49,6 @@
     return Math.max(0, Math.round(num));
   }
 
-  function normalize(value) {
-    return (value || "")
-      .toString()
-      .normalize("NFD")
-      .replace(ACCENTS, "")
-      .toLowerCase();
-  }
-
   function loadJobs(owner) {
     if (!owner) return [];
     try {
@@ -71,7 +63,7 @@
   function summarizeJobs(jobs) {
     return jobs.reduce(
       (summary, job) => {
-        const status = normalize(job?.status || "aberta");
+        const status = normalizeText(job?.status || "aberta");
         if (status.includes("fech")) summary.closed += 1;
         else if (status.includes("analise") || status.includes("andamento")) summary.reviewing += 1;
         else summary.open += 1;

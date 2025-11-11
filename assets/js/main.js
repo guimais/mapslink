@@ -1,4 +1,5 @@
-﻿(() => {
+(() => {
+  window.MapsUtils = window.MapsUtils || {};
   const script = document.currentScript || Array.from(document.scripts).find(s => (s.src || "").includes("/main.js"));
   const usersUrl = script ? new URL("../data/users.json", script.src).href : "assets/data/users.json";
   const USERS_KEY = "mapslink:users";
@@ -6,6 +7,7 @@
   const watchers = new Set();
   const storageState = { users: null, session: null };
   const storageLogged = { local: false, session: false };
+  const ACCENT_CHARS = /[\u0300-\u036f]/g;
   let cache = null;
   let loadingPromise = null;
 
@@ -19,6 +21,14 @@
 
   function normalize(value) {
     return (value || "").replace(/\D/g, "").toLowerCase();
+  }
+
+  function normalizeTextValue(value) {
+    return (value || "")
+      .toString()
+      .normalize("NFD")
+      .replace(ACCENT_CHARS, "")
+      .toLowerCase();
   }
 
   function storageCandidates() {
@@ -341,6 +351,11 @@
     navLinks,
     highlightNav: highlight,
     closeNav: () => window.MapsNav && window.MapsNav.close && window.MapsNav.close()
+  });
+
+  window.MapsUtils = Object.assign(window.MapsUtils, {
+    normalizeText: normalizeTextValue,
+    normalizeDigits: normalize
   });
 
   function hydrate() {

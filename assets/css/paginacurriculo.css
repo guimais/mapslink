@@ -1,19 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap');
+:root {
 
-:root{
-  --bg:#f8fafc;
-  --surface:#edf2f7;
-  --surface-2:#e6edf5;
-  --text:#0f172a;
-  --muted:#475569;
-  --brand:#102569;
-  --brand-2:#0b1b4a;
   --radius-lg:24px;
+
   --radius-md:16px;
+
   --radius-sm:10px;
+
   --shadow-1:0 6px 20px rgba(0,0,0,.06);
+
   --shadow-2:0 8px 24px rgba(0,0,0,.08);
+
   --fs-body:17px;
+
 }
 
 *{
@@ -788,3 +786,7 @@ h2,
   transform:scale(.965);
   filter:brightness(.98) saturate(.98);
 }
+
+
+
+

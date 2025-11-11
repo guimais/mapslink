@@ -1,16 +1,29 @@
-﻿:root{
+﻿:root {
+
   --edicao-bg:var(--bg,#f8fafc);
+
   --edicao-surface:#ffffff;
+
   --edicao-surface-soft:rgba(255,255,255,.9);
+
   --edicao-border:rgba(16,37,105,.12);
+
   --edicao-border-strong:rgba(16,37,105,.18);
+
   --edicao-shadow:0 16px 36px rgba(15,23,42,.12);
+
   --edicao-shadow-soft:0 12px 28px rgba(15,23,42,.1);
+
   --edicao-heading:#102569;
+
   --edicao-muted:#4a5972;
+
   --edicao-radius-lg:28px;
+
   --edicao-radius-md:20px;
+
   --edicao-radius-sm:16px;
+
 }
 
 body[data-page="edicaoperfilempresa"]{
@@ -545,4 +558,8 @@ body[data-page="edicaoperfilempresa"]{
     min-width:auto;
   }
 }
+
+
+
+
 

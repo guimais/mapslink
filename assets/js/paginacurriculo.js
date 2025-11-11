@@ -5,6 +5,7 @@
   const APPLICATION_PREFIX = "mapslink:applications";
   const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const FILTER_STORAGE = "mapslink:curriculo:filtros";
+  const { normalizeText } = window.MapsUtils || {};
 
   const dom = {
     avatar: document.querySelector("[data-company-avatar]"),
@@ -118,10 +119,6 @@
     updateCount(state.filtered.length);
   }
 
-  function normalize(value) {
-    return (value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  }
-
   function parseDate(value) {
     if (!value) return null;
     const match = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
@@ -136,18 +133,18 @@
 
   function getFilters() {
     return {
-      search: normalize(dom.search?.value),
-      status: normalize(dom.status?.value),
-      role: normalize(dom.role?.value),
+      search: normalizeText(dom.search?.value || ""),
+      status: normalizeText(dom.status?.value || ""),
+      role: normalizeText(dom.role?.value || ""),
       start: parseDate(dom.start?.value),
       end: parseDate(dom.end?.value)
     };
   }
 
   function matches(entry, filters) {
-    const name = normalize(entry.candidate);
-    const role = normalize(entry.title);
-    const status = normalize(entry.status);
+    const name = normalizeText(entry.candidate || "");
+    const role = normalizeText(entry.title || "");
+    const status = normalizeText(entry.status || "");
     const date = entry.appliedAt ? new Date(entry.appliedAt) : null;
 
     if (filters.search && !name.includes(filters.search) && !role.includes(filters.search)) return false;

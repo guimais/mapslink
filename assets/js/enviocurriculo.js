@@ -7,7 +7,7 @@
   const APPLIED_PREFIX = "mapslink_envio_aplicado";
   const EMPTY_IMAGE =
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-  const ACCENTS = /[\u0300-\u036f]/g;
+  const { normalizeText } = window.MapsUtils || {};
 
   const dom = {
     root: document.getElementById("envio-cv"),
@@ -47,14 +47,6 @@
     window.setTimeout(() => {
       state.liveRegion.textContent = message;
     }, 30);
-  }
-
-  function normalize(value) {
-    return (value || "")
-      .toString()
-      .normalize("NFD")
-      .replace(ACCENTS, "")
-      .toLowerCase();
   }
 
   function storageKey(owner) {
@@ -218,7 +210,7 @@
     const tr = document.createElement("tr");
     const area = escapeHtml(job.area || "--");
     const type = escapeHtml(job.type || job.status || "--");
-    const isClosed = normalize(job.status).includes("fech") || normalize(job.status).includes("encerr");
+    const isClosed = normalizeText(job.status || "").includes("fech") || normalizeText(job.status || "").includes("encerr");
 
     tr.innerHTML = `
       <td><span class="cell-text">${escapeHtml(job.title || "Vaga")}</span></td>
@@ -249,14 +241,14 @@
   }
 
   function filterJobs(term) {
-    const normalizedTerm = normalize(term);
+    const normalizedTerm = normalizeText(term || "");
     if (!normalizedTerm) {
       state.filtered = state.jobs.slice();
       return;
     }
     state.filtered = state.jobs.filter(job => {
       return [job.title, job.area, job.type, job.description]
-        .some(field => normalize(field).includes(normalizedTerm));
+        .some(field => normalizeText(field || "").includes(normalizedTerm));
     });
   }
 

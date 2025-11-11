@@ -1,10 +1,15 @@
 @charset "UTF-8";
 
 :root {
+
   --footer-bg: linear-gradient(135deg, rgba(16, 37, 105, 0.98) 0%, rgba(11, 27, 74, 0.98) 100%);
+
   --footer-text: #f8fafc;
+
   --footer-muted: rgba(226, 232, 240, 0.78);
+
   --footer-divider: rgba(148, 163, 184, 0.24);
+
 }
 
 .site-footer[data-component="site-footer"] {
@@ -288,3 +293,7 @@
     transform: none !important;
   }
 }
+
+
+
+

@@ -2,7 +2,6 @@
   if (window.__ml_perfilusuario_init__) return;
   window.__ml_perfilusuario_init__ = true;
 
-  const ACCENTS = /[\u0300-\u036f]/g;
   const sectionIds = ["#home", "#planos", "#maps", "#profile", "#about", "#contact"];
 
   const selectors = {
