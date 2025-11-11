@@ -1,3 +1,7 @@
+const token = localStorage.getItem("jwt_token");
+if (!token) {
+  window.location.href = "loginempresa.html"; 
+}
 (() => {
   if (window.__ml_curriculo_init__) return;
   window.__ml_curriculo_init__ = true;

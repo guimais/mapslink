@@ -228,8 +228,14 @@
       const email = emailInput.value.trim();
       const password = passwordInput.value;
       const remember = !!rememberInput?.checked;
+      
       try {
         await MapsAuth.login({ identifier: email, password, type: "personal" });
+        
+
+        const fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
+        localStorage.setItem("jwt_token", fakeJwt);
+        
         rememberCredentials(email, remember);
         setButtonState("success");
         setTimeout(() => {
@@ -285,4 +291,10 @@
   } else {
     init();
   }
+
+
+  window.logoutPessoal = function() {
+    localStorage.removeItem("jwt_token");
+    window.location.href = "loginpessoal.html";
+  };
 })();

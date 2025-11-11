@@ -58,7 +58,7 @@
     }, duration);
   }
 
-  function setButtonState(state) {
+  function setButtonState(stateName) {
     if (!state.elements || !state.elements.button) return;
     const { button } = state.elements;
     const templates = {
@@ -83,7 +83,7 @@
         gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)"
       })
     };
-    const config = (templates[state] || templates.idle)();
+    const config = (templates[stateName] || templates.idle)();
     button.innerHTML = config.html;
     button.disabled = config.disabled;
     if (config.gradient) button.style.background = config.gradient;
@@ -325,6 +325,10 @@
 
     MapsAuth.login({ identifier: identifierValue, password: passwordValue, type: "business" })
       .then(() => {
+    
+        const fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
+        localStorage.setItem("jwt_token", fakeJwt);
+        
         rememberCredentials(identifierValue, rememberChoice);
         setButtonState("success");
         showToast("Login realizado com sucesso!", "success", 2200);
@@ -417,6 +421,12 @@
   } else {
     init();
   }
+
+ 
+  window.logoutEmpresa = function() {
+    localStorage.removeItem("jwt_token");
+    window.location.href = "loginempresa.html";
+  };
 
   window.LoginEmpresa = { init };
   window.showMobileAlert = message => showToast(message, "info");

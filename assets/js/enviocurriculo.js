@@ -1,3 +1,8 @@
+const token = localStorage.getItem("jwt_token");
+if (!token) {
+  window.location.href = "loginpessoal.html"; 
+}
+
 (() => {
   if (window.__ml_enviocv_init__) return;
   window.__ml_enviocv_init__ = true;

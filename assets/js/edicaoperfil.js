@@ -1,3 +1,8 @@
+const token = localStorage.getItem("jwt_token");
+if (!token) {
+  window.location.href = "loginpessoal.html"; 
+}
+
 (function () {
   const FIELD_SELECTOR = "[data-field]";
   const STORAGE_FALLBACK = "mapslink:perfil:usuario";
