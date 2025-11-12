@@ -7,6 +7,7 @@ if (!token) {
   window.__ml_curriculo_init__ = true;
 
   const APPLICATION_PREFIX = "mapslink:applications";
+  const APPLICATION_RESET_KEY = `${APPLICATION_PREFIX}:reset:v2`;
   const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const FILTER_STORAGE = "mapslink:curriculo:filtros";
   const { normalizeText } = window.MapsUtils || {};
@@ -43,9 +44,11 @@ if (!token) {
 
   function sanitizeEntry(entry, index) {
     if (!entry || typeof entry !== "object") return null;
+    const candidateName = typeof entry.candidate === "string" ? entry.candidate.trim() : "";
+    if (!candidateName) return null;
     const safe = { ...entry };
     safe.id = safe.id || `app_${index}_${Date.now().toString(36)}`;
-    safe.candidate = safe.candidate || `Candidato ${index + 1}`;
+    safe.candidate = candidateName;
     safe.status = safe.status || "Em análise";
     safe.appliedAt = safe.appliedAt || safe.createdAt || new Date().toISOString();
     safe.avatar = safe.avatar || "";
@@ -155,48 +158,48 @@ if (!token) {
   }
 
   function createRow(entry, index) {
-    const tr = document.createElement(\"tr\");
-    tr.dataset.entryId = entry.id || entry-;
+    const tr = document.createElement("tr");
+    tr.dataset.entryId = entry.id || `entry-${index}`;
     const date = formatDate(entry.appliedAt);
     const hasCv = !!(entry.cv && entry.cv.dataUrl);
 
-    const candidateCell = document.createElement(\"td\");
-    const avatarWrap = document.createElement(\"span\");
-    avatarWrap.className = \"avatar\";
-    const img = document.createElement(\"img\");
+    const candidateCell = document.createElement("td");
+    const avatarWrap = document.createElement("span");
+    avatarWrap.className = "avatar";
+    const img = document.createElement("img");
     img.src = entry.avatar || EMPTY_IMAGE;
-    img.alt = entry.candidate ? Foto de  : \"Foto do candidato\";
+    img.alt = entry.candidate ? `Foto de ${entry.candidate}` : "Foto do candidato";
     avatarWrap.appendChild(img);
-    const nameSpan = document.createElement(\"span\");
-    nameSpan.className = \"cell-text\";
-    nameSpan.textContent = entry.candidate || Candidato ;
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "cell-text";
+    nameSpan.textContent = entry.candidate || "Candidato";
     candidateCell.append(avatarWrap, nameSpan);
 
-    const roleCell = document.createElement(\"td\");
-    roleCell.textContent = entry.title || \"--\";
+    const roleCell = document.createElement("td");
+    roleCell.textContent = entry.title || "--";
 
-    const dateCell = document.createElement(\"td\");
-    const time = document.createElement(\"time\");
+    const dateCell = document.createElement("td");
+    const time = document.createElement("time");
     time.dateTime = date.iso;
     time.textContent = date.text;
     dateCell.appendChild(time);
 
-    const statusCell = document.createElement(\"td\");
-    const statusBadge = document.createElement(\"span\");
+    const statusCell = document.createElement("td");
+    const statusBadge = document.createElement("span");
     statusBadge.className = statusClass(entry.status);
-    statusBadge.textContent = entry.status || \"Em análise\";
+    statusBadge.textContent = entry.status || "Em análise";
     statusCell.appendChild(statusBadge);
 
-    const actionCell = document.createElement(\"td\");
-    const button = document.createElement(\"button\");
-    button.type = \"button\";
-    button.className = \"btn btn-small ver-cv\";
-    button.dataset.viewCv = entry.id || \"\";
+    const actionCell = document.createElement("td");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-small ver-cv";
+    button.dataset.viewCv = entry.id || "";
     if (hasCv) {
-      button.textContent = \"Ver CV\";
-      button.title = entry.cv?.name || \"Visualizar currículo\";
+      button.textContent = "Ver CV";
+      button.title = (entry.cv && entry.cv.name) || "Visualizar currículo";
     } else {
-      button.textContent = \"CV indisponível\";
+      button.textContent = "CV indisponível";
       button.disabled = true;
     }
     actionCell.appendChild(button);
@@ -367,6 +370,25 @@ if (!token) {
       alert("Não há candidaturas para exportar.");
       return;
     }
+    const header = ["Nome", "Vaga", "Data", "Status"];
+    const rows = state.filtered.map(entry => [
+      `"${entry.candidate || ""}"`,
+      `"${entry.title || ""}"`,
+      `"${formatDate(entry.appliedAt).text}"`,
+      `"${entry.status || "Em análise"}"`
+    ]);
+    const csv = [header.join(";"), ...rows.map(row => row.join(";"))].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "curriculos.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   function handleCvClick(event) {
     const button = event.target.closest("[data-view-cv]");
     if (!button || button.disabled) return;
@@ -385,24 +407,6 @@ if (!token) {
     if (event.key === storageKey(state.owner)) {
       refreshEntries();
     }
-  }
-    const header = ["Nome", "Vaga", "Data", "Status"];
-    const rows = state.filtered.map(entry => [
-      `"${entry.candidate || ""}"`,
-      `"${entry.title || ""}"`,
-      `"${formatDate(entry.appliedAt).text}"`,
-      `"${entry.status || "Em análise"}"`
-    ]);
-    const csv = [header.join(";"), ...rows.map(row => row.join(";"))].join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "curriculos.csv";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   }
 
   function initListeners() {
@@ -466,3 +470,22 @@ if (!token) {
     init();
   }
 })();
+  function resetApplicationsOnce() {
+    try {
+      if (localStorage.getItem(APPLICATION_RESET_KEY)) return;
+      const prefix = `${APPLICATION_PREFIX}:`;
+      const keysToRemove = [];
+      for (let index = 0; index < localStorage.length; index += 1) {
+        const key = localStorage.key(index);
+        if (key && key.startsWith(prefix)) keysToRemove.push(key);
+      }
+      keysToRemove.forEach(key => {
+        try {
+          localStorage.removeItem(key);
+        } catch {}
+      });
+      localStorage.setItem(APPLICATION_RESET_KEY, String(Date.now()));
+    } catch {}
+  }
+
+  resetApplicationsOnce();

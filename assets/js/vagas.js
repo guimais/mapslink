@@ -14,7 +14,9 @@ if (!token) {
   const state = {
     owner: null,
     jobs: [],
-    companyMeta: null
+    companyMeta: null,
+    unsyncedJobs: [],
+    pendingRemovals: new Set()
   };
 
   const dom = {
@@ -188,7 +190,11 @@ if (!token) {
     };
     if (!job.title || !job.area || !job.type) return;
     state.jobs = [job, ...state.jobs];
-    persistJobs();
+    if (state.owner) {
+      persistJobs();
+    } else {
+      state.unsyncedJobs = [job, ...state.unsyncedJobs];
+    }
     renderJobs();
     dom.form.reset();
     const firstInput = dom.form.querySelector("input");
@@ -203,7 +209,12 @@ if (!token) {
     const next = state.jobs.filter(job => job.id !== id);
     if (next.length === state.jobs.length) return;
     state.jobs = next;
-    persistJobs();
+    if (state.owner) {
+      persistJobs();
+    } else {
+      state.pendingRemovals.add(id);
+      state.unsyncedJobs = state.unsyncedJobs.filter(job => job.id !== id);
+    }
     renderJobs();
   }
 
@@ -241,9 +252,42 @@ if (!token) {
     state.companyMeta = deriveCompanyMeta(session);
     setAvatar(profile.avatar || "");
     setCompanyName(session?.company || session?.name || "");
+    let didSync = false;
     if (ownerChanged) {
-      state.jobs = loadJobs();
+      const pendingAdds = state.unsyncedJobs.slice();
+      const pendingRemovals = new Set(state.pendingRemovals);
+      state.unsyncedJobs = [];
+      state.pendingRemovals.clear();
+      let existing = loadJobs();
+      if (pendingRemovals.size) {
+        existing = existing.filter(job => !pendingRemovals.has(job.id));
+      }
+      const additions = pendingAdds.filter(job => !pendingRemovals.has(job.id));
+      state.jobs = additions.length ? [...additions, ...existing] : existing;
       renderJobs();
+      if (additions.length || pendingRemovals.size) {
+        persistJobs();
+        didSync = true;
+      } else {
+        syncPublicJobs();
+        didSync = true;
+      }
+    } else if (state.owner && state.unsyncedJobs.length) {
+      state.unsyncedJobs = [];
+      persistJobs();
+      didSync = true;
+    } else if (state.owner && state.pendingRemovals.size) {
+      const removalIds = Array.from(state.pendingRemovals);
+      state.pendingRemovals.clear();
+      const beforeLength = state.jobs.length;
+      state.jobs = state.jobs.filter(job => !removalIds.includes(job.id));
+      if (state.jobs.length !== beforeLength) {
+        renderJobs();
+        persistJobs();
+        didSync = true;
+      }
+    }
+    if (!didSync && state.owner && state.jobs.length) {
       syncPublicJobs();
     }
   }
@@ -254,12 +298,11 @@ if (!token) {
       hydrateFromAuth(null);
       return;
     }
+    hydrateFromAuth(auth.current ? auth.current() : null);
     if (typeof auth.ready === "function") {
       auth.ready()
-        .then(() => hydrateFromAuth(auth.current()))
+        .then(() => hydrateFromAuth(auth.current ? auth.current() : null))
         .catch(() => hydrateFromAuth(null));
-    } else {
-      hydrateFromAuth(auth.current ? auth.current() : null);
     }
     if (typeof auth.onSession === "function") auth.onSession(hydrateFromAuth);
   }

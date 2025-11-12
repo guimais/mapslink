@@ -329,6 +329,7 @@ if (!token) {
       ownerId: job.ownerId || resolveOwnerId(job, job.publicId || job.id || ""),
       appliedAt: new Date().toISOString(),
       status: "Em analise",
+      candidateId: candidateId,
       candidate: candidateName,
       avatar: candidateAvatar,
       cv
