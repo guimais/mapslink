@@ -694,6 +694,127 @@ main,
   outline:none;
 }
 
+.cv-widget{
+  margin-left:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:10px;
+  min-width:220px;
+}
+
+.card-action.cv-button{
+  width:100%;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 22px;
+  border-radius:32px;
+  background:linear-gradient(135deg, #102569, #1d3fb3);
+  box-shadow:0 18px 36px rgba(16,37,105,.32);
+  border:1px solid rgba(255,255,255,.15);
+}
+
+.card-action.cv-button:is(:hover, :focus-visible){
+  background:linear-gradient(135deg, #142d7a, #274fd1);
+  box-shadow:0 20px 44px rgba(16,37,105,.42);
+}
+
+.cv-button__text{
+  display:flex;
+  align-items:center;
+  flex:1;
+  text-align:left;
+  gap:12px;
+  min-width:0;
+  overflow:hidden;
+  line-height:1.1;
+}
+
+.cv-button__label{
+  font-size:15px;
+  font-weight:800;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+.cv-button__icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.18);
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  transition:transform .2s ease, background .2s ease;
+}
+
+.cv-button:hover .cv-button__icon,
+.cv-button:focus-visible .cv-button__icon{
+  transform:scale(1.05);
+  background:rgba(255,255,255,.28);
+}
+
+.cv-button__icon[data-cv-icon="preview"]{
+  display:none;
+}
+
+.cv-button[data-has-file="true"] .cv-button__icon[data-cv-icon="upload"]{
+  display:none;
+}
+
+.cv-button[data-has-file="true"] .cv-button__icon[data-cv-icon="preview"]{
+  display:grid;
+}
+
+.cv-meta{
+  width:100%;
+  max-width:280px;
+  background:rgba(255,255,255,.8);
+  border:1px dashed rgba(15,23,42,.25);
+  border-radius:20px;
+  padding:10px 14px;
+  text-align:right;
+  font-size:12px;
+  color:#0f172a;
+}
+
+.cv-meta__name{
+  display:block;
+  font-weight:700;
+  margin-bottom:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.cv-meta__actions{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:16px;
+  justify-content:flex-end;
+  align-items:center;
+}
+
+.cv-meta__action{
+  border:none;
+  background:none;
+  color:var(--brand);
+  font-weight:700;
+  cursor:pointer;
+  padding:0;
+  font-size:12px;
+}
+
+.cv-meta__action:hover,
+.cv-meta__action:focus-visible{
+  text-decoration:underline;
+  outline:none;
+}
+
+.cv-meta__remove{
+  color:#b42318;
+}
+
 .perfil-grid{
   display:grid;
   gap:28px;
@@ -882,6 +1003,16 @@ main,
   }
   .card-action{
     margin-left:0;
+  }
+  .cv-widget{
+    width:100%;
+    align-items:stretch;
+  }
+  .cv-meta{
+    text-align:left;
+  }
+  .cv-meta__actions{
+    justify-content:flex-start;
   }
 }
 

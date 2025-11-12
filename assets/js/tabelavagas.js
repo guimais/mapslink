@@ -4,6 +4,9 @@
 
   const STORAGE_PREFIX = "mapslink:vagas";
   const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const JobsStore = window.MapsJobsStore || null;
+  const PUBLIC_KEY = JobsStore?.publicKey || `${STORAGE_PREFIX}:public`;
+  const JOBS_EVENT = JobsStore?.event || "mapslink:jobs-updated";
 
   const dom = {
     avatar: null,
@@ -24,20 +27,34 @@
     if (badge) badge.classList.toggle("is-empty", !has);
   }
 
-  function storageKey(owner) {
-    return owner ? `${STORAGE_PREFIX}:${owner}` : null;
+  function legacyCollectJobs() {
+    const jobs = [];
+    try {
+      const total = window.localStorage?.length ?? 0;
+      for (let index = 0; index < total; index += 1) {
+        const key = window.localStorage.key(index);
+        if (!key || !key.startsWith(`${STORAGE_PREFIX}:`) || key === PUBLIC_KEY) continue;
+        const raw = window.localStorage.getItem(key);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed)) jobs.push(...parsed);
+      }
+    } catch {}
+    return jobs;
   }
 
-  function loadJobs(owner) {
-    const key = storageKey(owner);
-    if (!key) return [];
-    try {
-      const raw = localStorage.getItem(key);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
+  function loadPublicJobs() {
+    if (JobsStore?.loadPublic) return JobsStore.loadPublic();
+    return legacyCollectJobs();
+  }
+
+  function sortJobs(list) {
+    return (list || [])
+      .slice()
+      .sort((a, b) => {
+        const left = Date.parse(a?.publishedAt || 0) || 0;
+        const right = Date.parse(b?.publishedAt || 0) || 0;
+        return right - left;
+      });
   }
 
   function formatDate(value) {
@@ -93,11 +110,13 @@
     jobs.forEach(job => dom.tbody.appendChild(buildRow(job)));
   }
 
+  function refreshJobs() {
+    renderJobs(sortJobs(loadPublicJobs()));
+  }
+
   function hydrate(session) {
     applyAvatar(session?.profile?.avatar || "");
-    const owner = session?.id || null;
-    const jobs = owner ? loadJobs(owner) : [];
-    renderJobs(jobs);
+    refreshJobs();
   }
 
   function initAuth() {
@@ -119,6 +138,10 @@
     initDom();
     hydrate(null);
     initAuth();
+    window.addEventListener("storage", event => {
+      if (event.key === PUBLIC_KEY) refreshJobs();
+    });
+    window.addEventListener(JOBS_EVENT, refreshJobs);
   }
 
   if (document.readyState === "loading") {
@@ -127,4 +150,3 @@
     init();
   }
 })();
-

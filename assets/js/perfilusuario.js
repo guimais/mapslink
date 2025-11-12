@@ -26,6 +26,9 @@ if (!token) {
     miniCards: ".curriculo-experiencias li"
   };
 
+  const CV_STORAGE_KEY = "mapslink:perfil:curriculo_pdf";
+  const CV_MAX_SIZE = 5 * 1024 * 1024;
+
   const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
   function valueToString(value) {
@@ -255,6 +258,204 @@ if (!token) {
         element.style.opacity = "0";
       }, 1400);
     };
+  }
+
+  function formatFileSize(bytes) {
+    const value = Number(bytes);
+    if (!Number.isFinite(value) || value <= 0) return "0 KB";
+    let size = value / 1024;
+    if (size < 1) return "< 1 KB";
+    const units = ["KB", "MB", "GB"];
+    let unit = 0;
+    while (size >= 1024 && unit < units.length - 1) {
+      size /= 1024;
+      unit += 1;
+    }
+    const precision = size >= 10 ? 0 : 1;
+    return `${size.toFixed(precision)} ${units[unit]}`;
+  }
+
+  function formatUpdatedAt(timestamp) {
+    if (!timestamp) return "";
+    try {
+      return new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(new Date(timestamp));
+    } catch {
+      return "";
+    }
+  }
+
+  function readStoredCv() {
+    try {
+      const raw = localStorage.getItem(CV_STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return null;
+      return typeof parsed.dataUrl === "string" ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveStoredCv(payload) {
+    try {
+      localStorage.setItem(CV_STORAGE_KEY, JSON.stringify(payload));
+      return true;
+    } catch {
+      state.toast?.("Não foi possível salvar o currículo neste navegador.");
+      return false;
+    }
+  }
+
+  function clearStoredCv() {
+    try {
+      localStorage.removeItem(CV_STORAGE_KEY);
+      return true;
+    } catch {
+      state.toast?.("Não foi possível remover o currículo neste navegador.");
+      return false;
+    }
+  }
+
+  function dataUrlToBlob(dataUrl) {
+    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) return null;
+    const [meta, content] = dataUrl.split(",");
+    if (!content) return null;
+    try {
+      const mime = (meta.match(/data:(.*?);/) || [])[1] || "application/pdf";
+      const binary = atob(content);
+      const length = binary.length;
+      const buffer = new Uint8Array(length);
+      for (let i = 0; i < length; i += 1) buffer[i] = binary.charCodeAt(i);
+      return new Blob([buffer], { type: mime });
+    } catch {
+      return null;
+    }
+  }
+
+  function openCvPreview(payload) {
+    if (!payload?.dataUrl) return false;
+    const blob = dataUrlToBlob(payload.dataUrl);
+    if (!blob) {
+      state.toast?.("Não foi possível carregar o PDF salvo.");
+      return false;
+    }
+    const url = URL.createObjectURL(blob);
+    const preview = window.open(url, "_blank", "noopener");
+    if (!preview) {
+      state.toast?.("Permita pop-ups para visualizar o currículo.");
+      URL.revokeObjectURL(url);
+      return false;
+    }
+    preview.focus();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    return true;
+  }
+
+  function initCvWidget() {
+    const widget = query("[data-cv-widget]");
+    if (!widget) return;
+    if (widget.dataset.cvBound) return;
+    widget.dataset.cvBound = "true";
+
+    const trigger = widget.querySelector("[data-cv-trigger]");
+    const meta = widget.querySelector("[data-cv-meta]");
+    const name = widget.querySelector("[data-cv-name]");
+    const change = widget.querySelector("[data-cv-change]");
+    const remove = widget.querySelector("[data-cv-remove]");
+    const input = widget.querySelector("[data-cv-input]");
+    if (!trigger || !input) return;
+
+    let cached = readStoredCv();
+    updateUI(cached);
+
+    trigger.addEventListener("click", () => {
+      if (cached?.dataUrl) {
+        openCvPreview(cached);
+        return;
+      }
+      input.click();
+    });
+
+    change?.addEventListener("click", event => {
+      event.preventDefault();
+      input.click();
+    });
+
+    remove?.addEventListener("click", event => {
+      event.preventDefault();
+      if (!cached?.dataUrl) return;
+      const confirmed = typeof window.confirm === "function" ? window.confirm("Remover o currículo salvo?") : true;
+      if (!confirmed) return;
+      if (!clearStoredCv()) return;
+      cached = null;
+      updateUI(null);
+      state.toast?.("Currículo removido.");
+    });
+
+    input.addEventListener("change", event => {
+      const file = event.target?.files?.[0];
+      input.value = "";
+      if (!file) return;
+      if (file.type && file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+        state.toast?.("Envie um arquivo em PDF.");
+        return;
+      }
+      if (file.size > CV_MAX_SIZE) {
+        state.toast?.("O limite é de 5 MB por arquivo.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result !== "string") {
+          state.toast?.("Não foi possível processar o PDF.");
+          return;
+        }
+        const payload = {
+          name: file.name,
+          size: file.size,
+          updatedAt: Date.now(),
+          dataUrl: reader.result
+        };
+        if (!saveStoredCv(payload)) return;
+        cached = payload;
+        updateUI(payload);
+        state.toast?.("Currículo salvo com sucesso.");
+      };
+      reader.onerror = () => state.toast?.("Não foi possível ler o arquivo.");
+      reader.readAsDataURL(file);
+    });
+
+    function updateUI(data) {
+      const hasFile = !!(data && data.dataUrl);
+      trigger.setAttribute("data-has-file", hasFile ? "true" : "false");
+      trigger.setAttribute(
+        "aria-label",
+        hasFile ? "Abrir currículo salvo em nova guia" : "Enviar currículo em PDF"
+      );
+      if (meta) {
+        meta.hidden = !hasFile;
+        if (hasFile && name) {
+          const updatedText = formatUpdatedAt(data.updatedAt);
+          const sizeText = formatFileSize(data.size);
+          name.textContent = updatedText
+            ? `${data.name} • ${sizeText} • ${updatedText}`
+            : `${data.name} • ${sizeText}`;
+        } else if (name) {
+          name.textContent = "";
+        }
+      }
+      if (remove) {
+        remove.disabled = !hasFile;
+      }
+      if (change) {
+        change.disabled = false;
+      }
+    }
   }
 
   function hydrateFromAuth(data) {
@@ -513,6 +714,7 @@ if (!token) {
     bindContactCopies();
     setupReveal();
     setupShortcuts();
+    initCvWidget();
     initCardAnimations();
     initMiniAnimations();
   }

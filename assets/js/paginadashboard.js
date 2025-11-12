@@ -55,6 +55,9 @@ if (!token) {
 
   function loadJobs(owner) {
     if (!owner) return [];
+    if (window.MapsJobsStore?.loadOwner) {
+      return window.MapsJobsStore.loadOwner(owner);
+    }
     try {
       const raw = localStorage.getItem(`${JOBS_STORAGE}:${owner}`);
       const list = raw ? JSON.parse(raw) : [];

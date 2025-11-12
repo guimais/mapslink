@@ -33,11 +33,26 @@ if (!token) {
     owner: null,
     entries: [],
     filtered: [],
-    overlay: null
+    overlay: null,
+    entriesMap: new Map()
   };
 
   function storageKey(owner) {
     return owner ? `${APPLICATION_PREFIX}:${owner}` : null;
+  }
+
+  function sanitizeEntry(entry, index) {
+    if (!entry || typeof entry !== "object") return null;
+    const safe = { ...entry };
+    safe.id = safe.id || `app_${index}_${Date.now().toString(36)}`;
+    safe.candidate = safe.candidate || `Candidato ${index + 1}`;
+    safe.status = safe.status || "Em análise";
+    safe.appliedAt = safe.appliedAt || safe.createdAt || new Date().toISOString();
+    safe.avatar = safe.avatar || "";
+    if (!safe.cv || typeof safe.cv !== "object" || !safe.cv.dataUrl) {
+      safe.cv = null;
+    }
+    return safe;
   }
 
   function loadApplications(owner) {
@@ -49,10 +64,28 @@ if (!token) {
       if (!Array.isArray(list)) return [];
       return list
         .slice()
-        .sort((a, b) => new Date(b.appliedAt || 0).getTime() - new Date(a.appliedAt || 0).getTime());
+        .sort(
+          (a, b) =>
+            (Date.parse(b?.appliedAt || b?.createdAt || 0) || 0) -
+            (Date.parse(a?.appliedAt || a?.createdAt || 0) || 0)
+        )
+        .map((entry, index) => sanitizeEntry(entry, index))
+        .filter(Boolean);
     } catch {
       return [];
     }
+  }
+
+  function refreshEntries() {
+    if (!state.owner) {
+      state.entries = [];
+      state.filtered = [];
+      render();
+      return;
+    }
+    state.entries = loadApplications(state.owner);
+    state.entriesMap = new Map(state.entries.map(entry => [entry.id, entry]));
+    applyFilters();
   }
 
   function applyAvatar(src) {
@@ -87,24 +120,90 @@ if (!token) {
     return "status";
   }
 
-  function createRow(entry, index) {
-    const tr = document.createElement("tr");
-    const date = formatDate(entry.appliedAt);
-    const avatar = entry.avatar || EMPTY_IMAGE;
-    const name = entry.candidate || `Candidato ${index + 1}`;
-    tr.innerHTML = `
-      <td>
-        <span class="avatar"><img src="${avatar}" alt=""></span>
-        <span class="cell-text">${name}</span>
-      </td>
-      <td>${entry.title || "--"}</td>
-      <td><time datetime="${date.iso}">${date.text}</time></td>
-      <td><span class="${statusClass(entry.status)}">${entry.status || "Em análise"}</span></td>
-      <td><button class="btn btn-small ver-cv" type="button" disabled>Ver CV</button></td>
-    `;
-    return tr;
+  function dataUrlToBlob(dataUrl) {
+    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) return null;
+    const [meta, payload] = dataUrl.split(",");
+    if (!payload) return null;
+    try {
+      const mime = (meta.match(/data:(.*?);/) || [])[1] || "application/pdf";
+      const binary = atob(payload);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return new Blob([bytes], { type: mime });
+    } catch {
+      return null;
+    }
   }
 
+  function openCv(entry) {
+    if (!entry?.cv?.dataUrl) return;
+    const blob = dataUrlToBlob(entry.cv.dataUrl);
+    if (!blob) {
+      alert("Não foi possível abrir este currículo.");
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const win = window.open(url, "_blank", "noopener");
+    if (!win) {
+      alert("Permita pop-ups para visualizar o currículo.");
+      URL.revokeObjectURL(url);
+      return;
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  function createRow(entry, index) {
+    const tr = document.createElement(\"tr\");
+    tr.dataset.entryId = entry.id || entry-;
+    const date = formatDate(entry.appliedAt);
+    const hasCv = !!(entry.cv && entry.cv.dataUrl);
+
+    const candidateCell = document.createElement(\"td\");
+    const avatarWrap = document.createElement(\"span\");
+    avatarWrap.className = \"avatar\";
+    const img = document.createElement(\"img\");
+    img.src = entry.avatar || EMPTY_IMAGE;
+    img.alt = entry.candidate ? Foto de  : \"Foto do candidato\";
+    avatarWrap.appendChild(img);
+    const nameSpan = document.createElement(\"span\");
+    nameSpan.className = \"cell-text\";
+    nameSpan.textContent = entry.candidate || Candidato ;
+    candidateCell.append(avatarWrap, nameSpan);
+
+    const roleCell = document.createElement(\"td\");
+    roleCell.textContent = entry.title || \"--\";
+
+    const dateCell = document.createElement(\"td\");
+    const time = document.createElement(\"time\");
+    time.dateTime = date.iso;
+    time.textContent = date.text;
+    dateCell.appendChild(time);
+
+    const statusCell = document.createElement(\"td\");
+    const statusBadge = document.createElement(\"span\");
+    statusBadge.className = statusClass(entry.status);
+    statusBadge.textContent = entry.status || \"Em análise\";
+    statusCell.appendChild(statusBadge);
+
+    const actionCell = document.createElement(\"td\");
+    const button = document.createElement(\"button\");
+    button.type = \"button\";
+    button.className = \"btn btn-small ver-cv\";
+    button.dataset.viewCv = entry.id || \"\";
+    if (hasCv) {
+      button.textContent = \"Ver CV\";
+      button.title = entry.cv?.name || \"Visualizar currículo\";
+    } else {
+      button.textContent = \"CV indisponível\";
+      button.disabled = true;
+    }
+    actionCell.appendChild(button);
+
+    tr.append(candidateCell, roleCell, dateCell, statusCell, actionCell);
+    return tr;
+  }
   function render() {
     if (!dom.tbody) return;
     dom.tbody.innerHTML = "";
@@ -268,6 +367,25 @@ if (!token) {
       alert("Não há candidaturas para exportar.");
       return;
     }
+  function handleCvClick(event) {
+    const button = event.target.closest("[data-view-cv]");
+    if (!button || button.disabled) return;
+    const id = button.dataset.viewCv;
+    if (!id) return;
+    const entry = state.entries.find(item => item.id === id);
+    if (!entry || !entry.cv) {
+      alert("Currículo não disponível para este candidato.");
+      return;
+    }
+    openCv(entry);
+  }
+
+  function handleStorageEvent(event) {
+    if (!state.owner) return;
+    if (event.key === storageKey(state.owner)) {
+      refreshEntries();
+    }
+  }
     const header = ["Nome", "Vaga", "Data", "Status"];
     const rows = state.filtered.map(entry => [
       `"${entry.candidate || ""}"`,
@@ -311,14 +429,13 @@ if (!token) {
       applyFilters();
     });
     dom.exportBtn?.addEventListener("click", exportData);
+    dom.tbody?.addEventListener("click", handleCvClick);
   }
 
   function hydrate(session) {
     state.owner = session?.id || null;
     applyAvatar(session?.profile?.avatar || "");
-    state.entries = loadApplications(state.owner);
-    state.filtered = state.entries.slice();
-    applyFilters();
+    refreshEntries();
   }
 
   function initAuth() {
@@ -340,6 +457,7 @@ if (!token) {
     restoreFilters();
     initListeners();
     initAuth();
+    window.addEventListener("storage", handleStorageEvent);
   }
 
   if (document.readyState === "loading") {

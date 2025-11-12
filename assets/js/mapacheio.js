@@ -460,7 +460,14 @@
     markersLayer = L.layerGroup().addTo(map);
   }
 
-  async function fetchCompanies() {
+  async function loadCompanies() {
+    if (window.MapsCompanyService?.loadAll) {
+      try {
+        return await window.MapsCompanyService.loadAll();
+      } catch (error) {
+        console.error("Maps Link: falha ao carregar empresas para o mapa cheio.", error);
+      }
+    }
     const dataUrl = location.pathname.includes("/pages/")
       ? "../assets/data/companies.json"
       : "assets/data/companies.json";
@@ -469,11 +476,14 @@
       if (!response.ok) throw new Error("Falha ao carregar companies.json");
       return await response.json();
     } catch {
-      return Array.isArray(window.__companies) ? window.__companies : [];
+      if (Array.isArray(window.__companies)) return window.__companies;
+      return Array.isArray(window.mapsLinkCompanies)
+        ? window.mapsLinkCompanies
+        : [];
     }
   }
 
-  const companies = await fetchCompanies();
+  const companies = await loadCompanies();
   window.__companies = companies;
 
   const initial = window.MapsFilters?.filterCompanies

@@ -358,6 +358,147 @@
     normalizeDigits: normalize
   });
 
+  if (!window.MapsJobsStore) {
+    const JOBS_PREFIX = "mapslink:vagas";
+    const PUBLIC_KEY = `${JOBS_PREFIX}:public`;
+    const EVENT_NAME = "mapslink:jobs-updated";
+
+    const isObject = value => value && typeof value === "object" && !Array.isArray(value);
+
+    function read(key) {
+      if (!key) return null;
+      try {
+        return window.localStorage?.getItem(key);
+      } catch {
+        return null;
+      }
+    }
+
+    function write(key, value) {
+      if (!key) return false;
+      try {
+        if (value === null || value === undefined) {
+          window.localStorage?.removeItem(key);
+        } else {
+          window.localStorage?.setItem(key, value);
+        }
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function parseList(raw, fallback = []) {
+      try {
+        const value = raw ? JSON.parse(raw) : fallback;
+        if (!Array.isArray(value)) return fallback.slice();
+        return value.filter(isObject).map(item => ({ ...item }));
+      } catch {
+        return fallback.slice();
+      }
+    }
+
+    function ownerKey(owner) {
+      if (!owner) return `${JOBS_PREFIX}:anonimo`;
+      return `${JOBS_PREFIX}:${owner}`;
+    }
+
+    function toIso(value) {
+      const time = Date.parse(value || "");
+      if (Number.isNaN(time)) return new Date().toISOString();
+      return new Date(time).toISOString();
+    }
+
+    function jobSort(list) {
+      return list
+        .slice()
+        .sort((a, b) => {
+          const left = Date.parse(a?.publishedAt || a?.createdAt || 0) || 0;
+          const right = Date.parse(b?.publishedAt || b?.createdAt || 0) || 0;
+          return right - left;
+        });
+    }
+
+    function dispatchJobsEvent() {
+      try {
+        window.dispatchEvent(new CustomEvent(EVENT_NAME));
+      } catch {}
+    }
+
+    function enrichJob(job, meta, ownerId) {
+      const safeOwner = ownerId ? String(ownerId) : "anonimo";
+      const id = job?.id || `job_${Math.random().toString(36).slice(2, 10)}`;
+      return {
+        ...job,
+        id,
+        ownerId: safeOwner,
+        publicId: job?.publicId || `${safeOwner}:${id}`,
+        companyName: meta?.name || job?.companyName || "",
+        companyAvatar: meta?.avatar || job?.companyAvatar || "",
+        city: meta?.city || job?.city || "",
+        state: meta?.state || job?.state || "",
+        publishedAt: toIso(job?.publishedAt || job?.createdAt)
+      };
+    }
+
+    function loadOwner(owner) {
+      const key = ownerKey(owner);
+      return parseList(read(key));
+    }
+
+    function saveOwner(owner, list) {
+      const key = ownerKey(owner);
+      write(key, JSON.stringify(list || []));
+    }
+
+    function loadPublic() {
+      return parseList(read(PUBLIC_KEY));
+    }
+
+    function persistPublic(list, { silent } = {}) {
+      write(PUBLIC_KEY, JSON.stringify(jobSort(list || [])));
+      if (!silent) dispatchJobsEvent();
+    }
+
+    const JobsStore = {
+      prefix: JOBS_PREFIX,
+      publicKey: PUBLIC_KEY,
+      event: EVENT_NAME,
+      loadOwner,
+      saveOwner,
+      loadPublic,
+      savePublic(list, options) {
+        persistPublic(list, options);
+      },
+      syncOwner(ownerId, meta = {}, jobs = []) {
+        if (!ownerId) return;
+        const safeOwner = String(ownerId);
+        const existing = loadPublic().filter(job => job.ownerId !== safeOwner);
+        const entries = jobSort((Array.isArray(jobs) ? jobs : []).map(job => enrichJob(job, meta, safeOwner)));
+        persistPublic([...entries, ...existing]);
+      },
+      upsert(ownerId, meta = {}, job) {
+        if (!ownerId || !job) return;
+        const entry = enrichJob(job, meta, ownerId);
+        const filtered = loadPublic().filter(
+          item => !(item.ownerId === entry.ownerId && (item.id === entry.id || item.publicId === entry.publicId))
+        );
+        persistPublic([entry, ...filtered]);
+      },
+      remove(ownerId, jobId) {
+        if (!ownerId || !jobId) return;
+        const safeOwner = String(ownerId);
+        const filtered = loadPublic().filter(item => {
+          if (item.ownerId !== safeOwner) return true;
+          return item.id !== jobId && item.publicId !== jobId && item.publicId !== `${safeOwner}:${jobId}`;
+        });
+        persistPublic(filtered);
+      }
+    };
+
+    window.MapsJobsStore = JobsStore;
+  }
+
   function hydrate() {
     const data = MapsAuth.current();
     if (!data) return;

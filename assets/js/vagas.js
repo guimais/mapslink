@@ -13,7 +13,8 @@ if (!token) {
 
   const state = {
     owner: null,
-    jobs: []
+    jobs: [],
+    companyMeta: null
   };
 
   const dom = {
@@ -85,6 +86,9 @@ if (!token) {
   }
 
   function loadJobs(owner = state.owner) {
+    if (window.MapsJobsStore?.loadOwner) {
+      return window.MapsJobsStore.loadOwner(owner);
+    }
     try {
       const raw = localStorage.getItem(storageKey(owner));
       const parsed = raw ? JSON.parse(raw) : [];
@@ -95,12 +99,24 @@ if (!token) {
   }
 
   function persistJobs() {
-    const key = storageKey();
-    if (!key) return;
-    try {
-      if (!state.jobs.length) localStorage.removeItem(key);
-      else localStorage.setItem(key, JSON.stringify(state.jobs));
-    } catch {}
+    if (!state.owner) return;
+    if (window.MapsJobsStore?.saveOwner) {
+      window.MapsJobsStore.saveOwner(state.owner, state.jobs);
+    } else {
+      try {
+        const key = storageKey();
+        if (!state.jobs.length) localStorage.removeItem(key);
+        else localStorage.setItem(key, JSON.stringify(state.jobs));
+      } catch {}
+    }
+    syncPublicJobs();
+  }
+
+  function syncPublicJobs() {
+    if (!state.owner || !state.companyMeta) return;
+    if (window.MapsJobsStore?.syncOwner) {
+      window.MapsJobsStore.syncOwner(state.owner, state.companyMeta, state.jobs);
+    }
   }
 
   function safe(value) {
@@ -202,16 +218,33 @@ if (!token) {
     }
   }
 
+  function deriveCompanyMeta(session) {
+    const profile = session?.profile || {};
+    const location = profile.location && typeof profile.location === "object" ? profile.location : {};
+    const contact = profile.contact && typeof profile.contact === "object" ? profile.contact : {};
+    const fallback = profile.headquarters || contact.address || "";
+    const fallbackParts = fallback.split(/[-,]/).map(part => part.trim()).filter(Boolean);
+    return {
+      id: session?.id || null,
+      name: session?.company || session?.name || "Empresa",
+      avatar: profile.avatar || "",
+      city: location.city || location.town || fallbackParts[0] || "",
+      state: location.state || location.region || fallbackParts[1] || ""
+    };
+  }
+
   function hydrateFromAuth(session) {
     const profile = session?.profile || {};
     const nextOwner = session?.id || null;
     const ownerChanged = nextOwner !== state.owner;
     state.owner = nextOwner;
+    state.companyMeta = deriveCompanyMeta(session);
     setAvatar(profile.avatar || "");
     setCompanyName(session?.company || session?.name || "");
     if (ownerChanged) {
       state.jobs = loadJobs();
       renderJobs();
+      syncPublicJobs();
     }
   }
 

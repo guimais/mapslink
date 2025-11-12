@@ -12,6 +12,10 @@ if (!token) {
   const APPLIED_PREFIX = "mapslink_envio_aplicado";
   const EMPTY_IMAGE =
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const JobsStore = window.MapsJobsStore || null;
+  const PUBLIC_JOBS_KEY = JobsStore?.publicKey || `${JOBS_STORAGE}:public`;
+  const JOBS_EVENT = JobsStore?.event || "mapslink:jobs-updated";
+  const CV_STORAGE_KEY = "mapslink:perfil:curriculo_pdf";
   const { normalizeText } = window.MapsUtils || {};
 
   const dom = {
@@ -54,29 +58,33 @@ if (!token) {
     }, 30);
   }
 
-  function storageKey(owner) {
-    return owner ? `${JOBS_STORAGE}:${owner}` : null;
-  }
-
   function appliedKey(owner) {
     return owner ? `${APPLIED_PREFIX}:${owner}` : `${APPLIED_PREFIX}:anon`;
   }
-
-  function loadJobs(owner) {
-    const key = storageKey(owner);
-    if (!key) return [];
+  function legacyCollectJobs() {
+    const jobs = [];
     try {
-      const raw = localStorage.getItem(key);
-      const list = raw ? JSON.parse(raw) : [];
-      if (!Array.isArray(list)) return [];
-      return list
-        .slice()
-        .sort((a, b) =>
-          new Date(b.publishedAt || 0).getTime() - new Date(a.publishedAt || 0).getTime()
-        );
-    } catch {
-      return [];
-    }
+      const total = window.localStorage?.length ?? 0;
+      for (let index = 0; index < total; index += 1) {
+        const key = window.localStorage.key(index);
+        if (!key || !key.startsWith(`${JOBS_STORAGE}:`) || key === PUBLIC_JOBS_KEY) continue;
+        const raw = window.localStorage.getItem(key);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed)) jobs.push(...parsed);
+      }
+    } catch {}
+    return jobs;
+  }
+
+  function loadPublicJobs() {
+    const source = JobsStore?.loadPublic ? JobsStore.loadPublic() : legacyCollectJobs();
+    return source
+      .slice()
+      .sort(
+        (a, b) =>
+          (Date.parse(b?.publishedAt || b?.createdAt || 0) || 0) -
+          (Date.parse(a?.publishedAt || a?.createdAt || 0) || 0)
+      );
   }
 
   function applicationsKey(owner = state.owner) {
@@ -89,14 +97,21 @@ if (!token) {
     try {
       const raw = localStorage.getItem(key);
       const list = raw ? JSON.parse(raw) : [];
-      return Array.isArray(list) ? list : [];
+      if (!Array.isArray(list)) return [];
+      return list
+        .slice()
+        .sort(
+          (a, b) =>
+            (Date.parse(b?.appliedAt || b?.createdAt || 0) || 0) -
+            (Date.parse(a?.appliedAt || a?.createdAt || 0) || 0)
+        );
     } catch {
       return [];
     }
   }
 
-  function saveApplications(list) {
-    const key = applicationsKey();
+  function saveApplications(list, owner = state.owner) {
+    const key = applicationsKey(owner);
     if (!key) return;
     try {
       localStorage.setItem(key, JSON.stringify(list));
@@ -153,17 +168,20 @@ if (!token) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "btn btn-primary btn-small prestar-vaga";
-    button.dataset.applyId = job.id || "";
+    const jobKey = job.publicId || job.id || `${job.title || "vaga"}-${job.area || ""}`;
+    button.dataset.applyId = jobKey;
     button.dataset.jobTitle = job.title || "Vaga";
-    button.dataset.jobId = job.id || "";
+    button.dataset.jobId = job.id || jobKey;
     button.dataset.jobArea = job.area || "";
     button.dataset.jobType = job.type || "";
+    button.dataset.jobCompany = job.companyName || job.company || "";
+    button.dataset.jobOwner = job.ownerId || "";
     if (disabled) {
       button.disabled = true;
       button.innerHTML = '<i class="ri-lock-line" aria-hidden="true"></i> Encerrada';
       return button;
     }
-    if (state.applied.has(job.id)) {
+    if (state.applied.has(jobKey)) {
       button.disabled = true;
       button.classList.add("btn-prestado");
       button.innerHTML = '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
@@ -177,30 +195,57 @@ if (!token) {
     return button;
   }
 
+  function loadCandidateCv() {
+    try {
+      const raw = localStorage.getItem(CV_STORAGE_KEY);
+      const data = raw ? JSON.parse(raw) : null;
+      if (!data || typeof data !== "object" || !data.dataUrl) return null;
+      return {
+        name: data.name || "curriculo.pdf",
+        size: data.size || null,
+        updatedAt: data.updatedAt || Date.now(),
+        dataUrl: data.dataUrl
+      };
+    } catch {
+      return null;
+    }
+  }
+
   function recordApplication(job) {
     if (!state.owner || !job) return;
     const viewer = window.MapsAuth?.current?.();
     const candidateName =
       viewer && viewer.type === "personal"
-        ? viewer.name || viewer.email || "Candidato"
+        ? viewer.profile?.fullName || viewer.name || viewer.email || "Candidato"
         : "Candidato";
     const candidateAvatar =
       viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
+    const cv = loadCandidateCv();
     const entry = {
       id: `app_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
       jobId: job.id || null,
       title: job.title || "Vaga",
       area: job.area || "",
       type: job.type || "",
+      company: job.company || "",
+      ownerId: job.ownerId || "",
       appliedAt: new Date().toISOString(),
       status: "Em análise",
       candidate: candidateName,
-      avatar: candidateAvatar
+      avatar: candidateAvatar,
+      cv
     };
     const applications = loadApplications();
     applications.push(entry);
     saveApplications(applications);
-    state.applications = applications;
+    state.applications = loadApplications(state.owner);
+
+    if (entry.ownerId) {
+      const companyEntries = loadApplications(entry.ownerId);
+      companyEntries.push(entry);
+      saveApplications(companyEntries, entry.ownerId);
+    }
+
     try {
       localStorage.setItem("mapslink_curriculos_recebidos", JSON.stringify(applications.length));
     } catch {}
@@ -245,6 +290,12 @@ if (!token) {
     setCount(list.length);
   }
 
+  function refreshJobsList() {
+    state.jobs = loadPublicJobs();
+    filterJobs(state.searchTerm);
+    renderJobs(state.filtered);
+  }
+
   function filterJobs(term) {
     const normalizedTerm = normalizeText(term || "");
     if (!normalizedTerm) {
@@ -279,7 +330,9 @@ if (!token) {
       id: button.dataset.jobId || id,
       title: button.dataset.jobTitle || "Vaga",
       area: button.dataset.jobArea || "",
-      type: button.dataset.jobType || ""
+      type: button.dataset.jobType || "",
+      company: button.dataset.jobCompany || "",
+      ownerId: button.dataset.jobOwner || ""
     });
   }
 
@@ -287,11 +340,9 @@ if (!token) {
     state.owner = session?.id || null;
     applyAvatar(session?.profile?.avatar || "");
     setCompanyInfo(session);
-    state.jobs = loadJobs(state.owner);
     state.applied = loadApplied(state.owner);
     state.applications = loadApplications(state.owner);
-    filterJobs(state.searchTerm);
-    renderJobs(state.filtered);
+    refreshJobsList();
   }
 
   function initAuth() {
@@ -313,6 +364,10 @@ if (!token) {
     ensureLiveRegion();
     dom.tbody.addEventListener("click", handleApply);
     if (dom.search) dom.search.addEventListener("input", handleSearch);
+    window.addEventListener("storage", event => {
+      if (event.key === PUBLIC_JOBS_KEY) refreshJobsList();
+    });
+    window.addEventListener(JOBS_EVENT, refreshJobsList);
     initAuth();
   }
 

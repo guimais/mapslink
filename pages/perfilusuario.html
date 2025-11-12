@@ -101,10 +101,23 @@
               <h2 class="card-title">Curriculo atualizado</h2>
               <p class="card-subtitle">Compartilhe seu perfil completo e acompanhe aplicacoes em tempo real.</p>
             </div>
-            <a class="card-action" href="enviocurriculo.html">
-              Ver curriculo
-              <i class="ri-external-link-line" aria-hidden="true"></i>
-            </a>
+            <div class="cv-widget" data-cv-widget>
+              <button type="button" class="card-action cv-button" data-cv-trigger aria-live="polite">
+                <div class="cv-button__text">
+                  <span class="cv-button__label">Ver curriculo</span>
+                </div>
+                <span class="cv-button__icon ri-upload-2-line" data-cv-icon="upload" aria-hidden="true"></span>
+                <span class="cv-button__icon ri-external-link-line" data-cv-icon="preview" aria-hidden="true"></span>
+              </button>
+              <div class="cv-meta" data-cv-meta hidden>
+                <span class="cv-meta__name" data-cv-name></span>
+                <div class="cv-meta__actions">
+                  <button type="button" class="cv-meta__action cv-meta__change" data-cv-change>Trocar arquivo</button>
+                  <button type="button" class="cv-meta__action cv-meta__remove" data-cv-remove>Remover arquivo</button>
+                </div>
+              </div>
+              <input type="file" accept="application/pdf" class="cv-input" data-cv-input hidden>
+            </div>
           </div>
 
           <div class="perfil-grid">
