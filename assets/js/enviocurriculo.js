@@ -37,8 +37,99 @@ if (!token) {
     filtered: [],
     applied: new Set(),
     searchTerm: "",
-    liveRegion: null
+    liveRegion: null,
+    jobOwners: new Map()
   };
+
+  function getCurrentSession() {
+    const auth = window.MapsAuth;
+    if (!auth || typeof auth.current !== "function") return null;
+    try {
+      return auth.current();
+    } catch {
+      return null;
+    }
+  }
+
+  function primeCandidateSession() {
+    if (state.owner) return state.owner;
+    const session = getCurrentSession();
+    if (!session?.id) return null;
+    state.owner = session.id;
+    state.applied = loadApplied(state.owner);
+    state.applications = loadApplications(state.owner);
+    applyAvatar(session?.profile?.avatar || "");
+    setCompanyInfo(session);
+    return state.owner;
+  }
+
+  function normalizeKey(value) {
+    if (value === null || value === undefined) return "";
+    return String(value).trim().toLowerCase();
+  }
+
+  function jobButtonKey(job) {
+    return job?.publicId || job?.id || `${job?.title || "vaga"}-${job?.area || ""}`;
+  }
+
+  function rememberJobOwner(job) {
+    if (!job) return "";
+    const owner = (job.ownerId || job.owner || "").toString().trim();
+    if (!owner) return "";
+    const composite = normalizeKey(`${job.title || ""}|${job.companyName || job.company || ""}`);
+    [job.id, job.publicId, jobButtonKey(job), composite].forEach(key => {
+      const normalized = normalizeKey(key);
+      if (normalized) state.jobOwners.set(normalized, owner);
+    });
+    return owner;
+  }
+
+  function indexJobOwners(list) {
+    state.jobOwners.clear();
+    (list || []).forEach(rememberJobOwner);
+  }
+
+  function resolveOwnerId(job, fallbackKey) {
+    if (!job) return "";
+    if (job.ownerId) return job.ownerId;
+    const candidates = [
+      job.publicId,
+      job.id,
+      fallbackKey,
+      `${job.title || ""}|${job.companyName || job.company || ""}`
+    ];
+    for (const key of candidates) {
+      const normalized = normalizeKey(key);
+      if (normalized && state.jobOwners.has(normalized)) {
+        return state.jobOwners.get(normalized);
+      }
+    }
+    if (window.MapsJobsStore?.loadPublic) {
+      const catalog = window.MapsJobsStore.loadPublic();
+      const match = (catalog || []).find(entry => {
+        return candidates.some(key => {
+          if (!key) return false;
+          return entry.id === key || entry.publicId === key;
+        });
+      });
+      if (match) return rememberJobOwner(match);
+    }
+    return "";
+  }
+
+  function findJobByKey(key) {
+    const normalized = normalizeKey(key);
+    if (!normalized) return null;
+    return (
+      state.jobs.find(job => {
+        return (
+          normalizeKey(job.id) === normalized ||
+          normalizeKey(job.publicId) === normalized ||
+          normalizeKey(jobButtonKey(job)) === normalized
+        );
+      }) || null
+    );
+  }
 
   function ensureLiveRegion() {
     if (state.liveRegion) return;
@@ -168,14 +259,16 @@ if (!token) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "btn btn-primary btn-small prestar-vaga";
-    const jobKey = job.publicId || job.id || `${job.title || "vaga"}-${job.area || ""}`;
+    const jobKey = jobButtonKey(job);
+    const ownerId = resolveOwnerId(job, jobKey);
     button.dataset.applyId = jobKey;
     button.dataset.jobTitle = job.title || "Vaga";
     button.dataset.jobId = job.id || jobKey;
+    button.dataset.jobPublicId = job.publicId || "";
     button.dataset.jobArea = job.area || "";
     button.dataset.jobType = job.type || "";
     button.dataset.jobCompany = job.companyName || job.company || "";
-    button.dataset.jobOwner = job.ownerId || "";
+    button.dataset.jobOwner = ownerId || "";
     if (disabled) {
       button.disabled = true;
       button.innerHTML = '<i class="ri-lock-line" aria-hidden="true"></i> Encerrada';
@@ -212,33 +305,39 @@ if (!token) {
   }
 
   function recordApplication(job) {
-    if (!state.owner || !job) return;
-    const viewer = window.MapsAuth?.current?.();
+    if (!job) return;
+    const candidateId = state.owner || primeCandidateSession();
+    if (!candidateId) {
+      alert("Faca login como candidato para aplicar.");
+      return;
+    }
+    const viewer = getCurrentSession();
     const candidateName =
       viewer && viewer.type === "personal"
         ? viewer.profile?.fullName || viewer.name || viewer.email || "Candidato"
         : "Candidato";
-    const candidateAvatar =
-      viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
+    const candidateAvatar = viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
     const cv = loadCandidateCv();
     const entry = {
       id: `app_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
       jobId: job.id || null,
+      publicId: job.publicId || null,
       title: job.title || "Vaga",
       area: job.area || "",
       type: job.type || "",
       company: job.company || "",
-      ownerId: job.ownerId || "",
+      ownerId: job.ownerId || resolveOwnerId(job, job.publicId || job.id || ""),
       appliedAt: new Date().toISOString(),
-      status: "Em análise",
+      status: "Em analise",
       candidate: candidateName,
       avatar: candidateAvatar,
       cv
     };
-    const applications = loadApplications();
+    const applications = loadApplications(candidateId);
     applications.push(entry);
-    saveApplications(applications);
-    state.applications = loadApplications(state.owner);
+    saveApplications(applications, candidateId);
+    state.owner = candidateId;
+    state.applications = applications;
 
     if (entry.ownerId) {
       const companyEntries = loadApplications(entry.ownerId);
@@ -292,6 +391,7 @@ if (!token) {
 
   function refreshJobsList() {
     state.jobs = loadPublicJobs();
+    indexJobOwners(state.jobs);
     filterJobs(state.searchTerm);
     renderJobs(state.filtered);
   }
@@ -319,6 +419,13 @@ if (!token) {
     if (!button || button.disabled) return;
     const id = button.dataset.applyId;
     if (!id) return;
+    if (!primeCandidateSession()) {
+      alert("Faca login como candidato para se candidatar a vagas.");
+      return;
+    }
+    const matchedJob = findJobByKey(id);
+    const ownerId =
+      button.dataset.jobOwner || resolveOwnerId(matchedJob, button.dataset.jobPublicId || id);
     state.applied.add(id);
     saveApplied();
     button.disabled = true;
@@ -327,12 +434,13 @@ if (!token) {
     button.setAttribute("aria-pressed", "true");
     announce(`Candidatura enviada para ${button.dataset.jobTitle || "a vaga"}.`);
     recordApplication({
-      id: button.dataset.jobId || id,
-      title: button.dataset.jobTitle || "Vaga",
-      area: button.dataset.jobArea || "",
-      type: button.dataset.jobType || "",
-      company: button.dataset.jobCompany || "",
-      ownerId: button.dataset.jobOwner || ""
+      id: button.dataset.jobId || matchedJob?.id || id,
+      publicId: button.dataset.jobPublicId || matchedJob?.publicId || "",
+      title: button.dataset.jobTitle || matchedJob?.title || "Vaga",
+      area: button.dataset.jobArea || matchedJob?.area || "",
+      type: button.dataset.jobType || matchedJob?.type || "",
+      company: button.dataset.jobCompany || matchedJob?.companyName || matchedJob?.company || "",
+      ownerId: ownerId || ""
     });
   }
 
@@ -368,6 +476,9 @@ if (!token) {
       if (event.key === PUBLIC_JOBS_KEY) refreshJobsList();
     });
     window.addEventListener(JOBS_EVENT, refreshJobsList);
+    const initialSession = getCurrentSession();
+    if (initialSession) hydrate(initialSession);
+    else refreshJobsList();
     initAuth();
   }
 

@@ -22,11 +22,41 @@
     heatLayer: null,
     filters: {},
     companies: [],
-    filtered: []
+    filtered: [],
+    staticCache: null
   };
+
+  const STATIC_CACHE_KEY = "mapslink:cache:companies";
 
   function isDrawerMode() {
     return state.mqDrawer.matches;
+  }
+
+  function readCachedCompanies() {
+    try {
+      const raw = localStorage.getItem(STATIC_CACHE_KEY);
+      if (!raw) return [];
+      const data = JSON.parse(raw);
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function writeCachedCompanies(list) {
+    try {
+      localStorage.setItem(STATIC_CACHE_KEY, JSON.stringify(Array.isArray(list) ? list : []));
+    } catch {}
+  }
+
+  function getWarmCompanies() {
+    if (Array.isArray(state.companies) && state.companies.length) return state.companies;
+    if (Array.isArray(window.__companies) && window.__companies.length) return window.__companies;
+    if (Array.isArray(window.__staticCompanies) && window.__staticCompanies.length) return window.__staticCompanies;
+    if (Array.isArray(window.mapsLinkCompanies) && window.mapsLinkCompanies.length) return window.mapsLinkCompanies;
+    const cached = readCachedCompanies();
+    if (cached.length) return cached;
+    return [];
   }
 
   function resetOverflow() {
@@ -290,39 +320,90 @@
     return filtered;
   }
 
+  function companySignature(list) {
+    return (Array.isArray(list) ? list : [])
+      .map((company, index) => {
+        const key = company?.id || company?.slug || company?.name || `idx-${index}`;
+        const updated = company?.updatedAt || company?.updated_at || company?.updated || "";
+        const jobs = Array.isArray(company?.jobs) ? company.jobs.length : 0;
+        return `${key}:${updated}:${jobs}`;
+      })
+      .sort()
+      .join("|");
+  }
+
+  function sameCompanySnapshot(first, second) {
+    if (first === second) return true;
+    return companySignature(first) === companySignature(second);
+  }
+
   async function loadAndRenderCompanies() {
-    try {
-      if (window.MapsCompanyService?.loadAll) {
-        state.companies = await window.MapsCompanyService.loadAll();
-      } else {
-        state.companies = await fetchStaticCompanies();
-      }
-    } catch (error) {
-      console.error("Maps Link: falha ao carregar empresas.", error);
-      try {
-        state.companies = await fetchStaticCompanies();
-      } catch {
-        state.companies = [];
-      }
+    const render = list => {
+      const normalized = Array.isArray(list) ? list : [];
+      if (sameCompanySnapshot(normalized, state.companies)) return;
+      state.companies = normalized;
+      window.__companies = normalized;
+      applyFilters({});
+    };
+
+    const fallbackPromise = fetchStaticCompanies()
+      .then(list => {
+        render(list);
+        return list;
+      })
+      .catch(error => {
+        console.warn("Maps Link: falha no fallback de empresas.", error);
+        render([]);
+        return [];
+      });
+
+    if (!window.MapsCompanyService?.loadAll) {
+      await fallbackPromise;
+      return;
     }
-    window.__companies = state.companies;
-    applyFilters({});
+
+    let merged = null;
+    try {
+      merged = await window.MapsCompanyService.loadAll();
+    } catch (error) {
+      console.error("Maps Link: erro ao carregar empresas do serviço.", error);
+      await fallbackPromise;
+      return;
+    }
+
+    const baseline = await fallbackPromise;
+    if (!sameCompanySnapshot(merged, baseline)) {
+      render(merged);
+    }
   }
 
   async function fetchStaticCompanies() {
+    if (Array.isArray(state.staticCache) && state.staticCache.length) return state.staticCache;
+    if (Array.isArray(window.__staticCompanies) && window.__staticCompanies.length) {
+      state.staticCache = window.__staticCompanies;
+      return state.staticCache;
+    }
+    const cached = readCachedCompanies();
+    if (cached.length && !state.staticCache) {
+      state.staticCache = cached;
+      window.__staticCompanies = cached;
+    }
     const dataUrl = location.pathname.includes("/pages/") ? "../assets/data/companies.json" : "assets/data/companies.json";
     try {
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Falha ao carregar companies.json");
       const data = await response.json();
       const list = Array.isArray(data) ? data : [];
+      state.staticCache = list;
       window.__staticCompanies = list;
+      writeCachedCompanies(list);
       return list;
     } catch {
-      if (Array.isArray(window.__staticCompanies)) return window.__staticCompanies;
+      if (state.staticCache && state.staticCache.length) return state.staticCache;
       if (Array.isArray(window.__companies)) {
         return window.__companies.filter(company => company?.source !== "user");
       }
+      if (Array.isArray(window.mapsLinkCompanies)) return window.mapsLinkCompanies;
       return [];
     }
   }
@@ -407,6 +488,13 @@
     }).addTo(state.map);
     state.markersLayer = L.layerGroup().addTo(state.map);
     window._leafletMap = state.map;
+
+    const warm = getWarmCompanies();
+    if (warm.length) {
+      state.companies = warm.slice();
+      window.__companies = state.companies;
+      applyFilters({});
+    }
 
     loadAndRenderCompanies();
     exposeHelpers();

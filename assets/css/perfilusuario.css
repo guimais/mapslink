@@ -178,31 +178,33 @@ main,
   padding:0;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:12px;
   width:100%;
 }
 
 .perfil-contatos li{
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:12px;
+  gap:12px;
+  padding:14px 16px;
   border-radius:18px;
-  background:rgba(16,37,105,.06);
+  background:#f7f9ff;
+  border:1px solid rgba(15,23,42,.08);
   color:var(--brand-2);
   font-weight:600;
+  box-shadow:none;
 }
 
 .perfil-contatos i{
   font-size:18px;
-  color:var(--brand);
-  width:36px;
-  height:36px;
+  color:#102569;
+  width:38px;
+  height:38px;
   border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(16,37,105,.12);
+  background:#e6edff;
 }
 
 .perfil-contatos a,
@@ -225,11 +227,11 @@ main,
 
 .bloco{
   padding:calc(var(--pad-card) + 6px) var(--pad-card);
-  background:var(--panel-bg, #fff);
+  background:#fff;
   border-radius:26px;
   border:1px solid rgba(16,37,105,.08);
-  box-shadow:0 24px 48px rgba(15,23,42,.12);
-  backdrop-filter:blur(8px);
+  box-shadow:0 18px 38px rgba(15,23,42,.14);
+  backdrop-filter:none;
 }
 
 .bloco-header{
@@ -448,10 +450,10 @@ main,
 }
 
 .perfil-sidebar{
-  background:var(--panel-bg);
+  background:#fff;
   border-radius:var(--radius-lg);
-  border:1px solid var(--panel-border);
-  box-shadow:var(--panel-shadow);
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 20px 45px rgba(15,23,42,.12);
   padding:26px;
   display:grid;
   gap:22px;
@@ -486,8 +488,9 @@ main,
   gap:6px;
   padding:16px 18px;
   border-radius:var(--radius-md);
-  background:var(--accent-soft);
-  border:1px solid var(--panel-border);
+  background:#f7f9ff;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 8px 24px rgba(15,23,42,.08);
 }
 
 .meta-label{
@@ -511,11 +514,12 @@ main,
 }
 
 .perfil-sidebar-card{
-  background:var(--panel-bg);
+  background:#fff;
   border-radius:var(--radius-lg);
-  padding: 24px 24px;
-  border:1px solid var(--panel-border);
-  box-shadow:var(--panel-shadow);
+  padding:24px;
+  border:1px solid rgba(15,23,42,.08);
+  box-shadow:0 12px 32px rgba(15,23,42,.12);
+  overflow:visible;
 }
 
 .sidebar-title{
@@ -529,30 +533,34 @@ main,
   list-style:none;
   margin:0;
   padding:0;
-  display:grid;
-  gap:12px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
 .perfil-contatos li{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:12px 12px;
-  border-radius:var(--radius-md);
-  background:var(--accent-softer);
+  width:100%;
+  padding:16px 18px;
+  border-radius:22px;
+  background:#f7f9ff;
+  border:1px solid rgba(15,23,42,.08);
   color:var(--brand-2);
   font-weight:600;
+  box-shadow:0 8px 18px rgba(15,23,42,.08);
 }
 
 .perfil-contatos i{
-  width:36px;
-  height:36px;
+  width:38px;
+  height:38px;
   border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(16,37,105,.12);
-  color:var(--brand);
+  background:#e6edff;
+  color:#102569;
   font-size:18px;
 }
 

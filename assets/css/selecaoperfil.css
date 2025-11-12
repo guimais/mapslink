@@ -134,8 +134,9 @@ h2,
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:32px 28px 64px;
-  gap:16px;
+  padding:48px 36px 96px;
+  gap:24px;
+  min-height:360px;
 }
 
 .perfil-avatar.circulo{
@@ -200,6 +201,11 @@ h2,
   }
   .opcoes-perfil{
     grid-template-columns:1fr;
+    gap:20px;
+  }
+  .perfil-card{
+    min-height:320px;
+    padding:40px 28px 80px;
     gap:20px;
   }
 }
@@ -276,6 +282,11 @@ h2,
     background:var(--surface);
     color:var(--brand);
   }
+  .perfil-card{
+    min-height:280px;
+    padding:36px 24px 72px;
+    gap:18px;
+  }
   .nav-link.active{
     background:rgba(16,37,105,.12);
     box-shadow:none;
@@ -319,6 +330,11 @@ h2,
     padding:14px 18px;
     font-size:16px;
   }
+  .perfil-card{
+    min-height:250px;
+    padding:30px 20px 60px;
+    gap:16px;
+  }
 }
 
 @media (max-width: 420px){
@@ -342,6 +358,10 @@ h2,
   }
   .perfil-cta{
     width:100%;
+  }
+  .perfil-card{
+    min-height:220px;
+    padding:24px 18px 52px;
   }
 }
 
