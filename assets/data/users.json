@@ -28,8 +28,21 @@
         "instagram": "@gelado.tech",
         "linkedin": "/in/geladodasilva"
       },
-      "interviewsToday": 2
-    }
+      "interviewsToday": 2,
+      "completion": 100
+    },
+    "slug": "gelado-da-silva",
+    "account": {
+      "role": "personal",
+      "status": "active",
+      "created_at": "2025-11-13T03:07:27Z",
+      "updated_at": "2025-11-13T03:07:27Z"
+    },
+    "security": {
+      "mfa_enabled": false,
+      "password_hint": null
+    },
+    "lastLogin": null
   },
   {
     "id": "biz-001",
@@ -54,7 +67,20 @@
       },
       "agendaToday": 3,
       "curriculos": 12,
-      "bio": "Uma gigante global de tecnologia focada em e-commerce, computacao em nuvem (AWS), streaming digital e inteligencia artificial. Reconhecida por inovacao constante e por ser uma das marcas mais valiosas do mundo."
-    }
+      "bio": "Uma gigante global de tecnologia focada em e-commerce, computacao em nuvem (AWS), streaming digital e inteligencia artificial. Reconhecida por inovacao constante e por ser uma das marcas mais valiosas do mundo.",
+      "completion": 66
+    },
+    "slug": "amazon",
+    "account": {
+      "role": "business",
+      "status": "active",
+      "created_at": "2025-11-13T03:07:27Z",
+      "updated_at": "2025-11-13T03:07:27Z"
+    },
+    "security": {
+      "mfa_enabled": false,
+      "password_hint": null
+    },
+    "lastLogin": null
   }
 ]

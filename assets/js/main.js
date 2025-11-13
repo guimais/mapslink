@@ -1,7 +1,13 @@
 (() => {
   window.MapsUtils = window.MapsUtils || {};
-  const script = document.currentScript || Array.from(document.scripts).find(s => (s.src || "").includes("/main.js"));
-  const usersUrl = script ? new URL("../data/users.json", script.src).href : "assets/data/users.json";
+  const script =
+    document.currentScript ||
+    Array.from(document.scripts).find((s) =>
+      (s.src || "").includes("/main.js"),
+    );
+  const usersUrl = script
+    ? new URL("../data/users.json", script.src).href
+    : "assets/data/users.json";
   const USERS_KEY = "mapslink:users";
   const SESSION_KEY = "mapslink:session";
   const watchers = new Set();
@@ -36,7 +42,11 @@
     function tryAdd(label, getter, flag) {
       try {
         const store = getter();
-        if (store && typeof store.getItem === "function" && !list.some(item => item.store === store)) {
+        if (
+          store &&
+          typeof store.getItem === "function" &&
+          !list.some((item) => item.store === store)
+        ) {
           list.push({ label, store });
         }
       } catch (error) {
@@ -55,9 +65,9 @@
     const stores = storageCandidates();
     const preferred = storageState[type];
     if (!preferred) return stores;
-    const match = stores.find(item => item.store === preferred.store);
+    const match = stores.find((item) => item.store === preferred.store);
     if (!match) return stores;
-    return [match, ...stores.filter(item => item !== match)];
+    return [match, ...stores.filter((item) => item !== match)];
   }
 
   function writeStore(type, key, value) {
@@ -126,10 +136,10 @@
             email: "",
             phone: "",
             instagram: "",
-            linkedin: ""
+            linkedin: "",
           },
-          interviewsToday: null
-        }
+          interviewsToday: null,
+        },
       },
       {
         id: "biz-001",
@@ -152,19 +162,22 @@
             linkedin: "",
             email: "",
             phone: "",
-            address: ""
+            address: "",
           },
           site: "",
           agendaToday: null,
           curriculos: null,
-          bio: ""
-        }
-      }
+          bio: "",
+        },
+      },
     ];
   }
 
   function persist() {
-    return Array.isArray(cache) && writeStore("users", USERS_KEY, JSON.stringify(cache));
+    return (
+      Array.isArray(cache) &&
+      writeStore("users", USERS_KEY, JSON.stringify(cache))
+    );
   }
 
   function readSession() {
@@ -183,7 +196,7 @@
     } else if (!writeStore("session", SESSION_KEY, JSON.stringify(data))) {
       warn("MapsAuth: nao foi possivel persistir a sessao do usuario.");
     }
-    watchers.forEach(fn => fn(data));
+    watchers.forEach((fn) => fn(data));
     return data;
   }
 
@@ -196,7 +209,7 @@
       company: user.company || null,
       phone: user.phone || null,
       profile: user.profile || null,
-      token: `tok-${Date.now()}`
+      token: `tok-${Date.now()}`,
     };
   }
 
@@ -209,9 +222,12 @@
         try {
           cache = JSON.parse(stored) || [];
         } catch {
-          warn("MapsAuth: dados corrompidos no localStorage, recriando lista de usuarios.");
+          warn(
+            "MapsAuth: dados corrompidos no localStorage, recriando lista de usuarios.",
+          );
           cache = fallbackUsers();
-          if (!persist()) warn("MapsAuth: nao foi possivel salvar usuarios de fallback.");
+          if (!persist())
+            warn("MapsAuth: nao foi possivel salvar usuarios de fallback.");
         }
         return cache;
       }
@@ -221,10 +237,16 @@
         const data = await response.json();
         cache = Array.isArray(data) ? data : [];
       } catch (error) {
-        warn("MapsAuth: nao foi possivel carregar users.json, usando lista local.", error);
+        warn(
+          "MapsAuth: nao foi possivel carregar users.json, usando lista local.",
+          error,
+        );
         cache = Array.isArray(cache) && cache.length ? cache : fallbackUsers();
       }
-      if (!persist()) warn("MapsAuth: nao foi possivel salvar a lista de usuarios carregada.");
+      if (!persist())
+        warn(
+          "MapsAuth: nao foi possivel salvar a lista de usuarios carregada.",
+        );
       return cache;
     })();
     return loadingPromise;
@@ -244,7 +266,7 @@
       const list = await loadUsers();
       const identifier = (payload.identifier || "").trim();
       const hashed = encode(payload.password || "");
-      const user = list.find(u => {
+      const user = list.find((u) => {
         if (payload.type && u.type !== payload.type) return false;
         if (u.pass !== hashed) return false;
         const lower = identifier.toLowerCase();
@@ -256,18 +278,22 @@
       });
       if (!user) throw new Error("INVALID");
       user.lastLogin = new Date().toISOString();
-      if (!persist()) warn("MapsAuth: nao foi possivel atualizar informacoes do usuario.");
+      if (!persist())
+        warn("MapsAuth: nao foi possivel atualizar informacoes do usuario.");
       return setSession(baseUser(user));
     },
     async register(payload) {
       const list = await loadUsers();
       const email = (payload.email || "").trim().toLowerCase();
       if (!email) throw new Error("EMAIL_REQUIRED");
-      if (list.some(u => u.email?.toLowerCase() === email)) throw new Error("EMAIL_TAKEN");
+      if (list.some((u) => u.email?.toLowerCase() === email))
+        throw new Error("EMAIL_TAKEN");
       const cleanCnpj = normalize(payload.cnpj);
-      if (cleanCnpj && list.some(u => normalize(u.cnpj) === cleanCnpj)) throw new Error("CNPJ_TAKEN");
+      if (cleanCnpj && list.some((u) => normalize(u.cnpj) === cleanCnpj))
+        throw new Error("CNPJ_TAKEN");
       const cleanCpf = normalize(payload.cpf);
-      if (cleanCpf && list.some(u => normalize(u.cpf) === cleanCpf)) throw new Error("CPF_TAKEN");
+      if (cleanCpf && list.some((u) => normalize(u.cpf) === cleanCpf))
+        throw new Error("CPF_TAKEN");
       const password = payload.password || "";
       if (!password) throw new Error("PASSWORD_REQUIRED");
       const id = `${payload.type === "business" ? "biz" : "usr"}-${Math.random().toString(36).slice(2, 10)}`;
@@ -281,7 +307,7 @@
         cpf: payload.cpf || "",
         cnpj: payload.cnpj || "",
         company: payload.company || "",
-        profile: payload.profile || {}
+        profile: payload.profile || {},
       };
       list.push(entry);
       if (!persist()) {
@@ -302,13 +328,19 @@
       const session = readSession();
       if (!session) throw new Error("NO_SESSION");
       const list = await loadUsers();
-      const user = list.find(u => u.id === session.id);
+      const user = list.find((u) => u.id === session.id);
       if (!user) throw new Error("NOT_FOUND");
-      if (Object.prototype.hasOwnProperty.call(values, "name")) user.name = values.name || "";
-      if (Object.prototype.hasOwnProperty.call(values, "phone")) user.phone = values.phone || "";
-      if (Object.prototype.hasOwnProperty.call(values, "company")) user.company = values.company || "";
+      if (Object.prototype.hasOwnProperty.call(values, "name"))
+        user.name = values.name || "";
+      if (Object.prototype.hasOwnProperty.call(values, "phone"))
+        user.phone = values.phone || "";
+      if (Object.prototype.hasOwnProperty.call(values, "company"))
+        user.company = values.company || "";
       if (values.profile) {
-        const current = user.profile && typeof user.profile === "object" ? { ...user.profile } : {};
+        const current =
+          user.profile && typeof user.profile === "object"
+            ? { ...user.profile }
+            : {};
         Object.entries(values.profile).forEach(([key, value]) => {
           if (key === "contact" && value && typeof value === "object") {
             current.contact = { ...value };
@@ -318,9 +350,10 @@
         });
         user.profile = current;
       }
-      if (!persist()) warn("MapsAuth: nao foi possivel salvar alteracoes de perfil.");
+      if (!persist())
+        warn("MapsAuth: nao foi possivel salvar alteracoes de perfil.");
       return setSession({ ...baseUser(user), token: session.token });
-    }
+    },
   };
 
   window.MapsAuth = MapsAuth;
@@ -331,7 +364,7 @@
 
   function highlight(target) {
     const current = (target || "").toLowerCase();
-    navLinks().forEach(link => {
+    navLinks().forEach((link) => {
       const href = (link.getAttribute("href") || "").toLowerCase();
       const key = (link.dataset?.navKey || "").toLowerCase();
       const label = (link.textContent || "").trim().toLowerCase();
@@ -350,12 +383,13 @@
   window.MapsApp = Object.assign(window.MapsApp || {}, {
     navLinks,
     highlightNav: highlight,
-    closeNav: () => window.MapsNav && window.MapsNav.close && window.MapsNav.close()
+    closeNav: () =>
+      window.MapsNav && window.MapsNav.close && window.MapsNav.close(),
   });
 
   window.MapsUtils = Object.assign(window.MapsUtils, {
     normalizeText: normalizeTextValue,
-    normalizeDigits: normalize
+    normalizeDigits: normalize,
   });
 
   if (!window.MapsJobsStore) {
@@ -363,7 +397,8 @@
     const PUBLIC_KEY = `${JOBS_PREFIX}:public`;
     const EVENT_NAME = "mapslink:jobs-updated";
 
-    const isObject = value => value && typeof value === "object" && !Array.isArray(value);
+    const isObject = (value) =>
+      value && typeof value === "object" && !Array.isArray(value);
 
     function read(key) {
       if (!key) return null;
@@ -392,7 +427,7 @@
       try {
         const value = raw ? JSON.parse(raw) : fallback;
         if (!Array.isArray(value)) return fallback.slice();
-        return value.filter(isObject).map(item => ({ ...item }));
+        return value.filter(isObject).map((item) => ({ ...item }));
       } catch {
         return fallback.slice();
       }
@@ -410,13 +445,11 @@
     }
 
     function jobSort(list) {
-      return list
-        .slice()
-        .sort((a, b) => {
-          const left = Date.parse(a?.publishedAt || a?.createdAt || 0) || 0;
-          const right = Date.parse(b?.publishedAt || b?.createdAt || 0) || 0;
-          return right - left;
-        });
+      return list.slice().sort((a, b) => {
+        const left = Date.parse(a?.publishedAt || a?.createdAt || 0) || 0;
+        const right = Date.parse(b?.publishedAt || b?.createdAt || 0) || 0;
+        return right - left;
+      });
     }
 
     function dispatchJobsEvent() {
@@ -437,7 +470,7 @@
         companyAvatar: meta?.avatar || job?.companyAvatar || "",
         city: meta?.city || job?.city || "",
         state: meta?.state || job?.state || "",
-        publishedAt: toIso(job?.publishedAt || job?.createdAt)
+        publishedAt: toIso(job?.publishedAt || job?.createdAt),
       };
     }
 
@@ -473,27 +506,41 @@
       syncOwner(ownerId, meta = {}, jobs = []) {
         if (!ownerId) return;
         const safeOwner = String(ownerId);
-        const existing = loadPublic().filter(job => job.ownerId !== safeOwner);
-        const entries = jobSort((Array.isArray(jobs) ? jobs : []).map(job => enrichJob(job, meta, safeOwner)));
+        const existing = loadPublic().filter(
+          (job) => job.ownerId !== safeOwner,
+        );
+        const entries = jobSort(
+          (Array.isArray(jobs) ? jobs : []).map((job) =>
+            enrichJob(job, meta, safeOwner),
+          ),
+        );
         persistPublic([...entries, ...existing]);
       },
       upsert(ownerId, meta = {}, job) {
         if (!ownerId || !job) return;
         const entry = enrichJob(job, meta, ownerId);
         const filtered = loadPublic().filter(
-          item => !(item.ownerId === entry.ownerId && (item.id === entry.id || item.publicId === entry.publicId))
+          (item) =>
+            !(
+              item.ownerId === entry.ownerId &&
+              (item.id === entry.id || item.publicId === entry.publicId)
+            ),
         );
         persistPublic([entry, ...filtered]);
       },
       remove(ownerId, jobId) {
         if (!ownerId || !jobId) return;
         const safeOwner = String(ownerId);
-        const filtered = loadPublic().filter(item => {
+        const filtered = loadPublic().filter((item) => {
           if (item.ownerId !== safeOwner) return true;
-          return item.id !== jobId && item.publicId !== jobId && item.publicId !== `${safeOwner}:${jobId}`;
+          return (
+            item.id !== jobId &&
+            item.publicId !== jobId &&
+            item.publicId !== `${safeOwner}:${jobId}`
+          );
         });
         persistPublic(filtered);
-      }
+      },
     };
 
     window.MapsJobsStore = JobsStore;
@@ -512,9 +559,13 @@
     if (document.querySelector('script[data-site-footer="true"]')) return;
     const footerScript = document.createElement("script");
     footerScript.defer = true;
-    footerScript.src = script ? new URL("./_shared-footer.js", script.src).href : "assets/js/_shared-footer.js";
+    footerScript.src = script
+      ? new URL("./_shared-footer.js", script.src).href
+      : "assets/js/_shared-footer.js";
     footerScript.dataset.siteFooter = "true";
-    (document.body || document.head || document.documentElement).appendChild(footerScript);
+    (document.body || document.head || document.documentElement).appendChild(
+      footerScript,
+    );
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -523,13 +574,10 @@
     const active = document.body?.dataset?.navActive;
     if (active) highlight(active);
     const gate = (document.body?.dataset?.page || "").toLowerCase();
-    if (gate === "perfilusuario") MapsAuth.require("personal", "loginpessoal.html");
-    if (gate === "perfilempresa") MapsAuth.require("business", "loginempresa.html");
+    if (gate === "perfilusuario")
+      MapsAuth.require("personal", "loginpessoal.html");
+    if (gate === "perfilempresa")
+      MapsAuth.require("business", "loginempresa.html");
     if (gate !== "mapacheio") ensureFooterScript();
   });
 })();
-
-
-
-
-

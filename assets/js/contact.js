@@ -7,7 +7,7 @@
     inputs: "input, textarea",
     textarea: "textarea",
     submit: 'button[type="submit"], .botao',
-    card: ".contact-card"
+    card: ".contact-card",
   };
 
   function ensureStyles() {
@@ -54,8 +54,12 @@
     ripple.style.top = `${event.clientY - rect.top - size / 2}px`;
     element.classList.add("ml-ripple-host");
     element.appendChild(ripple);
-    requestAnimationFrame(() => { ripple.style.transform = "scale(1)"; });
-    setTimeout(() => { ripple.style.opacity = "0"; }, 320);
+    requestAnimationFrame(() => {
+      ripple.style.transform = "scale(1)";
+    });
+    setTimeout(() => {
+      ripple.style.opacity = "0";
+    }, 320);
     setTimeout(() => ripple.remove(), 800);
   }
 
@@ -87,13 +91,16 @@
     const card = document.querySelector(SELECTORS.card);
     if (!card) return;
     card.classList.add("contact-reveal");
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        card.classList.add("is-visible");
-        observer.disconnect();
-      });
-    }, { threshold: 0.2 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          card.classList.add("is-visible");
+          observer.disconnect();
+        });
+      },
+      { threshold: 0.2 },
+    );
     observer.observe(card);
   }
 
@@ -103,7 +110,7 @@
     if (!form) return;
 
     const inputs = form.querySelectorAll(SELECTORS.inputs);
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       markFilled(input);
       input.addEventListener("input", () => markFilled(input));
       input.addEventListener("blur", () => markFilled(input));
@@ -117,10 +124,10 @@
 
     const submit = form.querySelector(SELECTORS.submit);
     if (submit) {
-      submit.addEventListener("click", event => ripple(event, submit));
+      submit.addEventListener("click", (event) => ripple(event, submit));
     }
 
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
       const { errors } = validateForm(form);
       if (errors.length) {
@@ -134,13 +141,17 @@
       if (submit) {
         submit.disabled = true;
         submit.style.opacity = "0.8";
-        submit.dataset.original = submit.dataset.original || submit.textContent || submit.innerText || "";
+        submit.dataset.original =
+          submit.dataset.original ||
+          submit.textContent ||
+          submit.innerText ||
+          "";
         submit.textContent = "Enviando...";
       }
       setTimeout(() => {
         showToast("Mensagem enviada com sucesso! 📬");
         form.reset();
-        inputs.forEach(input => {
+        inputs.forEach((input) => {
           input.classList.remove("is-filled");
           markFilled(input);
         });
@@ -165,16 +176,20 @@
   window.MapsContact = { showToast };
 })();
 
-document.querySelectorAll('.faq-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+document.querySelectorAll(".faq-toggle").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const isOpen = btn.getAttribute("aria-expanded") === "true";
 
-    document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded','false'));
-    document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('active'));
+    document
+      .querySelectorAll(".faq-toggle")
+      .forEach((b) => b.setAttribute("aria-expanded", "false"));
+    document
+      .querySelectorAll(".faq-answer")
+      .forEach((a) => a.classList.remove("active"));
 
     if (!isOpen) {
-      btn.setAttribute('aria-expanded','true');
-      btn.nextElementSibling.classList.add('active');
+      btn.setAttribute("aria-expanded", "true");
+      btn.nextElementSibling.classList.add("active");
     }
   });
 });

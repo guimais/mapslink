@@ -5,36 +5,39 @@
     {
       id: "sidi",
       name: "SIDI",
-      address: "Rua Angacu, 171 - Loteamento Alphaville Campinas, Campinas - SP, 13098-321",
+      address:
+        "Rua Angacu, 171 - Loteamento Alphaville Campinas, Campinas - SP, 13098-321",
       city: "Campinas",
       coords: [-22.8339, -47.0739],
       status: "open",
       areas: ["ti"],
       porte: "medium",
-      modalities: ["hibrido", "presencial"]
+      modalities: ["hibrido", "presencial"],
     },
     {
       id: "samsung",
       name: "Samsung",
-      address: "Rua Thomas Nilsen Junior, 150 - Parque Imperador, Campinas - SP, 13097-105",
+      address:
+        "Rua Thomas Nilsen Junior, 150 - Parque Imperador, Campinas - SP, 13097-105",
       city: "Campinas",
       coords: [-22.942, -47.06],
       status: "closed",
       areas: ["ti"],
       porte: "large",
-      modalities: ["presencial"]
+      modalities: ["presencial"],
     },
     {
       id: "cnpem",
       name: "CNPEM",
-      address: "Polo II de Alta Tecnologia - Rua Giuseppe Maximo Scolfaro, 10000 - Bosque das Palmeiras, Campinas - SP, 13083-100",
+      address:
+        "Polo II de Alta Tecnologia - Rua Giuseppe Maximo Scolfaro, 10000 - Bosque das Palmeiras, Campinas - SP, 13083-100",
       city: "Campinas",
       coords: [-22.8197, -47.0647],
       status: "open",
       areas: ["ti", "health"],
       porte: "large",
-      modalities: ["presencial"]
-    }
+      modalities: ["presencial"],
+    },
   ]);
 
   window.mapsLinkCompanies = FALLBACK_COMPANIES;
@@ -46,7 +49,7 @@
   const state = {
     staticCache: null,
     mergedCache: null,
-    pending: null
+    pending: null,
   };
 
   function normalizeKey(value) {
@@ -76,7 +79,8 @@
         return null;
       }
       const { cachedAt, ...value } = data;
-      if (!Number.isFinite(value.lat) || !Number.isFinite(value.lng)) return null;
+      if (!Number.isFinite(value.lat) || !Number.isFinite(value.lng))
+        return null;
       return value;
     } catch {
       return null;
@@ -87,7 +91,10 @@
     const key = encodeKey(address);
     if (!key) return;
     try {
-      localStorage.setItem(key, JSON.stringify({ ...value, cachedAt: Date.now() }));
+      localStorage.setItem(
+        key,
+        JSON.stringify({ ...value, cachedAt: Date.now() }),
+      );
     } catch {}
   }
 
@@ -109,18 +116,18 @@
 
   function cleanJobs(list) {
     return (Array.isArray(list) ? list : [])
-      .map(job => ({
+      .map((job) => ({
         title: (job?.title || "").trim(),
         type: (job?.type || "").trim(),
         status: job?.status || "",
-        url: job?.url || ""
+        url: job?.url || "",
       }))
-      .filter(job => job.title.length);
+      .filter((job) => job.title.length);
   }
 
   function jobsAreOpen(list) {
     if (!list.length) return true;
-    return list.some(job => !/fechad/i.test(job.status || ""));
+    return list.some((job) => !/fechad/i.test(job.status || ""));
   }
 
   function extractCityState(value) {
@@ -134,13 +141,13 @@
       const before = cleaned
         .slice(0, stateMatch.index)
         .split(/[,|-]/)
-        .map(part => part.trim())
+        .map((part) => part.trim())
         .filter(Boolean);
       city = before.pop() || "";
     } else {
       const parts = cleaned
         .split(/[,|-]/)
-        .map(part => part.trim())
+        .map((part) => part.trim())
         .filter(Boolean);
       city = parts.length > 1 ? parts[parts.length - 1] : parts[0] || "";
     }
@@ -159,14 +166,22 @@
     if (!user) return null;
     const profile = user.profile || {};
     const contact = profile.contact || {};
-    const locationMeta = typeof profile.location === "object" ? profile.location : {};
+    const locationMeta =
+      typeof profile.location === "object" ? profile.location : {};
     const coords = normalizeCoords(locationMeta);
-    const tags = Array.isArray(profile.tags) ? profile.tags.filter(Boolean) : [];
+    const tags = Array.isArray(profile.tags)
+      ? profile.tags.filter(Boolean)
+      : [];
     const jobs = cleanJobs(loadOwnerJobs(user.id));
-    const fallbackLocation = extractCityState(locationMeta.formatted || profile.headquarters || contact.address || "");
-    const city = locationMeta.city || locationMeta.town || fallbackLocation.city || "";
-    const state = locationMeta.state || locationMeta.region || fallbackLocation.state || "";
-    const address = contact.address || locationMeta.formatted || profile.headquarters || "";
+    const fallbackLocation = extractCityState(
+      locationMeta.formatted || profile.headquarters || contact.address || "",
+    );
+    const city =
+      locationMeta.city || locationMeta.town || fallbackLocation.city || "";
+    const state =
+      locationMeta.state || locationMeta.region || fallbackLocation.state || "";
+    const address =
+      contact.address || locationMeta.formatted || profile.headquarters || "";
     return {
       id: user.id,
       name: user.company || user.name || "Empresa",
@@ -180,13 +195,16 @@
       is_hiring: jobsAreOpen(jobs),
       jobs: jobs.slice(0, 4),
       coordinates: coords,
-      source: "user"
+      source: "user",
     };
   }
 
   function geocodeQuery(company) {
     if (!company) return "";
-    const parts = [company.address, [company.city, company.state].filter(Boolean).join(", ")].filter(Boolean);
+    const parts = [
+      company.address,
+      [company.city, company.state].filter(Boolean).join(", "),
+    ].filter(Boolean);
     return parts.join(", ").trim();
   }
 
@@ -198,9 +216,9 @@
     if (geocodeQueue.has(normalized)) return geocodeQueue.get(normalized);
     const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&addressdetails=1&q=${encodeURIComponent(address)}`;
     const promise = fetch(url, {
-      headers: { "Accept-Language": "pt-BR" }
+      headers: { "Accept-Language": "pt-BR" },
     })
-      .then(async response => {
+      .then(async (response) => {
         if (!response.ok) throw new Error(`Geocode HTTP ${response.status}`);
         const data = await response.json();
         const hit = Array.isArray(data) ? data[0] : null;
@@ -218,8 +236,12 @@
             hit.address?.municipality ||
             hit.address?.county ||
             "",
-          state: hit.address?.state || hit.address?.region || hit.address?.state_district || "",
-          formatted: hit.display_name || address
+          state:
+            hit.address?.state ||
+            hit.address?.region ||
+            hit.address?.state_district ||
+            "",
+          formatted: hit.display_name || address,
         };
         writeGeocodeCache(normalized, result);
         return result;
@@ -234,7 +256,9 @@
 
   async function ensureCompanyCoordinates(company) {
     if (!company) return null;
-    const hasCoords = Number.isFinite(company?.coordinates?.lat) && Number.isFinite(company?.coordinates?.lng);
+    const hasCoords =
+      Number.isFinite(company?.coordinates?.lat) &&
+      Number.isFinite(company?.coordinates?.lng);
     if (hasCoords) return company;
     const query = geocodeQuery(company);
     if (!query) return company;
@@ -250,7 +274,9 @@
   async function fetchStaticCompanies() {
     if (Array.isArray(state.staticCache)) return state.staticCache;
     try {
-      const dataUrl = location.pathname.includes("/pages/") ? "../assets/data/companies.json" : "assets/data/companies.json";
+      const dataUrl = location.pathname.includes("/pages/")
+        ? "../assets/data/companies.json"
+        : "assets/data/companies.json";
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Falha ao carregar companies.json");
       const data = await response.json();
@@ -269,9 +295,13 @@
     if (!auth || typeof auth.ready !== "function") return [];
     try {
       const users = await auth.ready();
-      const business = (Array.isArray(users) ? users : []).filter(user => user?.type === "business");
+      const business = (Array.isArray(users) ? users : []).filter(
+        (user) => user?.type === "business",
+      );
       const mapped = business.map(buildCompanyFromUser).filter(Boolean);
-      const enriched = await Promise.all(mapped.map(company => ensureCompanyCoordinates(company)));
+      const enriched = await Promise.all(
+        mapped.map((company) => ensureCompanyCoordinates(company)),
+      );
       return enriched.filter(Boolean);
     } catch {
       return [];
@@ -286,10 +316,13 @@
   }
 
   async function mergeCompanies() {
-    const [base, custom] = await Promise.all([fetchStaticCompanies(), loadUserCompanies()]);
+    const [base, custom] = await Promise.all([
+      fetchStaticCompanies(),
+      loadUserCompanies(),
+    ]);
     const seen = new Set();
     const merged = [];
-    (custom || []).forEach(company => {
+    (custom || []).forEach((company) => {
       if (!company) return;
       const key = companyKey(company);
       if (key) {
@@ -298,7 +331,7 @@
       }
       merged.push(company);
     });
-    (base || []).forEach(company => {
+    (base || []).forEach((company) => {
       if (!company) return;
       const key = companyKey(company);
       if (key && seen.has(key)) return;
@@ -309,7 +342,8 @@
   }
 
   async function loadAll(options = {}) {
-    if (!options.refresh && Array.isArray(state.mergedCache)) return state.mergedCache;
+    if (!options.refresh && Array.isArray(state.mergedCache))
+      return state.mergedCache;
     if (!options.refresh && state.pending) return state.pending;
     state.pending = (async () => {
       const list = await mergeCompanies();
@@ -330,7 +364,6 @@
     reset() {
       state.staticCache = null;
       state.mergedCache = null;
-    }
+    },
   };
 })();
-

@@ -1,16 +1,65 @@
 <!doctype html>
 <html lang="pt-br">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="./manifest.json">
-    <link href="./assets/css/main.css" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/logo-icon-192.png">
-    <meta name="description" content="MapsLink conecta talentos e empresas com um mapa interativo, filtros inteligentes e dashboards acess&iacute;veis.">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102569" />
+    <link rel="manifest" href="./manifest.json" />
+    <link href="./assets/css/main.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="assets/images/logo-icon-192.png"
+    />
+    <meta
+      name="description"
+      content="MapsLink conecta talentos e empresas com um mapa interativo, filtros inteligentes e dashboards acess&iacute;veis."
+    />
+    <!-- SEO -->
+    <link rel="canonical" href="https://mapslink.app/" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="MapsLink" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MapsLink" />
+    <meta property="og:title" content="MapsLink &ndash; Home" />
+    <meta
+      property="og:description"
+      content="MapsLink conecta talentos e empresas com um mapa interativo, filtros inteligentes e dashboards acess&iacute;veis."
+    />
+    <meta property="og:url" content="https://mapslink.app/" />
+    <meta
+      property="og:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MapsLink &ndash; Home" />
+    <meta
+      name="twitter:description"
+      content="MapsLink conecta talentos e empresas com um mapa interativo, filtros inteligentes e dashboards acess&iacute;veis."
+    />
+    <meta
+      name="twitter:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "MapsLink &ndash; Home",
+        "description": "MapsLink conecta talentos e empresas com um mapa interativo, filtros inteligentes e dashboards acess&iacute;veis.",
+        "url": "https://mapslink.app/",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
     <title>MapsLink &ndash; Home</title>
-    <link rel="stylesheet" href="assets/css/paginainicial.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="assets/css/paginainicial.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    />
     <script defer src="./assets/js/_shared-nav.js"></script>
     <script defer src="./assets/js/main.js"></script>
   </head>
@@ -18,15 +67,39 @@
     <header class="nav-container nav-fixed" role="banner">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
         <a href="index.html" class="nav-logo-link" aria-label="Página inicial">
-          <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo pílula Maps Link" class="nav-logo" loading="lazy" decoding="async">
+          <img
+            src="assets/images/Logo Certa - Fundo png.png"
+            alt="Logo pílula Maps Link"
+            class="nav-logo"
+            loading="lazy"
+            decoding="async"
+          />
         </a>
-        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
+        <button
+          class="nav-toggle"
+          aria-controls="navMenu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+          aria-haspopup="true"
+          type="button"
+        >
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
-        <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
-          <li><a class="nav-link active" href="index.html" aria-current="page">Home</a></li>
+        <ul
+          class="nav-links"
+          id="navMenu"
+          role="navigation"
+          aria-label="Seções do site"
+        >
+          <li>
+            <a class="nav-link active" href="index.html" aria-current="page"
+              >Home</a
+            >
+          </li>
           <li><a class="nav-link" href="pages/paginamapav4.html">Maps</a></li>
-          <li><a class="nav-link" href="pages/selecaoperfil.html">Profile</a></li>
+          <li>
+            <a class="nav-link" href="pages/selecaoperfil.html">Profile</a>
+          </li>
           <li><a class="nav-link" href="pages/paginaplanos.html">Planos</a></li>
           <li><a class="nav-link" href="pages/about.html">About</a></li>
           <li><a class="nav-link" href="pages/contact.html">Contact</a></li>
@@ -34,32 +107,64 @@
       </nav>
     </header>
 
-    <main id="home" class="container" role="main" aria-labelledby="titulo-principal">
+    <main
+      id="home"
+      class="container"
+      role="main"
+      aria-labelledby="titulo-principal"
+    >
       <section class="hero">
         <div class="hero__text">
-          <h1 id="titulo-principal" class="hero__title">Encontre seu pr&oacute;ximo emprego</h1>
-          <p class="hero__subtitle">Descubra vagas e empresas na sua regi&atilde;o de um jeito f&aacute;cil e inovador.</p>
-          <div class="hero__actions" role="group" aria-label="A&ccedil;&otilde;es principais">
+          <h1 id="titulo-principal" class="hero__title">
+            Encontre seu pr&oacute;ximo emprego
+          </h1>
+          <p class="hero__subtitle">
+            Descubra vagas e empresas na sua regi&atilde;o de um jeito
+            f&aacute;cil e inovador.
+          </p>
+          <div
+            class="hero__actions"
+            role="group"
+            aria-label="A&ccedil;&otilde;es principais"
+          >
             <a class="btn" href="pages/paginamapav4.html">Explore o mapa</a>
-            <a class="btn btn--light" href="pages/about.html">Sobre n&oacute;s</a>
+            <a class="btn btn--light" href="pages/about.html"
+              >Sobre n&oacute;s</a
+            >
           </div>
         </div>
         <div class="hero__logo" aria-hidden="true">
-          <img src="assets/images/Logo Certa - Fundo png.png" alt="MAPS LINK">
+          <img src="assets/images/Logo Certa - Fundo png.png" alt="MAPS LINK" />
         </div>
       </section>
 
       <section class="icons-section" aria-label="Funcionalidades">
         <div class="icons-container">
           <ul class="icons-list" role="list">
-            <li class="icon-pill" role="listitem" aria-label="Vagas"><i class="ri-briefcase-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Tecnologia"><i class="ri-cpu-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Explorar"><i class="ri-compass-3-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Localização"><i class="ri-map-pin-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Usuários"><i class="ri-user-3-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Finanças"><i class="ri-money-dollar-circle-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Organização"><i class="ri-clipboard-line" aria-hidden="true"></i></li>
-            <li class="icon-pill" role="listitem" aria-label="Dispositivos"><i class="ri-smartphone-line" aria-hidden="true"></i></li>
+            <li class="icon-pill" role="listitem" aria-label="Vagas">
+              <i class="ri-briefcase-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Tecnologia">
+              <i class="ri-cpu-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Explorar">
+              <i class="ri-compass-3-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Localização">
+              <i class="ri-map-pin-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Usuários">
+              <i class="ri-user-3-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Finanças">
+              <i class="ri-money-dollar-circle-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Organização">
+              <i class="ri-clipboard-line" aria-hidden="true"></i>
+            </li>
+            <li class="icon-pill" role="listitem" aria-label="Dispositivos">
+              <i class="ri-smartphone-line" aria-hidden="true"></i>
+            </li>
           </ul>
         </div>
       </section>
@@ -68,27 +173,40 @@
         <h2 class="titulo-sobre" id="titulo-sobre">SOBRE:</h2>
       </div>
 
-
-      <div class="cards-sobre" role="list" aria-label="Benef&iacute;cios do Maps Link">
+      <div
+        class="cards-sobre"
+        role="list"
+        aria-label="Benef&iacute;cios do Maps Link"
+      >
         <div class="card-sobre" role="listitem">
           <div class="icone-sobre" aria-hidden="true">
             <i class="ri-archive-drawer-line"></i>
           </div>
-          <p class="texto-sobre">Encontre vagas de emprego relevantes para suas habilidades e &aacute;rea de atua&ccedil;&atilde;o, de forma r&aacute;pida e organizada.</p>
+          <p class="texto-sobre">
+            Encontre vagas de emprego relevantes para suas habilidades e
+            &aacute;rea de atua&ccedil;&atilde;o, de forma r&aacute;pida e
+            organizada.
+          </p>
         </div>
 
         <div class="card-sobre" role="listitem">
           <div class="icone-sobre" aria-hidden="true">
             <i class="ri-map-pin-2-line"></i>
           </div>
-          <p class="texto-sobre">Descubra empresas contratando na sua cidade e regi&atilde;o atrav&eacute;s de um mapa interativo e intuitivo.</p>
+          <p class="texto-sobre">
+            Descubra empresas contratando na sua cidade e regi&atilde;o
+            atrav&eacute;s de um mapa interativo e intuitivo.
+          </p>
         </div>
 
         <div class="card-sobre" role="listitem">
           <div class="icone-sobre" aria-hidden="true">
             <i class="ri-briefcase-3-line"></i>
           </div>
-          <p class="texto-sobre">Receba sugest&otilde;es de vagas e empresas que correspondem ao seu perfil profissional e interesses.</p>
+          <p class="texto-sobre">
+            Receba sugest&otilde;es de vagas e empresas que correspondem ao seu
+            perfil profissional e interesses.
+          </p>
         </div>
       </div>
     </main>
@@ -100,6 +218,5 @@
     </div>
 
     <script defer src="assets/js/paginainicial.js"></script>
-    
   </body>
 </html>

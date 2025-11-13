@@ -2,7 +2,9 @@
   if (window.__ml_planos_init__) return;
   window.__ml_planos_init__ = true;
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   function selectOne(selector, root) {
     return (root || document).querySelector(selector);
@@ -17,7 +19,7 @@
     const style = document.createElement("style");
     style.id = "app-dynamic-styles";
     style.textContent =
-      "[data-animate=\"fade-up\"]{opacity:0;transform:translateY(8px);}" +
+      '[data-animate="fade-up"]{opacity:0;transform:translateY(8px);}' +
       ".in-view{opacity:1;transform:none;transition:transform .6s ease,opacity .6s ease;}" +
       ".ripple-wrap{position:relative;overflow:hidden;}" +
       ".ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;width:10px;height:10px;background:currentColor;opacity:.25;animation:ripple .6s ease-out;}" +
@@ -43,7 +45,7 @@
   }
 
   function showSection(id, sections, links) {
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const active = section.id === id;
       section.toggleAttribute("hidden", !active);
       if (active) {
@@ -51,11 +53,14 @@
         try {
           section.focus({ preventScroll: true });
         } catch {}
-        section.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+        section.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "start",
+        });
       }
     });
 
-    links.forEach(link => {
+    links.forEach((link) => {
       const href = link.getAttribute("href") || "";
       if (!href.startsWith("#")) return;
       const active = href === `#${id}`;
@@ -74,19 +79,32 @@
 
   function setupSectionRouting() {
     const links = getNavLinks();
-    const sectionIds = ["home", "planos", "maps", "profile", "about", "contact"];
-    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const sectionIds = [
+      "home",
+      "planos",
+      "maps",
+      "profile",
+      "about",
+      "contact",
+    ];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
 
-    links.forEach(link => {
+    links.forEach((link) => {
       if (link.__ml_planos_bound) return;
       link.__ml_planos_bound = true;
-      link.addEventListener("click", event => {
+      link.addEventListener("click", (event) => {
         const href = link.getAttribute("href") || "";
         if (!href.startsWith("#")) return;
         event.preventDefault();
         const id = href.slice(1);
         const target = document.getElementById(id);
-        const hasContent = !!(target && target.children && target.children.length);
+        const hasContent = !!(
+          target &&
+          target.children &&
+          target.children.length
+        );
         if (id !== "planos" && (!target || !hasContent)) {
           showSection("planos", sections, links);
           showToast("Secao em construcao");
@@ -101,9 +119,14 @@
       });
     });
 
-    const initialCandidate = (location.hash && location.hash.slice(1)) || "planos";
+    const initialCandidate =
+      (location.hash && location.hash.slice(1)) || "planos";
     const initialElement = document.getElementById(initialCandidate);
-    const initialHasContent = !!(initialElement && initialElement.children && initialElement.children.length);
+    const initialHasContent = !!(
+      initialElement &&
+      initialElement.children &&
+      initialElement.children.length
+    );
     const firstSection = initialHasContent ? initialCandidate : "planos";
     if (document.getElementById(firstSection)) {
       showSection(firstSection, sections, links);
@@ -114,23 +137,26 @@
     if (prefersReducedMotion) return;
     const cards = selectAll(".plano-card");
     if (!cards.length) return;
-    cards.forEach(card => card.setAttribute("data-animate", "fade-up"));
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("in-view");
-        obs.unobserve(entry.target);
-      });
-    }, { threshold: 0.16 });
-    cards.forEach(card => observer.observe(card));
+    cards.forEach((card) => card.setAttribute("data-animate", "fade-up"));
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("in-view");
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.16 },
+    );
+    cards.forEach((card) => observer.observe(card));
   }
 
   function attachRipple(selector) {
-    selectAll(selector || ".botao").forEach(button => {
+    selectAll(selector || ".botao").forEach((button) => {
       if (button.__ml_ripple_bound) return;
       button.__ml_ripple_bound = true;
       button.classList.add("ripple-wrap");
-      button.addEventListener("click", event => {
+      button.addEventListener("click", (event) => {
         const rect = button.getBoundingClientRect();
         const x = (event.clientX || rect.left + rect.width / 2) - rect.left;
         const y = (event.clientY || rect.top + rect.height / 2) - rect.top;
@@ -139,7 +165,9 @@
         ripple.style.left = `${x}px`;
         ripple.style.top = `${y}px`;
         button.appendChild(ripple);
-        ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+        ripple.addEventListener("animationend", () => ripple.remove(), {
+          once: true,
+        });
       });
     });
   }
@@ -171,7 +199,10 @@
     el.querySelector(".snackbar-text").textContent = message;
     el.classList.add("show");
     if (showToast.timer) clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(hideToast, typeof timeout === "number" ? timeout : 2600);
+    showToast.timer = setTimeout(
+      hideToast,
+      typeof timeout === "number" ? timeout : 2600,
+    );
   }
 
   function hideToast() {
@@ -186,7 +217,9 @@
     const centerY = rect.height / 2;
     const group = document.createElement("div");
     group.className = "burst";
-    if (!/relative|absolute|fixed|sticky/.test(getComputedStyle(element).position)) {
+    if (
+      !/relative|absolute|fixed|sticky/.test(getComputedStyle(element).position)
+    ) {
       element.style.position = "relative";
     }
     element.appendChild(group);
@@ -205,9 +238,12 @@
       dot.animate(
         [
           { transform: "translate(-50%,-50%) translate(0,0)", opacity: 0.9 },
-          { transform: `translate(-50%,-50%) translate(${translateX}px,${translateY}px)`, opacity: 0 }
+          {
+            transform: `translate(-50%,-50%) translate(${translateX}px,${translateY}px)`,
+            opacity: 0,
+          },
         ],
-        { duration: 700, easing: "ease-out" }
+        { duration: 700, easing: "ease-out" },
       );
       group.appendChild(dot);
     }
@@ -220,7 +256,7 @@
     const STORAGE_KEY = "selectedPlan";
 
     function updateCard(plan, selected) {
-      const button = buttons.find(b => b.dataset.plan === plan);
+      const button = buttons.find((b) => b.dataset.plan === plan);
       if (!button) return;
       button.textContent = selected ? "Assinado" : "Assinar";
       button.disabled = !!selected;
@@ -232,17 +268,24 @@
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) updateCard(saved, true);
 
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       if (button.__ml_plan_bound) return;
       button.__ml_plan_bound = true;
       button.addEventListener("click", () => {
         const plan = button.dataset.plan;
         if (!plan) return;
         localStorage.setItem(STORAGE_KEY, plan);
-        buttons.forEach(b => updateCard(b.dataset.plan, b.dataset.plan === plan));
+        buttons.forEach((b) =>
+          updateCard(b.dataset.plan, b.dataset.plan === plan),
+        );
         burstFrom(button);
         const name = plan.charAt(0).toUpperCase() + plan.slice(1);
-        const label = plan === "gold" ? "Plano Gold" : plan === "silver" ? "Plano Silver" : "Plano Bronze";
+        const label =
+          plan === "gold"
+            ? "Plano Gold"
+            : plan === "silver"
+              ? "Plano Silver"
+              : "Plano Bronze";
         showToast(`${label} ativado!`);
       });
     });

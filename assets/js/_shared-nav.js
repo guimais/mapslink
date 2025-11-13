@@ -21,7 +21,7 @@ window.injectSharedNav = function injectSharedNav() {
     highlight: null,
     breakpoint: 768,
     iconOpen: "ri-menu-line",
-    iconClose: "ri-close-line"
+    iconClose: "ri-close-line",
   };
 
   const state = {
@@ -35,7 +35,7 @@ window.injectSharedNav = function injectSharedNav() {
     isOpen: false,
     initialized: false,
     originalShadow: "",
-    originalOverflow: ""
+    originalOverflow: "",
   };
 
   function truthy(value) {
@@ -45,11 +45,13 @@ window.injectSharedNav = function injectSharedNav() {
 
   function mergeConfig(source = {}) {
     const config = { ...DEFAULTS };
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       const value = source[key];
-      if (value !== undefined && value !== null && value !== "") config[key] = value;
+      if (value !== undefined && value !== null && value !== "")
+        config[key] = value;
     });
-    if (!config.altOpenClass && config.openClass !== "active") config.altOpenClass = "active";
+    if (!config.altOpenClass && config.openClass !== "active")
+      config.altOpenClass = "active";
     return config;
   }
 
@@ -57,14 +59,23 @@ window.injectSharedNav = function injectSharedNav() {
     const dataset = document.body?.dataset || {};
     const config = {};
     if (dataset.navOpenClass) config.openClass = dataset.navOpenClass;
-    if (dataset.navOverlay !== undefined) config.overlay = truthy(dataset.navOverlay);
-    if (dataset.navLockScroll !== undefined) config.lockScroll = truthy(dataset.navLockScroll);
-    if (dataset.navCloseOnLink !== undefined) config.closeOnLink = truthy(dataset.navCloseOnLink);
-    if (dataset.navCloseOnOutside !== undefined) config.closeOnOutside = truthy(dataset.navCloseOnOutside);
-    if (dataset.navCloseOnEsc !== undefined) config.closeOnEsc = truthy(dataset.navCloseOnEsc);
-    if (dataset.navSmoothScroll !== undefined) config.smoothScroll = truthy(dataset.navSmoothScroll);
-    if (dataset.navShadow !== undefined) config.shadow = truthy(dataset.navShadow);
-    if (dataset.navBreakpoint) config.breakpoint = parseInt(dataset.navBreakpoint, 10) || DEFAULTS.breakpoint;
+    if (dataset.navOverlay !== undefined)
+      config.overlay = truthy(dataset.navOverlay);
+    if (dataset.navLockScroll !== undefined)
+      config.lockScroll = truthy(dataset.navLockScroll);
+    if (dataset.navCloseOnLink !== undefined)
+      config.closeOnLink = truthy(dataset.navCloseOnLink);
+    if (dataset.navCloseOnOutside !== undefined)
+      config.closeOnOutside = truthy(dataset.navCloseOnOutside);
+    if (dataset.navCloseOnEsc !== undefined)
+      config.closeOnEsc = truthy(dataset.navCloseOnEsc);
+    if (dataset.navSmoothScroll !== undefined)
+      config.smoothScroll = truthy(dataset.navSmoothScroll);
+    if (dataset.navShadow !== undefined)
+      config.shadow = truthy(dataset.navShadow);
+    if (dataset.navBreakpoint)
+      config.breakpoint =
+        parseInt(dataset.navBreakpoint, 10) || DEFAULTS.breakpoint;
     if (dataset.navActive) config.highlight = dataset.navActive;
     if (dataset.navIconOpen) config.iconOpen = dataset.navIconOpen;
     if (dataset.navIconClose) config.iconClose = dataset.navIconClose;
@@ -74,8 +85,10 @@ window.injectSharedNav = function injectSharedNav() {
   function elements() {
     const nav = document.querySelector(".nav-pilula");
     if (!nav) return { nav: null, menu: null, toggle: null };
-    const toggle = nav.querySelector(".nav-toggle") || document.querySelector(".nav-toggle");
-    const menu = document.getElementById("navMenu") || nav.querySelector(".nav-links");
+    const toggle =
+      nav.querySelector(".nav-toggle") || document.querySelector(".nav-toggle");
+    const menu =
+      document.getElementById("navMenu") || nav.querySelector(".nav-links");
     return { nav, menu, toggle };
   }
 
@@ -116,11 +129,11 @@ window.injectSharedNav = function injectSharedNav() {
     if (!state.menu) return;
     [state.config.openClass, state.config.altOpenClass]
       .filter(Boolean)
-      .forEach(cls => state.menu.classList.toggle(cls, open));
+      .forEach((cls) => state.menu.classList.toggle(cls, open));
   }
 
   function notify(open) {
-    state.changeListeners.forEach(listener => {
+    state.changeListeners.forEach((listener) => {
       try {
         listener(open);
       } catch {}
@@ -142,7 +155,7 @@ window.injectSharedNav = function injectSharedNav() {
   }
 
   function bindLinks() {
-    state.links.forEach(link => {
+    state.links.forEach((link) => {
       if (link.dataset.navBound) return;
       link.dataset.navBound = "true";
       link.addEventListener("click", handleLinkClick);
@@ -150,7 +163,7 @@ window.injectSharedNav = function injectSharedNav() {
   }
 
   function unbindLinks() {
-    state.links.forEach(link => {
+    state.links.forEach((link) => {
       if (!link.dataset.navBound) return;
       link.removeEventListener("click", handleLinkClick);
       delete link.dataset.navBound;
@@ -162,7 +175,11 @@ window.injectSharedNav = function injectSharedNav() {
     if (!state.isOpen) return;
     const target = event.target;
     if (state.menu?.contains(target)) return;
-    if (state.toggle && (target === state.toggle || state.toggle.contains(target))) return;
+    if (
+      state.toggle &&
+      (target === state.toggle || state.toggle.contains(target))
+    )
+      return;
     api.close();
   }
 
@@ -179,7 +196,9 @@ window.injectSharedNav = function injectSharedNav() {
   function updateShadow() {
     if (!state.config.shadow || !state.nav) return;
     const scrolled = window.scrollY > 8;
-    state.nav.style.boxShadow = scrolled ? "0 10px 26px rgba(0,0,0,0.12)" : state.originalShadow;
+    state.nav.style.boxShadow = scrolled
+      ? "0 10px 26px rgba(0,0,0,0.12)"
+      : state.originalShadow;
   }
 
   function bindGlobalEvents() {
@@ -210,7 +229,7 @@ window.injectSharedNav = function injectSharedNav() {
       lockScroll(false);
       updateShadow();
       if (!state.initialized) {
-        toggle.addEventListener("click", event => {
+        toggle.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
           api.toggle();
@@ -249,10 +268,15 @@ window.injectSharedNav = function injectSharedNav() {
     },
     highlight(target) {
       const normalized = String(target || "").toLowerCase();
-      state.links.forEach(link => {
+      state.links.forEach((link) => {
         const href = (link.getAttribute("href") || "").toLowerCase();
-        const key = (link.dataset.navKey || link.textContent || "").trim().toLowerCase();
-        const match = href === normalized || key === normalized || href.endsWith(normalized);
+        const key = (link.dataset.navKey || link.textContent || "")
+          .trim()
+          .toLowerCase();
+        const match =
+          href === normalized ||
+          key === normalized ||
+          href.endsWith(normalized);
         link.classList.toggle("active", match);
         if (match) link.setAttribute("aria-current", "page");
       });
@@ -268,9 +292,10 @@ window.injectSharedNav = function injectSharedNav() {
       api.close();
       unbindLinks();
       unbindGlobalEvents();
-      if (state.overlay?.parentElement === document.body) state.overlay.remove();
+      if (state.overlay?.parentElement === document.body)
+        state.overlay.remove();
       state.initialized = false;
-    }
+    },
   };
 
   window.MapsNav = api;

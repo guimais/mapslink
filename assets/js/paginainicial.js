@@ -2,7 +2,15 @@
   if (window.__ml_home_init__) return;
   window.__ml_home_init__ = true;
 
-  const sectionIds = ["home", "sobre", "planos", "maps", "profile", "about", "contact"];
+  const sectionIds = [
+    "home",
+    "sobre",
+    "planos",
+    "maps",
+    "profile",
+    "about",
+    "contact",
+  ];
   const maxTilt = 6;
   const ICON_ANIMATION_BREAKPOINT = 900;
 
@@ -50,16 +58,18 @@
 
   function initNavHighlight(links, sections) {
     const mapByKey = new Map();
-    links.forEach(link => {
+    links.forEach((link) => {
       const href = (link.getAttribute("href") || "").toLowerCase();
       if (href) mapByKey.set(href, link);
-      const key = (link.dataset.navKey || link.textContent || "").trim().toLowerCase();
+      const key = (link.dataset.navKey || link.textContent || "")
+        .trim()
+        .toLowerCase();
       if (key) mapByKey.set(key, link);
     });
 
     function highlight(target) {
       const norm = (target || "").toLowerCase();
-      links.forEach(link => {
+      links.forEach((link) => {
         if ((link.getAttribute("href") || "").startsWith("#")) {
           link.classList.remove("active");
           link.removeAttribute("aria-current");
@@ -72,40 +82,47 @@
       }
     }
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          highlight(entry.target.id || "");
-        }
-      });
-    }, { threshold: 0.6 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            highlight(entry.target.id || "");
+          }
+        });
+      },
+      { threshold: 0.6 },
+    );
 
-    sections.forEach(section => observer.observe(section));
+    sections.forEach((section) => observer.observe(section));
   }
 
   function initCardReveal(cards) {
-    cards.forEach(card => {
+    cards.forEach((card) => {
       card.style.opacity = "0";
-      card.style.transform = "perspective(800px) translateY(28px) rotateX(8deg) scale(0.96)";
+      card.style.transform =
+        "perspective(800px) translateY(28px) rotateX(8deg) scale(0.96)";
       card.style.transformOrigin = "50% 80%";
       card.style.willChange = "transform, opacity";
     });
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const index = cards.indexOf(entry.target);
-        animateCard(entry.target, 700, index * 120);
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.25 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const index = cards.indexOf(entry.target);
+          animateCard(entry.target, 700, index * 120);
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.25 },
+    );
 
-    cards.forEach(card => observer.observe(card));
+    cards.forEach((card) => observer.observe(card));
   }
 
   function initCardTilt(cards) {
-    cards.forEach(card => {
-      card.addEventListener("mousemove", event => {
+    cards.forEach((card) => {
+      card.addEventListener("mousemove", (event) => {
         const rect = card.getBoundingClientRect();
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
@@ -128,12 +145,12 @@
     let animationFrameId = null;
     let isAnimating = false;
 
-    const iconData = icons.map(icon => ({
+    const iconData = icons.map((icon) => ({
       el: icon,
-      amplitude: 8 + Math.random() * 6, 
+      amplitude: 8 + Math.random() * 6,
       speed: 0.8 + Math.random() * 0.7,
-      phase: Math.random() * Math.PI * 2, 
-      delay: Math.random() * 2 
+      phase: Math.random() * Math.PI * 2,
+      delay: Math.random() * 2,
     }));
 
     function shouldAnimate() {
@@ -144,7 +161,7 @@
       if (isAnimating) return;
       isAnimating = true;
 
-      iconData.forEach(item => {
+      iconData.forEach((item) => {
         item.el.style.willChange = "transform";
         item.el.style.transition = "none";
       });
@@ -160,10 +177,11 @@
         if (startTime === null) startTime = timestamp;
         const elapsed = (timestamp - startTime) / 1000;
 
-        iconData.forEach(item => {
+        iconData.forEach((item) => {
           if (elapsed > item.delay) {
             const adjustedTime = elapsed - item.delay;
-            const offsetY = Math.sin(adjustedTime * item.speed + item.phase) * item.amplitude;
+            const offsetY =
+              Math.sin(adjustedTime * item.speed + item.phase) * item.amplitude;
             item.el.style.transform = `translateY(${offsetY.toFixed(2)}px)`;
           }
         });
@@ -181,7 +199,7 @@
       }
       isAnimating = false;
 
-      iconData.forEach(item => {
+      iconData.forEach((item) => {
         item.el.style.transition = "transform 0.3s ease-out";
         item.el.style.transform = "translateY(0)";
         item.el.style.willChange = "auto";
@@ -214,16 +232,18 @@
   }
 
   function initFloatingIcons() {
-    const icons = Array.from(document.querySelectorAll(".icones-flutuantes-grid .icone-flutuante"));
+    const icons = Array.from(
+      document.querySelectorAll(".icones-flutuantes-grid .icone-flutuante"),
+    );
     if (!icons.length) return;
-    const data = icons.map(icon => ({
+    const data = icons.map((icon) => ({
       el: icon,
       amplitude: 6 + Math.random() * 6,
       speed: 0.6 + Math.random() * 0.6,
-      phase: Math.random() * Math.PI * 2
+      phase: Math.random() * Math.PI * 2,
     }));
 
-    data.forEach(item => {
+    data.forEach((item) => {
       item.el.style.willChange = "transform";
     });
 
@@ -231,8 +251,9 @@
     function step(timestamp) {
       if (start === null) start = timestamp;
       const elapsed = (timestamp - start) / 1000;
-      data.forEach(item => {
-        const offsetY = Math.sin(elapsed * item.speed + item.phase) * item.amplitude;
+      data.forEach((item) => {
+        const offsetY =
+          Math.sin(elapsed * item.speed + item.phase) * item.amplitude;
         item.el.style.transform = `translateY(${offsetY.toFixed(2)}px)`;
       });
       requestAnimationFrame(step);
@@ -242,7 +263,9 @@
 
   function init() {
     const links = navLinks();
-    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
     if (sections.length) initNavHighlight(links, sections);
     const cardList = Array.from(document.querySelectorAll(".card-sobre"));
     if (cardList.length) {

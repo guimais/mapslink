@@ -1,19 +1,21 @@
 ﻿const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginempresa.html"; 
+  window.location.href = "loginempresa.html";
 }
 (() => {
   if (window.__ml_perfilempresa_init__) return;
   window.__ml_perfilempresa_init__ = true;
 
   const { normalizeText } = window.MapsUtils || {};
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const AVATAR_SELECTOR = ".empresa-hero-avatar img";
   const AVATAR_WRAPPER_SELECTOR = ".empresa-hero-avatar";
 
   function valueToString(value) {
     if (value === 0) return "0";
-    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (typeof value === "number" && Number.isFinite(value))
+      return String(value);
     if (!value) return "";
     return String(value).trim();
   }
@@ -39,12 +41,14 @@ if (!token) {
     if (!node) return;
     const items = Array.isArray(values)
       ? values
-          .map(item => (typeof item === "string" ? item.trim() : item))
-          .filter(item => item || item === 0)
+          .map((item) => (typeof item === "string" ? item.trim() : item))
+          .filter((item) => item || item === 0)
       : [];
     if (!items.length) {
       const placeholder = node.dataset?.placeholder || "";
-      node.innerHTML = placeholder ? `<li class="placeholder-item">${placeholder}</li>` : "";
+      node.innerHTML = placeholder
+        ? `<li class="placeholder-item">${placeholder}</li>`
+        : "";
       node.dataset.empty = "true";
       if (node.classList) {
         node.classList.add("is-empty");
@@ -115,21 +119,24 @@ if (!token) {
   function setActiveLink(url) {
     if (highlightNav(url)) return;
     const links = navLinks();
-    links.forEach(link => {
+    links.forEach((link) => {
       const href = link.getAttribute("href") || "";
-      const active = sameUrl(link.href || href, url) || (href.startsWith("#") && href === (location.hash || ""));
+      const active =
+        sameUrl(link.href || href, url) ||
+        (href.startsWith("#") && href === (location.hash || ""));
       link.classList.toggle("active", active);
-      if (href.startsWith("#")) link.setAttribute("aria-current", active ? "page" : "false");
+      if (href.startsWith("#"))
+        link.setAttribute("aria-current", active ? "page" : "false");
     });
   }
 
   function bindAnchors() {
     navLinks()
-      .filter(link => (link.getAttribute("href") || "").startsWith("#"))
-      .forEach(link => {
+      .filter((link) => (link.getAttribute("href") || "").startsWith("#"))
+      .forEach((link) => {
         if (link.dataset.bound) return;
         link.dataset.bound = "true";
-        link.addEventListener("click", event => {
+        link.addEventListener("click", (event) => {
           const id = link.getAttribute("href");
           const target = id && query(id);
           if (!target) return;
@@ -151,25 +158,35 @@ if (!token) {
     const valid = data?.type === "business";
     const profile = valid && data.profile ? data.profile : {};
     setAvatar(valid && profile.avatar ? profile.avatar : "");
-    setText(query("#empresa-nome-exibicao"), valid ? data.company || data.name : "");
+    setText(
+      query("#empresa-nome-exibicao"),
+      valid ? data.company || data.name : "",
+    );
     setText(query(".empresa-hero-desc"), profile.caption);
     const tagList = Array.isArray(profile.tags)
       ? profile.tags
       : typeof profile.tags === "string"
-        ? profile.tags.split(",").map(tag => tag.trim()).filter(Boolean)
+        ? profile.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean)
         : [];
-    setList(query(".empresa-hero-tags"), tagList, tag => `<li>${tag}</li>`);
+    setList(query(".empresa-hero-tags"), tagList, (tag) => `<li>${tag}</li>`);
     const meta = queryAll(".empresa-meta .meta-value");
-    [profile.sector, profile.headquarters, profile.model].forEach((value, index) => setText(meta[index], value));
+    [profile.sector, profile.headquarters, profile.model].forEach(
+      (value, index) => setText(meta[index], value),
+    );
     const contact = profile.contact || {};
     const contacts = [
       contact.instagram || "",
       contact.linkedin || "",
       contact.email || "",
       profile.site || "",
-      contact.address || contact.phone || ""
+      contact.address || contact.phone || "",
     ];
-    queryAll(".empresa-contatos span").forEach((node, index) => setText(node, contacts[index]));
+    queryAll(".empresa-contatos span").forEach((node, index) =>
+      setText(node, contacts[index]),
+    );
     setText(query("#bio-empresa p"), profile.bio);
     const agenda = query("#agenda-entrevistas .agenda-numero");
     setText(agenda, profile.agendaToday ?? "");
@@ -203,7 +220,7 @@ if (!token) {
         if (value === null || value === undefined) localStorage.removeItem(key);
         else localStorage.setItem(key, JSON.stringify(value));
       } catch {}
-    }
+    },
   };
 
   function ensureBadge(card) {
@@ -218,7 +235,7 @@ if (!token) {
       borderRadius: "9999px",
       padding: "4px 10px",
       fontSize: "14px",
-      display: "inline-block"
+      display: "inline-block",
     });
     const title = card.querySelector(".card-title") || card.querySelector("h2");
     if (title) title.appendChild(badge);
@@ -262,7 +279,7 @@ if (!token) {
     if (!search || !rows.length) return;
     search.addEventListener("input", () => {
       const term = normalizeText(search.value || "");
-      rows.forEach(row => {
+      rows.forEach((row) => {
         const text = normalizeText(row.textContent || "");
         row.style.display = term && !text.includes(term) ? "none" : "";
       });
@@ -293,7 +310,7 @@ if (!token) {
           badge.textContent = valueToString(num);
           badge.style.display = "inline-block";
         }
-      }
+      },
     });
   }
 
@@ -303,8 +320,3 @@ if (!token) {
     init();
   }
 })();
-
-
-
-
-

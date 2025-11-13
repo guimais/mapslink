@@ -1,22 +1,87 @@
 ﻿<!doctype html>
 <html lang="pt-br">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="../manifest.json">
-    <link href="../assets/css/main.css" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
-    <meta name="description" content="Atualize os dados do perfil da empresa no Maps Link.">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102569" />
+    <link rel="manifest" href="../manifest.json" />
+    <link href="../assets/css/main.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../assets/images/logo-icon-192.png"
+    />
+    <meta
+      name="description"
+      content="Atualize os dados do perfil da empresa no Maps Link."
+    />
+    <!-- SEO -->
+    <link
+      rel="canonical"
+      href="https://mapslink.app/pages/edicaoperfilempresa.html"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="MapsLink" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MapsLink" />
+    <meta
+      property="og:title"
+      content="Maps Link - Edição de Perfil da Empresa"
+    />
+    <meta
+      property="og:description"
+      content="Atualize os dados do perfil da empresa no Maps Link."
+    />
+    <meta
+      property="og:url"
+      content="https://mapslink.app/pages/edicaoperfilempresa.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Maps Link - Edição de Perfil da Empresa"
+    />
+    <meta
+      name="twitter:description"
+      content="Atualize os dados do perfil da empresa no Maps Link."
+    />
+    <meta
+      name="twitter:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Maps Link - Edi\u00e7\u00e3o de Perfil da Empresa",
+        "description": "Atualize os dados do perfil da empresa no Maps Link.",
+        "url": "https://mapslink.app/pages/edicaoperfilempresa.html",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
     <title>Maps Link - Edição de Perfil da Empresa</title>
-    <link rel="stylesheet" href="../assets/css/edicaoperfilempresa.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="../assets/css/edicaoperfilempresa.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    />
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
     <script defer src="../assets/js/edicaoperfilempresa.js"></script>
   </head>
   <body data-page="edicaoperfilempresa">
-    <main class="edicao-page" role="main" aria-labelledby="titulo-edicao-empresa">
+    <main
+      class="edicao-page"
+      role="main"
+      aria-labelledby="titulo-edicao-empresa"
+    >
       <section class="edicao-hero" aria-labelledby="titulo-edicao-empresa">
         <a class="edicao-back-link" href="perfilempresa.html">
           <i class="ri-arrow-left-line" aria-hidden="true"></i>
@@ -24,13 +89,18 @@
         </a>
         <h1 id="titulo-edicao-empresa">Edição de perfil da empresa</h1>
         <p>
-          Mantenha os dados da sua organização atualizados para atrair talentos e parceiros alinhados ao propósito da empresa.
+          Mantenha os dados da sua organização atualizados para atrair talentos
+          e parceiros alinhados ao propósito da empresa.
         </p>
         <nav class="edicao-mode-switch" aria-label="Alternar edição de perfil">
           <a class="edicao-mode-link" href="edicaoperfil.html">
             Perfil do usuário
           </a>
-          <a class="edicao-mode-link is-active" href="edicaoperfilempresa.html" aria-current="page">
+          <a
+            class="edicao-mode-link is-active"
+            href="edicaoperfilempresa.html"
+            aria-current="page"
+          >
             Perfil da empresa
           </a>
         </nav>
@@ -38,15 +108,44 @@
 
       <div class="edicao-layout">
         <section class="edicao-form-wrapper">
-          <form id="edicao-form-empresa" class="edicao-form is-active" data-preview-context="empresa" data-storage-key="mapslink:perfil:empresa" novalidate>
+          <form
+            id="edicao-form-empresa"
+            class="edicao-form is-active"
+            data-preview-context="empresa"
+            data-storage-key="mapslink:perfil:empresa"
+            novalidate
+          >
             <div class="edicao-field edicao-field--avatar">
               <label for="empresa-avatar">Foto da empresa</label>
               <div class="edicao-avatar-control">
-                <img src="" alt="" data-avatar-preview class="edicao-avatar-preview">
+                <img
+                  src=""
+                  alt=""
+                  data-avatar-preview
+                  class="edicao-avatar-preview"
+                />
                 <div class="edicao-avatar-actions">
-                  <input id="empresa-avatar" type="file" accept="image/*" data-avatar-input hidden>
-                  <button type="button" class="edicao-avatar-upload" data-avatar-trigger>Trocar foto</button>
-                  <button type="button" class="edicao-avatar-remove" data-avatar-remove>Remover</button>
+                  <input
+                    id="empresa-avatar"
+                    type="file"
+                    accept="image/*"
+                    data-avatar-input
+                    hidden
+                  />
+                  <button
+                    type="button"
+                    class="edicao-avatar-upload"
+                    data-avatar-trigger
+                  >
+                    Trocar foto
+                  </button>
+                  <button
+                    type="button"
+                    class="edicao-avatar-remove"
+                    data-avatar-remove
+                  >
+                    Remover
+                  </button>
                 </div>
               </div>
             </div>
@@ -54,27 +153,65 @@
             <div class="edicao-field-grid">
               <div class="edicao-field">
                 <label for="empresa-nome">Nome da empresa</label>
-                <input id="empresa-nome" type="text" placeholder="Digite o nome fantasia" autocomplete="organization" data-field="company" data-sync="name" data-preview="company">
+                <input
+                  id="empresa-nome"
+                  type="text"
+                  placeholder="Digite o nome fantasia"
+                  autocomplete="organization"
+                  data-field="company"
+                  data-sync="name"
+                  data-preview="company"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-caption">Resumo principal</label>
-                <input id="empresa-caption" type="text" placeholder="Resuma o posicionamento da empresa" data-field="profile.caption" data-preview="caption">
+                <input
+                  id="empresa-caption"
+                  type="text"
+                  placeholder="Resuma o posicionamento da empresa"
+                  data-field="profile.caption"
+                  data-preview="caption"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-tags">Áreas de atuação</label>
-                <input id="empresa-tags" type="text" placeholder="Separe por vírgulas" data-field="profile.tags" data-format="csv" data-preview="tags">
+                <input
+                  id="empresa-tags"
+                  type="text"
+                  placeholder="Separe por vírgulas"
+                  data-field="profile.tags"
+                  data-format="csv"
+                  data-preview="tags"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-setor">Setor</label>
-                <input id="empresa-setor" type="text" placeholder="Ex.: Tecnologia, E-commerce" data-field="profile.sector" data-preview="sector">
+                <input
+                  id="empresa-setor"
+                  type="text"
+                  placeholder="Ex.: Tecnologia, E-commerce"
+                  data-field="profile.sector"
+                  data-preview="sector"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-sede">Sede</label>
-                <input id="empresa-sede" type="text" placeholder="Cidade, País" autocomplete="address-level2" data-field="profile.headquarters" data-preview="headquarters">
+                <input
+                  id="empresa-sede"
+                  type="text"
+                  placeholder="Cidade, País"
+                  autocomplete="address-level2"
+                  data-field="profile.headquarters"
+                  data-preview="headquarters"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-modelo">Modelo de trabalho</label>
-                <select id="empresa-modelo" data-field="profile.model" data-preview="model">
+                <select
+                  id="empresa-modelo"
+                  data-field="profile.model"
+                  data-preview="model"
+                >
                   <option value="">Selecione uma opção</option>
                   <option value="Global - Híbrido">Global - Híbrido</option>
                   <option value="Remoto">Remoto</option>
@@ -84,64 +221,149 @@
               </div>
               <div class="edicao-field">
                 <label for="empresa-instagram">Instagram</label>
-                <input id="empresa-instagram" type="text" placeholder="@empresa" data-field="profile.contact.instagram" data-preview="instagram">
+                <input
+                  id="empresa-instagram"
+                  type="text"
+                  placeholder="@empresa"
+                  data-field="profile.contact.instagram"
+                  data-preview="instagram"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-linkedin">LinkedIn</label>
-                <input id="empresa-linkedin" type="text" placeholder="/in/empresa" data-field="profile.contact.linkedin" data-preview="linkedin">
+                <input
+                  id="empresa-linkedin"
+                  type="text"
+                  placeholder="/in/empresa"
+                  data-field="profile.contact.linkedin"
+                  data-preview="linkedin"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-email">E-mail de contato</label>
-                <input id="empresa-email" type="email" placeholder="contato@empresa.com" autocomplete="email" data-field="profile.contact.email" data-preview="email">
+                <input
+                  id="empresa-email"
+                  type="email"
+                  placeholder="contato@empresa.com"
+                  autocomplete="email"
+                  data-field="profile.contact.email"
+                  data-preview="email"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-telefone">Telefone</label>
-                <input id="empresa-telefone" type="tel" placeholder="+55 00 00000-0000" autocomplete="tel" data-field="profile.contact.phone" data-sync="phone" data-preview="phone">
+                <input
+                  id="empresa-telefone"
+                  type="tel"
+                  placeholder="+55 00 00000-0000"
+                  autocomplete="tel"
+                  data-field="profile.contact.phone"
+                  data-sync="phone"
+                  data-preview="phone"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-endereco">Endereço principal</label>
-                <input id="empresa-endereco" type="text" placeholder="Rua, número, cidade" data-field="profile.contact.address" data-preview="address">
+                <input
+                  id="empresa-endereco"
+                  type="text"
+                  placeholder="Rua, número, cidade"
+                  data-field="profile.contact.address"
+                  data-preview="address"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-site">Site institucional</label>
-                <input id="empresa-site" type="url" placeholder="https://empresa.com" autocomplete="url" data-field="profile.site" data-preview="site">
+                <input
+                  id="empresa-site"
+                  type="url"
+                  placeholder="https://empresa.com"
+                  autocomplete="url"
+                  data-field="profile.site"
+                  data-preview="site"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-agenda">Entrevistas do dia</label>
-                <input id="empresa-agenda" type="number" min="0" step="1" data-field="profile.agendaToday" data-type="number" data-preview="agenda">
+                <input
+                  id="empresa-agenda"
+                  type="number"
+                  min="0"
+                  step="1"
+                  data-field="profile.agendaToday"
+                  data-type="number"
+                  data-preview="agenda"
+                />
               </div>
               <div class="edicao-field">
                 <label for="empresa-curriculos">Currículos recebidos</label>
-                <input id="empresa-curriculos" type="number" min="0" step="1" data-field="profile.curriculos" data-type="number" data-preview="curriculos">
+                <input
+                  id="empresa-curriculos"
+                  type="number"
+                  min="0"
+                  step="1"
+                  data-field="profile.curriculos"
+                  data-type="number"
+                  data-preview="curriculos"
+                />
               </div>
             </div>
 
             <div class="edicao-field">
               <label for="empresa-sobre">Sobre a empresa</label>
-              <textarea id="empresa-sobre" rows="4" placeholder="Descreva a missão e visão da empresa" data-field="profile.bio" data-preview="bio"></textarea>
+              <textarea
+                id="empresa-sobre"
+                rows="4"
+                placeholder="Descreva a missão e visão da empresa"
+                data-field="profile.bio"
+                data-preview="bio"
+              ></textarea>
             </div>
 
             <div class="edicao-field">
               <label for="empresa-beneficios">Benefícios oferecidos</label>
-              <textarea id="empresa-beneficios" rows="3" placeholder="Separe por vírgulas ou quebre linhas" data-field="profile.benefits" data-format="lines" data-preview="benefits"></textarea>
+              <textarea
+                id="empresa-beneficios"
+                rows="3"
+                placeholder="Separe por vírgulas ou quebre linhas"
+                data-field="profile.benefits"
+                data-format="lines"
+                data-preview="benefits"
+              ></textarea>
             </div>
 
             <div class="edicao-actions">
-              <button type="submit" class="edicao-submit">Salvar alterações</button>
+              <button type="submit" class="edicao-submit">
+                Salvar alterações
+              </button>
               <button type="reset" class="edicao-reset">Limpar</button>
             </div>
-            <div class="edicao-feedback" role="status" aria-live="polite" data-edicao-feedback>
+            <div
+              class="edicao-feedback"
+              role="status"
+              aria-live="polite"
+              data-edicao-feedback
+            >
               <span class="edicao-feedback-icon" aria-hidden="true"></span>
-              <span class="edicao-feedback-text" data-edicao-feedback-text></span>
+              <span
+                class="edicao-feedback-text"
+                data-edicao-feedback-text
+              ></span>
             </div>
           </form>
         </section>
 
-        <aside class="edicao-side-panel" aria-label="Pré-visualização do perfil da empresa">
+        <aside
+          class="edicao-side-panel"
+          aria-label="Pré-visualização do perfil da empresa"
+        >
           <section class="edicao-preview" data-edicao-preview="empresa">
             <div class="edicao-preview-header">
               <h2>Pré-visualização</h2>
-              <p>Acompanhe como as informações serão exibidas no perfil corporativo.</p>
+              <p>
+                Acompanhe como as informações serão exibidas no perfil
+                corporativo.
+              </p>
             </div>
             <div class="edicao-preview-card">
               <dl class="edicao-preview-list">
@@ -210,11 +432,10 @@
                   <dd data-preview-field="curriculos">--</dd>
                 </div>
               </dl>
+            </div>
           </section>
         </aside>
       </div>
     </main>
   </body>
 </html>
-
-

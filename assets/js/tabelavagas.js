@@ -3,14 +3,15 @@
   window.__ml_tabelavagas_init__ = true;
 
   const STORAGE_PREFIX = "mapslink:vagas";
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const JobsStore = window.MapsJobsStore || null;
   const PUBLIC_KEY = JobsStore?.publicKey || `${STORAGE_PREFIX}:public`;
   const JOBS_EVENT = JobsStore?.event || "mapslink:jobs-updated";
 
   const dom = {
     avatar: null,
-    tbody: null
+    tbody: null,
   };
 
   function initDom() {
@@ -33,7 +34,8 @@
       const total = window.localStorage?.length ?? 0;
       for (let index = 0; index < total; index += 1) {
         const key = window.localStorage.key(index);
-        if (!key || !key.startsWith(`${STORAGE_PREFIX}:`) || key === PUBLIC_KEY) continue;
+        if (!key || !key.startsWith(`${STORAGE_PREFIX}:`) || key === PUBLIC_KEY)
+          continue;
         const raw = window.localStorage.getItem(key);
         const parsed = raw ? JSON.parse(raw) : [];
         if (Array.isArray(parsed)) jobs.push(...parsed);
@@ -48,13 +50,11 @@
   }
 
   function sortJobs(list) {
-    return (list || [])
-      .slice()
-      .sort((a, b) => {
-        const left = Date.parse(a?.publishedAt || 0) || 0;
-        const right = Date.parse(b?.publishedAt || 0) || 0;
-        return right - left;
-      });
+    return (list || []).slice().sort((a, b) => {
+      const left = Date.parse(a?.publishedAt || 0) || 0;
+      const right = Date.parse(b?.publishedAt || 0) || 0;
+      return right - left;
+    });
   }
 
   function formatDate(value) {
@@ -66,14 +66,17 @@
   }
 
   function escapeHtml(text) {
-    return String(text || "").replace(/[&<>"']/g, chr => {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[chr] || chr;
+    return String(text || "").replace(/[&<>"']/g, (chr) => {
+      return (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[chr] || chr
+      );
     });
   }
 
   function statusClass(status) {
     const normalized = (status || "").toLowerCase();
-    if (normalized.includes("fech") || normalized.includes("encerr")) return "status status-fechada";
+    if (normalized.includes("fech") || normalized.includes("encerr"))
+      return "status status-fechada";
     return "status";
   }
 
@@ -102,12 +105,13 @@
       row.className = "tbl-empty";
       const cell = document.createElement("td");
       cell.colSpan = 5;
-      cell.textContent = dom.tbody.dataset.emptyText || "Nenhuma vaga disponível.";
+      cell.textContent =
+        dom.tbody.dataset.emptyText || "Nenhuma vaga disponível.";
       row.appendChild(cell);
       dom.tbody.appendChild(row);
       return;
     }
-    jobs.forEach(job => dom.tbody.appendChild(buildRow(job)));
+    jobs.forEach((job) => dom.tbody.appendChild(buildRow(job)));
   }
 
   function refreshJobs() {
@@ -127,7 +131,10 @@
     }
     const refresh = () => hydrate(auth.current ? auth.current() : null);
     if (typeof auth.ready === "function") {
-      auth.ready().then(refresh).catch(() => hydrate(null));
+      auth
+        .ready()
+        .then(refresh)
+        .catch(() => hydrate(null));
     } else {
       refresh();
     }
@@ -138,7 +145,7 @@
     initDom();
     hydrate(null);
     initAuth();
-    window.addEventListener("storage", event => {
+    window.addEventListener("storage", (event) => {
       if (event.key === PUBLIC_KEY) refreshJobs();
     });
     window.addEventListener(JOBS_EVENT, refreshJobs);

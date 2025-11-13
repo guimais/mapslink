@@ -1,7 +1,6 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginempresa.html"; 
-  
+  window.location.href = "loginempresa.html";
 }
 (function () {
   "use strict";
@@ -10,7 +9,7 @@ if (!token) {
 
   const STORAGE_KEYS = {
     activeDay: "agendaActiveDay",
-    data: "agendaCustomData"
+    data: "agendaCustomData",
   };
 
   const COLOR_CLASSES = ["azul", "verde", "amarelo", "roxo", "laranja"];
@@ -40,7 +39,7 @@ if (!token) {
     { value: "ri-slideshow-line", label: "Demonstracao" },
     { value: "ri-cup-line", label: "Celebracao" },
     { value: "ri-movie-2-line", label: "Lazer" },
-    { value: "ri-calendar-event-line", label: "Outro" }
+    { value: "ri-calendar-event-line", label: "Outro" },
   ];
 
   const DEFAULT_AGENDA = [
@@ -48,37 +47,38 @@ if (!token) {
       id: "seg",
       label: "Seg",
       dayNumber: "1",
-      summary: "Sem compromissos cadastrados. Use o botão para começar a semana.",
-      events: []
+      summary:
+        "Sem compromissos cadastrados. Use o botão para começar a semana.",
+      events: [],
     },
     {
       id: "ter",
       label: "Ter",
       dayNumber: "2",
       summary: "Nada marcado ainda para terça-feira.",
-      events: []
+      events: [],
     },
     {
       id: "qua",
       label: "Qua",
       dayNumber: "3",
       summary: "Adicione reuniões ou entrevistas para a quarta.",
-      events: []
+      events: [],
     },
     {
       id: "qui",
       label: "Qui",
       dayNumber: "4",
       summary: "Nenhum compromisso programado para quinta-feira.",
-      events: []
+      events: [],
     },
     {
       id: "sex",
       label: "Sex",
       dayNumber: "5",
       summary: "Sexta-feira livre no momento.",
-      events: []
-    }
+      events: [],
+    },
   ];
 
   let agendaData = [];
@@ -108,7 +108,9 @@ if (!token) {
     bindWeek();
     bindTimeline();
 
-    addButton?.addEventListener("click", () => openEditor(activeDayIndex, null));
+    addButton?.addEventListener("click", () =>
+      openEditor(activeDayIndex, null),
+    );
     resetButton?.addEventListener("click", handleReset);
 
     window.addEventListener("resize", debounce(renderTimeline, 120));
@@ -131,12 +133,21 @@ if (!token) {
     if (!candidate || typeof candidate !== "object") return deepClone(baseDay);
     const merged = {
       id: typeof candidate.id === "string" ? candidate.id : baseDay.id,
-      label: typeof candidate.label === "string" ? candidate.label : baseDay.label,
-      dayNumber: typeof candidate.dayNumber === "string" ? candidate.dayNumber : baseDay.dayNumber,
-      summary: typeof candidate.summary === "string" ? candidate.summary : baseDay.summary,
-      events: []
+      label:
+        typeof candidate.label === "string" ? candidate.label : baseDay.label,
+      dayNumber:
+        typeof candidate.dayNumber === "string"
+          ? candidate.dayNumber
+          : baseDay.dayNumber,
+      summary:
+        typeof candidate.summary === "string"
+          ? candidate.summary
+          : baseDay.summary,
+      events: [],
     };
-    const customEvents = Array.isArray(candidate.events) ? candidate.events : [];
+    const customEvents = Array.isArray(candidate.events)
+      ? candidate.events
+      : [];
     const baseEvents = Array.isArray(baseDay.events) ? baseDay.events : [];
     const length = Math.max(customEvents.length, baseEvents.length);
     for (let i = 0; i < length; i += 1) {
@@ -145,20 +156,26 @@ if (!token) {
       merged.events.push(normalizeEvent(source, fallback));
     }
     if (merged.events.length === 0) {
-      merged.events = baseEvents.map(evt => normalizeEvent(evt));
+      merged.events = baseEvents.map((evt) => normalizeEvent(evt));
     }
     sortDayEvents(merged);
     return merged;
   }
 
   function normalizeEvent(event, fallback = {}) {
-    const safe = value => (typeof value === "string" ? value : "");
-    const time = sanitizeTime(safe(event?.time) || safe(fallback.time) || "09:00");
+    const safe = (value) => (typeof value === "string" ? value : "");
+    const time = sanitizeTime(
+      safe(event?.time) || safe(fallback.time) || "09:00",
+    );
     const title = safe(event?.title) || safe(fallback.title) || "Compromisso";
-    const description = safe(event?.description) || safe(fallback.description) || "";
-    const icon = safe(event?.icon) || safe(fallback.icon) || ICON_OPTIONS[0].value;
+    const description =
+      safe(event?.description) || safe(fallback.description) || "";
+    const icon =
+      safe(event?.icon) || safe(fallback.icon) || ICON_OPTIONS[0].value;
     const rawColor = safe(event?.color) || safe(fallback.color);
-    const color = COLOR_CLASSES.includes(rawColor) ? rawColor : COLOR_CLASSES[0];
+    const color = COLOR_CLASSES.includes(rawColor)
+      ? rawColor
+      : COLOR_CLASSES[0];
     return { time, title, description, icon, color };
   }
 
@@ -198,10 +215,14 @@ if (!token) {
     agendaData.forEach((day, index) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "agenda-day" + (index === activeDayIndex ? " active-day" : "");
+      button.className =
+        "agenda-day" + (index === activeDayIndex ? " active-day" : "");
       button.dataset.index = String(index);
       button.setAttribute("role", "tab");
-      button.setAttribute("aria-selected", index === activeDayIndex ? "true" : "false");
+      button.setAttribute(
+        "aria-selected",
+        index === activeDayIndex ? "true" : "false",
+      );
       button.setAttribute("tabindex", index === activeDayIndex ? "0" : "-1");
 
       const dow = document.createElement("span");
@@ -228,7 +249,10 @@ if (!token) {
     summaryElement.innerHTML = "";
     const highlight = document.createElement("strong");
     highlight.textContent = `${day.label} ${day.dayNumber}`;
-    summaryElement.append(highlight, document.createTextNode(` - ${day.summary}`));
+    summaryElement.append(
+      highlight,
+      document.createTextNode(` - ${day.summary}`),
+    );
   }
 
   function renderTimeline() {
@@ -267,7 +291,7 @@ if (!token) {
   }
 
   function bindWeek() {
-    weekContainer.addEventListener("click", event => {
+    weekContainer.addEventListener("click", (event) => {
       const button = event.target.closest(".agenda-day");
       if (!button) return;
       const index = Number(button.dataset.index);
@@ -275,7 +299,7 @@ if (!token) {
       setActiveDay(index, true);
     });
 
-    weekContainer.addEventListener("keydown", event => {
+    weekContainer.addEventListener("keydown", (event) => {
       const button = event.target.closest(".agenda-day");
       if (!button) return;
       const index = Number(button.dataset.index);
@@ -295,11 +319,15 @@ if (!token) {
     });
 
     let touchStartX = null;
-    weekContainer.addEventListener("touchstart", e => {
-      if (e.touches.length !== 1) return;
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-    weekContainer.addEventListener("touchend", e => {
+    weekContainer.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.touches.length !== 1) return;
+        touchStartX = e.touches[0].clientX;
+      },
+      { passive: true },
+    );
+    weekContainer.addEventListener("touchend", (e) => {
       if (touchStartX === null) return;
       const dx = e.changedTouches[0].clientX - touchStartX;
       if (dx < -40) setActiveDay(activeDayIndex + 1, true);
@@ -316,7 +344,9 @@ if (!token) {
       return;
     }
     activeDayIndex = next;
-    try { localStorage.setItem(STORAGE_KEYS.activeDay, String(next)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEYS.activeDay, String(next));
+    } catch {}
     renderWeek();
     renderSummary();
     renderTimeline();
@@ -327,7 +357,7 @@ if (!token) {
   }
 
   function bindTimeline() {
-    timelineContainer.addEventListener("click", event => {
+    timelineContainer.addEventListener("click", (event) => {
       const action = event.target.closest(".event-act");
       if (action) {
         handleEventAction(action);
@@ -338,7 +368,7 @@ if (!token) {
       toggleEvent(card);
     });
 
-    timelineContainer.addEventListener("keydown", event => {
+    timelineContainer.addEventListener("keydown", (event) => {
       const card = event.target.closest(".agenda-event");
       if (!card) return;
       if (event.key === "Enter" || event.key === " ") {
@@ -347,7 +377,7 @@ if (!token) {
       }
     });
 
-    document.addEventListener("click", event => {
+    document.addEventListener("click", (event) => {
       if (!event.target.closest(".agenda-event")) collapseAll();
     });
   }
@@ -362,7 +392,7 @@ if (!token) {
   }
 
   function collapseAll() {
-    document.querySelectorAll(".agenda-event.expanded").forEach(card => {
+    document.querySelectorAll(".agenda-event.expanded").forEach((card) => {
       card.classList.remove("expanded");
       card.setAttribute("aria-expanded", "false");
     });
@@ -413,7 +443,14 @@ if (!token) {
 
     if (button.dataset.act === "notify") {
       try {
-        localStorage.setItem("agendaNotify", JSON.stringify({ time: event.time, title: event.title, at: Date.now() }));
+        localStorage.setItem(
+          "agendaNotify",
+          JSON.stringify({
+            time: event.time,
+            title: event.title,
+            at: Date.now(),
+          }),
+        );
       } catch {}
     }
 
@@ -426,7 +463,9 @@ if (!token) {
     const day = agendaData[dayIndex];
     if (!day) return;
     const isEdit = Number.isInteger(eventIndex);
-    const draft = isEdit ? { ...day.events[eventIndex] } : createDefaultEvent(day);
+    const draft = isEdit
+      ? { ...day.events[eventIndex] }
+      : createDefaultEvent(day);
 
     closeEditor();
 
@@ -460,18 +499,67 @@ if (!token) {
     intro.textContent = `${day.label} ${day.dayNumber}  ${day.summary}`;
     form.appendChild(intro);
 
-    form.appendChild(fieldGroup("Horario", `<input class="agenda-editor__input" id="agenda-editor-time" name="time" type="time" required value="${draft.time}">`, "agenda-editor-time"));
-    form.appendChild(fieldGroup("Titulo", `<input class="agenda-editor__input" id="agenda-editor-title-input" name="title" type="text" required value="${escapeHtml(draft.title)}" placeholder="Descreva o compromisso">`, "agenda-editor-title-input"));
-    form.appendChild(fieldGroup("Descricao", `<textarea class="agenda-editor__textarea" id="agenda-editor-description" name="description" placeholder="Adicione detalhes">${escapeHtml(draft.description || "")}</textarea>`, "agenda-editor-description"));
-    form.appendChild(fieldGroup("Icone", buildSelect("icon", ICON_OPTIONS, draft.icon, "agenda-editor-icon"), "agenda-editor-icon"));
-    form.appendChild(fieldGroup("Cor", buildSelect("color", COLOR_CLASSES.map(color => ({ value: color, label: color })), draft.color, "agenda-editor-color"), "agenda-editor-color"));
+    form.appendChild(
+      fieldGroup(
+        "Horario",
+        `<input class="agenda-editor__input" id="agenda-editor-time" name="time" type="time" required value="${draft.time}">`,
+        "agenda-editor-time",
+      ),
+    );
+    form.appendChild(
+      fieldGroup(
+        "Titulo",
+        `<input class="agenda-editor__input" id="agenda-editor-title-input" name="title" type="text" required value="${escapeHtml(draft.title)}" placeholder="Descreva o compromisso">`,
+        "agenda-editor-title-input",
+      ),
+    );
+    form.appendChild(
+      fieldGroup(
+        "Descricao",
+        `<textarea class="agenda-editor__textarea" id="agenda-editor-description" name="description" placeholder="Adicione detalhes">${escapeHtml(draft.description || "")}</textarea>`,
+        "agenda-editor-description",
+      ),
+    );
+    form.appendChild(
+      fieldGroup(
+        "Icone",
+        buildSelect("icon", ICON_OPTIONS, draft.icon, "agenda-editor-icon"),
+        "agenda-editor-icon",
+      ),
+    );
+    form.appendChild(
+      fieldGroup(
+        "Cor",
+        buildSelect(
+          "color",
+          COLOR_CLASSES.map((color) => ({ value: color, label: color })),
+          draft.color,
+          "agenda-editor-color",
+        ),
+        "agenda-editor-color",
+      ),
+    );
 
     const actions = document.createElement("div");
     actions.className = "agenda-editor__actions";
     if (isEdit) {
-      actions.appendChild(buildActionButton("Excluir", "ri-delete-bin-line", "delete", "agenda-editor__button agenda-editor__button--danger"));
+      actions.appendChild(
+        buildActionButton(
+          "Excluir",
+          "ri-delete-bin-line",
+          "delete",
+          "agenda-editor__button agenda-editor__button--danger",
+        ),
+      );
     }
-    actions.appendChild(buildActionButton("Cancelar", "ri-close-circle-line", "cancel", "agenda-editor__button agenda-editor__button--muted"));
+    actions.appendChild(
+      buildActionButton(
+        "Cancelar",
+        "ri-close-circle-line",
+        "cancel",
+        "agenda-editor__button agenda-editor__button--muted",
+      ),
+    );
     const save = document.createElement("button");
     save.type = "submit";
     save.className = "agenda-editor__button agenda-editor__button--primary";
@@ -485,7 +573,7 @@ if (!token) {
     const close = () => closeEditor(wrapper);
     backdrop.addEventListener("click", close);
     closeBtn.addEventListener("click", close);
-    actions.addEventListener("click", event => {
+    actions.addEventListener("click", (event) => {
       const btn = event.target.closest("[data-editor-act]");
       if (!btn) return;
       if (btn.dataset.editorAct === "cancel") {
@@ -503,7 +591,7 @@ if (!token) {
       }
     });
 
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
       const formData = new FormData(form);
       const payload = {
@@ -511,9 +599,10 @@ if (!token) {
         title: String(formData.get("title") || "").trim() || "Novo compromisso",
         description: String(formData.get("description") || "").trim(),
         icon: String(formData.get("icon") || ICON_OPTIONS[0].value),
-        color: String(formData.get("color") || COLOR_CLASSES[0])
+        color: String(formData.get("color") || COLOR_CLASSES[0]),
       };
-      if (!COLOR_CLASSES.includes(payload.color)) payload.color = COLOR_CLASSES[0];
+      if (!COLOR_CLASSES.includes(payload.color))
+        payload.color = COLOR_CLASSES[0];
       if (isEdit) {
         day.events[eventIndex] = payload;
       } else {
@@ -527,13 +616,17 @@ if (!token) {
 
     form.querySelector("#agenda-editor-time")?.focus({ preventScroll: true });
 
-    document.addEventListener("keydown", function escListener(ev) {
-      if (ev.key === "Escape") {
-        ev.preventDefault();
-        close();
-        document.removeEventListener("keydown", escListener);
-      }
-    }, { once: true });
+    document.addEventListener(
+      "keydown",
+      function escListener(ev) {
+        if (ev.key === "Escape") {
+          ev.preventDefault();
+          close();
+          document.removeEventListener("keydown", escListener);
+        }
+      },
+      { once: true },
+    );
   }
 
   function buildActionButton(label, icon, act, className) {
@@ -554,23 +647,32 @@ if (!token) {
   }
 
   function buildSelect(name, options, value, id) {
-    const list = options.map(option => {
-      const opt = typeof option === "string" ? { value: option, label: option } : option;
-      const selected = opt.value === value ? " selected" : "";
-      return `<option value="${opt.value}"${selected}>${opt.label}</option>`;
-    }).join("");
+    const list = options
+      .map((option) => {
+        const opt =
+          typeof option === "string"
+            ? { value: option, label: option }
+            : option;
+        const selected = opt.value === value ? " selected" : "";
+        return `<option value="${opt.value}"${selected}>${opt.label}</option>`;
+      })
+      .join("");
     const idAttr = id ? ` id="${id}"` : "";
     return `<select class="agenda-editor__select" name="${name}"${idAttr}>${list}</select>`;
   }
 
   function escapeHtml(text) {
-    return String(text || "").replace(/[&<>"']/g, chr => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    }[chr] || chr));
+    return String(text || "").replace(
+      /[&<>"']/g,
+      (chr) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[chr] || chr,
+    );
   }
 
   function closeEditor(wrapper) {
@@ -582,14 +684,16 @@ if (!token) {
 
   function createDefaultEvent(day) {
     const baseColor = COLOR_CLASSES[day.events.length % COLOR_CLASSES.length];
-    const baseTime = day.events.length ? day.events[day.events.length - 1].time : "09:00";
+    const baseTime = day.events.length
+      ? day.events[day.events.length - 1].time
+      : "09:00";
     const next = incrementTime(baseTime, 60);
     return {
       time: next,
       title: "Novo compromisso",
       description: "",
       icon: ICON_OPTIONS[0].value,
-      color: baseColor
+      color: baseColor,
     };
   }
 
@@ -611,7 +715,9 @@ if (!token) {
   function handleReset() {
     if (!confirm("Deseja restaurar os compromissos padrao da agenda?")) return;
     agendaData = deepClone(DEFAULT_AGENDA);
-    try { localStorage.removeItem(STORAGE_KEYS.data); } catch {}
+    try {
+      localStorage.removeItem(STORAGE_KEYS.data);
+    } catch {}
     renderWeek();
     renderSummary();
     renderTimeline();

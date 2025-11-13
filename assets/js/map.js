@@ -6,7 +6,7 @@
     map: null,
     layer: null,
     filters: {},
-    companies: []
+    companies: [],
   };
 
   function coords(company) {
@@ -20,11 +20,13 @@
     const tags = Array.isArray(company?.tags) ? company.tags.join(", ") : "";
     const jobs = Array.isArray(company?.jobs)
       ? company.jobs
-          .map(job => {
+          .map((job) => {
             if (!job) return "";
             const title = job.title || "Vaga";
             const type = job.type ? ` (${job.type})` : "";
-            const url = job.url ? ` href="${job.url}" target="_blank" rel="noopener"` : "";
+            const url = job.url
+              ? ` href="${job.url}" target="_blank" rel="noopener"`
+              : "";
             return `<li><a${url}>${title}${type}</a></li>`;
           })
           .join("")
@@ -38,7 +40,11 @@
     const website = company?.website
       ? `<div style="font-size:12px;margin:6px 0"><a href="${company.website}" target="_blank" rel="noopener">${company.website.replace(/^https?:\/\//, "")}</a></div>`
       : "";
-    const addressParts = [company?.address, company?.city, company?.state].filter(Boolean);
+    const addressParts = [
+      company?.address,
+      company?.city,
+      company?.state,
+    ].filter(Boolean);
     const address = addressParts.length ? addressParts.join(" - ") : "";
 
     return `
@@ -64,7 +70,7 @@
   function renderMarkers(list) {
     if (!state.layer) return;
     const bounds = [];
-    list.forEach(company => {
+    list.forEach((company) => {
       const position = coords(company);
       if (!position) return;
       const marker = L.marker(position);
@@ -94,7 +100,9 @@
       state.companies = Array.isArray(data) ? data : [];
       window.__companies = state.companies;
     } catch {
-      state.companies = Array.isArray(window.__companies) ? window.__companies : [];
+      state.companies = Array.isArray(window.__companies)
+        ? window.__companies
+        : [];
     }
     return state.companies;
   }
@@ -111,8 +119,8 @@
   }
 
   function exposeHelpers() {
-    window.applyFilters = filters => applyFilters(filters);
-    window.setFilters = filters => applyFilters(filters);
+    window.applyFilters = (filters) => applyFilters(filters);
+    window.setFilters = (filters) => applyFilters(filters);
     window.getFilterOptions = () => {
       if (window.MapsFilters?.buildFilterOptions) {
         return window.MapsFilters.buildFilterOptions(state.companies || []);
@@ -129,7 +137,7 @@
     state.map = L.map("map", { scrollWheelZoom: true });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
+      attribution: "&copy; OpenStreetMap",
     }).addTo(state.map);
     state.layer = L.layerGroup().addTo(state.map);
   }

@@ -1,11 +1,12 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginempresa.html"; 
+  window.location.href = "loginempresa.html";
 }
 (function () {
   const FIELD_SELECTOR = "[data-field]";
   const STORAGE_FALLBACK = "mapslink:perfil:empresa";
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const FALLBACK = {
     default: "--",
     company: "Informe o nome da empresa",
@@ -23,14 +24,14 @@ if (!token) {
     bio: "Fale mais sobre a empresa",
     benefits: "Liste os beneficios oferecidos",
     agenda: "--",
-    curriculos: "--"
+    curriculos: "--",
   };
 
   const state = {
     avatar: "",
     owner: null,
     baseStorage: STORAGE_FALLBACK,
-    feedbackTimer: null
+    feedbackTimer: null,
   };
 
   const own = Object.prototype.hasOwnProperty;
@@ -65,11 +66,17 @@ if (!token) {
     const format = input.dataset.format;
     if (format === "csv") {
       if (!raw) return [];
-      return raw.split(",").map(item => item.trim()).filter(Boolean);
+      return raw
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
     }
     if (format === "lines") {
       if (!raw) return [];
-      return raw.split(/\r?\n+/).map(item => item.trim()).filter(Boolean);
+      return raw
+        .split(/\r?\n+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
     }
     if (input.dataset.type === "number") {
       if (!raw.length) return null;
@@ -82,7 +89,9 @@ if (!token) {
   function previewText(input, value) {
     if (Array.isArray(value)) {
       if (!value.length) return "";
-      return input.dataset.format === "lines" ? value.join("\n") : value.join(", ");
+      return input.dataset.format === "lines"
+        ? value.join("\n")
+        : value.join(", ");
     }
     if (typeof value === "number") {
       return Number.isFinite(value) ? String(value) : "";
@@ -132,7 +141,8 @@ if (!token) {
         if (!raw) continue;
         const stored = JSON.parse(raw);
         if (!stored || typeof stored !== "object") continue;
-        if (stored.owner && state.owner && stored.owner !== state.owner) continue;
+        if (stored.owner && state.owner && stored.owner !== state.owner)
+          continue;
         return stored.payload || null;
       } catch (error) {
         console.warn("MapsEdit: unable to read draft.", error);
@@ -145,7 +155,10 @@ if (!token) {
     const key = storageKey();
     if (!key) return;
     try {
-      window.localStorage.setItem(key, JSON.stringify({ owner: state.owner, payload }));
+      window.localStorage.setItem(
+        key,
+        JSON.stringify({ owner: state.owner, payload }),
+      );
     } catch (error) {
       console.warn("MapsEdit: unable to save draft.", error);
     }
@@ -156,7 +169,7 @@ if (!token) {
     const ownerKey = storageKey();
     if (ownerKey) keys.add(ownerKey);
     if (state.baseStorage) keys.add(state.baseStorage);
-    keys.forEach(key => {
+    keys.forEach((key) => {
       if (!key) return;
       try {
         window.localStorage.removeItem(key);
@@ -170,7 +183,8 @@ if (!token) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result || "");
-      reader.onerror = () => reject(reader.error || new Error("Falha ao ler o arquivo."));
+      reader.onerror = () =>
+        reject(reader.error || new Error("Falha ao ler o arquivo."));
       reader.readAsDataURL(file);
     });
   }
@@ -191,14 +205,15 @@ if (!token) {
 
     function updatePreview() {
       if (!preview) return;
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         const key = input.dataset.preview;
         if (!key) return;
         const target = preview.querySelector(`[data-preview-field="${key}"]`);
         if (!target) return;
         const value = parseInputValue(input);
         const text = previewText(input, value);
-        const fallback = target.dataset.placeholder || FALLBACK[key] || FALLBACK.default;
+        const fallback =
+          target.dataset.placeholder || FALLBACK[key] || FALLBACK.default;
         target.textContent = text || fallback;
         target.classList.toggle("is-placeholder", !text);
       });
@@ -207,12 +222,15 @@ if (!token) {
     function fillForm(data) {
       state.avatar = (data && data.profile && data.profile.avatar) || "";
       applyAvatar(avatarPreview, state.avatar);
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         const path = input.dataset.field;
         if (!path) return;
         const value = getByPath(data, path);
         if (Array.isArray(value)) {
-          input.value = input.dataset.format === "lines" ? value.join("\n") : value.join(", ");
+          input.value =
+            input.dataset.format === "lines"
+              ? value.join("\n")
+              : value.join(", ");
         } else if (value === null || value === undefined) {
           input.value = "";
         } else if (input.dataset.type === "number") {
@@ -226,7 +244,7 @@ if (!token) {
 
     function collectPayload() {
       const payload = { profile: { contact: {} } };
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         const path = input.dataset.field;
         if (!path) return;
         const value = parseInputValue(input);
@@ -237,9 +255,9 @@ if (!token) {
         setByPath(payload, path, finalValue);
         const extra = (input.dataset.sync || "")
           .split(",")
-          .map(item => item.trim())
+          .map((item) => item.trim())
           .filter(Boolean);
-        extra.forEach(target => setByPath(payload, target, finalValue));
+        extra.forEach((target) => setByPath(payload, target, finalValue));
       });
       if (!payload.profile) payload.profile = {};
       payload.profile.avatar = state.avatar || "";
@@ -266,15 +284,15 @@ if (!token) {
       updatePreview();
     }
 
-    form.addEventListener("input", event => {
+    form.addEventListener("input", (event) => {
       if (event.target && event.target.matches(FIELD_SELECTOR)) updatePreview();
     });
 
-    form.addEventListener("change", event => {
+    form.addEventListener("change", (event) => {
       if (event.target && event.target.matches(FIELD_SELECTOR)) updatePreview();
     });
 
-    form.addEventListener("submit", async event => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const payload = collectPayload();
       const auth = window.MapsAuth;
@@ -284,11 +302,14 @@ if (!token) {
       if (auth && typeof auth.updateProfile === "function") {
         try {
           const request = { profile: payload.profile };
-          if (own.call(payload, "company")) request.company = payload.company || "";
+          if (own.call(payload, "company"))
+            request.company = payload.company || "";
           if (own.call(payload, "name")) request.name = payload.name || "";
           if (own.call(payload, "phone")) request.phone = payload.phone || "";
           const result = await auth.updateProfile(request);
-          applySession(result || (auth.current ? auth.current() : null), { useSessionDirectly: true });
+          applySession(result || (auth.current ? auth.current() : null), {
+            useSessionDirectly: true,
+          });
           message = "Alteracoes salvas e sincronizadas.";
         } catch (error) {
           console.error(error);
@@ -297,7 +318,8 @@ if (!token) {
             message = "Nao foi possivel salvar. Tente novamente.";
             isError = true;
           } else {
-            message = "Alteracoes salvas localmente. Entre novamente para sincronizar.";
+            message =
+              "Alteracoes salvas localmente. Entre novamente para sincronizar.";
           }
         }
       }
@@ -308,7 +330,7 @@ if (!token) {
 
     form.addEventListener("reset", () => {
       window.setTimeout(() => {
-        inputs.forEach(input => {
+        inputs.forEach((input) => {
           input.value = "";
         });
         state.avatar = "";

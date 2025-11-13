@@ -7,14 +7,26 @@
   const STORAGE_REMEMBER = "rememberBusiness";
 
   const linkShortcuts = [
-    { selector: ".register-link", url: "registroempresa.html", message: "Redirecionando para cadastro empresarial..." },
-    { selector: ".forgot-password", url: "esqueceusenha.html", message: "Redirecionando para recuperação de senha..." },
-    { selector: ".personal-login-link", url: "loginpessoal.html", message: "Redirecionando para login pessoal..." }
+    {
+      selector: ".register-link",
+      url: "registroempresa.html",
+      message: "Redirecionando para cadastro empresarial...",
+    },
+    {
+      selector: ".forgot-password",
+      url: "esqueceusenha.html",
+      message: "Redirecionando para recuperação de senha...",
+    },
+    {
+      selector: ".personal-login-link",
+      url: "loginpessoal.html",
+      message: "Redirecionando para login pessoal...",
+    },
   ];
 
   const state = {
     identifierType: "unknown",
-    elements: null
+    elements: null,
   };
 
   function isMobile() {
@@ -46,7 +58,7 @@
 
   function showToast(message, variant = "info", duration = 2600) {
     if (!message) return;
-    document.querySelectorAll(".ml-toast").forEach(toast => toast.remove());
+    document.querySelectorAll(".ml-toast").forEach((toast) => toast.remove());
     const toast = document.createElement("div");
     toast.className = `ml-toast ml-toast--${variant}`;
     toast.textContent = message;
@@ -63,25 +75,28 @@
     const { button } = state.elements;
     const templates = {
       idle: () => ({
-        html: state.elements.originalButtonHtml || '<span class="button-text">Entrar</span><i class="ri-arrow-right-line button-icon"></i>',
+        html:
+          state.elements.originalButtonHtml ||
+          '<span class="button-text">Entrar</span><i class="ri-arrow-right-line button-icon"></i>',
         disabled: false,
-        gradient: "linear-gradient(135deg, var(--brand, #2563eb) 0%, var(--brand-2, #1d4ed8) 100%)"
+        gradient:
+          "linear-gradient(135deg, var(--brand, #2563eb) 0%, var(--brand-2, #1d4ed8) 100%)",
       }),
       loading: () => ({
         html: '<span class="loading-spinner" aria-hidden="true"></span><span class="button-text">Validando...</span>',
         disabled: true,
-        gradient: null
+        gradient: null,
       }),
       success: () => ({
         html: '<i class="ri-check-line button-icon" aria-hidden="true"></i><span class="button-text">Tudo certo!</span>',
         disabled: true,
-        gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)"
+        gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
       }),
       error: () => ({
         html: '<i class="ri-error-warning-line button-icon" aria-hidden="true"></i><span class="button-text">Revise os dados</span>',
         disabled: true,
-        gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)"
-      })
+        gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
+      }),
     };
     const config = (templates[stateName] || templates.idle)();
     button.innerHTML = config.html;
@@ -119,8 +134,9 @@
   }
 
   function isValidCnpj(digits) {
-    if (!digits || digits.length !== 14 || /^(\d)\1+$/.test(digits)) return false;
-    const calcDigit = length => {
+    if (!digits || digits.length !== 14 || /^(\d)\1+$/.test(digits))
+      return false;
+    const calcDigit = (length) => {
       let sum = 0;
       let pos = length - 7;
       for (let index = length; index >= 1; index -= 1) {
@@ -139,7 +155,9 @@
     if (!identifierIcon) return;
     identifierIcon.classList.add("input-icon");
     identifierIcon.classList.remove("ri-mail-line", "ri-building-4-line");
-    identifierIcon.classList.add(type === "email" ? "ri-mail-line" : "ri-building-4-line");
+    identifierIcon.classList.add(
+      type === "email" ? "ri-mail-line" : "ri-building-4-line",
+    );
   }
 
   function setFieldError(input, errorNode, message) {
@@ -168,16 +186,36 @@
     if (!identifier) return true;
     const value = sanitizeIdentifier(identifier.value);
     state.identifierType = detectIdentifierType(value);
-    if (!value) return setFieldError(identifier, identifierError, "Informe seu e-mail ou CNPJ.");
+    if (!value)
+      return setFieldError(
+        identifier,
+        identifierError,
+        "Informe seu e-mail ou CNPJ.",
+      );
     if (state.identifierType === "email") {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!regex.test(value.toLowerCase())) return setFieldError(identifier, identifierError, "Digite um e-mail válido.");
+      if (!regex.test(value.toLowerCase()))
+        return setFieldError(
+          identifier,
+          identifierError,
+          "Digite um e-mail válido.",
+        );
     } else if (state.identifierType === "cnpj") {
       const digits = stripDigits(value);
-      if (digits.length !== 14) return setFieldError(identifier, identifierError, "O CNPJ deve ter 14 dígitos.");
-      if (!isValidCnpj(digits)) return setFieldError(identifier, identifierError, "CNPJ inválido.");
+      if (digits.length !== 14)
+        return setFieldError(
+          identifier,
+          identifierError,
+          "O CNPJ deve ter 14 dígitos.",
+        );
+      if (!isValidCnpj(digits))
+        return setFieldError(identifier, identifierError, "CNPJ inválido.");
     } else {
-      return setFieldError(identifier, identifierError, "Use um e-mail válido ou CNPJ completo.");
+      return setFieldError(
+        identifier,
+        identifierError,
+        "Use um e-mail válido ou CNPJ completo.",
+      );
     }
     setIdentifierIcon(state.identifierType);
     return setFieldError(identifier, identifierError, "");
@@ -187,13 +225,20 @@
     const { password, passwordError } = state.elements;
     if (!password) return true;
     const value = password.value;
-    if (!value) return setFieldError(password, passwordError, "Informe sua senha.");
-    if (value.length < 8) return setFieldError(password, passwordError, "A senha precisa ter pelo menos 8 caracteres.");
+    if (!value)
+      return setFieldError(password, passwordError, "Informe sua senha.");
+    if (value.length < 8)
+      return setFieldError(
+        password,
+        passwordError,
+        "A senha precisa ter pelo menos 8 caracteres.",
+      );
     return setFieldError(password, passwordError, "");
   }
 
   function clearErrors() {
-    const { identifier, identifierError, password, passwordError } = state.elements;
+    const { identifier, identifierError, password, passwordError } =
+      state.elements;
     setFieldError(identifier, identifierError, "");
     setFieldError(password, passwordError, "");
   }
@@ -207,7 +252,10 @@
       warning.id = "capsLockWarning";
       warning.className = "caps-lock-warning";
       warning.textContent = "Caps Lock ativado";
-      const container = password.closest(".input-wrapper") || password.parentElement || password;
+      const container =
+        password.closest(".input-wrapper") ||
+        password.parentElement ||
+        password;
       container.appendChild(warning);
     }
     state.elements.capsWarning = warning;
@@ -228,7 +276,11 @@
     form.classList.remove("is-shaking");
     void form.offsetWidth;
     form.classList.add("is-shaking");
-    form.addEventListener("animationend", () => form.classList.remove("is-shaking"), { once: true });
+    form.addEventListener(
+      "animationend",
+      () => form.classList.remove("is-shaking"),
+      { once: true },
+    );
   }
 
   function rememberCredentials(identifierValue, remember) {
@@ -263,18 +315,20 @@
   function navigateWithFeedback(url, message) {
     if (isMobile()) {
       showToast(message, "info");
-      setTimeout(() => { window.location.href = url; }, 800);
+      setTimeout(() => {
+        window.location.href = url;
+      }, 800);
     } else {
       window.location.href = url;
     }
   }
 
   function setupLinkShortcuts() {
-    linkShortcuts.forEach(link => {
+    linkShortcuts.forEach((link) => {
       const node = document.querySelector(link.selector);
       if (!node || node.dataset.bound) return;
       node.dataset.bound = "true";
-      node.addEventListener("click", event => {
+      node.addEventListener("click", (event) => {
         event.preventDefault();
         navigateWithFeedback(link.url, link.message);
       });
@@ -283,25 +337,46 @@
 
   function bindTouchFeedback() {
     if (!("ontouchstart" in window)) return;
-    const touchables = document.querySelectorAll(".login-button, .password-toggle, .checkbox-container, .forgot-password, .personal-login-link, .nav-link, .nav-toggle");
-    touchables.forEach(node => {
+    const touchables = document.querySelectorAll(
+      ".login-button, .password-toggle, .checkbox-container, .forgot-password, .personal-login-link, .nav-link, .nav-toggle",
+    );
+    touchables.forEach((node) => {
       if (node.dataset.touchBound) return;
       node.dataset.touchBound = "true";
-      node.addEventListener("touchstart", () => {
-        node.classList.add("is-pressed");
-        if (navigator.vibrate && node.matches(".login-button, .nav-toggle")) navigator.vibrate(40);
-      }, { passive: true });
+      node.addEventListener(
+        "touchstart",
+        () => {
+          node.classList.add("is-pressed");
+          if (navigator.vibrate && node.matches(".login-button, .nav-toggle"))
+            navigator.vibrate(40);
+        },
+        { passive: true },
+      );
       const reset = () => node.classList.remove("is-pressed");
       node.addEventListener("touchend", () => setTimeout(reset, 120));
       node.addEventListener("touchcancel", reset);
     });
     const inputs = document.querySelectorAll("input");
     const viewport = document.querySelector('meta[name="viewport"]');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       if (input.dataset.viewportBound || !viewport) return;
       input.dataset.viewportBound = "true";
-      input.addEventListener("focus", () => viewport.setAttribute("content", "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"));
-      input.addEventListener("blur", () => setTimeout(() => viewport.setAttribute("content", "width=device-width, initial-scale=1"), 250));
+      input.addEventListener("focus", () =>
+        viewport.setAttribute(
+          "content",
+          "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+        ),
+      );
+      input.addEventListener("blur", () =>
+        setTimeout(
+          () =>
+            viewport.setAttribute(
+              "content",
+              "width=device-width, initial-scale=1",
+            ),
+          250,
+        ),
+      );
     });
   }
 
@@ -323,24 +398,32 @@
 
     setButtonState("loading");
 
-    MapsAuth.login({ identifier: identifierValue, password: passwordValue, type: "business" })
+    MapsAuth.login({
+      identifier: identifierValue,
+      password: passwordValue,
+      type: "business",
+    })
       .then(() => {
-    
-        const fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
+        const fakeJwt =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
         localStorage.setItem("jwt_token", fakeJwt);
-        
+
         rememberCredentials(identifierValue, rememberChoice);
         setButtonState("success");
         showToast("Login realizado com sucesso!", "success", 2200);
         setTimeout(() => {
           const redirect = state.elements.form?.getAttribute("data-redirect");
-          window.location.href = redirect && redirect.trim() ? redirect.trim() : "perfilempresa.html";
+          window.location.href =
+            redirect && redirect.trim()
+              ? redirect.trim()
+              : "perfilempresa.html";
         }, 1200);
       })
-      .catch(error => {
-        const message = error?.message === "INVALID"
-          ? "E-mail/CNPJ ou senha incorretos."
-          : (error?.message || "Não foi possível entrar. Tente novamente.");
+      .catch((error) => {
+        const message =
+          error?.message === "INVALID"
+            ? "E-mail/CNPJ ou senha incorretos."
+            : error?.message || "Não foi possível entrar. Tente novamente.";
         setButtonState("error");
         showToast(message, "error", 3200);
         resetButtonWithDelay(3200);
@@ -359,12 +442,22 @@
       remember: document.getElementById("rememberMe"),
       identifierError: document.getElementById("emailOrCnpjError"),
       passwordError: document.getElementById("passwordError"),
-      identifierIcon: document.querySelector("[data-identifier-icon]") || document.querySelector("#emailOrCnpj + .input-icon") || document.querySelector(".input-icon"),
+      identifierIcon:
+        document.querySelector("[data-identifier-icon]") ||
+        document.querySelector("#emailOrCnpj + .input-icon") ||
+        document.querySelector(".input-icon"),
       originalButtonHtml: null,
-      capsWarning: null
+      capsWarning: null,
     };
 
-    if (!elements.form || !elements.identifier || !elements.password || !elements.toggle || !elements.button) return;
+    if (
+      !elements.form ||
+      !elements.identifier ||
+      !elements.password ||
+      !elements.toggle ||
+      !elements.button
+    )
+      return;
 
     elements.originalButtonHtml = elements.button.innerHTML;
     state.elements = elements;
@@ -378,7 +471,10 @@
       elements.password.type = willShow ? "text" : "password";
       const icon = elements.toggle.querySelector("i");
       if (icon) icon.className = willShow ? "ri-eye-off-line" : "ri-eye-line";
-      elements.toggle.setAttribute("aria-label", willShow ? "Ocultar senha" : "Mostrar senha");
+      elements.toggle.setAttribute(
+        "aria-label",
+        willShow ? "Ocultar senha" : "Mostrar senha",
+      );
       elements.toggle.setAttribute("aria-pressed", String(willShow));
     });
 
@@ -386,12 +482,15 @@
       if (state.identifierType === "cnpj") {
         const cursor = elements.identifier.selectionStart;
         elements.identifier.value = formatCnpj(elements.identifier.value);
-        try { elements.identifier.setSelectionRange(cursor, cursor); } catch {}
+        try {
+          elements.identifier.setSelectionRange(cursor, cursor);
+        } catch {}
       }
       const nextType = detectIdentifierType(elements.identifier.value);
       if (nextType !== state.identifierType) {
         state.identifierType = nextType;
-        if (state.identifierType === "cnpj") elements.identifier.value = formatCnpj(elements.identifier.value);
+        if (state.identifierType === "cnpj")
+          elements.identifier.value = formatCnpj(elements.identifier.value);
         setIdentifierIcon(state.identifierType);
       }
       validateIdentifier();
@@ -400,7 +499,7 @@
     elements.identifier.addEventListener("blur", validateIdentifier);
 
     elements.password.addEventListener("input", validatePassword);
-    elements.password.addEventListener("keyup", event => {
+    elements.password.addEventListener("keyup", (event) => {
       if (!event.getModifierState) return;
       updateCapsWarning(event.getModifierState("CapsLock"));
     });
@@ -422,12 +521,11 @@
     init();
   }
 
- 
-  window.logoutEmpresa = function() {
+  window.logoutEmpresa = function () {
     localStorage.removeItem("jwt_token");
     window.location.href = "loginempresa.html";
   };
 
   window.LoginEmpresa = { init };
-  window.showMobileAlert = message => showToast(message, "info");
+  window.showMobileAlert = (message) => showToast(message, "info");
 })();

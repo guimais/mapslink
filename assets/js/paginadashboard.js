@@ -1,13 +1,15 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginempresa.html";}
+  window.location.href = "loginempresa.html";
+}
 
 (() => {
   if (window.__ml_dashboard_init__) return;
   window.__ml_dashboard_init__ = true;
 
   const JOBS_STORAGE = "mapslink:vagas";
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const { normalizeText } = window.MapsUtils || {};
   const DEFAULT_STATS = {
     accepted: 0,
@@ -15,22 +17,22 @@ if (!token) {
     received: 0,
     reviewing: 0,
     interviews: 0,
-    closed: 0
+    closed: 0,
   };
   const BAR_ITEMS = [
     { key: "received", label: "Recebidos" },
     { key: "accepted", label: "Aceitos" },
-    { key: "reviewing", label: "Em análise" }
+    { key: "reviewing", label: "Em análise" },
   ];
   const DONUT_ITEMS = [
     { key: "reviewing", label: "Em análise", color: "#a5b4fc" },
     { key: "open", label: "Aberta", color: "#1e90ff" },
-    { key: "closed", label: "Fechada", color: "#ef4444" }
+    { key: "closed", label: "Fechada", color: "#ef4444" },
   ];
   const COLORS = {
     brand: getToken("--brand", "#102569"),
     muted: getToken("--muted", "#475569"),
-    bar: "#1e90ff"
+    bar: "#1e90ff",
   };
   const numberFormatter = new Intl.NumberFormat("pt-BR");
   const TEXT_NODE = typeof Node !== "undefined" ? Node.TEXT_NODE : 3;
@@ -39,11 +41,13 @@ if (!token) {
     stats: { ...DEFAULT_STATS },
     owner: null,
     barData: [],
-    donutData: []
+    donutData: [],
   };
 
   function getToken(name, fallback) {
-    const value = getComputedStyle(document.documentElement).getPropertyValue(name);
+    const value = getComputedStyle(document.documentElement).getPropertyValue(
+      name,
+    );
     return value && value.trim() ? value.trim() : fallback;
   }
 
@@ -72,11 +76,12 @@ if (!token) {
       (summary, job) => {
         const status = normalizeText(job?.status || "aberta");
         if (status.includes("fech")) summary.closed += 1;
-        else if (status.includes("analise") || status.includes("andamento")) summary.reviewing += 1;
+        else if (status.includes("analise") || status.includes("andamento"))
+          summary.reviewing += 1;
         else summary.open += 1;
         return summary;
       },
-      { open: 0, reviewing: 0, closed: 0 }
+      { open: 0, reviewing: 0, closed: 0 },
     );
   }
 
@@ -91,7 +96,7 @@ if (!token) {
   }
 
   function updateStatNodes() {
-    document.querySelectorAll("[data-stat]").forEach(node => {
+    document.querySelectorAll("[data-stat]").forEach((node) => {
       const key = node.dataset.stat;
       const value = state.stats[key] ?? 0;
       node.textContent = numberFormatter.format(value);
@@ -99,14 +104,14 @@ if (!token) {
   }
 
   function buildDatasets() {
-    state.barData = BAR_ITEMS.map(item => ({
-      label: item.label,
-      value: state.stats[item.key] || 0
-    }));
-    state.donutData = DONUT_ITEMS.map(item => ({
+    state.barData = BAR_ITEMS.map((item) => ({
       label: item.label,
       value: state.stats[item.key] || 0,
-      color: item.color
+    }));
+    state.donutData = DONUT_ITEMS.map((item) => ({
+      label: item.label,
+      value: state.stats[item.key] || 0,
+      color: item.color,
     }));
   }
 
@@ -116,10 +121,13 @@ if (!token) {
   }
 
   function toggleFallback(canvas, show, message) {
-    const fallback = canvas?.closest(".chart-box")?.querySelector(".chart-fallback");
+    const fallback = canvas
+      ?.closest(".chart-box")
+      ?.querySelector(".chart-fallback");
     if (!fallback) return;
     if (show) {
-      fallback.textContent = message || "Sem dados suficientes para exibir o gráfico.";
+      fallback.textContent =
+        message || "Sem dados suficientes para exibir o gráfico.";
       fallback.style.display = "block";
       fallback.setAttribute("aria-hidden", "false");
     } else {
@@ -140,7 +148,9 @@ if (!token) {
       const value = Number(segment.value) || 0;
       const percent = total > 0 ? Math.round((value / total) * 100) : 0;
       const text = ` ${segment.label} - ${value} (${percent}%)`;
-      const textNode = Array.from(item.childNodes).find(node => node.nodeType === TEXT_NODE);
+      const textNode = Array.from(item.childNodes).find(
+        (node) => node.nodeType === TEXT_NODE,
+      );
       if (textNode) textNode.textContent = text;
       else item.append(document.createTextNode(text));
     });
@@ -151,9 +161,17 @@ if (!token) {
     const title = parent?.querySelector(".chart-title");
     const padding = 18;
     const minHeight = 260;
-    const height = parent ? Math.max(minHeight, parent.clientHeight - (title?.offsetHeight || 0) - padding * 2) : minHeight;
+    const height = parent
+      ? Math.max(
+          minHeight,
+          parent.clientHeight - (title?.offsetHeight || 0) - padding * 2,
+        )
+      : minHeight;
     const rect = canvas.getBoundingClientRect();
-    const cssWidth = Math.max(320, Math.floor(rect.width || parent?.clientWidth || 320));
+    const cssWidth = Math.max(
+      320,
+      Math.floor(rect.width || parent?.clientWidth || 320),
+    );
     return { width: cssWidth, height };
   }
 
@@ -164,11 +182,23 @@ if (!token) {
     const title = box?.querySelector(".chart-title");
     const padding = 18;
     const minHeight = 240;
-    const baseHeight = box ? Math.max(minHeight, box.clientHeight - (title?.offsetHeight || 0) - padding * 2) : minHeight;
-    const baseWidth = group?.getBoundingClientRect().width || canvas.getBoundingClientRect().width || 260;
+    const baseHeight = box
+      ? Math.max(
+          minHeight,
+          box.clientHeight - (title?.offsetHeight || 0) - padding * 2,
+        )
+      : minHeight;
+    const baseWidth =
+      group?.getBoundingClientRect().width ||
+      canvas.getBoundingClientRect().width ||
+      260;
     const legendWidth = legend?.getBoundingClientRect().width || 0;
-    const maxLegend = legendWidth && legendWidth < baseWidth * 0.6 ? legendWidth : 0;
-    return { width: Math.max(260, Math.floor(baseWidth - maxLegend - 24)), height: baseHeight };
+    const maxLegend =
+      legendWidth && legendWidth < baseWidth * 0.6 ? legendWidth : 0;
+    return {
+      width: Math.max(260, Math.floor(baseWidth - maxLegend - 24)),
+      height: baseHeight,
+    };
   }
 
   function configureCanvas(canvas, size) {
@@ -197,8 +227,15 @@ if (!token) {
 
   function drawBarChart(canvas, data) {
     if (!canvas) return;
-    const total = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
-    toggleFallback(canvas, total <= 0, "Cadastre currículos para visualizar este gráfico.");
+    const total = data.reduce(
+      (sum, item) => sum + (Number(item.value) || 0),
+      0,
+    );
+    toggleFallback(
+      canvas,
+      total <= 0,
+      "Cadastre currículos para visualizar este gráfico.",
+    );
     if (total <= 0) {
       configureCanvas(canvas, measureBarCanvas(canvas));
       return;
@@ -211,11 +248,12 @@ if (!token) {
     const margin = { top: 12, right: 24, bottom: 56, left: 44 };
     const innerWidth = size.width - margin.left - margin.right;
     const innerHeight = size.height - margin.top - margin.bottom;
-    const values = data.map(item => Number(item.value) || 0);
+    const values = data.map((item) => Number(item.value) || 0);
     const maxValue = Math.max(...values);
     const yMax = Math.max(4, Math.ceil(maxValue / 4) * 4);
     const step = yMax / 4;
-    const scaleY = value => margin.top + innerHeight - (value / yMax) * innerHeight;
+    const scaleY = (value) =>
+      margin.top + innerHeight - (value / yMax) * innerHeight;
 
     ctx.strokeStyle = "rgba(0,0,0,0.12)";
     ctx.lineWidth = 1;
@@ -268,10 +306,15 @@ if (!token) {
 
   function drawDonutChart(canvas, data) {
     if (!canvas) return;
-    const total = data.reduce((sum, item) => sum + (Number(item.value) || 0), 0);
+    const total = data.reduce(
+      (sum, item) => sum + (Number(item.value) || 0),
+      0,
+    );
     toggleFallback(canvas, total <= 0, "Abra vagas para gerar este gráfico.");
 
-    const legend = canvas.closest(".chart-with-legend")?.querySelector(".chart-legend");
+    const legend = canvas
+      .closest(".chart-with-legend")
+      ?.querySelector(".chart-legend");
     updateLegend(legend, data, total);
     if (total <= 0) {
       configureCanvas(canvas, measureDonutCanvas(canvas));
@@ -295,7 +338,7 @@ if (!token) {
     ctx.stroke();
 
     let start = -Math.PI / 2;
-    data.forEach(segment => {
+    data.forEach((segment) => {
       const value = Number(segment.value) || 0;
       if (!value) return;
       const slice = (value / total) * Math.PI * 2;
@@ -347,19 +390,55 @@ if (!token) {
 
   function deriveStats(session) {
     const profile = session?.profile || {};
-    const metrics = (profile.dashboard && typeof profile.dashboard === "object" ? profile.dashboard : null) || profile.metrics || {};
+    const metrics =
+      (profile.dashboard && typeof profile.dashboard === "object"
+        ? profile.dashboard
+        : null) ||
+      profile.metrics ||
+      {};
     const stats = { ...DEFAULT_STATS };
-    stats.accepted = pick(metrics, profile, "accepted", "curriculosAceitos", "aceitos");
+    stats.accepted = pick(
+      metrics,
+      profile,
+      "accepted",
+      "curriculosAceitos",
+      "aceitos",
+    );
     stats.open = pick(metrics, profile, "open", "vagasAbertas", "abertas");
-    stats.received = pick(metrics, profile, "received", "curriculos", "curriculosRecebidos");
-    stats.reviewing = pick(metrics, profile, "reviewing", "emAnalise", "analise");
-    stats.interviews = pick(metrics, profile, "interviews", "entrevistas", "agendaToday");
-    stats.closed = pick(metrics, profile, "closed", "vagasFechadas", "fechadas");
+    stats.received = pick(
+      metrics,
+      profile,
+      "received",
+      "curriculos",
+      "curriculosRecebidos",
+    );
+    stats.reviewing = pick(
+      metrics,
+      profile,
+      "reviewing",
+      "emAnalise",
+      "analise",
+    );
+    stats.interviews = pick(
+      metrics,
+      profile,
+      "interviews",
+      "entrevistas",
+      "agendaToday",
+    );
+    stats.closed = pick(
+      metrics,
+      profile,
+      "closed",
+      "vagasFechadas",
+      "fechadas",
+    );
 
     const owner = session?.id || null;
     const summary = summarizeJobs(loadJobs(owner));
     if (!stats.open && summary.open) stats.open = summary.open;
-    if (!stats.reviewing && summary.reviewing) stats.reviewing = summary.reviewing;
+    if (!stats.reviewing && summary.reviewing)
+      stats.reviewing = summary.reviewing;
     if (!stats.closed && summary.closed) stats.closed = summary.closed;
 
     const derivedTotal = stats.accepted + stats.reviewing + stats.closed;
@@ -427,7 +506,7 @@ if (!token) {
       },
       setAvatar(src) {
         applyAvatar(src || "");
-      }
+      },
     });
   }
 

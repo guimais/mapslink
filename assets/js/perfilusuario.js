@@ -1,13 +1,20 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginpessoal.html"; 
+  window.location.href = "loginpessoal.html";
 }
 
 (() => {
   if (window.__ml_perfilusuario_init__) return;
   window.__ml_perfilusuario_init__ = true;
 
-  const sectionIds = ["#home", "#planos", "#maps", "#profile", "#about", "#contact"];
+  const sectionIds = [
+    "#home",
+    "#planos",
+    "#maps",
+    "#profile",
+    "#about",
+    "#contact",
+  ];
 
   const selectors = {
     header: ".nav-container",
@@ -23,17 +30,19 @@ if (!token) {
     avatarWrapper: ".perfil-hero-avatar",
     revealTargets: ".card, .bloco, .curriculo-card",
     cards: ".card",
-    miniCards: ".curriculo-experiencias li"
+    miniCards: ".curriculo-experiencias li",
   };
 
   const CV_STORAGE_KEY = "mapslink:perfil:curriculo_pdf";
   const CV_MAX_SIZE = 5 * 1024 * 1024;
 
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
   function valueToString(value) {
     if (value === 0) return "0";
-    if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    if (typeof value === "number" && Number.isFinite(value))
+      return String(value);
     if (!value) return "";
     return String(value).trim();
   }
@@ -63,12 +72,14 @@ if (!token) {
     if (!node) return;
     const items = Array.isArray(values)
       ? values
-          .map(item => (typeof item === "string" ? item.trim() : item))
-          .filter(item => item || item === 0)
+          .map((item) => (typeof item === "string" ? item.trim() : item))
+          .filter((item) => item || item === 0)
       : [];
     if (!items.length) {
       const placeholder = node.dataset?.placeholder || "";
-      node.innerHTML = placeholder ? `<li class="placeholder-item">${placeholder}</li>` : "";
+      node.innerHTML = placeholder
+        ? `<li class="placeholder-item">${placeholder}</li>`
+        : "";
       node.dataset.empty = "true";
       if (node.classList) {
         node.classList.add("is-empty");
@@ -97,7 +108,7 @@ if (!token) {
   const state = {
     navLinks: [],
     sections: [],
-    toast: null
+    toast: null,
   };
 
   function query(selector, root) {
@@ -159,14 +170,14 @@ if (!token) {
 
   function setupNav() {
     state.navLinks = navLinks();
-    state.sections = sectionIds.map(id => query(id)).filter(Boolean);
+    state.sections = sectionIds.map((id) => query(id)).filter(Boolean);
 
     state.navLinks
-      .filter(link => (link.getAttribute("href") || "").startsWith("#"))
-      .forEach(link => {
+      .filter((link) => (link.getAttribute("href") || "").startsWith("#"))
+      .forEach((link) => {
         if (link.dataset.bound) return;
         link.dataset.bound = "true";
-        link.addEventListener("click", event => {
+        link.addEventListener("click", (event) => {
           const hash = link.getAttribute("href");
           const target = hash ? document.querySelector(hash) : null;
           if (!target) return;
@@ -182,39 +193,53 @@ if (!token) {
       return;
     }
 
-    const sectionLinks = state.navLinks.filter(link => (link.getAttribute("href") || "").startsWith("#"));
+    const sectionLinks = state.navLinks.filter((link) =>
+      (link.getAttribute("href") || "").startsWith("#"),
+    );
     if (!sectionLinks.length) {
       markActiveLink();
       return;
     }
 
-    const map = new Map(sectionLinks.map(link => [link.getAttribute("href"), link]));
+    const map = new Map(
+      sectionLinks.map((link) => [link.getAttribute("href"), link]),
+    );
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const id = `#${entry.target.id}`;
-        if (highlightNav(id)) return;
-        sectionLinks.forEach(link => link.classList.remove("active"));
-        map.get(id)?.classList.add("active");
-      });
-    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const id = `#${entry.target.id}`;
+          if (highlightNav(id)) return;
+          sectionLinks.forEach((link) => link.classList.remove("active"));
+          map.get(id)?.classList.add("active");
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0.01 },
+    );
 
-    state.sections.forEach(section => observer.observe(section));
+    state.sections.forEach((section) => observer.observe(section));
 
-    const start = location.hash && map.get(location.hash) ? location.hash : "#profile";
+    const start =
+      location.hash && map.get(location.hash) ? location.hash : "#profile";
     if (!highlightNav(start)) map.get(start)?.classList.add("active");
   }
 
   function markActiveLink() {
-    const path = (location.pathname.split("/").pop() || "index.html").split("?")[0];
-    const activeKey = (document.body?.dataset?.navActive || "").trim().toLowerCase();
+    const path = (location.pathname.split("/").pop() || "index.html").split(
+      "?",
+    )[0];
+    const activeKey = (document.body?.dataset?.navActive || "")
+      .trim()
+      .toLowerCase();
     if (highlightNav(path)) return;
-    state.navLinks.forEach(link => {
+    state.navLinks.forEach((link) => {
       const hrefRaw = (link.getAttribute("href") || "").split("?")[0];
       if (!hrefRaw || hrefRaw.startsWith("#")) return;
       const href = hrefRaw.split("/").pop();
-      const key = (link.dataset?.navKey || link.textContent || "").trim().toLowerCase();
+      const key = (link.dataset?.navKey || link.textContent || "")
+        .trim()
+        .toLowerCase();
       const match = href === path || (activeKey && key === activeKey);
       link.classList.toggle("active", match);
       if (match) {
@@ -245,12 +270,12 @@ if (!token) {
         opacity: "0",
         pointerEvents: "none",
         transition: "opacity .2s ease",
-        zIndex: "9999"
+        zIndex: "9999",
       });
       document.body.appendChild(element);
     }
     let timer;
-    return message => {
+    return (message) => {
       clearTimeout(timer);
       element.textContent = message;
       element.style.opacity = "1";
@@ -282,7 +307,7 @@ if (!token) {
         day: "2-digit",
         month: "short",
         hour: "2-digit",
-        minute: "2-digit"
+        minute: "2-digit",
       }).format(new Date(timestamp));
     } catch {
       return "";
@@ -322,7 +347,8 @@ if (!token) {
   }
 
   function dataUrlToBlob(dataUrl) {
-    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) return null;
+    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:"))
+      return null;
     const [meta, content] = dataUrl.split(",");
     if (!content) return null;
     try {
@@ -381,15 +407,18 @@ if (!token) {
       input.click();
     });
 
-    change?.addEventListener("click", event => {
+    change?.addEventListener("click", (event) => {
       event.preventDefault();
       input.click();
     });
 
-    remove?.addEventListener("click", event => {
+    remove?.addEventListener("click", (event) => {
       event.preventDefault();
       if (!cached?.dataUrl) return;
-      const confirmed = typeof window.confirm === "function" ? window.confirm("Remover o currículo salvo?") : true;
+      const confirmed =
+        typeof window.confirm === "function"
+          ? window.confirm("Remover o currículo salvo?")
+          : true;
       if (!confirmed) return;
       if (!clearStoredCv()) return;
       cached = null;
@@ -397,11 +426,15 @@ if (!token) {
       state.toast?.("Currículo removido.");
     });
 
-    input.addEventListener("change", event => {
+    input.addEventListener("change", (event) => {
       const file = event.target?.files?.[0];
       input.value = "";
       if (!file) return;
-      if (file.type && file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      if (
+        file.type &&
+        file.type !== "application/pdf" &&
+        !file.name.toLowerCase().endsWith(".pdf")
+      ) {
         state.toast?.("Envie um arquivo em PDF.");
         return;
       }
@@ -419,7 +452,7 @@ if (!token) {
           name: file.name,
           size: file.size,
           updatedAt: Date.now(),
-          dataUrl: reader.result
+          dataUrl: reader.result,
         };
         if (!saveStoredCv(payload)) return;
         cached = payload;
@@ -435,7 +468,9 @@ if (!token) {
       trigger.setAttribute("data-has-file", hasFile ? "true" : "false");
       trigger.setAttribute(
         "aria-label",
-        hasFile ? "Abrir currículo salvo em nova guia" : "Enviar currículo em PDF"
+        hasFile
+          ? "Abrir currículo salvo em nova guia"
+          : "Enviar currículo em PDF",
       );
       if (meta) {
         meta.hidden = !hasFile;
@@ -467,34 +502,51 @@ if (!token) {
     const skillList = Array.isArray(profile.skills)
       ? profile.skills
       : typeof profile.skills === "string"
-        ? profile.skills.split(",").map(item => item.trim()).filter(Boolean)
+        ? profile.skills
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean)
         : [];
-    setList(query(selectors.heroTags), skillList, skill => `<li>${skill}</li>`);
+    setList(
+      query(selectors.heroTags),
+      skillList,
+      (skill) => `<li>${skill}</li>`,
+    );
     const metaValues = queryAll(selectors.metaValues);
     [
       profile.specialty,
       profile.location,
       profile.experience,
-      profile.availability
+      profile.availability,
     ].forEach((value, index) => setText(metaValues[index], value));
     setText(query(selectors.bio), profile.bio);
     setText(query(selectors.status), profile.interviewsToday ?? "");
     const contact = profile.contact || {};
-    const contacts = [contact.instagram, contact.linkedin, contact.email, contact.phone];
-    queryAll(selectors.contacts).forEach((node, index) => setText(node, contacts[index]));
+    const contacts = [
+      contact.instagram,
+      contact.linkedin,
+      contact.email,
+      contact.phone,
+    ];
+    queryAll(selectors.contacts).forEach((node, index) =>
+      setText(node, contacts[index]),
+    );
     const list = query(selectors.experiences);
     if (list) {
       const experiences = Array.isArray(profile.experiences)
-        ? profile.experiences.map(item => String(item).trim()).filter(Boolean)
+        ? profile.experiences.map((item) => String(item).trim()).filter(Boolean)
         : [];
       if (!experiences.length) {
         const placeholder = list.dataset?.placeholder || "";
-        list.innerHTML = placeholder ? `<li class="placeholder-item">${placeholder}</li>` : "";
+        list.innerHTML = placeholder
+          ? `<li class="placeholder-item">${placeholder}</li>`
+          : "";
         list.dataset.empty = "true";
-        if (list.classList) list.classList.toggle("is-placeholder", !!placeholder);
+        if (list.classList)
+          list.classList.toggle("is-placeholder", !!placeholder);
       } else {
         list.innerHTML = experiences
-          .map(item => {
+          .map((item) => {
             const [role, ...rest] = item.split(" - ");
             const title = role.trim();
             const detail = rest.join(" - ").trim();
@@ -521,7 +573,10 @@ if (!token) {
               : parsed
             : null;
         if (!payload || typeof payload !== "object") continue;
-        const profile = payload.profile && typeof payload.profile === "object" ? payload.profile : payload;
+        const profile =
+          payload.profile && typeof payload.profile === "object"
+            ? payload.profile
+            : payload;
         const name = payload.name || "";
         hydrateFromAuth({ type: "personal", name, profile });
         return;
@@ -533,10 +588,10 @@ if (!token) {
 
   function bindContactCopies() {
     const links = queryAll(selectors.contactLinks);
-    links.forEach(link => {
+    links.forEach((link) => {
       if (link.dataset.copyBound) return;
       link.dataset.copyBound = "true";
-      link.addEventListener("click", async event => {
+      link.addEventListener("click", async (event) => {
         const href = link.getAttribute("href") || "";
         const text = (() => {
           if (href.startsWith("mailto:")) return href.replace(/^mailto:/, "");
@@ -560,24 +615,27 @@ if (!token) {
   function setupReveal() {
     const nodes = queryAll(selectors.revealTargets);
     if (!nodes.length) return;
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       node.style.opacity = "0";
       node.style.transform = "translateY(8px)";
       node.style.transition = "opacity .35s ease, transform .35s ease";
     });
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
-        obs.unobserve(entry.target);
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    nodes.forEach(node => observer.observe(node));
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.style.opacity = "1";
+          entry.target.style.transform = "translateY(0)";
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+    nodes.forEach((node) => observer.observe(node));
   }
 
   function setupShortcuts() {
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
       if (event.altKey && event.key.toLowerCase() === "m") {
         event.preventDefault();
         toggleMenu();
@@ -609,37 +667,44 @@ if (!token) {
         ".js-card-init{opacity:0;transform:translateY(14px);}",
         ".js-card-in{opacity:1;transform:translateY(0);}",
         ".js-card-in.js-card-elevate:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.08)!important;}",
-        ".js-card-pressed{transform:translateY(0) scale(.995)!important;}"
-      ].join("")
+        ".js-card-pressed{transform:translateY(0) scale(.995)!important;}",
+      ].join(""),
     );
 
     const cards = queryAll(selectors.cards);
     if (!cards.length) return;
     const reduced = prefersReducedMotion();
 
-    cards.forEach(card => {
+    cards.forEach((card) => {
       if (card.dataset.cardBound) return;
       card.dataset.cardBound = "true";
       card.classList.add("js-card-hover", "js-card-elevate");
       if (!reduced) card.classList.add("js-card-init");
-      card.addEventListener("pointerdown", () => card.classList.add("js-card-pressed"));
-      ["pointerup", "pointercancel", "pointerleave"].forEach(evt => {
-        card.addEventListener(evt, () => card.classList.remove("js-card-pressed"));
+      card.addEventListener("pointerdown", () =>
+        card.classList.add("js-card-pressed"),
+      );
+      ["pointerup", "pointercancel", "pointerleave"].forEach((evt) => {
+        card.addEventListener(evt, () =>
+          card.classList.remove("js-card-pressed"),
+        );
       });
     });
 
     if (reduced) return;
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("js-card-in");
-        entry.target.classList.remove("js-card-init");
-        obs.unobserve(entry.target);
-      });
-    }, { threshold: 0.15, rootMargin: "0px 0px -10% 0px" });
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("js-card-in");
+          entry.target.classList.remove("js-card-init");
+          obs.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+    );
 
-    cards.forEach(card => observer.observe(card));
+    cards.forEach((card) => observer.observe(card));
   }
 
   function initMiniAnimations() {
@@ -651,8 +716,8 @@ if (!token) {
         ".js-mini-init{opacity:0;transform:translateX(12px);}",
         ".js-mini-in{opacity:1;transform:none;}",
         ".js-mini:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.22);}",
-        ".js-mini-press{transform:translateY(0) scale(.995)!important;}"
-      ].join("")
+        ".js-mini-press{transform:translateY(0) scale(.995)!important;}",
+      ].join(""),
     );
 
     const items = queryAll(selectors.miniCards);
@@ -665,33 +730,46 @@ if (!token) {
       item.dataset.idx = String(index);
       item.classList.add("js-mini", "js-mini-light");
       if (!reduced) item.classList.add("js-mini-init");
-      item.addEventListener("pointermove", event => {
+      item.addEventListener("pointermove", (event) => {
         const rect = item.getBoundingClientRect();
-        item.style.setProperty("--mx", `${Math.round(event.clientX - rect.left)}px`);
-        item.style.setProperty("--my", `${Math.round(event.clientY - rect.top)}px`);
+        item.style.setProperty(
+          "--mx",
+          `${Math.round(event.clientX - rect.left)}px`,
+        );
+        item.style.setProperty(
+          "--my",
+          `${Math.round(event.clientY - rect.top)}px`,
+        );
       });
-      item.addEventListener("pointerdown", () => item.classList.add("js-mini-press"));
-      ["pointerup", "pointercancel", "pointerleave"].forEach(evt => {
-        item.addEventListener(evt, () => item.classList.remove("js-mini-press"));
+      item.addEventListener("pointerdown", () =>
+        item.classList.add("js-mini-press"),
+      );
+      ["pointerup", "pointercancel", "pointerleave"].forEach((evt) => {
+        item.addEventListener(evt, () =>
+          item.classList.remove("js-mini-press"),
+        );
       });
     });
 
     if (reduced) return;
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const delay = (parseInt(el.dataset.idx || "0", 10) % 8) * 70;
-        setTimeout(() => {
-          el.classList.add("js-mini-in");
-          el.classList.remove("js-mini-init");
-        }, delay);
-        obs.unobserve(el);
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const delay = (parseInt(el.dataset.idx || "0", 10) % 8) * 70;
+          setTimeout(() => {
+            el.classList.add("js-mini-in");
+            el.classList.remove("js-mini-init");
+          }, delay);
+          obs.unobserve(el);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" },
+    );
 
-    items.forEach(item => observer.observe(item));
+    items.forEach((item) => observer.observe(item));
   }
 
   function initAuth() {

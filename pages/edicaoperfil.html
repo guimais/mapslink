@@ -1,16 +1,68 @@
 ﻿<!doctype html>
 <html lang="pt-br">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="../manifest.json">
-    <link href="../assets/css/main.css" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
-    <meta name="description" content="Atualize os dados do seu perfil de usuario ou empresa no Maps Link.">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102569" />
+    <link rel="manifest" href="../manifest.json" />
+    <link href="../assets/css/main.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../assets/images/logo-icon-192.png"
+    />
+    <meta
+      name="description"
+      content="Atualize os dados do seu perfil de usuario ou empresa no Maps Link."
+    />
+    <!-- SEO -->
+    <link rel="canonical" href="https://mapslink.app/pages/edicaoperfil.html" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="MapsLink" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MapsLink" />
+    <meta property="og:title" content="Maps Link - Edição de Perfil" />
+    <meta
+      property="og:description"
+      content="Atualize os dados do seu perfil de usuario ou empresa no Maps Link."
+    />
+    <meta
+      property="og:url"
+      content="https://mapslink.app/pages/edicaoperfil.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Maps Link - Edição de Perfil" />
+    <meta
+      name="twitter:description"
+      content="Atualize os dados do seu perfil de usuario ou empresa no Maps Link."
+    />
+    <meta
+      name="twitter:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Maps Link - Edi\u00e7\u00e3o de Perfil",
+        "description": "Atualize os dados do seu perfil de usuario ou empresa no Maps Link.",
+        "url": "https://mapslink.app/pages/edicaoperfil.html",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
     <title>Maps Link - Edição de Perfil</title>
-    <link rel="stylesheet" href="../assets/css/edicaoperfil.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="../assets/css/edicaoperfil.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    />
     <script defer src="../assets/js/main.js"></script>
     <script defer src="../assets/js/edicaoperfil.js"></script>
   </head>
@@ -24,11 +76,16 @@
           </a>
           <h1 id="titulo-edicao">Edição de perfil</h1>
           <p>
-            Atualize rapidamente os dados principais do seu perfil como candidato ou empresa para manter as informações sempre em dia.
+            Atualize rapidamente os dados principais do seu perfil como
+            candidato ou empresa para manter as informações sempre em dia.
           </p>
         </div>
         <nav class="edicao-mode-switch" aria-label="Alternar edição de perfil">
-          <a class="edicao-mode-link is-active" href="edicaoperfil.html" aria-current="page">
+          <a
+            class="edicao-mode-link is-active"
+            href="edicaoperfil.html"
+            aria-current="page"
+          >
             Perfil do usuário
           </a>
           <a class="edicao-mode-link" href="edicaoperfilempresa.html">
@@ -39,15 +96,47 @@
 
       <div class="edicao-layout">
         <section class="edicao-form-wrapper">
-          <form id="edicao-form-usuario" class="edicao-form is-active" data-edicao-form="usuario" data-storage-key="mapslink:perfil:usuario" role="tabpanel" aria-label="Formulário de edição do usuário" aria-hidden="false" novalidate>
+          <form
+            id="edicao-form-usuario"
+            class="edicao-form is-active"
+            data-edicao-form="usuario"
+            data-storage-key="mapslink:perfil:usuario"
+            role="tabpanel"
+            aria-label="Formulário de edição do usuário"
+            aria-hidden="false"
+            novalidate
+          >
             <div class="edicao-field edicao-field--avatar">
               <label for="usuario-avatar">Foto do perfil</label>
               <div class="edicao-avatar-control">
-                <img src="" alt="" data-avatar-preview class="edicao-avatar-preview">
+                <img
+                  src=""
+                  alt=""
+                  data-avatar-preview
+                  class="edicao-avatar-preview"
+                />
                 <div class="edicao-avatar-actions">
-                  <input id="usuario-avatar" type="file" accept="image/*" data-avatar-input hidden>
-                  <button type="button" class="edicao-avatar-upload" data-avatar-trigger>Trocar foto</button>
-                  <button type="button" class="edicao-avatar-remove" data-avatar-remove>Remover</button>
+                  <input
+                    id="usuario-avatar"
+                    type="file"
+                    accept="image/*"
+                    data-avatar-input
+                    hidden
+                  />
+                  <button
+                    type="button"
+                    class="edicao-avatar-upload"
+                    data-avatar-trigger
+                  >
+                    Trocar foto
+                  </button>
+                  <button
+                    type="button"
+                    class="edicao-avatar-remove"
+                    data-avatar-remove
+                  >
+                    Remover
+                  </button>
                 </div>
               </div>
             </div>
@@ -55,79 +144,187 @@
             <div class="edicao-field-grid">
               <div class="edicao-field">
                 <label for="usuario-nome">Nome completo</label>
-                <input id="usuario-nome" type="text" placeholder="Digite o nome completo" autocomplete="name" data-field="name" data-preview="name">
+                <input
+                  id="usuario-nome"
+                  type="text"
+                  placeholder="Digite o nome completo"
+                  autocomplete="name"
+                  data-field="name"
+                  data-preview="name"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-headline">Resumo profissional</label>
-                <input id="usuario-headline" type="text" placeholder="Apresente seu foco em uma frase" data-field="profile.headline" data-preview="headline">
+                <input
+                  id="usuario-headline"
+                  type="text"
+                  placeholder="Apresente seu foco em uma frase"
+                  data-field="profile.headline"
+                  data-preview="headline"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-especialidade">Especialidade</label>
-                <input id="usuario-especialidade" type="text" placeholder="Ex.: Engenharia Full Stack" data-field="profile.specialty" data-preview="specialty">
+                <input
+                  id="usuario-especialidade"
+                  type="text"
+                  placeholder="Ex.: Engenharia Full Stack"
+                  data-field="profile.specialty"
+                  data-preview="specialty"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-local">Localização</label>
-                <input id="usuario-local" type="text" placeholder="Cidade, Estado" autocomplete="address-level2" data-field="profile.location" data-preview="location">
+                <input
+                  id="usuario-local"
+                  type="text"
+                  placeholder="Cidade, Estado"
+                  autocomplete="address-level2"
+                  data-field="profile.location"
+                  data-preview="location"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-experiencia">Experiência total</label>
-                <input id="usuario-experiencia" type="text" placeholder="Ex.: 12 anos em tecnologia" data-field="profile.experience" data-preview="experience">
+                <input
+                  id="usuario-experiencia"
+                  type="text"
+                  placeholder="Ex.: 12 anos em tecnologia"
+                  data-field="profile.experience"
+                  data-preview="experience"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-disponibilidade">Disponibilidade</label>
-                <select id="usuario-disponibilidade" data-field="profile.availability" data-preview="availability">
+                <select
+                  id="usuario-disponibilidade"
+                  data-field="profile.availability"
+                  data-preview="availability"
+                >
                   <option value="">Selecione uma opção</option>
                   <option value="Imediata - Híbrido">Imediata - Híbrido</option>
                   <option value="Pronto para remoto">Pronto para remoto</option>
-                  <option value="Disponível para presencial">Disponível para presencial</option>
-                  <option value="Disponível em até 30 dias">Disponível em até 30 dias</option>
+                  <option value="Disponível para presencial">
+                    Disponível para presencial
+                  </option>
+                  <option value="Disponível em até 30 dias">
+                    Disponível em até 30 dias
+                  </option>
                 </select>
               </div>
               <div class="edicao-field">
                 <label for="usuario-email">E-mail principal</label>
-                <input id="usuario-email" type="email" placeholder="nome@email.com" autocomplete="email" data-field="profile.contact.email" data-preview="email">
+                <input
+                  id="usuario-email"
+                  type="email"
+                  placeholder="nome@email.com"
+                  autocomplete="email"
+                  data-field="profile.contact.email"
+                  data-preview="email"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-telefone">Telefone</label>
-                <input id="usuario-telefone" type="tel" placeholder="+55 00 00000-0000" autocomplete="tel" data-field="profile.contact.phone" data-sync="phone" data-preview="phone">
+                <input
+                  id="usuario-telefone"
+                  type="tel"
+                  placeholder="+55 00 00000-0000"
+                  autocomplete="tel"
+                  data-field="profile.contact.phone"
+                  data-sync="phone"
+                  data-preview="phone"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-instagram">Instagram</label>
-                <input id="usuario-instagram" type="text" placeholder="@usuario" data-field="profile.contact.instagram" data-preview="instagram">
+                <input
+                  id="usuario-instagram"
+                  type="text"
+                  placeholder="@usuario"
+                  data-field="profile.contact.instagram"
+                  data-preview="instagram"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-linkedin">LinkedIn</label>
-                <input id="usuario-linkedin" type="text" placeholder="/in/usuario" data-field="profile.contact.linkedin" data-preview="linkedin">
+                <input
+                  id="usuario-linkedin"
+                  type="text"
+                  placeholder="/in/usuario"
+                  data-field="profile.contact.linkedin"
+                  data-preview="linkedin"
+                />
               </div>
               <div class="edicao-field">
                 <label for="usuario-entrevistas">Entrevistas de hoje</label>
-                <input id="usuario-entrevistas" type="number" min="0" step="1" data-field="profile.interviewsToday" data-type="number" data-preview="interviews">
+                <input
+                  id="usuario-entrevistas"
+                  type="number"
+                  min="0"
+                  step="1"
+                  data-field="profile.interviewsToday"
+                  data-type="number"
+                  data-preview="interviews"
+                />
               </div>
             </div>
 
             <div class="edicao-field">
               <label for="usuario-bio">Bio profissional</label>
-              <textarea id="usuario-bio" rows="4" placeholder="Resuma sua trajetória profissional com seus destaques" data-field="profile.bio" data-preview="bio"></textarea>
+              <textarea
+                id="usuario-bio"
+                rows="4"
+                placeholder="Resuma sua trajetória profissional com seus destaques"
+                data-field="profile.bio"
+                data-preview="bio"
+              ></textarea>
             </div>
 
             <div class="edicao-field">
               <label for="usuario-competencias">Competências principais</label>
-              <input id="usuario-competencias" type="text" placeholder="Separe por vírgulas" data-field="profile.skills" data-format="csv" data-preview="skills">
-              <span class="edicao-field-helper">Sugestão: adicione entre 3 e 5 competências para manter o destaque objetivo.</span>
+              <input
+                id="usuario-competencias"
+                type="text"
+                placeholder="Separe por vírgulas"
+                data-field="profile.skills"
+                data-format="csv"
+                data-preview="skills"
+              />
+              <span class="edicao-field-helper"
+                >Sugestão: adicione entre 3 e 5 competências para manter o
+                destaque objetivo.</span
+              >
             </div>
 
             <div class="edicao-field">
               <label for="usuario-experiencias">Experiências recentes</label>
-              <textarea id="usuario-experiencias" rows="4" placeholder="Uma experiência por linha (Cargo - Empresa - Período)" data-field="profile.experiences" data-format="lines" data-preview="experiences"></textarea>
+              <textarea
+                id="usuario-experiencias"
+                rows="4"
+                placeholder="Uma experiência por linha (Cargo - Empresa - Período)"
+                data-field="profile.experiences"
+                data-format="lines"
+                data-preview="experiences"
+              ></textarea>
             </div>
 
             <div class="edicao-actions">
-              <button type="submit" class="edicao-submit">Salvar alterações</button>
+              <button type="submit" class="edicao-submit">
+                Salvar alterações
+              </button>
               <button type="reset" class="edicao-reset">Limpar</button>
             </div>
-            <div class="edicao-feedback" role="status" aria-live="polite" data-edicao-feedback>
+            <div
+              class="edicao-feedback"
+              role="status"
+              aria-live="polite"
+              data-edicao-feedback
+            >
               <span class="edicao-feedback-icon" aria-hidden="true"></span>
-              <span class="edicao-feedback-text" data-edicao-feedback-text></span>
+              <span
+                class="edicao-feedback-text"
+                data-edicao-feedback-text
+              ></span>
             </div>
           </form>
         </section>
@@ -136,7 +333,10 @@
           <section class="edicao-preview" data-edicao-preview="usuario">
             <div class="edicao-preview-header">
               <h2>Pré-visualização</h2>
-              <p>Veja rapidamente como as principais informações do perfil do usuário serão apresentadas.</p>
+              <p>
+                Veja rapidamente como as principais informações do perfil do
+                usuário serão apresentadas.
+              </p>
             </div>
 
             <div class="edicao-preview-card">
@@ -205,4 +405,3 @@
     </main>
   </body>
 </html>
-

@@ -1,13 +1,14 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginempresa.html"; 
+  window.location.href = "loginempresa.html";
 }
 
 (() => {
   if (window.__ml_vagas_init__) return;
   window.__ml_vagas_init__ = true;
 
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const STORAGE_PREFIX = "mapslink:vagas";
   const DEFAULT_EMPTY = "Nenhuma vaga cadastrada ainda.";
 
@@ -16,14 +17,14 @@ if (!token) {
     jobs: [],
     companyMeta: null,
     unsyncedJobs: [],
-    pendingRemovals: new Set()
+    pendingRemovals: new Set(),
   };
 
   const dom = {
     form: null,
     tbody: null,
     avatar: null,
-    companyMeta: null
+    companyMeta: null,
   };
 
   function initDom() {
@@ -31,7 +32,8 @@ if (!token) {
     dom.tbody = document.querySelector(".table-cv tbody");
     dom.avatar = document.querySelector(".page-header .avatar-badge img");
     ensureCompanyMeta();
-    if (dom.tbody && !dom.tbody.dataset.emptyText) dom.tbody.dataset.emptyText = DEFAULT_EMPTY;
+    if (dom.tbody && !dom.tbody.dataset.emptyText)
+      dom.tbody.dataset.emptyText = DEFAULT_EMPTY;
   }
 
   function ensureCompanyMeta() {
@@ -117,7 +119,11 @@ if (!token) {
   function syncPublicJobs() {
     if (!state.owner || !state.companyMeta) return;
     if (window.MapsJobsStore?.syncOwner) {
-      window.MapsJobsStore.syncOwner(state.owner, state.companyMeta, state.jobs);
+      window.MapsJobsStore.syncOwner(
+        state.owner,
+        state.companyMeta,
+        state.jobs,
+      );
     }
   }
 
@@ -143,7 +149,9 @@ if (!token) {
     const tr = document.createElement("tr");
     tr.dataset.jobId = job.id;
     const status = (job.status || "Aberta").trim();
-    const statusClass = status.toLowerCase().includes("fech") ? "status status-fechada" : "status status-aberta";
+    const statusClass = status.toLowerCase().includes("fech")
+      ? "status status-fechada"
+      : "status status-aberta";
     tr.innerHTML = `
       <td><span class="cell-text">${safe(job.title)}</span></td>
       <td>${safe(job.area)}</td>
@@ -168,7 +176,7 @@ if (!token) {
       dom.tbody.appendChild(row);
       return;
     }
-    state.jobs.forEach(job => dom.tbody.appendChild(createRow(job)));
+    state.jobs.forEach((job) => dom.tbody.appendChild(createRow(job)));
   }
 
   function createJobId() {
@@ -186,7 +194,7 @@ if (!token) {
       description: (formData.get("descricao") || "").trim(),
       type: (formData.get("tipo") || "").trim(),
       status: "Aberta",
-      publishedAt: new Date().toISOString()
+      publishedAt: new Date().toISOString(),
     };
     if (!job.title || !job.area || !job.type) return;
     state.jobs = [job, ...state.jobs];
@@ -202,18 +210,18 @@ if (!token) {
   }
 
   function handleTableClick(event) {
-    const action = event.target.closest("[data-action=\"remove\"]");
+    const action = event.target.closest('[data-action="remove"]');
     if (!action) return;
     const id = action.getAttribute("data-id");
     if (!id) return;
-    const next = state.jobs.filter(job => job.id !== id);
+    const next = state.jobs.filter((job) => job.id !== id);
     if (next.length === state.jobs.length) return;
     state.jobs = next;
     if (state.owner) {
       persistJobs();
     } else {
       state.pendingRemovals.add(id);
-      state.unsyncedJobs = state.unsyncedJobs.filter(job => job.id !== id);
+      state.unsyncedJobs = state.unsyncedJobs.filter((job) => job.id !== id);
     }
     renderJobs();
   }
@@ -231,16 +239,25 @@ if (!token) {
 
   function deriveCompanyMeta(session) {
     const profile = session?.profile || {};
-    const location = profile.location && typeof profile.location === "object" ? profile.location : {};
-    const contact = profile.contact && typeof profile.contact === "object" ? profile.contact : {};
+    const location =
+      profile.location && typeof profile.location === "object"
+        ? profile.location
+        : {};
+    const contact =
+      profile.contact && typeof profile.contact === "object"
+        ? profile.contact
+        : {};
     const fallback = profile.headquarters || contact.address || "";
-    const fallbackParts = fallback.split(/[-,]/).map(part => part.trim()).filter(Boolean);
+    const fallbackParts = fallback
+      .split(/[-,]/)
+      .map((part) => part.trim())
+      .filter(Boolean);
     return {
       id: session?.id || null,
       name: session?.company || session?.name || "Empresa",
       avatar: profile.avatar || "",
       city: location.city || location.town || fallbackParts[0] || "",
-      state: location.state || location.region || fallbackParts[1] || ""
+      state: location.state || location.region || fallbackParts[1] || "",
     };
   }
 
@@ -260,9 +277,11 @@ if (!token) {
       state.pendingRemovals.clear();
       let existing = loadJobs();
       if (pendingRemovals.size) {
-        existing = existing.filter(job => !pendingRemovals.has(job.id));
+        existing = existing.filter((job) => !pendingRemovals.has(job.id));
       }
-      const additions = pendingAdds.filter(job => !pendingRemovals.has(job.id));
+      const additions = pendingAdds.filter(
+        (job) => !pendingRemovals.has(job.id),
+      );
       state.jobs = additions.length ? [...additions, ...existing] : existing;
       renderJobs();
       if (additions.length || pendingRemovals.size) {
@@ -280,7 +299,7 @@ if (!token) {
       const removalIds = Array.from(state.pendingRemovals);
       state.pendingRemovals.clear();
       const beforeLength = state.jobs.length;
-      state.jobs = state.jobs.filter(job => !removalIds.includes(job.id));
+      state.jobs = state.jobs.filter((job) => !removalIds.includes(job.id));
       if (state.jobs.length !== beforeLength) {
         renderJobs();
         persistJobs();
@@ -300,7 +319,8 @@ if (!token) {
     }
     hydrateFromAuth(auth.current ? auth.current() : null);
     if (typeof auth.ready === "function") {
-      auth.ready()
+      auth
+        .ready()
         .then(() => hydrateFromAuth(auth.current ? auth.current() : null))
         .catch(() => hydrateFromAuth(null));
     }
@@ -308,8 +328,11 @@ if (!token) {
   }
 
   async function loadCompanies() {
-    if (Array.isArray(window.__companies) && window.__companies.length) return window.__companies;
-    const response = await fetch("/assets/data/companies.json", { cache: "no-store" });
+    if (Array.isArray(window.__companies) && window.__companies.length)
+      return window.__companies;
+    const response = await fetch("/assets/data/companies.json", {
+      cache: "no-store",
+    });
     if (!response.ok) throw new Error("Falha ao carregar companies.json");
     const data = await response.json();
     window.__companies = Array.isArray(data) ? data : [];
@@ -318,28 +341,35 @@ if (!token) {
 
   function collectJobs(list) {
     window.__jobs = [];
-    list.forEach(company => {
-      (company.jobs || []).forEach(job => {
+    list.forEach((company) => {
+      (company.jobs || []).forEach((job) => {
         window.__jobs.push({
           ...job,
           company: company.name,
           city: company.city,
-          sector: company.sector
+          sector: company.sector,
         });
       });
     });
   }
 
   function filterJobs(filters) {
-    if (!window.MapsFilters || typeof window.MapsFilters.filterCompanies !== "function") return [];
-    const companies = window.MapsFilters.filterCompanies(window.__companies || [], filters);
-    return companies.flatMap(company =>
-      (company.jobs || []).map(job => ({
+    if (
+      !window.MapsFilters ||
+      typeof window.MapsFilters.filterCompanies !== "function"
+    )
+      return [];
+    const companies = window.MapsFilters.filterCompanies(
+      window.__companies || [],
+      filters,
+    );
+    return companies.flatMap((company) =>
+      (company.jobs || []).map((job) => ({
         ...job,
         company: company.name,
         city: company.city,
-        sector: company.sector
-      }))
+        sector: company.sector,
+      })),
     );
   }
 

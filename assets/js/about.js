@@ -2,7 +2,9 @@
   if (window.__ml_about_init__) return;
   window.__ml_about_init__ = true;
 
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   function ensureStyles() {
     if (document.getElementById("ml-about-styles")) return;
@@ -36,19 +38,28 @@
 
   function initReveal() {
     ensureStyles();
-    const targets = document.querySelectorAll(".about-container p, .about-container h3, .about-cta");
+    const targets = document.querySelectorAll(
+      ".about-container p, .about-container h3, .about-cta",
+    );
     targets.forEach((element, index) => {
       element.classList.add("ml-reveal");
-      if (!prefersReducedMotion) element.style.setProperty("--ml-delay", `${Math.min(10, index * 40)}ms`);
+      if (!prefersReducedMotion)
+        element.style.setProperty(
+          "--ml-delay",
+          `${Math.min(10, index * 40)}ms`,
+        );
     });
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.15 });
-    targets.forEach(element => observer.observe(element));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.15 },
+    );
+    targets.forEach((element) => observer.observe(element));
   }
 
   function initReadingProgress() {
@@ -64,7 +75,8 @@
     bar.classList.add("ml-reading-progress");
 
     function update() {
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? window.scrollY / docHeight : 0;
       bar.style.width = `${(progress * 100).toFixed(2)}%`;
     }

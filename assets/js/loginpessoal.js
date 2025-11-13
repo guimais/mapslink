@@ -48,8 +48,10 @@
 
   function bindTouchFeedback(selector) {
     const elements = document.querySelectorAll(selector);
-    elements.forEach(el => {
-      el.addEventListener("touchstart", () => el.classList.add("is-pressed"), { passive: true });
+    elements.forEach((el) => {
+      el.addEventListener("touchstart", () => el.classList.add("is-pressed"), {
+        passive: true,
+      });
       const reset = () => el.classList.remove("is-pressed");
       el.addEventListener("touchend", reset);
       el.addEventListener("touchcancel", reset);
@@ -58,7 +60,7 @@
 
   function bindHaptics(selector) {
     if (!("vibrate" in navigator)) return;
-    document.querySelectorAll(selector).forEach(button => {
+    document.querySelectorAll(selector).forEach((button) => {
       button.addEventListener("click", () => navigator.vibrate(50));
     });
   }
@@ -74,22 +76,31 @@
   function setupMobileViewport(inputs) {
     if (!isMobile()) return;
     const viewport = document.querySelector('meta[name="viewport"]');
-    inputs.forEach(input => {
+    inputs.forEach((input) => {
       input.addEventListener("focus", () => {
-        if (viewport) viewport.content = "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+        if (viewport)
+          viewport.content =
+            "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
         setTimeout(() => {
-          input.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+          input.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest",
+          });
         }, 300);
       });
       input.addEventListener("blur", () => {
         setTimeout(() => {
-          if (viewport) viewport.content = "width=device-width, initial-scale=1";
+          if (viewport)
+            viewport.content = "width=device-width, initial-scale=1";
         }, 300);
       });
     });
     document.body.style.overflowX = "hidden";
     adjustCardPadding();
-    window.addEventListener("orientationchange", () => setTimeout(adjustCardPadding, 100));
+    window.addEventListener("orientationchange", () =>
+      setTimeout(adjustCardPadding, 100),
+    );
     window.addEventListener("resize", adjustCardPadding);
   }
 
@@ -144,24 +155,25 @@
     const buttonTemplates = {
       idle: {
         html: button.innerHTML,
-        gradient: "linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%)",
-        disabled: false
+        gradient:
+          "linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%)",
+        disabled: false,
       },
       loading: {
         html: '<div class="loading-spinner"></div><span class="button-text">Entrando...</span>',
         gradient: null,
-        disabled: true
+        disabled: true,
       },
       success: {
         html: '<i class="ri-check-line button-icon"></i><span class="button-text">Login realizado com sucesso!</span>',
         gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-        disabled: true
+        disabled: true,
       },
       error: {
         html: '<i class="ri-error-warning-line button-icon"></i><span class="button-text">Erro</span>',
         gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
-        disabled: true
-      }
+        disabled: true,
+      },
     };
 
     function setButtonState(state) {
@@ -197,7 +209,11 @@
         return false;
       }
       if (value.length < 8) {
-        setError(passwordInput, passwordError, "A senha deve ter pelo menos 8 caracteres");
+        setError(
+          passwordInput,
+          passwordError,
+          "A senha deve ter pelo menos 8 caracteres",
+        );
         return false;
       }
       setError(passwordInput, passwordError, "");
@@ -214,13 +230,16 @@
       passwordInput.type = visible ? "password" : "text";
       const icon = toggle.querySelector("i");
       if (icon) icon.className = visible ? "ri-eye-line" : "ri-eye-off-line";
-      toggle.setAttribute("aria-label", visible ? "Mostrar senha" : "Ocultar senha");
+      toggle.setAttribute(
+        "aria-label",
+        visible ? "Mostrar senha" : "Ocultar senha",
+      );
     });
 
     emailInput.addEventListener("input", validateEmail);
     passwordInput.addEventListener("input", validatePassword);
 
-    form.addEventListener("submit", async event => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearErrors();
       if (!validateEmail() || !validatePassword()) return;
@@ -228,23 +247,25 @@
       const email = emailInput.value.trim();
       const password = passwordInput.value;
       const remember = !!rememberInput?.checked;
-      
+
       try {
         await MapsAuth.login({ identifier: email, password, type: "personal" });
-        
 
-        const fakeJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
+        const fakeJwt =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30";
         localStorage.setItem("jwt_token", fakeJwt);
-        
+
         rememberCredentials(email, remember);
         setButtonState("success");
         setTimeout(() => {
-          window.location.href = form.getAttribute("data-redirect")?.trim() || "perfilusuario.html";
+          window.location.href =
+            form.getAttribute("data-redirect")?.trim() || "perfilusuario.html";
         }, 1200);
       } catch (error) {
-        const message = error?.message === "INVALID"
-          ? "E-mail ou senha incorretos"
-          : (error?.message || "Erro ao fazer login. Tente novamente.");
+        const message =
+          error?.message === "INVALID"
+            ? "E-mail ou senha incorretos"
+            : error?.message || "Erro ao fazer login. Tente novamente.";
         setButtonState("error");
         alert(message);
         resetButtonWithDelay(3000);
@@ -256,30 +277,41 @@
 
     const inputs = Array.from(form.querySelectorAll("input"));
     setupMobileViewport(inputs);
-    bindTouchFeedback(".login-button, .password-toggle, .checkbox-container, .forgot-password, .business-login-link, .register-link");
+    bindTouchFeedback(
+      ".login-button, .password-toggle, .checkbox-container, .forgot-password, .business-login-link, .register-link",
+    );
     bindHaptics(".login-button, .password-toggle");
 
     const registerLink = document.querySelector(".register-link");
     if (registerLink) {
-      registerLink.addEventListener("click", event => {
+      registerLink.addEventListener("click", (event) => {
         event.preventDefault();
-        navigateWithFeedback("registropessoal.html", "Redirecionando para página de cadastro...");
+        navigateWithFeedback(
+          "registropessoal.html",
+          "Redirecionando para página de cadastro...",
+        );
       });
     }
 
     const forgotPasswordLink = document.querySelector(".forgot-password");
     if (forgotPasswordLink) {
-      forgotPasswordLink.addEventListener("click", event => {
+      forgotPasswordLink.addEventListener("click", (event) => {
         event.preventDefault();
-        navigateWithFeedback("esqueceusenha.html", "Redirecionando para recuperação de senha...");
+        navigateWithFeedback(
+          "esqueceusenha.html",
+          "Redirecionando para recuperação de senha...",
+        );
       });
     }
 
     const businessLink = document.querySelector(".business-login-link");
     if (businessLink) {
-      businessLink.addEventListener("click", event => {
+      businessLink.addEventListener("click", (event) => {
         event.preventDefault();
-        navigateWithFeedback("loginempresa.html", "Redirecionando para login empresarial...");
+        navigateWithFeedback(
+          "loginempresa.html",
+          "Redirecionando para login empresarial...",
+        );
       });
     }
 
@@ -292,8 +324,7 @@
     init();
   }
 
-
-  window.logoutPessoal = function() {
+  window.logoutPessoal = function () {
     localStorage.removeItem("jwt_token");
     window.location.href = "loginpessoal.html";
   };

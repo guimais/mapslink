@@ -1,28 +1,29 @@
 (() => {
   const currentScript = document.currentScript;
 
-
   if (window.location.pathname.endsWith("/pages/esqueceusenha.html")) return;
 
   function ensureBody() {
     if (document.body) return document.body;
-    document.addEventListener(
-      "DOMContentLoaded",
-      () => ensureBody(),
-      { once: true }
-    );
+    document.addEventListener("DOMContentLoaded", () => ensureBody(), {
+      once: true,
+    });
     return null;
   }
 
   const body = ensureBody();
   if (!body) return;
-  if (document.querySelector('.site-footer[data-component="site-footer"]')) return;
+  if (document.querySelector('.site-footer[data-component="site-footer"]'))
+    return;
 
   const pageId = (body.dataset.page || "").toLowerCase();
   if (pageId === "edicaoperfil" || pageId === "edicaoperfilempresa") return;
   const navActive = (body.dataset.navActive || "").toLowerCase();
   const path = (window.location.pathname || "").toLowerCase();
-  const isRoot = pageId === "home" || navActive === "index.html" || (!path.includes("/pages/") && !path.includes("\\pages\\"));
+  const isRoot =
+    pageId === "home" ||
+    navActive === "index.html" ||
+    (!path.includes("/pages/") && !path.includes("\\pages\\"));
 
   const assetBase = isRoot ? "." : "..";
   const pageBase = isRoot ? "pages/" : "";

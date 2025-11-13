@@ -4,7 +4,7 @@
   "description": "Conectando profissionais e empresas através de um mapa interativo e inteligente.",
   "lang": "pt-BR",
   "dir": "ltr",
-  "start_url": "/index.html",
+  "start_url": "/index.html?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -17,7 +17,7 @@
       "src": "assets/images/logo-icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "assets/images/logo-icon-512.png",
@@ -28,15 +28,15 @@
   ],
   "screenshots": [
     {
-      "src": "assets/images/screenshots/home.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpeg",
+      "src": "assets/images/3d_avatar_21.png",
+      "sizes": "220x220",
+      "type": "image/png",
       "label": "Tela inicial do MapsLink"
     },
     {
-      "src": "assets/images/screenshots/map.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpeg",
+      "src": "assets/images/image 4.png",
+      "sizes": "137x137",
+      "type": "image/png",
       "label": "Mapa interativo de empresas"
     }
   ],
@@ -45,19 +45,50 @@
       "name": "Abrir Mapa",
       "short_name": "Mapa",
       "description": "Ver empresas e vagas no mapa interativo",
-      "url": "/pages/mapa.html",
+      "url": "/pages/paginamapav4.html",
       "icons": [
-        { "src": "assets/images/shortcut-map.png", "sizes": "96x96", "type": "image/png" }
+        {
+          "src": "assets/images/logo-icon-192.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
       ]
     },
     {
       "name": "Ver Vagas",
       "short_name": "Vagas",
-      "description": "Navegar pelas oportunidades disponíveis",
+      "description": "Navegar pelas oportunidades dispon��veis",
       "url": "/pages/vagas.html",
       "icons": [
-        { "src": "assets/images/shortcut-jobs.png", "sizes": "96x96", "type": "image/png" }
+        {
+          "src": "assets/images/logo-icon-192.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
       ]
     }
-  ]
+  ],
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "https://mapslink.app/",
+  "display_override": ["standalone", "fullscreen"],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+mapslink",
+      "url": "/pages/paginamapav4.html?q=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/pages/contact.html",
+    "method": "POST",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "subject",
+      "text": "message",
+      "url": "map"
+    }
+  }
 }

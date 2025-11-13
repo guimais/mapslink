@@ -1,26 +1,91 @@
 ﻿<!doctype html>
 <html lang="pt-br">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="../manifest.json">
-    <link href="../assets/css/main.css" rel="stylesheet">
-<link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
-    <meta name="description" content="Maps Link - Login Empresarial">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102569" />
+    <link rel="manifest" href="../manifest.json" />
+    <link href="../assets/css/main.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../assets/images/logo-icon-192.png"
+    />
+    <meta name="description" content="Maps Link - Login Empresarial" />
+    <!-- SEO -->
+    <link rel="canonical" href="https://mapslink.app/pages/loginempresa.html" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="MapsLink" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MapsLink" />
+    <meta property="og:title" content="Maps Link - Login Empresarial" />
+    <meta property="og:description" content="Maps Link - Login Empresarial" />
+    <meta
+      property="og:url"
+      content="https://mapslink.app/pages/loginempresa.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Maps Link - Login Empresarial" />
+    <meta name="twitter:description" content="Maps Link - Login Empresarial" />
+    <meta
+      name="twitter:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Maps Link - Login Empresarial",
+        "description": "Maps Link - Login Empresarial",
+        "url": "https://mapslink.app/pages/loginempresa.html",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
     <title>Maps Link - Login Empresarial</title>
-    <link rel="stylesheet" href="../assets/css/loginempresa.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="../assets/css/loginempresa.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    />
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
   </head>
-  <body data-page="loginempresa" data-nav-active="selecaoperfil.html" data-nav-open-class="active" data-nav-overlay="true">
+  <body
+    data-page="loginempresa"
+    data-nav-active="selecaoperfil.html"
+    data-nav-open-class="active"
+    data-nav-overlay="true"
+  >
     <header class="nav-container">
       <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
-        <a href="../index.html" class="nav-logo-link" aria-label="Ir para a página inicial">
-          <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" loading="lazy" decoding="async">
+        <a
+          href="../index.html"
+          class="nav-logo-link"
+          aria-label="Ir para a página inicial"
+        >
+          <img
+            src="../assets/images/Logo Certa - Fundo png.png"
+            alt="Logo Maps Link"
+            class="nav-logo"
+            loading="lazy"
+            decoding="async"
+          />
         </a>
-        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu" aria-haspopup="true" type="button">
+        <button
+          class="nav-toggle"
+          aria-controls="navMenu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+          aria-haspopup="true"
+          type="button"
+        >
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
         <ul class="nav-links" id="navMenu" role="list">
@@ -28,26 +93,43 @@
           <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
           <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
           <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
-          <li><a class="nav-link active" href="about.html" aria-current="page">About</a></li>
+          <li>
+            <a class="nav-link active" href="about.html" aria-current="page"
+              >About</a
+            >
+          </li>
           <li><a class="nav-link" href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </header>
 
-    <main id="loginempresarial" class="loginempresarial" role="main" aria-label="Login empresarial">
+    <main
+      id="loginempresarial"
+      class="loginempresarial"
+      role="main"
+      aria-label="Login empresarial"
+    >
       <div class="login-container">
         <div class="login-card">
           <div class="login-header">
             <h1 class="login-title">Login Empresarial</h1>
             <p class="login-subtitle">Entre com os dados da sua empresa</p>
           </div>
-          
+
           <form class="login-form" id="loginForm" novalidate>
             <div class="form-group">
               <label for="emailOrCnpj" class="form-label">E-mail ou CNPJ</label>
               <div class="input-container">
                 <i class="ri-building-4-line input-icon"></i>
-                <input type="text" id="emailOrCnpj" name="emailOrCnpj" class="form-input" placeholder="Digite o e-mail ou CNPJ da empresa" required autocomplete="username">
+                <input
+                  type="text"
+                  id="emailOrCnpj"
+                  name="emailOrCnpj"
+                  class="form-input"
+                  placeholder="Digite o e-mail ou CNPJ da empresa"
+                  required
+                  autocomplete="username"
+                />
               </div>
               <span class="error-message" id="emailOrCnpjError"></span>
             </div>
@@ -56,8 +138,21 @@
               <label for="password" class="form-label">Senha</label>
               <div class="input-container">
                 <i class="ri-lock-line input-icon"></i>
-                <input type="password" id="password" name="password" class="form-input" placeholder="Sua senha de acesso" required autocomplete="current-password">
-                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Mostrar senha">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-input"
+                  placeholder="Sua senha de acesso"
+                  required
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  id="passwordToggle"
+                  aria-label="Mostrar senha"
+                >
                   <i class="ri-eye-line"></i>
                 </button>
               </div>
@@ -66,11 +161,13 @@
 
             <div class="form-options">
               <label class="checkbox-container">
-                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <input type="checkbox" id="rememberMe" name="rememberMe" />
                 <span class="checkmark"></span>
                 Lembrar-me
               </label>
-              <a href="esqueceusenha.html" class="forgot-password">Esqueci minha senha</a>
+              <a href="esqueceusenha.html" class="forgot-password"
+                >Esqueci minha senha</a
+              >
             </div>
 
             <button type="submit" class="login-button" id="loginButton">
@@ -80,7 +177,12 @@
           </form>
 
           <div class="login-footer">
-            <p>Não tem uma conta? <a href="registroempresa.html" class="register-link">Crie uma conta empresarial</a></p>
+            <p>
+              Não tem uma conta?
+              <a href="registroempresa.html" class="register-link"
+                >Crie uma conta empresarial</a
+              >
+            </p>
             <div class="divider">
               <span>ou</span>
             </div>
@@ -92,7 +194,6 @@
         </div>
       </div>
     </main>
-
 
     <script defer src="../assets/js/loginempresa.js"></script>
   </body>

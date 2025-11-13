@@ -1,6 +1,6 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginempresa.html"; 
+  window.location.href = "loginempresa.html";
 }
 (() => {
   if (window.__ml_curriculo_init__) return;
@@ -8,7 +8,8 @@ if (!token) {
 
   const APPLICATION_PREFIX = "mapslink:applications";
   const APPLICATION_RESET_KEY = `${APPLICATION_PREFIX}:reset:v2`;
-  const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+  const EMPTY_IMAGE =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const FILTER_STORAGE = "mapslink:curriculo:filtros";
   const { normalizeText } = window.MapsUtils || {};
 
@@ -27,7 +28,7 @@ if (!token) {
     clear: document.getElementById("btn-limpar-filtros"),
     tbody: document.getElementById("lista-curriculos"),
     tableWrapper: document.querySelector(".table-wrapper"),
-    exportBtn: document.getElementById("btn-exportar")
+    exportBtn: document.getElementById("btn-exportar"),
   };
 
   const state = {
@@ -35,7 +36,7 @@ if (!token) {
     entries: [],
     filtered: [],
     overlay: null,
-    entriesMap: new Map()
+    entriesMap: new Map(),
   };
 
   function storageKey(owner) {
@@ -44,13 +45,15 @@ if (!token) {
 
   function sanitizeEntry(entry, index) {
     if (!entry || typeof entry !== "object") return null;
-    const candidateName = typeof entry.candidate === "string" ? entry.candidate.trim() : "";
+    const candidateName =
+      typeof entry.candidate === "string" ? entry.candidate.trim() : "";
     if (!candidateName) return null;
     const safe = { ...entry };
     safe.id = safe.id || `app_${index}_${Date.now().toString(36)}`;
     safe.candidate = candidateName;
     safe.status = safe.status || "Em análise";
-    safe.appliedAt = safe.appliedAt || safe.createdAt || new Date().toISOString();
+    safe.appliedAt =
+      safe.appliedAt || safe.createdAt || new Date().toISOString();
     safe.avatar = safe.avatar || "";
     if (!safe.cv || typeof safe.cv !== "object" || !safe.cv.dataUrl) {
       safe.cv = null;
@@ -70,7 +73,7 @@ if (!token) {
         .sort(
           (a, b) =>
             (Date.parse(b?.appliedAt || b?.createdAt || 0) || 0) -
-            (Date.parse(a?.appliedAt || a?.createdAt || 0) || 0)
+            (Date.parse(a?.appliedAt || a?.createdAt || 0) || 0),
         )
         .map((entry, index) => sanitizeEntry(entry, index))
         .filter(Boolean);
@@ -87,7 +90,7 @@ if (!token) {
       return;
     }
     state.entries = loadApplications(state.owner);
-    state.entriesMap = new Map(state.entries.map(entry => [entry.id, entry]));
+    state.entriesMap = new Map(state.entries.map((entry) => [entry.id, entry]));
     applyFilters();
   }
 
@@ -111,7 +114,7 @@ if (!token) {
     if (Number.isNaN(date.getTime())) return { text: "--/--/----", iso: "" };
     return {
       text: date.toLocaleDateString("pt-BR"),
-      iso: date.toISOString().split("T")[0]
+      iso: date.toISOString().split("T")[0],
     };
   }
 
@@ -124,7 +127,8 @@ if (!token) {
   }
 
   function dataUrlToBlob(dataUrl) {
-    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:")) return null;
+    if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:"))
+      return null;
     const [meta, payload] = dataUrl.split(",");
     if (!payload) return null;
     try {
@@ -168,7 +172,9 @@ if (!token) {
     avatarWrap.className = "avatar";
     const img = document.createElement("img");
     img.src = entry.avatar || EMPTY_IMAGE;
-    img.alt = entry.candidate ? `Foto de ${entry.candidate}` : "Foto do candidato";
+    img.alt = entry.candidate
+      ? `Foto de ${entry.candidate}`
+      : "Foto do candidato";
     avatarWrap.appendChild(img);
     const nameSpan = document.createElement("span");
     nameSpan.className = "cell-text";
@@ -215,13 +221,16 @@ if (!token) {
       row.className = "tbl-empty";
       const cell = document.createElement("td");
       cell.colSpan = 5;
-      cell.textContent = dom.tbody.dataset.emptyText || "Nenhuma candidatura recebida ainda.";
+      cell.textContent =
+        dom.tbody.dataset.emptyText || "Nenhuma candidatura recebida ainda.";
       row.appendChild(cell);
       dom.tbody.appendChild(row);
       updateCount(0);
       return;
     }
-    state.filtered.forEach((entry, index) => dom.tbody.appendChild(createRow(entry, index)));
+    state.filtered.forEach((entry, index) =>
+      dom.tbody.appendChild(createRow(entry, index)),
+    );
     updateCount(state.filtered.length);
   }
 
@@ -233,7 +242,12 @@ if (!token) {
     const month = Number(match[2]);
     const year = Number(match[3]);
     const date = new Date(year, month - 1, day);
-    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    )
+      return null;
     return date;
   }
 
@@ -243,7 +257,7 @@ if (!token) {
       status: normalizeText(dom.status?.value || ""),
       role: normalizeText(dom.role?.value || ""),
       start: parseDate(dom.start?.value),
-      end: parseDate(dom.end?.value)
+      end: parseDate(dom.end?.value),
     };
   }
 
@@ -253,7 +267,12 @@ if (!token) {
     const status = normalizeText(entry.status || "");
     const date = entry.appliedAt ? new Date(entry.appliedAt) : null;
 
-    if (filters.search && !name.includes(filters.search) && !role.includes(filters.search)) return false;
+    if (
+      filters.search &&
+      !name.includes(filters.search) &&
+      !role.includes(filters.search)
+    )
+      return false;
     if (filters.role && !role.includes(filters.role)) return false;
     if (filters.status && status !== filters.status) return false;
     if (filters.start && date && date < filters.start) return false;
@@ -263,9 +282,9 @@ if (!token) {
 
   function applyFilters() {
     const filters = getFilters();
-    state.filtered = state.entries.filter(entry => matches(entry, filters));
+    state.filtered = state.entries.filter((entry) => matches(entry, filters));
     render();
-    const active = Object.values(filters).some(value => value);
+    const active = Object.values(filters).some((value) => value);
     dom.toggle?.classList.toggle("active", active);
     try {
       localStorage.setItem(
@@ -275,8 +294,8 @@ if (!token) {
           role: dom.role?.value || "",
           start: dom.start?.value || "",
           end: dom.end?.value || "",
-          search: dom.search?.value || ""
-        })
+          search: dom.search?.value || "",
+        }),
       );
     } catch {}
   }
@@ -326,8 +345,15 @@ if (!token) {
     const width = Math.min(520, window.innerWidth * 0.92);
     const top = rect.bottom + 10 + window.scrollY;
     let left = rect.right - width + window.scrollX;
-    left = Math.max(16 + window.scrollX, Math.min(left, window.scrollX + window.innerWidth - width - 16));
-    Object.assign(panel.style, { width: `${width}px`, top: `${top}px`, left: `${left}px` });
+    left = Math.max(
+      16 + window.scrollX,
+      Math.min(left, window.scrollX + window.innerWidth - width - 16),
+    );
+    Object.assign(panel.style, {
+      width: `${width}px`,
+      top: `${top}px`,
+      left: `${left}px`,
+    });
   }
 
   function openPanel() {
@@ -361,7 +387,11 @@ if (!token) {
     const panel = dom.panel;
     if (!panel || panel.hidden) return;
     if (panel.contains(event.target)) return;
-    if (dom.toggle && (event.target === dom.toggle || dom.toggle.contains(event.target))) return;
+    if (
+      dom.toggle &&
+      (event.target === dom.toggle || dom.toggle.contains(event.target))
+    )
+      return;
     closePanel();
   }
 
@@ -371,13 +401,15 @@ if (!token) {
       return;
     }
     const header = ["Nome", "Vaga", "Data", "Status"];
-    const rows = state.filtered.map(entry => [
+    const rows = state.filtered.map((entry) => [
       `"${entry.candidate || ""}"`,
       `"${entry.title || ""}"`,
       `"${formatDate(entry.appliedAt).text}"`,
-      `"${entry.status || "Em análise"}"`
+      `"${entry.status || "Em análise"}"`,
     ]);
-    const csv = [header.join(";"), ...rows.map(row => row.join(";"))].join("\n");
+    const csv = [header.join(";"), ...rows.map((row) => row.join(";"))].join(
+      "\n",
+    );
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -394,7 +426,7 @@ if (!token) {
     if (!button || button.disabled) return;
     const id = button.dataset.viewCv;
     if (!id) return;
-    const entry = state.entries.find(item => item.id === id);
+    const entry = state.entries.find((item) => item.id === id);
     if (!entry || !entry.cv) {
       alert("Currículo não disponível para este candidato.");
       return;
@@ -413,17 +445,17 @@ if (!token) {
     dom.search?.addEventListener("input", applyFilters);
     dom.start?.addEventListener("input", () => maskDate(dom.start));
     dom.end?.addEventListener("input", () => maskDate(dom.end));
-    dom.toggle?.addEventListener("click", event => {
+    dom.toggle?.addEventListener("click", (event) => {
       event.stopPropagation();
       if (dom.panel?.hidden) openPanel();
       else closePanel();
     });
     dom.close?.addEventListener("click", closePanel);
     document.addEventListener("click", handleOutsideClick);
-    document.addEventListener("keydown", event => {
+    document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closePanel();
     });
-    dom.panelForm?.addEventListener("submit", event => {
+    dom.panelForm?.addEventListener("submit", (event) => {
       event.preventDefault();
       applyFilters();
       closePanel();
@@ -450,7 +482,10 @@ if (!token) {
     }
     const refresh = () => hydrate(auth.current ? auth.current() : null);
     if (typeof auth.ready === "function") {
-      auth.ready().then(refresh).catch(() => hydrate(null));
+      auth
+        .ready()
+        .then(refresh)
+        .catch(() => hydrate(null));
     } else {
       refresh();
     }
@@ -470,22 +505,22 @@ if (!token) {
     init();
   }
 })();
-  function resetApplicationsOnce() {
-    try {
-      if (localStorage.getItem(APPLICATION_RESET_KEY)) return;
-      const prefix = `${APPLICATION_PREFIX}:`;
-      const keysToRemove = [];
-      for (let index = 0; index < localStorage.length; index += 1) {
-        const key = localStorage.key(index);
-        if (key && key.startsWith(prefix)) keysToRemove.push(key);
-      }
-      keysToRemove.forEach(key => {
-        try {
-          localStorage.removeItem(key);
-        } catch {}
-      });
-      localStorage.setItem(APPLICATION_RESET_KEY, String(Date.now()));
-    } catch {}
-  }
+function resetApplicationsOnce() {
+  try {
+    if (localStorage.getItem(APPLICATION_RESET_KEY)) return;
+    const prefix = `${APPLICATION_PREFIX}:`;
+    const keysToRemove = [];
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (key && key.startsWith(prefix)) keysToRemove.push(key);
+    }
+    keysToRemove.forEach((key) => {
+      try {
+        localStorage.removeItem(key);
+      } catch {}
+    });
+    localStorage.setItem(APPLICATION_RESET_KEY, String(Date.now()));
+  } catch {}
+}
 
-  resetApplicationsOnce();
+resetApplicationsOnce();

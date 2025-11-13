@@ -1,6 +1,6 @@
 const token = localStorage.getItem("jwt_token");
 if (!token) {
-  window.location.href = "loginpessoal.html"; 
+  window.location.href = "loginpessoal.html";
 }
 
 (() => {
@@ -23,9 +23,9 @@ if (!token) {
     avatar: document.querySelector("[data-company-avatar]"),
     name: document.querySelector("[data-company-name]"),
     caption: document.querySelector("[data-company-caption]"),
-    search: document.querySelector('[data-search-input]'),
+    search: document.querySelector("[data-search-input]"),
     count: document.getElementById("result-count"),
-    tbody: document.getElementById("lista-vagas-disponiveis")
+    tbody: document.getElementById("lista-vagas-disponiveis"),
   };
 
   if (!dom.root || !dom.tbody) return;
@@ -38,7 +38,7 @@ if (!token) {
     applied: new Set(),
     searchTerm: "",
     liveRegion: null,
-    jobOwners: new Map()
+    jobOwners: new Map(),
   };
 
   function getCurrentSession() {
@@ -69,15 +69,19 @@ if (!token) {
   }
 
   function jobButtonKey(job) {
-    return job?.publicId || job?.id || `${job?.title || "vaga"}-${job?.area || ""}`;
+    return (
+      job?.publicId || job?.id || `${job?.title || "vaga"}-${job?.area || ""}`
+    );
   }
 
   function rememberJobOwner(job) {
     if (!job) return "";
     const owner = (job.ownerId || job.owner || "").toString().trim();
     if (!owner) return "";
-    const composite = normalizeKey(`${job.title || ""}|${job.companyName || job.company || ""}`);
-    [job.id, job.publicId, jobButtonKey(job), composite].forEach(key => {
+    const composite = normalizeKey(
+      `${job.title || ""}|${job.companyName || job.company || ""}`,
+    );
+    [job.id, job.publicId, jobButtonKey(job), composite].forEach((key) => {
       const normalized = normalizeKey(key);
       if (normalized) state.jobOwners.set(normalized, owner);
     });
@@ -96,7 +100,7 @@ if (!token) {
       job.publicId,
       job.id,
       fallbackKey,
-      `${job.title || ""}|${job.companyName || job.company || ""}`
+      `${job.title || ""}|${job.companyName || job.company || ""}`,
     ];
     for (const key of candidates) {
       const normalized = normalizeKey(key);
@@ -106,8 +110,8 @@ if (!token) {
     }
     if (window.MapsJobsStore?.loadPublic) {
       const catalog = window.MapsJobsStore.loadPublic();
-      const match = (catalog || []).find(entry => {
-        return candidates.some(key => {
+      const match = (catalog || []).find((entry) => {
+        return candidates.some((key) => {
           if (!key) return false;
           return entry.id === key || entry.publicId === key;
         });
@@ -121,7 +125,7 @@ if (!token) {
     const normalized = normalizeKey(key);
     if (!normalized) return null;
     return (
-      state.jobs.find(job => {
+      state.jobs.find((job) => {
         return (
           normalizeKey(job.id) === normalized ||
           normalizeKey(job.publicId) === normalized ||
@@ -158,7 +162,12 @@ if (!token) {
       const total = window.localStorage?.length ?? 0;
       for (let index = 0; index < total; index += 1) {
         const key = window.localStorage.key(index);
-        if (!key || !key.startsWith(`${JOBS_STORAGE}:`) || key === PUBLIC_JOBS_KEY) continue;
+        if (
+          !key ||
+          !key.startsWith(`${JOBS_STORAGE}:`) ||
+          key === PUBLIC_JOBS_KEY
+        )
+          continue;
         const raw = window.localStorage.getItem(key);
         const parsed = raw ? JSON.parse(raw) : [];
         if (Array.isArray(parsed)) jobs.push(...parsed);
@@ -168,18 +177,22 @@ if (!token) {
   }
 
   function loadPublicJobs() {
-    const source = JobsStore?.loadPublic ? JobsStore.loadPublic() : legacyCollectJobs();
+    const source = JobsStore?.loadPublic
+      ? JobsStore.loadPublic()
+      : legacyCollectJobs();
     return source
       .slice()
       .sort(
         (a, b) =>
           (Date.parse(b?.publishedAt || b?.createdAt || 0) || 0) -
-          (Date.parse(a?.publishedAt || a?.createdAt || 0) || 0)
+          (Date.parse(a?.publishedAt || a?.createdAt || 0) || 0),
       );
   }
 
   function applicationsKey(owner = state.owner) {
-    return owner ? `${APPLICATION_PREFIX}:${owner}` : `${APPLICATION_PREFIX}:anonimo`;
+    return owner
+      ? `${APPLICATION_PREFIX}:${owner}`
+      : `${APPLICATION_PREFIX}:anonimo`;
   }
 
   function loadApplications(owner = state.owner) {
@@ -194,7 +207,7 @@ if (!token) {
         .sort(
           (a, b) =>
             (Date.parse(b?.appliedAt || b?.createdAt || 0) || 0) -
-            (Date.parse(a?.appliedAt || a?.createdAt || 0) || 0)
+            (Date.parse(a?.appliedAt || a?.createdAt || 0) || 0),
         );
     } catch {
       return [];
@@ -222,7 +235,10 @@ if (!token) {
 
   function saveApplied() {
     try {
-      localStorage.setItem(appliedKey(state.owner), JSON.stringify(Array.from(state.applied)));
+      localStorage.setItem(
+        appliedKey(state.owner),
+        JSON.stringify(Array.from(state.applied)),
+      );
     } catch {}
   }
 
@@ -250,8 +266,12 @@ if (!token) {
   }
 
   function escapeHtml(text) {
-    return String(text || "").replace(/[&<>"']/g, chr => {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[chr] || chr;
+    return String(text || "").replace(/[&<>"']/g, (chr) => {
+      return (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[
+          chr
+        ] || chr
+      );
     });
   }
 
@@ -271,18 +291,21 @@ if (!token) {
     button.dataset.jobOwner = ownerId || "";
     if (disabled) {
       button.disabled = true;
-      button.innerHTML = '<i class="ri-lock-line" aria-hidden="true"></i> Encerrada';
+      button.innerHTML =
+        '<i class="ri-lock-line" aria-hidden="true"></i> Encerrada';
       return button;
     }
     if (state.applied.has(jobKey)) {
       button.disabled = true;
       button.classList.add("btn-prestado");
-      button.innerHTML = '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
+      button.innerHTML =
+        '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
       button.setAttribute("aria-pressed", "true");
     } else {
       button.disabled = false;
       button.classList.remove("btn-prestado");
-      button.innerHTML = '<i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga';
+      button.innerHTML =
+        '<i class="ri-send-plane-2-line" aria-hidden="true"></i> Prestar Vaga';
       button.setAttribute("aria-pressed", "false");
     }
     return button;
@@ -297,7 +320,7 @@ if (!token) {
         name: data.name || "curriculo.pdf",
         size: data.size || null,
         updatedAt: data.updatedAt || Date.now(),
-        dataUrl: data.dataUrl
+        dataUrl: data.dataUrl,
       };
     } catch {
       return null;
@@ -316,7 +339,8 @@ if (!token) {
       viewer && viewer.type === "personal"
         ? viewer.profile?.fullName || viewer.name || viewer.email || "Candidato"
         : "Candidato";
-    const candidateAvatar = viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
+    const candidateAvatar =
+      viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
     const cv = loadCandidateCv();
     const entry = {
       id: `app_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
@@ -332,7 +356,7 @@ if (!token) {
       candidateId: candidateId,
       candidate: candidateName,
       avatar: candidateAvatar,
-      cv
+      cv,
     };
     const applications = loadApplications(candidateId);
     applications.push(entry);
@@ -347,7 +371,10 @@ if (!token) {
     }
 
     try {
-      localStorage.setItem("mapslink_curriculos_recebidos", JSON.stringify(applications.length));
+      localStorage.setItem(
+        "mapslink_curriculos_recebidos",
+        JSON.stringify(applications.length),
+      );
     } catch {}
     if (window.MapsLink?.setCurriculos) {
       try {
@@ -360,7 +387,9 @@ if (!token) {
     const tr = document.createElement("tr");
     const area = escapeHtml(job.area || "--");
     const type = escapeHtml(job.type || job.status || "--");
-    const isClosed = normalizeText(job.status || "").includes("fech") || normalizeText(job.status || "").includes("encerr");
+    const isClosed =
+      normalizeText(job.status || "").includes("fech") ||
+      normalizeText(job.status || "").includes("encerr");
 
     tr.innerHTML = `
       <td><span class="cell-text">${escapeHtml(job.title || "Vaga")}</span></td>
@@ -380,13 +409,14 @@ if (!token) {
       row.className = "tbl-empty";
       const cell = document.createElement("td");
       cell.colSpan = 4;
-      cell.textContent = dom.tbody.dataset.emptyText || "Nenhuma vaga disponível no momento.";
+      cell.textContent =
+        dom.tbody.dataset.emptyText || "Nenhuma vaga disponível no momento.";
       row.appendChild(cell);
       dom.tbody.appendChild(row);
       setCount(0);
       return;
     }
-    list.forEach(job => dom.tbody.appendChild(buildRow(job)));
+    list.forEach((job) => dom.tbody.appendChild(buildRow(job)));
     setCount(list.length);
   }
 
@@ -403,9 +433,10 @@ if (!token) {
       state.filtered = state.jobs.slice();
       return;
     }
-    state.filtered = state.jobs.filter(job => {
-      return [job.title, job.area, job.type, job.description]
-        .some(field => normalizeText(field || "").includes(normalizedTerm));
+    state.filtered = state.jobs.filter((job) => {
+      return [job.title, job.area, job.type, job.description].some((field) =>
+        normalizeText(field || "").includes(normalizedTerm),
+      );
     });
   }
 
@@ -426,22 +457,30 @@ if (!token) {
     }
     const matchedJob = findJobByKey(id);
     const ownerId =
-      button.dataset.jobOwner || resolveOwnerId(matchedJob, button.dataset.jobPublicId || id);
+      button.dataset.jobOwner ||
+      resolveOwnerId(matchedJob, button.dataset.jobPublicId || id);
     state.applied.add(id);
     saveApplied();
     button.disabled = true;
     button.classList.add("btn-prestado");
-    button.innerHTML = '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
+    button.innerHTML =
+      '<i class="ri-check-line" aria-hidden="true"></i> Aplicado';
     button.setAttribute("aria-pressed", "true");
-    announce(`Candidatura enviada para ${button.dataset.jobTitle || "a vaga"}.`);
+    announce(
+      `Candidatura enviada para ${button.dataset.jobTitle || "a vaga"}.`,
+    );
     recordApplication({
       id: button.dataset.jobId || matchedJob?.id || id,
       publicId: button.dataset.jobPublicId || matchedJob?.publicId || "",
       title: button.dataset.jobTitle || matchedJob?.title || "Vaga",
       area: button.dataset.jobArea || matchedJob?.area || "",
       type: button.dataset.jobType || matchedJob?.type || "",
-      company: button.dataset.jobCompany || matchedJob?.companyName || matchedJob?.company || "",
-      ownerId: ownerId || ""
+      company:
+        button.dataset.jobCompany ||
+        matchedJob?.companyName ||
+        matchedJob?.company ||
+        "",
+      ownerId: ownerId || "",
     });
   }
 
@@ -462,7 +501,10 @@ if (!token) {
     }
     const refresh = () => hydrate(auth.current ? auth.current() : null);
     if (typeof auth.ready === "function") {
-      auth.ready().then(refresh).catch(() => hydrate(null));
+      auth
+        .ready()
+        .then(refresh)
+        .catch(() => hydrate(null));
     } else {
       refresh();
     }
@@ -473,7 +515,7 @@ if (!token) {
     ensureLiveRegion();
     dom.tbody.addEventListener("click", handleApply);
     if (dom.search) dom.search.addEventListener("input", handleSearch);
-    window.addEventListener("storage", event => {
+    window.addEventListener("storage", (event) => {
       if (event.key === PUBLIC_JOBS_KEY) refreshJobsList();
     });
     window.addEventListener(JOBS_EVENT, refreshJobsList);

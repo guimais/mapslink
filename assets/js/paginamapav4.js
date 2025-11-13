@@ -23,7 +23,7 @@
     filters: {},
     companies: [],
     filtered: [],
-    staticCache: null
+    staticCache: null,
   };
 
   const STATIC_CACHE_KEY = "mapslink:cache:companies";
@@ -45,15 +45,28 @@
 
   function writeCachedCompanies(list) {
     try {
-      localStorage.setItem(STATIC_CACHE_KEY, JSON.stringify(Array.isArray(list) ? list : []));
+      localStorage.setItem(
+        STATIC_CACHE_KEY,
+        JSON.stringify(Array.isArray(list) ? list : []),
+      );
     } catch {}
   }
 
   function getWarmCompanies() {
-    if (Array.isArray(state.companies) && state.companies.length) return state.companies;
-    if (Array.isArray(window.__companies) && window.__companies.length) return window.__companies;
-    if (Array.isArray(window.__staticCompanies) && window.__staticCompanies.length) return window.__staticCompanies;
-    if (Array.isArray(window.mapsLinkCompanies) && window.mapsLinkCompanies.length) return window.mapsLinkCompanies;
+    if (Array.isArray(state.companies) && state.companies.length)
+      return state.companies;
+    if (Array.isArray(window.__companies) && window.__companies.length)
+      return window.__companies;
+    if (
+      Array.isArray(window.__staticCompanies) &&
+      window.__staticCompanies.length
+    )
+      return window.__staticCompanies;
+    if (
+      Array.isArray(window.mapsLinkCompanies) &&
+      window.mapsLinkCompanies.length
+    )
+      return window.mapsLinkCompanies;
     const cached = readCachedCompanies();
     if (cached.length) return cached;
     return [];
@@ -156,7 +169,9 @@
     const arr = Array.isArray(company?.coords) ? company.coords : null;
     if (arr && arr.length === 2) {
       const fromArray = [Number(arr[0]), Number(arr[1])];
-      return Number.isFinite(fromArray[0]) && Number.isFinite(fromArray[1]) ? fromArray : null;
+      return Number.isFinite(fromArray[0]) && Number.isFinite(fromArray[1])
+        ? fromArray
+        : null;
     }
     return null;
   }
@@ -164,11 +179,16 @@
   function popupTemplate(company) {
     const tags = Array.isArray(company?.tags) ? company.tags : [];
     const jobs = Array.isArray(company?.jobs) ? company.jobs : [];
-    const tagsHtml = tags.filter(Boolean).map(tag => `<span class="ml-popup__chip">${tag}</span>`).join("");
+    const tagsHtml = tags
+      .filter(Boolean)
+      .map((tag) => `<span class="ml-popup__chip">${tag}</span>`)
+      .join("");
     const jobsHtml = jobs
-      .map(job => {
+      .map((job) => {
         const title = job?.title || "Vaga";
-        const type = job?.type ? `<span class="ml-popup__job-type">${job.type}</span>` : "";
+        const type = job?.type
+          ? `<span class="ml-popup__job-type">${job.type}</span>`
+          : "";
         const label = `<span class="ml-popup__job-name">${title}</span>`;
         if (job?.url) {
           return `<li class="ml-popup__job"><a href="${job.url}" target="_blank" rel="noopener">${label}${type}</a></li>`;
@@ -179,20 +199,26 @@
 
     const hiring = company?.is_hiring;
     const badgeText = hiring ? "Contratando" : "Sem vagas";
-    const badgeClass = hiring ? "ml-popup__badge--open" : "ml-popup__badge--closed";
+    const badgeClass = hiring
+      ? "ml-popup__badge--open"
+      : "ml-popup__badge--closed";
     const addressParts = [
       company?.address || "",
-      [company?.city, company?.state].filter(Boolean).join(" - ")
+      [company?.city, company?.state].filter(Boolean).join(" - "),
     ].filter(Boolean);
     const address = addressParts.join(" - ");
-    const website = company?.website ? company.website.replace(/^https?:\/\//, "") : "";
+    const website = company?.website
+      ? company.website.replace(/^https?:\/\//, "")
+      : "";
     const name = company?.name || "Empresa";
     const aria = name.replace(/"/g, "&quot;");
     const initials = name.trim().charAt(0).toUpperCase() || "M";
     const logo = company?.logo
       ? `<img src="${company.logo}" alt="${aria}" class="ml-popup__logo">`
       : `<span class="ml-popup__logo ml-popup__logo--placeholder">${initials}</span>`;
-    const vagasUrl = location.pathname.includes("/pages/") ? "tabelavagas.html" : "pages/tabelavagas.html";
+    const vagasUrl = location.pathname.includes("/pages/")
+      ? "tabelavagas.html"
+      : "pages/tabelavagas.html";
 
     return `
       <article class="ml-popup" role="group" aria-label="${aria}">
@@ -225,11 +251,13 @@
   function addMarkers(list) {
     if (!state.markersLayer || !Array.isArray(list)) return;
     const bounds = [];
-    list.forEach(company => {
+    list.forEach((company) => {
       const coords = coordsOf(company);
       if (!coords) return;
       const marker = L.marker(coords);
-      marker.bindPopup(popupTemplate(company), { className: "ml-popup-wrapper" });
+      marker.bindPopup(popupTemplate(company), {
+        className: "ml-popup-wrapper",
+      });
       state.markersLayer.addLayer(marker);
       state.markers.set(company.id || company.name, marker);
       bounds.push(coords);
@@ -244,13 +272,15 @@
   function renderList(list) {
     if (!state.list) return;
     state.list.innerHTML = (list || [])
-      .map(company => {
+      .map((company) => {
         const open = company.is_hiring;
         const cls = open ? "aberta" : "fechada";
         const text = open ? "Vagas Abertas" : "Vagas Fechadas";
         const segments = [];
         if (company.address) segments.push(company.address);
-        const locality = [company.city, company.state].filter(Boolean).join(", ");
+        const locality = [company.city, company.state]
+          .filter(Boolean)
+          .join(", ");
         if (locality) segments.push(locality);
         const address = segments.join(" - ") || "Endereco nao informado";
         const markerId = company.id || company.name;
@@ -265,17 +295,19 @@
       })
       .join("");
 
-    state.list.querySelectorAll(".card-empresa .btn-detalhes").forEach(button => {
-      button.addEventListener("click", event => {
-        const card = event.currentTarget.closest(".card-empresa");
-        const id = card?.getAttribute("data-id");
-        const marker = state.markers.get(id);
-        if (!marker) return;
-        const point = marker.getLatLng();
-        state.map.setView(point, Math.max(state.map.getZoom(), 15));
-        marker.openPopup();
+    state.list
+      .querySelectorAll(".card-empresa .btn-detalhes")
+      .forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const card = event.currentTarget.closest(".card-empresa");
+          const id = card?.getAttribute("data-id");
+          const marker = state.markers.get(id);
+          if (!marker) return;
+          const point = marker.getLatLng();
+          state.map.setView(point, Math.max(state.map.getZoom(), 15));
+          marker.openPopup();
+        });
       });
-    });
   }
 
   function renderHeat(list, enabled) {
@@ -286,7 +318,7 @@
     }
     if (!enabled) return;
     const points = (list || [])
-      .map(company => {
+      .map((company) => {
         const coords = coordsOf(company);
         return coords ? [coords[0], coords[1], 1] : null;
       })
@@ -297,13 +329,16 @@
       blur: 24,
       maxZoom: 17,
       minOpacity: 0.25,
-      max: Math.max(20, Math.max(1, points.length) * 3)
+      max: Math.max(20, Math.max(1, points.length) * 3),
     });
     state.heatLayer.addTo(state.map);
   }
 
   function heatEnabled() {
-    return !!(state.heatToggle && state.heatToggle.getAttribute("aria-pressed") === "true");
+    return !!(
+      state.heatToggle &&
+      state.heatToggle.getAttribute("aria-pressed") === "true"
+    );
   }
 
   function applyFilters(nextFilters) {
@@ -323,8 +358,10 @@
   function companySignature(list) {
     return (Array.isArray(list) ? list : [])
       .map((company, index) => {
-        const key = company?.id || company?.slug || company?.name || `idx-${index}`;
-        const updated = company?.updatedAt || company?.updated_at || company?.updated || "";
+        const key =
+          company?.id || company?.slug || company?.name || `idx-${index}`;
+        const updated =
+          company?.updatedAt || company?.updated_at || company?.updated || "";
         const jobs = Array.isArray(company?.jobs) ? company.jobs.length : 0;
         return `${key}:${updated}:${jobs}`;
       })
@@ -338,7 +375,7 @@
   }
 
   async function loadAndRenderCompanies() {
-    const render = list => {
+    const render = (list) => {
       const normalized = Array.isArray(list) ? list : [];
       if (sameCompanySnapshot(normalized, state.companies)) return;
       state.companies = normalized;
@@ -347,11 +384,11 @@
     };
 
     const fallbackPromise = fetchStaticCompanies()
-      .then(list => {
+      .then((list) => {
         render(list);
         return list;
       })
-      .catch(error => {
+      .catch((error) => {
         console.warn("Maps Link: falha no fallback de empresas.", error);
         render([]);
         return [];
@@ -378,8 +415,12 @@
   }
 
   async function fetchStaticCompanies() {
-    if (Array.isArray(state.staticCache) && state.staticCache.length) return state.staticCache;
-    if (Array.isArray(window.__staticCompanies) && window.__staticCompanies.length) {
+    if (Array.isArray(state.staticCache) && state.staticCache.length)
+      return state.staticCache;
+    if (
+      Array.isArray(window.__staticCompanies) &&
+      window.__staticCompanies.length
+    ) {
       state.staticCache = window.__staticCompanies;
       return state.staticCache;
     }
@@ -388,7 +429,9 @@
       state.staticCache = cached;
       window.__staticCompanies = cached;
     }
-    const dataUrl = location.pathname.includes("/pages/") ? "../assets/data/companies.json" : "assets/data/companies.json";
+    const dataUrl = location.pathname.includes("/pages/")
+      ? "../assets/data/companies.json"
+      : "assets/data/companies.json";
     try {
       const response = await fetch(dataUrl, { cache: "no-store" });
       if (!response.ok) throw new Error("Falha ao carregar companies.json");
@@ -399,18 +442,22 @@
       writeCachedCompanies(list);
       return list;
     } catch {
-      if (state.staticCache && state.staticCache.length) return state.staticCache;
+      if (state.staticCache && state.staticCache.length)
+        return state.staticCache;
       if (Array.isArray(window.__companies)) {
-        return window.__companies.filter(company => company?.source !== "user");
+        return window.__companies.filter(
+          (company) => company?.source !== "user",
+        );
       }
-      if (Array.isArray(window.mapsLinkCompanies)) return window.mapsLinkCompanies;
+      if (Array.isArray(window.mapsLinkCompanies))
+        return window.mapsLinkCompanies;
       return [];
     }
   }
 
   function exposeHelpers() {
-    window.applyFilters = filters => applyFilters(filters);
-    window.setFilters = filters => applyFilters(filters);
+    window.applyFilters = (filters) => applyFilters(filters);
+    window.setFilters = (filters) => applyFilters(filters);
     window.getFilterOptions = () => {
       if (window.MapsFilters?.buildFilterOptions) {
         return window.MapsFilters.buildFilterOptions(state.companies || []);
@@ -433,11 +480,12 @@
         togglePanelDesktop();
       }
     });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && state.panel.classList.contains("is-open")) closeDrawer();
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && state.panel.classList.contains("is-open"))
+        closeDrawer();
     });
     if (state.layout) {
-      state.layout.addEventListener("transitionend", event => {
+      state.layout.addEventListener("transitionend", (event) => {
         if (event.propertyName === "grid-template-columns") {
           window._leafletMap?.invalidateSize();
         }
@@ -453,7 +501,8 @@
     }
     if (state.vagasToggle) {
       state.vagasToggle.addEventListener("click", () => {
-        const current = state.vagasToggle.getAttribute("aria-pressed") === "true";
+        const current =
+          state.vagasToggle.getAttribute("aria-pressed") === "true";
         const next = !current;
         state.vagasToggle.setAttribute("aria-pressed", String(next));
         applyFilters({ isHiring: next });
@@ -461,7 +510,8 @@
     }
     if (state.heatToggle) {
       state.heatToggle.addEventListener("click", () => {
-        const current = state.heatToggle.getAttribute("aria-pressed") === "true";
+        const current =
+          state.heatToggle.getAttribute("aria-pressed") === "true";
         const next = !current;
         state.heatToggle.setAttribute("aria-pressed", String(next));
         renderHeat(state.filtered, next);
@@ -484,7 +534,7 @@
     state.map = L.map(mapContainer, { scrollWheelZoom: true });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
+      attribution: "&copy; OpenStreetMap",
     }).addTo(state.map);
     state.markersLayer = L.layerGroup().addTo(state.map);
     window._leafletMap = state.map;

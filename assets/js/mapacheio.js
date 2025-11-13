@@ -16,9 +16,9 @@
   let currentResults = [];
   let filterPanelOpen = false;
 
-  const toLower = value => String(value ?? "").toLowerCase();
+  const toLower = (value) => String(value ?? "").toLowerCase();
 
-  const escapeHtml = value =>
+  const escapeHtml = (value) =>
     String(value ?? "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -26,13 +26,13 @@
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
 
-  const normalizeInput = value => {
+  const normalizeInput = (value) => {
     if (value == null) return null;
     const trimmed = String(value).trim();
     return trimmed ? trimmed : null;
   };
 
-  const arrayify = value =>
+  const arrayify = (value) =>
     value == null ? [] : Array.isArray(value) ? value : [value];
 
   function getFilterOptions() {
@@ -52,7 +52,7 @@
     return {
       industries: [],
       sizes: [],
-      workModes: []
+      workModes: [],
     };
   }
 
@@ -79,7 +79,10 @@
     if (!filterPanelOpen || !filterPanel) return;
     const target = event.target;
     if (filterPanel.contains(target)) return;
-    if (filterToggle && (target === filterToggle || filterToggle.contains(target))) {
+    if (
+      filterToggle &&
+      (target === filterToggle || filterToggle.contains(target))
+    ) {
       return;
     }
     closeFilterPanel();
@@ -90,7 +93,7 @@
       return `<span class="fp-subtle">Nenhuma opcao disponivel.</span>`;
     }
     return items
-      .map(item => {
+      .map((item) => {
         const label = escapeHtml(item);
         const checked = selectedSet.has(toLower(item)) ? " checked" : "";
         return `<label class="fp-check"><input type="checkbox" name="${name}" value="${label}"${checked}><span>${label}</span></label>`;
@@ -103,7 +106,7 @@
       return `<span class="fp-subtle">Sem dados cadastrados.</span>`;
     }
     return items
-      .map(item => {
+      .map((item) => {
         const label = escapeHtml(item);
         const active = selectedSet.has(toLower(item)) ? " active" : "";
         return `<button type="button" class="chip${active}" ${attr}="${label}">${label}</button>`;
@@ -115,20 +118,21 @@
     if (!filterPanel) return;
 
     const options = getFilterOptions();
-    const industries = Array.isArray(options.industries) ? options.industries : [];
+    const industries = Array.isArray(options.industries)
+      ? options.industries
+      : [];
     const sizes = Array.isArray(options.sizes) ? options.sizes : [];
     const workModes = Array.isArray(options.workModes) ? options.workModes : [];
 
     const selectedIndustries = new Set(
-      arrayify(currentFilters.industries).map(toLower)
+      arrayify(currentFilters.industries).map(toLower),
     );
     const selectedSizes = new Set(arrayify(currentFilters.sizes).map(toLower));
     const selectedModes = new Set(
-      arrayify(currentFilters.workModes).map(toLower)
+      arrayify(currentFilters.workModes).map(toLower),
     );
     const hiringActive =
-      currentFilters.isHiring === true ||
-      currentFilters.isHiring === "true";
+      currentFilters.isHiring === true || currentFilters.isHiring === "true";
     const locationValue = currentFilters.location ?? currentFilters.q ?? "";
 
     filterPanel.innerHTML = `
@@ -168,16 +172,16 @@
         <div class="fp-section linha-toggle">
           <span>Apenas com Vagas Abertas</span>
           <span class="toggle-wrapper">
-            <button type="button" class="toggle" data-toggle="hiring" aria-pressed="${hiringActive ? 'true' : 'false'}"></button>
-            <input type="hidden" name="isHiring" value="${hiringActive ? 'true' : ''}">
+            <button type="button" class="toggle" data-toggle="hiring" aria-pressed="${hiringActive ? "true" : "false"}"></button>
+            <input type="hidden" name="isHiring" value="${hiringActive ? "true" : ""}">
           </span>
         </div>
 
         <div class="fp-section linha-toggle">
           <span>Mapa de Calor</span>
           <span class="toggle-wrapper">
-            <button type="button" class="toggle" data-toggle="heatmap" aria-pressed="${heatEnabled ? 'true' : 'false'}"></button>
-            <input type="hidden" name="heatmap" value="${heatEnabled ? 'true' : ''}">
+            <button type="button" class="toggle" data-toggle="heatmap" aria-pressed="${heatEnabled ? "true" : "false"}"></button>
+            <input type="hidden" name="heatmap" value="${heatEnabled ? "true" : ""}">
           </span>
         </div>
 
@@ -201,21 +205,21 @@
       filterToggle?.focus();
     });
 
-    sizeButtons.forEach(btn => {
+    sizeButtons.forEach((btn) => {
       if (!btn.dataset.size) btn.dataset.size = btn.textContent.trim();
       btn.addEventListener("click", () => {
         btn.classList.toggle("active");
       });
     });
 
-    modeButtons.forEach(btn => {
+    modeButtons.forEach((btn) => {
       if (!btn.dataset.mode) btn.dataset.mode = btn.textContent.trim();
       btn.addEventListener("click", () => {
         btn.classList.toggle("active");
       });
     });
 
-    toggleButtons.forEach(btn => {
+    toggleButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const pressed = btn.getAttribute("aria-pressed") === "true";
         const next = !pressed;
@@ -229,22 +233,22 @@
       });
     });
 
-    form?.addEventListener("submit", event => {
+    form?.addEventListener("submit", (event) => {
       event.preventDefault();
       const formData = new FormData(form);
 
       const selectedIndustriesList = Array.from(
-        form.querySelectorAll('input[name="industries"]:checked')
-      ).map(input => input.value);
+        form.querySelectorAll('input[name="industries"]:checked'),
+      ).map((input) => input.value);
 
       const selectedSizesList = sizeButtons
-        .filter(btn => btn.classList.contains("active"))
-        .map(btn => btn.dataset.size)
+        .filter((btn) => btn.classList.contains("active"))
+        .map((btn) => btn.dataset.size)
         .filter(Boolean);
 
       const selectedModesList = modeButtons
-        .filter(btn => btn.classList.contains("active"))
-        .map(btn => btn.dataset.mode)
+        .filter((btn) => btn.classList.contains("active"))
+        .map((btn) => btn.dataset.mode)
         .filter(Boolean);
 
       const location = normalizeInput(formData.get("location"));
@@ -257,7 +261,7 @@
         industries: selectedIndustriesList,
         sizes: selectedSizesList,
         workModes: selectedModesList,
-        isHiring: hiring
+        isHiring: hiring,
       });
       renderHeat(currentResults, heatEnabled);
       closeFilterPanel();
@@ -310,10 +314,10 @@
     const jobs = Array.isArray(company?.jobs) ? company.jobs : [];
     const tagsHtml = tags
       .filter(Boolean)
-      .map(tag => `<span class="ml-popup__chip">${tag}</span>`)
+      .map((tag) => `<span class="ml-popup__chip">${tag}</span>`)
       .join("");
     const jobsHtml = jobs
-      .map(job => {
+      .map((job) => {
         const title = job?.title || "Vaga";
         const type = job?.type
           ? `<span class="ml-popup__job-type">${job.type}</span>`
@@ -331,7 +335,7 @@
       : "ml-popup__badge--closed";
     const addressParts = [
       company?.address ? company.address : "",
-      [company?.city, company?.state].filter(Boolean).join(" - ")
+      [company?.city, company?.state].filter(Boolean).join(" - "),
     ].filter(Boolean);
     const address = addressParts.join("  ");
     const website = company?.website
@@ -376,7 +380,7 @@
   function addMarkers(list) {
     if (!markersLayer || !Array.isArray(list)) return;
     const bounds = [];
-    list.forEach(company => {
+    list.forEach((company) => {
       const coords = getCoords(company);
       if (!coords) return;
       const marker = L.marker(coords);
@@ -399,7 +403,7 @@
     }
     if (!on) return;
     const points = (list || [])
-      .map(company => {
+      .map((company) => {
         const coords = getCoords(company);
         return coords ? [coords[0], coords[1], 1] : null;
       })
@@ -409,7 +413,7 @@
       radius: 36,
       blur: 24,
       maxZoom: 17,
-      minOpacity: 0.25
+      minOpacity: 0.25,
     });
     heatLayer.addTo(map);
   }
@@ -417,7 +421,7 @@
   function applyAndRender(filters = {}) {
     const merged = { ...currentFilters, ...filters };
 
-    Object.keys(merged).forEach(key => {
+    Object.keys(merged).forEach((key) => {
       const value = merged[key];
       const isNullish = value === null || value === undefined;
       const isString = typeof value === "string";
@@ -455,7 +459,7 @@
     map = L.map(mapElement, { scrollWheelZoom: true });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
+      attribution: "&copy; OpenStreetMap",
     }).addTo(map);
     markersLayer = L.layerGroup().addTo(map);
   }
@@ -465,7 +469,10 @@
       try {
         return await window.MapsCompanyService.loadAll();
       } catch (error) {
-        console.error("Maps Link: falha ao carregar empresas para o mapa cheio.", error);
+        console.error(
+          "Maps Link: falha ao carregar empresas para o mapa cheio.",
+          error,
+        );
       }
     }
     const dataUrl = location.pathname.includes("/pages/")
@@ -495,15 +502,15 @@
   renderHeat(initial, heatEnabled);
   updateFilterIndicator();
 
-  window.applyFilters = filters => applyAndRender(filters);
-  window.setFilters = filters => applyAndRender(filters);
+  window.applyFilters = (filters) => applyAndRender(filters);
+  window.setFilters = (filters) => applyAndRender(filters);
   window.getFilterOptions = () => {
     return window.MapsFilters?.buildFilterOptions
       ? window.MapsFilters.buildFilterOptions(window.__companies || [])
       : {
           industries: [],
           sizes: [],
-          workModes: []
+          workModes: [],
         };
   };
   window.resetMap = function () {
@@ -521,4 +528,4 @@
       renderFilterPanel();
     }
   };
-})(); 
+})();

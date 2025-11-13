@@ -1,17 +1,74 @@
 ﻿<!doctype html>
 <html lang="pt-br">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="../manifest.json">
-    <link href="../assets/css/main.css" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
-    <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102569" />
+    <link rel="manifest" href="../manifest.json" />
+    <link href="../assets/css/main.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../assets/images/logo-icon-192.png"
+    />
+    <meta
+      name="description"
+      content="Um projeto academico de mapeamento, chamado maps link"
+    />
+    <!-- SEO -->
+    <link rel="canonical" href="https://mapslink.app/pages/paginamapav4.html" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="MapsLink" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MapsLink" />
+    <meta property="og:title" content="Maps Link - Maps" />
+    <meta
+      property="og:description"
+      content="Um projeto academico de mapeamento, chamado maps link"
+    />
+    <meta
+      property="og:url"
+      content="https://mapslink.app/pages/paginamapav4.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Maps Link - Maps" />
+    <meta
+      name="twitter:description"
+      content="Um projeto academico de mapeamento, chamado maps link"
+    />
+    <meta
+      name="twitter:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Maps Link - Maps",
+        "description": "Um projeto academico de mapeamento, chamado maps link",
+        "url": "https://mapslink.app/pages/paginamapav4.html",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
     <title>Maps Link - Maps</title>
-    <link rel="stylesheet" href="../assets/css/paginamapav4.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="../assets/css/paginamapav4.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
   </head>
@@ -20,9 +77,18 @@
       <div class="nav-fixed" role="navigation" aria-label="Navegacao principal">
         <nav class="nav-pilula" aria-label="Menu">
           <a href="#maps" class="nav-logo-link" aria-label="Ir para Maps">
-            <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+            <img
+              src="../assets/images/Logo Certa - Fundo png.png"
+              alt="Logo Maps Link"
+              class="nav-logo"
+            />
           </a>
-          <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+          <button
+            class="nav-toggle"
+            aria-controls="navMenu"
+            aria-expanded="false"
+            aria-label="Abrir menu"
+          >
             <i class="ri-menu-line" aria-hidden="true"></i>
           </button>
           <ul class="nav-links" id="navMenu" role="menubar">
@@ -30,11 +96,21 @@
             <li><a class="nav-link" href="paginamapav4.html">Maps</a></li>
             <li><a class="nav-link" href="selecaoperfil.html">Profile</a></li>
             <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
-            <li><a class="nav-link active" href="about.html" aria-current="page">About</a></li>
+            <li>
+              <a class="nav-link active" href="about.html" aria-current="page"
+                >About</a
+              >
+            </li>
             <li><a class="nav-link" href="contact.html">Contact</a></li>
           </ul>
         </nav>
-        <button id="btnFiltro" class="btn-filtro" type="button" aria-controls="painelFiltros" aria-expanded="false">
+        <button
+          id="btnFiltro"
+          class="btn-filtro"
+          type="button"
+          aria-controls="painelFiltros"
+          aria-expanded="false"
+        >
           <i class="ri-filter-3-line" aria-hidden="true"></i>
           <span>Filtro</span>
         </button>
@@ -42,27 +118,45 @@
     </header>
 
     <main id="maps" class="maps-page" role="main">
-      <h1 style="position:absolute;left:-9999px;">Mapa interativo</h1>
+      <h1 style="position: absolute; left: -9999px">Mapa interativo</h1>
       <div class="maps-layout filters-closed">
         <aside class="lista-empresas" aria-labelledby="titulo-lista">
           <h2 id="titulo-lista">Empresas Listadas</h2>
           <ul class="cards-empresas">
             <li class="card-empresa">
-              <span class="badge-vagas aberta" aria-label="Vagas Abertas"><i class="ri-briefcase-2-fill" aria-hidden="true"></i> Vagas Abertas</span>
+              <span class="badge-vagas aberta" aria-label="Vagas Abertas"
+                ><i class="ri-briefcase-2-fill" aria-hidden="true"></i> Vagas
+                Abertas</span
+              >
               <h3 class="empresa-nome">SIDI</h3>
-              <p class="empresa-endereco">Rua Angacu, 171 - Lot. Alphaville Campinas, Campinas - SP, 13098-321</p>
+              <p class="empresa-endereco">
+                Rua Angacu, 171 - Lot. Alphaville Campinas, Campinas - SP,
+                13098-321
+              </p>
               <button class="btn-detalhes" type="button">Mais detalhes</button>
             </li>
             <li class="card-empresa">
-              <span class="badge-vagas fechada" aria-label="Vagas Fechadas"><i class="ri-briefcase-2-line" aria-hidden="true"></i> Vagas Fechadas</span>
+              <span class="badge-vagas fechada" aria-label="Vagas Fechadas"
+                ><i class="ri-briefcase-2-line" aria-hidden="true"></i> Vagas
+                Fechadas</span
+              >
               <h3 class="empresa-nome">SAMSUNG</h3>
-              <p class="empresa-endereco">Rua Thomas Nilsen Junior, 150 - Parque Imperador, Campinas - SP, 13097-105</p>
+              <p class="empresa-endereco">
+                Rua Thomas Nilsen Junior, 150 - Parque Imperador, Campinas - SP,
+                13097-105
+              </p>
               <button class="btn-detalhes" type="button">Mais detalhes</button>
             </li>
             <li class="card-empresa">
-              <span class="badge-vagas aberta" aria-label="Vagas Abertas"><i class="ri-briefcase-2-fill" aria-hidden="true"></i> Vagas Abertas</span>
+              <span class="badge-vagas aberta" aria-label="Vagas Abertas"
+                ><i class="ri-briefcase-2-fill" aria-hidden="true"></i> Vagas
+                Abertas</span
+              >
               <h3 class="empresa-nome">CNPEM</h3>
-              <p class="empresa-endereco">Polo II de Alta Tecnologia - Rua Giuseppe Maximo Scolfaro, 10000 - Bosque das Palmeiras, Campinas - SP, 13083-100</p>
+              <p class="empresa-endereco">
+                Polo II de Alta Tecnologia - Rua Giuseppe Maximo Scolfaro, 10000
+                - Bosque das Palmeiras, Campinas - SP, 13083-100
+              </p>
               <button class="btn-detalhes" type="button">Mais detalhes</button>
             </li>
           </ul>
@@ -71,34 +165,60 @@
         <section class="mapa-area" aria-label="Mapa de empresas">
           <div class="mapa-wrapper">
             <div id="map" role="application" aria-label="Mapa interativo"></div>
-            <button class="mapa-control fullscreen" type="button" aria-label="Tela cheia">
+            <button
+              class="mapa-control fullscreen"
+              type="button"
+              aria-label="Tela cheia"
+            >
               <i class="ri-fullscreen-line" aria-hidden="true"></i>
             </button>
             <form class="busca-mapa" role="search" aria-label="Buscar empresa">
               <i class="ri-search-line" aria-hidden="true"></i>
-              <input type="search" name="q" placeholder="Pesquise sua empresa" aria-label="Pesquise sua empresa">
-              <button class="btn-localizar" type="button" aria-label="Localizar">
+              <input
+                type="search"
+                name="q"
+                placeholder="Pesquise sua empresa"
+                aria-label="Pesquise sua empresa"
+              />
+              <button
+                class="btn-localizar"
+                type="button"
+                aria-label="Localizar"
+              >
                 <i class="ri-crosshair-2-line" aria-hidden="true"></i>
               </button>
             </form>
           </div>
         </section>
 
-        <aside id="painelFiltros" class="painel-filtros" role="dialog" aria-modal="true" aria-labelledby="tituloFiltros" hidden>
+        <aside
+          id="painelFiltros"
+          class="painel-filtros"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="tituloFiltros"
+          hidden
+        >
           <form class="filtros-conteudo" aria-label="Filtrar vagas">
             <h2 id="tituloFiltros">Filtros</h2>
-            <label for="filtroLocal" class="label-campo">Cidade, Estado ou Regiao</label>
+            <label for="filtroLocal" class="label-campo"
+              >Cidade, Estado ou Regiao</label
+            >
             <div class="campo-icone">
               <i class="ri-map-pin-2-line" aria-hidden="true"></i>
-              <input id="filtroLocal" type="text" placeholder="Cidade, Estado ou Regiao">
+              <input
+                id="filtroLocal"
+                type="text"
+                placeholder="Cidade, Estado ou Regiao"
+              />
             </div>
             <fieldset class="grupo-cbx">
               <legend>Área de Atuação</legend>
-              <label><input type="checkbox"> Tecnologia</label>
-              <label><input type="checkbox"> Saude</label>
-              <label><input type="checkbox"> Educacao</label>
-              <label><input type="checkbox"> Marketing</label>
-              <label><input type="checkbox"> Vendas</label>
+              <label><input type="checkbox" /> Tecnologia</label>
+              <label><input type="checkbox" /> Saude</label>
+              <label><input type="checkbox" /> Educacao</label>
+              <label><input type="checkbox" /> Marketing</label>
+              <label><input type="checkbox" /> Vendas</label>
             </fieldset>
             <fieldset class="grupo-chips">
               <legend>Porte da Empresa</legend>
@@ -115,11 +235,22 @@
             </fieldset>
             <div class="linha-toggle">
               <span>Apenas com Vagas Abertas</span>
-              <button type="button" class="toggle" aria-pressed="false" aria-label="Apenas com Vagas Abertas"></button>
+              <button
+                type="button"
+                class="toggle"
+                aria-pressed="false"
+                aria-label="Apenas com Vagas Abertas"
+              ></button>
             </div>
             <div class="linha-toggle">
               <span>Mapa de Calor</span>
-              <button id="toggleHeat" type="button" class="toggle" aria-pressed="false" aria-label="Ativar mapa de calor"></button>
+              <button
+                id="toggleHeat"
+                type="button"
+                class="toggle"
+                aria-pressed="false"
+                aria-label="Ativar mapa de calor"
+              ></button>
             </div>
             <button class="btn-aplicar" type="button">Aplicar Filtros</button>
           </form>
@@ -127,8 +258,16 @@
       </div>
     </main>
 
-    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script defer src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script
+      defer
+      src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"
+    ></script>
     <script defer src="../assets/js/filters.js"></script>
     <script defer src="../assets/js/maps-data.js"></script>
     <script defer src="../assets/js/paginamapav4.js"></script>

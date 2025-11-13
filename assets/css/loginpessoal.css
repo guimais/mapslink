@@ -1,92 +1,116 @@
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  padding:0;
-  font-family:'Open Sans',sans-serif;
-  color:var(--text);
-  line-height:1.6;
-  background-color:var(--bg);
+* {
+  box-sizing: border-box;
 }
 
-h1,h2,.titulo-principal{
-  font-family:'Montserrat',sans-serif;
-  letter-spacing:.2px;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+  background-color: var(--bg);
 }
 
-.nav-container{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  position:fixed;
-  top:20px;
-  left:0;
-  z-index:1000;
+h1,
+h2,
+.titulo-principal {
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.2px;
 }
 
-.nav-pilula{
-  background:var(--surface);
-  border:1px solid rgba(16,37,105,.10);
-  box-shadow:0 6px 20px rgba(0,0,0,.06);
-  border-radius:9999px;
-  padding:12px 28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:92%;
-  max-width:1200px;
-  height:60px;
+.nav-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 20px;
+  left: 0;
+  z-index: 1000;
 }
-.nav-logo-link{display:flex;align-items:center;justify-content:center;height:100%}
-.nav-logo{height:90px;width:auto;display:block;margin-right:8px}
-.nav-toggle{
-  display:none;
-  background:none;
-  border:none;
-  color:var(--text);
-  font-size:24px;
-  cursor:pointer;
-  padding:8px;
-  border-radius:8px;
-  transition:all .2s ease;
-  position:relative;
-  z-index:1001;
+
+.nav-pilula {
+  background: var(--surface);
+  border: 1px solid rgba(16, 37, 105, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  border-radius: 9999px;
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 92%;
+  max-width: 1200px;
+  height: 60px;
 }
-.nav-toggle:hover{
-  background:rgba(16,37,105,.05);
-  color:var(--brand);
+.nav-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
-.nav-toggle:focus-visible{
-  outline:2px solid var(--brand);
-  outline-offset:2px;
+.nav-logo {
+  height: 90px;
+  width: auto;
+  display: block;
+  margin-right: 8px;
 }
-.nav-links{
-  list-style:none;
-  display:flex;
-  gap:16px;
-  margin:0;
-  padding:0;
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1001;
 }
-.nav-link{
-  font-family:'Montserrat',sans-serif;
+.nav-toggle:hover {
+  background: rgba(16, 37, 105, 0.05);
+  color: var(--brand);
+}
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+}
+.nav-link {
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  text-decoration:none;
-  color:#1a1a1a;
-  font-size:16px;
-  opacity:.92;
-  padding:12px 16px;
-  border-radius:10px;
-  transition:color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 16px;
+  opacity: 0.92;
+  padding: 12px 16px;
+  border-radius: 10px;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.15s ease;
 }
-.nav-link.active{
+.nav-link.active {
   font-weight: 800;
   color: var(--brand-2, #0b1b4a);
-  background-color: rgba(16,37,105,.12);
-  box-shadow: 0 0 0 1px rgba(16,37,105,.18) inset;
+  background-color: rgba(16, 37, 105, 0.12);
+  box-shadow: 0 0 0 1px rgba(16, 37, 105, 0.18) inset;
 }
-.nav-link:hover{opacity:1;color:var(--brand);transform:translateY(-1px)}
-.nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-
+.nav-link:hover {
+  opacity: 1;
+  color: var(--brand);
+  transform: translateY(-1px);
+}
+.nav-link:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
 
 @media (max-width: 768px) {
   .nav-container {
@@ -116,7 +140,9 @@ h1,h2,.titulo-principal{
     background: none;
     color: var(--text);
     border-radius: 10px;
-    transition: background-color .2s ease, color .2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   .nav-links {
@@ -152,21 +178,21 @@ h1,h2,.titulo-principal{
     border-bottom: none;
   }
 
-  .nav-link{
-  font-family:'Montserrat',sans-serif;
-  font-weight: 700;
-  display: block;
-  padding: 18px 24px;
-  font-size: 16px;
-  color: var(--text);
-  border-radius: 0;
-  transition: all 0.2s ease;
-  min-height: 54px;
-  display: flex;
-  align-items: center;
-  opacity: 1;
-  transform: none;
-}
+  .nav-link {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    display: block;
+    padding: 18px 24px;
+    font-size: 16px;
+    color: var(--text);
+    border-radius: 0;
+    transition: all 0.2s ease;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    opacity: 1;
+    transform: none;
+  }
 
   .nav-link:hover,
   .nav-link:focus {
@@ -177,14 +203,13 @@ h1,h2,.titulo-principal{
   }
 
   .nav-link.active {
-  font-weight: 800;
-  color: var(--brand-2, #0b1b4a);
-  background-color: rgba(16,37,105,.12);
-  box-shadow: 0 0 0 1px rgba(16,37,105,.18) inset;
-  background: rgba(16, 37, 105, 0.08);
-  border-left: 4px solid var(--brand);
-}
-
+    font-weight: 800;
+    color: var(--brand-2, #0b1b4a);
+    background-color: rgba(16, 37, 105, 0.12);
+    box-shadow: 0 0 0 1px rgba(16, 37, 105, 0.18) inset;
+    background: rgba(16, 37, 105, 0.08);
+    border-left: 4px solid var(--brand);
+  }
 
   .nav-overlay {
     position: fixed;
@@ -203,7 +228,6 @@ h1,h2,.titulo-principal{
     opacity: 1;
     visibility: visible;
   }
-
 }
 
 @media (max-width: 560px) {
@@ -253,7 +277,8 @@ h1,h2,.titulo-principal{
     right: -100%;
     padding: 70px 0 30px;
   }
-  .nav-link{  font-weight: 700;
+  .nav-link {
+    font-weight: 700;
 
     padding: 16px 20px;
     font-size: 15px;
@@ -261,13 +286,10 @@ h1,h2,.titulo-principal{
   }
 }
 
-
 @media (min-width: 1500px) {
   :root {
-
     --nav-h: 72px;
-
-}
+  }
   html {
     font-size: 17px;
   }
@@ -275,7 +297,7 @@ h1,h2,.titulo-principal{
     top: 24px;
   }
   .nav-pilula {
-    max-width:1300px;
+    max-width: 1300px;
     padding: 16px 36px;
     height: var(--nav-h);
   }
@@ -320,12 +342,12 @@ h1,h2,.titulo-principal{
     align-items: center;
     justify-content: center;
   }
-  .nav-link{  font-weight: 700;
+  .nav-link {
+    font-weight: 700;
 
     min-height: 48px;
   }
 }
-
 
 .loginpessoal {
   min-height: 100vh;
@@ -335,7 +357,6 @@ h1,h2,.titulo-principal{
   padding: 100px 20px 40px;
   background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 100%);
 }
-
 
 @media (max-width: 768px) {
   .loginpessoal {
@@ -366,7 +387,7 @@ h1,h2,.titulo-principal{
 }
 
 .login-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -525,7 +546,7 @@ h1,h2,.titulo-principal{
 }
 
 .checkbox-container input[type="checkbox"]:checked + .checkmark::after {
-  content: '✓';
+  content: "✓";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -622,7 +643,7 @@ h1,h2,.titulo-principal{
 }
 
 .divider::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 0;
@@ -667,7 +688,7 @@ h1,h2,.titulo-principal{
 
 @media (max-width: 1200px) {
   .nav-pilula {
-    max-width:1200px;
+    max-width: 1200px;
     padding: 12px 24px;
   }
   .nav-links {
@@ -872,7 +893,6 @@ h1,h2,.titulo-principal{
   }
 }
 
-
 @media (max-width: 768px) and (orientation: landscape) {
   .loginpessoal {
     padding: 20px 16px;
@@ -906,7 +926,6 @@ h1,h2,.titulo-principal{
   }
 }
 
-
 @media (pointer: coarse) {
   .form-input {
     min-height: 48px;
@@ -938,8 +957,6 @@ h1,h2,.titulo-principal{
   }
 }
 
-
-
 @supports (-webkit-touch-callout: none) {
   .loginpessoal {
     min-height: -webkit-fill-available;
@@ -956,15 +973,8 @@ h1,h2,.titulo-principal{
   }
 }
 
-
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .login-card {
     border-width: 0.5px;
   }
 }
-
-
-
-
-
-

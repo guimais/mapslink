@@ -1,27 +1,97 @@
 <!doctype html>
 <html lang="pt-br">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#102569">
-    <link rel="manifest" href="../manifest.json">
-    <link href="../assets/css/main.css" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png">
-    <meta name="description" content="Um projeto academico de mapeamento, chamado maps link">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#102569" />
+    <link rel="manifest" href="../manifest.json" />
+    <link href="../assets/css/main.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="../assets/images/logo-icon-192.png"
+    />
+    <meta
+      name="description"
+      content="Um projeto academico de mapeamento, chamado maps link"
+    />
+    <!-- SEO -->
+    <link rel="canonical" href="https://mapslink.app/pages/mapacheio.html" />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="MapsLink" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MapsLink" />
+    <meta property="og:title" content="Maps Link - Mapa Cheio" />
+    <meta
+      property="og:description"
+      content="Um projeto academico de mapeamento, chamado maps link"
+    />
+    <meta
+      property="og:url"
+      content="https://mapslink.app/pages/mapacheio.html"
+    />
+    <meta
+      property="og:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Maps Link - Mapa Cheio" />
+    <meta
+      name="twitter:description"
+      content="Um projeto academico de mapeamento, chamado maps link"
+    />
+    <meta
+      name="twitter:image"
+      content="https://mapslink.app/assets/images/logo-icon-512.png"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Maps Link - Mapa Cheio",
+        "description": "Um projeto academico de mapeamento, chamado maps link",
+        "url": "https://mapslink.app/pages/mapacheio.html",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
     <title>Maps Link - Mapa Cheio</title>
-    <link rel="stylesheet" href="../assets/css/mapacheio.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="../assets/css/mapacheio.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <script defer src="../assets/js/_shared-nav.js"></script>
     <script defer src="../assets/js/main.js"></script>
   </head>
   <body data-page="mapacheio" data-nav-active="paginamapav4.html">
     <header class="nav-container" role="banner">
-      <nav class="nav-pilula" role="navigation" aria-label="Navegacao principal">
+      <nav
+        class="nav-pilula"
+        role="navigation"
+        aria-label="Navegacao principal"
+      >
         <a href="/" class="nav-logo-link" aria-label="Pagina inicial Maps Link">
-          <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo">
+          <img
+            src="../assets/images/Logo Certa - Fundo png.png"
+            alt="Logo Maps Link"
+            class="nav-logo"
+          />
         </a>
-        <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+        <button
+          class="nav-toggle"
+          aria-controls="navMenu"
+          aria-expanded="false"
+          aria-label="Abrir menu"
+        >
           <i class="ri-menu-line" aria-hidden="true"></i>
         </button>
         <ul class="nav-links" id="navMenu">
@@ -36,30 +106,69 @@
     </header>
 
     <main id="maps-page" role="main">
-      <h1 style="position:absolute;left:-9999px;">Mapa completo</h1>
+      <h1 style="position: absolute; left: -9999px">Mapa completo</h1>
       <section class="map-wrapper" aria-label="Mapa interativo">
-        <div id="map" class="map-canvas" role="application" aria-label="Canvas do mapa"></div>
+        <div
+          id="map"
+          class="map-canvas"
+          role="application"
+          aria-label="Canvas do mapa"
+        ></div>
         <div class="search-ui" aria-label="Busca e filtros">
-          <form class="search-bar" role="search" aria-label="Pesquisar empresas">
-            <input type="search" name="q" id="search" placeholder="Pesquise sua empresa" autocomplete="off" aria-label="Campo de busca por empresa">
+          <form
+            class="search-bar"
+            role="search"
+            aria-label="Pesquisar empresas"
+          >
+            <input
+              type="search"
+              name="q"
+              id="search"
+              placeholder="Pesquise sua empresa"
+              autocomplete="off"
+              aria-label="Campo de busca por empresa"
+            />
             <button type="submit" class="search-btn" aria-label="Buscar">
               <i class="ri-search-2-line" aria-hidden="true"></i>
             </button>
           </form>
-          <button class="filter-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="filterPanel">
+          <button
+            class="filter-toggle"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="filterPanel"
+          >
             <i class="ri-equalizer-line" aria-hidden="true"></i>
             <span>Filtro</span>
           </button>
         </div>
-        <a href="paginamapav4.html" class="map-exit-control" aria-label="Voltar para o mapa reduzido">
+        <a
+          href="paginamapav4.html"
+          class="map-exit-control"
+          aria-label="Voltar para o mapa reduzido"
+        >
           <i class="ri-fullscreen-exit-line" aria-hidden="true"></i>
         </a>
-        <aside id="filterPanel" class="filter-panel painel-filtros" aria-label="Painel de filtros" hidden></aside>
+        <aside
+          id="filterPanel"
+          class="filter-panel painel-filtros"
+          aria-label="Painel de filtros"
+          hidden
+        ></aside>
       </section>
     </main>
 
-    <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script defer src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script
+      defer
+      src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"
+    ></script>
     <script defer src="../assets/js/filters.js"></script>
     <script defer src="../assets/js/maps-data.js"></script>
     <script defer src="../assets/js/mapacheio.js"></script>

@@ -5,7 +5,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   color: var(--text);
   line-height: 1.6;
   background-color: var(--bg);
@@ -16,8 +16,8 @@ h2,
 .titulo-principal,
 .subtitulo-principal,
 .titulo-sobre {
-  font-family: 'Montserrat', sans-serif;
-  letter-spacing: .2px;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.2px;
 }
 
 .site-header {
@@ -32,15 +32,15 @@ h2,
 
 .nav-pilula {
   background: var(--surface);
-  border: 1px solid rgba(16, 37, 105, .10);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
+  border: 1px solid rgba(16, 37, 105, 0.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   border-radius: 9999px;
   padding: 12px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width:92%;
-  max-width:1200px;
+  width: 92%;
+  max-width: 1200px;
   height: var(--nav-h);
   position: relative;
 }
@@ -60,7 +60,7 @@ h2,
 }
 
 .nav-wordmark {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 14px;
   line-height: 14px;
@@ -79,15 +79,19 @@ h2,
 }
 
 .nav-link {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-decoration: none;
   color: #1a1a1a;
   font-weight: 700;
   font-size: 16px;
-  opacity: .92;
+  opacity: 0.92;
   padding: 10px 12px;
   border-radius: 10px;
-  transition: color .2s ease, background-color .2s ease, opacity .2s ease, transform .15s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.15s ease;
 }
 
 .nav-link:hover {
@@ -104,7 +108,7 @@ h2,
 .nav-link.active {
   font-weight: 800;
   color: var(--brand-2);
-  background-color: rgba(16, 37, 105, .10);
+  background-color: rgba(16, 37, 105, 0.1);
 }
 
 .nav-toggle {
@@ -131,7 +135,9 @@ h2,
   width: 100%;
   background: #1a1a1a;
   border-radius: 2px;
-  transition: transform .2s ease, opacity .2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .nav-pilula.is-open .nav-toggle-line:nth-child(1) {
@@ -189,14 +195,14 @@ h2,
 
 .dash-card {
   background: #e9edf3;
-  border: 1px solid rgba(0, 0, 0, .08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 14px;
   padding: 14px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 210px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, .05) inset;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05) inset;
 }
 
 .dash-card i {
@@ -205,7 +211,7 @@ h2,
 }
 
 .dash-card-num {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 28px;
   font-weight: 700;
   color: #000;
@@ -215,15 +221,15 @@ h2,
 .dash-card-label {
   display: block;
   font-size: 12px;
-  letter-spacing: .4px;
+  letter-spacing: 0.4px;
   color: #222;
-  opacity: .85;
+  opacity: 0.85;
 }
 
 .dash-divider {
   border: 0;
   height: 1px;
-  background: rgba(0, 0, 0, .12);
+  background: rgba(0, 0, 0, 0.12);
   max-width: 1800px;
   margin: 24px auto 12px;
 }
@@ -238,10 +244,10 @@ h2,
 
 .chart-box {
   background: var(--surface-2);
-  border: 1px solid rgba(0, 0, 0, .08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
   padding: 18px;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .06);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
   min-height: 420px;
   height: 48vh;
   display: flex;
@@ -250,10 +256,10 @@ h2,
 
 .chart-title {
   margin: 6px 0 14px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 700;
   font-size: 24px;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   color: #0f172a;
 }
 
@@ -321,7 +327,7 @@ h2,
     top: 14px;
   }
   .nav-pilula {
-    width:92%;
+    width: 92%;
     padding: 12px 20px;
   }
   .dashboard {
@@ -352,7 +358,7 @@ h2,
     padding: 10px 16px;
     height: 56px;
     border-radius: 18px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
   .nav-logo {
     height: 74px;
@@ -371,11 +377,13 @@ h2,
     background: none;
     color: var(--text);
     border-radius: 10px;
-    transition: background-color .2s ease, color .2s ease;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
   .nav-toggle:hover,
   .nav-toggle:focus-visible {
-    background: rgba(16,37,105,.08);
+    background: rgba(16, 37, 105, 0.08);
     color: var(--brand);
   }
   .nav-links {
@@ -390,8 +398,8 @@ h2,
     justify-content: flex-start;
     padding: 88px 0 40px;
     gap: 0;
-    box-shadow: -4px 0 20px rgba(0,0,0,0.12);
-    transition: right .3s ease;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
+    transition: right 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
   }
@@ -422,17 +430,17 @@ h2,
     color: var(--brand);
   }
   .nav-link.active {
-    background: rgba(16,37,105,.12);
+    background: rgba(16, 37, 105, 0.12);
     box-shadow: none;
     border-left: 4px solid var(--brand);
   }
   .nav-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15,23,42,0.45);
+    background: rgba(15, 23, 42, 0.45);
     opacity: 0;
     visibility: hidden;
-    transition: opacity .3s ease;
+    transition: opacity 0.3s ease;
     z-index: 999;
   }
   .nav-overlay.active {
@@ -551,7 +559,3 @@ h2,
     scroll-behavior: auto !important;
   }
 }
-
-
-
-

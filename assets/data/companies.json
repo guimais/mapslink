@@ -1,71 +1,139 @@
 [
   {
     "id": "cmp-001",
+    "slug": "techcampinas",
+    "source": "static",
     "name": "TechCampinas",
     "industry": "Software",
     "city": "Campinas",
     "state": "SP",
     "address": "Av. Francisco Glicério, 945 - Centro",
-    "coordinates": { "lat": -22.9056, "lng": -47.0608 },
+    "coordinates": {
+      "lat": -22.9056,
+      "lng": -47.0608
+    },
     "website": "https://techcampinas.com.br",
     "logo": "assets/images/techcampinas-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Desenvolvedor Front-End", "type": "CLT", "url": "https://techcampinas.com.br/vagas/frontend" },
-      { "title": "Estágio em UX/UI", "type": "Estágio", "url": "https://techcampinas.com.br/vagas/ux-stg" }
+      {
+        "id": "cmp-001-job-01",
+        "title": "Desenvolvedor Front-End",
+        "type": "CLT",
+        "url": "https://techcampinas.com.br/vagas/frontend",
+        "publishedAt": "2025-10-14T12:00:00Z"
+      },
+      {
+        "id": "cmp-001-job-02",
+        "title": "Estágio em UX/UI",
+        "type": "Estágio",
+        "url": "https://techcampinas.com.br/vagas/ux-stg",
+        "publishedAt": "2025-10-14T12:00:00Z"
+      }
     ],
     "tags": ["React", "JavaScript", "Figma"],
     "size": "Media",
     "work_modes": ["Hibrido", "Remoto"],
-    "updated_at": "2025-10-14T12:00:00Z"
+    "updated_at": "2025-10-14T12:00:00Z",
+    "updatedAt": "2025-10-14T12:00:00Z",
+    "stats": {
+      "jobs_open": 2,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-14T12:00:00Z"
+    }
   },
   {
     "id": "cmp-002",
+    "slug": "innovatesp",
+    "source": "static",
     "name": "InnovateSP",
     "industry": "Engenharia",
     "city": "São Paulo",
     "state": "SP",
     "address": "Rua Haddock Lobo, 200 - Cerqueira César",
-    "coordinates": { "lat": -23.5505, "lng": -46.6333 },
+    "coordinates": {
+      "lat": -23.5505,
+      "lng": -46.6333
+    },
     "website": "https://innovatesp.com.br",
     "logo": "assets/images/innovatesp-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Engenheiro de Software", "type": "PJ", "url": "https://innovatesp.com.br/oportunidades/engenheiro-software" }
+      {
+        "id": "cmp-002-job-01",
+        "title": "Engenheiro de Software",
+        "type": "PJ",
+        "url": "https://innovatesp.com.br/oportunidades/engenheiro-software",
+        "publishedAt": "2025-10-12T09:30:00Z"
+      }
     ],
     "tags": ["Python", "IA", "Cloud"],
     "size": "Grande",
     "work_modes": ["Hibrido"],
-    "updated_at": "2025-10-12T09:30:00Z"
+    "updated_at": "2025-10-12T09:30:00Z",
+    "updatedAt": "2025-10-12T09:30:00Z",
+    "stats": {
+      "jobs_open": 1,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-12T09:30:00Z"
+    }
   },
   {
     "id": "cmp-003",
+    "slug": "datario-labs",
+    "source": "static",
     "name": "DataRio Labs",
     "industry": "Pesquisa",
     "city": "Rio de Janeiro",
     "state": "RJ",
     "address": "Av. Pasteur, 250 - Urca",
-    "coordinates": { "lat": -22.9068, "lng": -43.1729 },
+    "coordinates": {
+      "lat": -22.9068,
+      "lng": -43.1729
+    },
     "website": "https://datario.labs.br",
     "logo": "assets/images/datario-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Cientista de Dados", "type": "CLT", "url": "https://datario.labs.br/carreiras/cientista-dados" },
-      { "title": "Analista de Dados Júnior", "type": "CLT", "url": "https://datario.labs.br/carreiras/analista-dados" }
+      {
+        "id": "cmp-003-job-01",
+        "title": "Cientista de Dados",
+        "type": "CLT",
+        "url": "https://datario.labs.br/carreiras/cientista-dados",
+        "publishedAt": "2025-10-10T15:45:00Z"
+      },
+      {
+        "id": "cmp-003-job-02",
+        "title": "Analista de Dados Júnior",
+        "type": "CLT",
+        "url": "https://datario.labs.br/carreiras/analista-dados",
+        "publishedAt": "2025-10-10T15:45:00Z"
+      }
     ],
     "tags": ["SQL", "Machine Learning", "Analytics"],
     "size": "Media",
     "work_modes": ["Presencial", "Hibrido"],
-    "updated_at": "2025-10-10T15:45:00Z"
+    "updated_at": "2025-10-10T15:45:00Z",
+    "updatedAt": "2025-10-10T15:45:00Z",
+    "stats": {
+      "jobs_open": 2,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-10T15:45:00Z"
+    }
   },
   {
     "id": "cmp-004",
+    "slug": "smart-mobility",
+    "source": "static",
     "name": "Smart Mobility",
     "industry": "Transporte Inteligente",
     "city": "Campinas",
     "state": "SP",
     "address": "Rod. Dom Pedro I, Km 138 - Parque das Universidades",
-    "coordinates": { "lat": -22.8349, "lng": -47.0526 },
+    "coordinates": {
+      "lat": -22.8349,
+      "lng": -47.0526
+    },
     "website": "https://smartmobility.com.br",
     "logo": "assets/images/smartmobility-logo.png",
     "is_hiring": false,
@@ -73,54 +141,99 @@
     "tags": ["IoT", "Mobilidade", "Sustentabilidade"],
     "size": "Startup",
     "work_modes": ["Presencial"],
-    "updated_at": "2025-10-11T18:00:00Z"
+    "updated_at": "2025-10-11T18:00:00Z",
+    "updatedAt": "2025-10-11T18:00:00Z",
+    "stats": {
+      "jobs_open": 0,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-11T18:00:00Z"
+    }
   },
   {
     "id": "cmp-005",
+    "slug": "greentech-solutions",
+    "source": "static",
     "name": "GreenTech Solutions",
     "industry": "Energia Sustentável",
     "city": "São Paulo",
     "state": "SP",
     "address": "Av. Paulista, 1374 - Bela Vista",
-    "coordinates": { "lat": -23.5614, "lng": -46.6558 },
+    "coordinates": {
+      "lat": -23.5614,
+      "lng": -46.6558
+    },
     "website": "https://greentechsolutions.com.br",
     "logo": "assets/images/greentech-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Analista de Energia Solar", "type": "CLT", "url": "https://greentechsolutions.com.br/carreiras/energia-solar" }
+      {
+        "id": "cmp-005-job-01",
+        "title": "Analista de Energia Solar",
+        "type": "CLT",
+        "url": "https://greentechsolutions.com.br/carreiras/energia-solar",
+        "publishedAt": "2025-10-13T11:20:00Z"
+      }
     ],
     "tags": ["Sustentabilidade", "Energia Solar", "Inovação"],
     "size": "Grande",
     "work_modes": ["Presencial", "Hibrido"],
-    "updated_at": "2025-10-13T11:20:00Z"
+    "updated_at": "2025-10-13T11:20:00Z",
+    "updatedAt": "2025-10-13T11:20:00Z",
+    "stats": {
+      "jobs_open": 1,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-13T11:20:00Z"
+    }
   },
   {
     "id": "cmp-006",
+    "slug": "neuralworks-ai",
+    "source": "static",
     "name": "NeuralWorks AI",
     "industry": "Inteligência Artificial",
     "city": "Campinas",
     "state": "SP",
     "address": "Rua Saturnino de Brito, 200 - Taquaral",
-    "coordinates": { "lat": -22.888, "lng": -47.066 },
+    "coordinates": {
+      "lat": -22.888,
+      "lng": -47.066
+    },
     "website": "https://neuralworks.ai",
     "logo": "assets/images/neuralworks-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Pesquisador em IA Generativa", "type": "CLT", "url": "https://neuralworks.ai/jobs/ia-generativa" }
+      {
+        "id": "cmp-006-job-01",
+        "title": "Pesquisador em IA Generativa",
+        "type": "CLT",
+        "url": "https://neuralworks.ai/jobs/ia-generativa",
+        "publishedAt": "2025-10-15T09:00:00Z"
+      }
     ],
     "tags": ["Deep Learning", "Python", "TensorFlow"],
     "size": "Startup",
     "work_modes": ["Hibrido", "Remoto"],
-    "updated_at": "2025-10-15T09:00:00Z"
+    "updated_at": "2025-10-15T09:00:00Z",
+    "updatedAt": "2025-10-15T09:00:00Z",
+    "stats": {
+      "jobs_open": 1,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-15T09:00:00Z"
+    }
   },
   {
     "id": "cmp-007",
+    "slug": "urbannext-engenharia",
+    "source": "static",
     "name": "UrbanNext Engenharia",
     "industry": "Infraestrutura",
     "city": "São Paulo",
     "state": "SP",
     "address": "Av. Brigadeiro Faria Lima, 2200 - Jardim Paulistano",
-    "coordinates": { "lat": -23.571, "lng": -46.687 },
+    "coordinates": {
+      "lat": -23.571,
+      "lng": -46.687
+    },
     "website": "https://urbannext.com.br",
     "logo": "assets/images/urbannext-logo.png",
     "is_hiring": false,
@@ -128,65 +241,134 @@
     "tags": ["Smart Cities", "IoT", "Infraestrutura Urbana"],
     "size": "Grande",
     "work_modes": ["Presencial"],
-    "updated_at": "2025-10-09T14:00:00Z"
+    "updated_at": "2025-10-09T14:00:00Z",
+    "updatedAt": "2025-10-09T14:00:00Z",
+    "stats": {
+      "jobs_open": 0,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-09T14:00:00Z"
+    }
   },
   {
     "id": "cmp-008",
+    "slug": "agroconnect-brasil",
+    "source": "static",
     "name": "AgroConnect Brasil",
     "industry": "Agrotech",
     "city": "Ribeirão Preto",
     "state": "SP",
     "address": "Rod. Anhanguera, Km 312",
-    "coordinates": { "lat": -21.178, "lng": -47.806 },
+    "coordinates": {
+      "lat": -21.178,
+      "lng": -47.806
+    },
     "website": "https://agroconnect.com.br",
     "logo": "assets/images/agroconnect-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Analista de IoT Agrícola", "type": "CLT", "url": "https://agroconnect.com.br/carreiras/iot" },
-      { "title": "Cientista de Dados Agrícolas", "type": "CLT", "url": "https://agroconnect.com.br/carreiras/data" }
+      {
+        "id": "cmp-008-job-01",
+        "title": "Analista de IoT Agrícola",
+        "type": "CLT",
+        "url": "https://agroconnect.com.br/carreiras/iot",
+        "publishedAt": "2025-10-13T16:45:00Z"
+      },
+      {
+        "id": "cmp-008-job-02",
+        "title": "Cientista de Dados Agrícolas",
+        "type": "CLT",
+        "url": "https://agroconnect.com.br/carreiras/data",
+        "publishedAt": "2025-10-13T16:45:00Z"
+      }
     ],
     "tags": ["IoT", "Sensores", "Agricultura de Precisão"],
     "size": "Media",
     "work_modes": ["Presencial", "Hibrido"],
-    "updated_at": "2025-10-13T16:45:00Z"
+    "updated_at": "2025-10-13T16:45:00Z",
+    "updatedAt": "2025-10-13T16:45:00Z",
+    "stats": {
+      "jobs_open": 2,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-13T16:45:00Z"
+    }
   },
   {
     "id": "cmp-009",
+    "slug": "cyberlink-security",
+    "source": "static",
     "name": "CyberLink Security",
     "industry": "Cibersegurança",
     "city": "São Paulo",
     "state": "SP",
     "address": "Rua Bela Cintra, 500 - Consolação",
-    "coordinates": { "lat": -23.556, "lng": -46.658 },
+    "coordinates": {
+      "lat": -23.556,
+      "lng": -46.658
+    },
     "website": "https://cyberlinksec.com",
     "logo": "assets/images/cyberlink-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Analista de Segurança Júnior", "type": "CLT", "url": "https://cyberlinksec.com/carreiras/analista-jr" },
-      { "title": "Pentester", "type": "PJ", "url": "https://cyberlinksec.com/carreiras/pentester" }
+      {
+        "id": "cmp-009-job-01",
+        "title": "Analista de Segurança Júnior",
+        "type": "CLT",
+        "url": "https://cyberlinksec.com/carreiras/analista-jr",
+        "publishedAt": "2025-10-15T08:20:00Z"
+      },
+      {
+        "id": "cmp-009-job-02",
+        "title": "Pentester",
+        "type": "PJ",
+        "url": "https://cyberlinksec.com/carreiras/pentester",
+        "publishedAt": "2025-10-15T08:20:00Z"
+      }
     ],
     "tags": ["Cybersecurity", "Red Team", "Network"],
     "size": "Media",
     "work_modes": ["Hibrido", "Remoto"],
-    "updated_at": "2025-10-15T08:20:00Z"
+    "updated_at": "2025-10-15T08:20:00Z",
+    "updatedAt": "2025-10-15T08:20:00Z",
+    "stats": {
+      "jobs_open": 2,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-15T08:20:00Z"
+    }
   },
   {
     "id": "cmp-010",
+    "slug": "biohealth-research",
+    "source": "static",
     "name": "BioHealth Research",
     "industry": "Biotecnologia",
     "city": "Belo Horizonte",
     "state": "MG",
     "address": "Av. Cristiano Machado, 1350 - Cidade Nova",
-    "coordinates": { "lat": -19.912, "lng": -43.934 },
+    "coordinates": {
+      "lat": -19.912,
+      "lng": -43.934
+    },
     "website": "https://biohealthresearch.com.br",
     "logo": "assets/images/biohealth-logo.png",
     "is_hiring": true,
     "jobs": [
-      { "title": "Pesquisador em Bioinformática", "type": "CLT", "url": "https://biohealthresearch.com.br/carreiras/bioinfo" }
+      {
+        "id": "cmp-010-job-01",
+        "title": "Pesquisador em Bioinformática",
+        "type": "CLT",
+        "url": "https://biohealthresearch.com.br/carreiras/bioinfo",
+        "publishedAt": "2025-10-15T13:00:00Z"
+      }
     ],
     "tags": ["BioTech", "Saúde", "Genética"],
     "size": "Pequena",
     "work_modes": ["Presencial", "Hibrido"],
-    "updated_at": "2025-10-15T13:00:00Z"
+    "updated_at": "2025-10-15T13:00:00Z",
+    "updatedAt": "2025-10-15T13:00:00Z",
+    "stats": {
+      "jobs_open": 1,
+      "tags_total": 3,
+      "last_reviewed": "2025-10-15T13:00:00Z"
+    }
   }
 ]

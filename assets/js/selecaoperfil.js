@@ -13,18 +13,24 @@
   }
 
   function highlightNav() {
-    const path = (location.pathname.split("/").pop() || "index.html").split("?")[0];
+    const path = (location.pathname.split("/").pop() || "index.html").split(
+      "?",
+    )[0];
     if (window.MapsApp?.highlightNav) {
       try {
         window.MapsApp.highlightNav(path);
         return;
       } catch {}
     }
-    const links = window.MapsApp?.navLinks ? window.MapsApp.navLinks() : queryAll(".nav-link");
-    links.forEach(link => {
+    const links = window.MapsApp?.navLinks
+      ? window.MapsApp.navLinks()
+      : queryAll(".nav-link");
+    links.forEach((link) => {
       const href = (link.getAttribute("href") || "").split("?")[0];
       const isHash = href.startsWith("#");
-      const active = (!isHash && (href.endsWith(path) || href === path)) || (path === "index.html" && href.includes("#home"));
+      const active =
+        (!isHash && (href.endsWith(path) || href === path)) ||
+        (path === "index.html" && href.includes("#home"));
       link.classList.toggle("active", active);
       if (!isHash) link.setAttribute("aria-current", active ? "page" : "false");
     });
@@ -38,7 +44,8 @@
 
   function goTo(type) {
     storeProfile(type);
-    window.location.href = type === "empresarial" ? "loginempresa.html" : "loginpessoal.html";
+    window.location.href =
+      type === "empresarial" ? "loginempresa.html" : "loginpessoal.html";
   }
 
   function bindButton(button, type) {
@@ -54,13 +61,14 @@
     card.setAttribute("tabindex", "0");
     card.setAttribute("role", "button");
     card.setAttribute("aria-pressed", "false");
-    const type = card.dataset.perfil === "empresarial" ? "empresarial" : "pessoal";
-    const activate = event => {
+    const type =
+      card.dataset.perfil === "empresarial" ? "empresarial" : "pessoal";
+    const activate = (event) => {
       if (event?.target?.closest && event.target.closest(".perfil-cta")) return;
       goTo(type);
     };
     card.addEventListener("click", activate);
-    card.addEventListener("keydown", event => {
+    card.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         activate(event);
@@ -81,7 +89,10 @@
   function initMotionToggle() {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => {
-      document.documentElement.style.setProperty("--ml-motion-scale", media.matches ? "0" : "1");
+      document.documentElement.style.setProperty(
+        "--ml-motion-scale",
+        media.matches ? "0" : "1",
+      );
     };
     apply();
     media.addEventListener?.("change", apply);

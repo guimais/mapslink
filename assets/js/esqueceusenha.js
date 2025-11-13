@@ -6,7 +6,8 @@
     if (document.getElementById("ml-forgot-styles")) return;
     const style = document.createElement("style");
     style.id = "ml-forgot-styles";
-    style.textContent = ".spin{display:inline-block;animation:spin .8s linear infinite;}@keyframes spin{to{transform:rotate(360deg);}}";
+    style.textContent =
+      ".spin{display:inline-block;animation:spin .8s linear infinite;}@keyframes spin{to{transform:rotate(360deg);}}";
     document.head.appendChild(style);
   }
 
@@ -29,10 +30,12 @@
     if (!button) return;
     if (state === "loading") {
       button.disabled = true;
-      button.innerHTML = '<i class="ri-loader-4-line spin" aria-hidden="true"></i> Enviando...';
+      button.innerHTML =
+        '<i class="ri-loader-4-line spin" aria-hidden="true"></i> Enviando...';
     } else {
       button.disabled = false;
-      button.innerHTML = '<i class="ri-mail-send-line" aria-hidden="true"></i> Enviar link de recuperação';
+      button.innerHTML =
+        '<i class="ri-mail-send-line" aria-hidden="true"></i> Enviar link de recuperação';
     }
   }
 
@@ -45,7 +48,7 @@
 
     const button = form.querySelector(".btn");
 
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!validate(email.value)) {
         showStatus(status, "Digite um e-mail válido", false);
