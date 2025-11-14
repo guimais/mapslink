@@ -143,8 +143,8 @@ h2,
   }
 
   .nav-pilula {
-    width: 100%;
-    max-width: none;
+    width: 92%;
+    max-width: 1200px;
     padding: 8px 16px;
     height: 52px;
     border-radius: 16px;

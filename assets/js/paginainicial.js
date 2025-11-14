@@ -60,6 +60,8 @@
     const mapByKey = new Map();
     links.forEach((link) => {
       const href = (link.getAttribute("href") || "").toLowerCase();
+      const isHashLink = href.startsWith("#");
+      if (!isHashLink) return;
       if (href) mapByKey.set(href, link);
       const key = (link.dataset.navKey || link.textContent || "")
         .trim()

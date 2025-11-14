@@ -549,8 +549,8 @@ body {
     padding: 0 12px;
   }
   .nav-pilula {
-    width: 100%;
-    max-width: none;
+    width: 92%;
+    max-width: 1200px;
     padding: 0 16px;
     height: var(--nav-h);
     border-radius: 18px;
