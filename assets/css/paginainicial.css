@@ -93,7 +93,7 @@ h2 {
   border-radius: 9999px;
   height: var(--nav-h);
   width: 92%;
-  max-width: var(--container);
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -373,8 +373,6 @@ h2 {
 @media (min-width: 1500px) {
   :root {
     --container: 1300px;
-
-    --nav-h: 72px;
   }
 
   html {
@@ -403,8 +401,8 @@ h2 {
   }
 
   .nav-pilula {
-    max-width: var(--container);
-    padding: 0 32px;
+    max-width: 1200px;
+    padding: 0 28px;
   }
 
   .nav-link {

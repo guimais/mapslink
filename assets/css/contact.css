@@ -524,9 +524,6 @@ h3,
 }
 
 @media (min-width: 1500px) {
-  :root {
-    --nav-h: 72px;
-  }
   .contact-container {
     max-width: 1320px;
     padding: 0 48px;

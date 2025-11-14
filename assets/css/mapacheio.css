@@ -43,13 +43,13 @@ h2,
   border: 1px solid rgba(16, 37, 105, 0.1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   border-radius: 9999px;
-  padding: 12px 28px;
+  padding: 0 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 92%;
   max-width: 1200px;
-  height: 68px;
+  height: var(--nav-h);
 }
 
 .nav-logo-link {
@@ -814,9 +814,6 @@ fieldset.fp-section::before {
 }
 
 @media (min-width: 1500px) {
-  :root {
-    --nav-h: 72px;
-  }
   html {
     font-size: 17px;
   }
@@ -825,8 +822,8 @@ fieldset.fp-section::before {
   }
   .nav-pilula {
     width: 92%;
-    max-width: 1300px;
-    padding: 16px 36px;
+    max-width: 1200px;
+    padding: 0 28px;
     height: var(--nav-h);
   }
   .nav-links {

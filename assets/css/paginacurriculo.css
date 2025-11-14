@@ -57,7 +57,7 @@ h2,
   justify-content: space-between;
   align-items: center;
   width: 92%;
-  height: 68px;
+  height: var(--nav-h);
   max-width: 1200px;
   border: 1px solid rgba(16, 37, 105, 0.1);
   box-shadow: var(--shadow-1);
