@@ -855,13 +855,105 @@ body.agenda-editor-open {
     height: 52px;
     border-radius: 16px;
   }
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    background: none;
+    color: var(--text);
+    border-radius: 12px;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background: rgba(16, 37, 105, 0.08);
+    color: var(--brand);
+  }
   .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 88px 0 40px;
+    gap: 0;
+    box-shadow: -4px 0 22px rgba(0, 0, 0, 0.16);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+  }
+  .nav-links.active,
+  .nav-links.is-open,
+  .nav-pilula.is-open .nav-links,
+  .nav-links[data-nav-open="true"] {
+    right: 0;
+  }
+  .nav-links li {
     width: 100%;
-    padding-top: 78px;
+    border-bottom: 1px solid var(--surface);
+  }
+  .nav-links li:last-child {
+    border-bottom: none;
   }
   .nav-link {
-    padding: 16px 20px;
-    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 18px 24px;
+    font-size: 16px;
+    border-radius: 0;
+    opacity: 1;
+    transform: none;
+  }
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--surface);
+    color: var(--brand);
+  }
+
+  .nav-link.active {
+    background: rgba(16, 37, 105, 0.12);
+    color: var(--brand-2);
+    box-shadow: none;
+    border-left: 4px solid var(--brand);
+    font-weight: 800;
+  }
+  .nav-link {
+    background: none;
+    color: #1a1a1a;
+    font-weight: 700;
+    border-left: 0 solid transparent;
+    transition:
+      color 0.2s,
+      background-color 0.2s,
+      border-left 0.2s;
+  }
+  .nav-link.active {
+    background: rgba(16, 37, 105, 0.12);
+    box-shadow: none;
+    border-left: 4px solid var(--brand);
+  }
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
   }
   .agenda {
     padding-top: 100px;
