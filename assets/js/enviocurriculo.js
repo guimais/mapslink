@@ -95,7 +95,20 @@ if (!token) {
 
   function resolveOwnerId(job, fallbackKey) {
     if (!job) return "";
-    if (job.ownerId) return job.ownerId;
+    if (job.ownerId) return String(job.ownerId).trim();
+    
+    // Tenta extrair ownerId do publicId se estiver no formato "ownerId:jobId"
+    if (job.publicId && typeof job.publicId === "string") {
+      const parts = job.publicId.split(":");
+      if (parts.length >= 2 && parts[0]) {
+        const extractedOwner = parts[0].trim();
+        if (extractedOwner && extractedOwner !== "anonimo") {
+          rememberJobOwner({ ...job, ownerId: extractedOwner });
+          return extractedOwner;
+        }
+      }
+    }
+    
     const candidates = [
       job.publicId,
       job.id,
@@ -180,7 +193,19 @@ if (!token) {
     const source = JobsStore?.loadPublic
       ? JobsStore.loadPublic()
       : legacyCollectJobs();
-    return source
+    // Garante que todas as vagas tenham ownerId extraído do publicId se necessário
+    const enriched = source.map((job) => {
+      if (job.ownerId) return job;
+      // Tenta extrair ownerId do publicId se estiver no formato "ownerId:jobId"
+      if (job.publicId && typeof job.publicId === "string") {
+        const parts = job.publicId.split(":");
+        if (parts.length >= 2 && parts[0] && parts[0] !== "anonimo") {
+          return { ...job, ownerId: parts[0].trim() };
+        }
+      }
+      return job;
+    });
+    return enriched
       .slice()
       .sort(
         (a, b) =>
@@ -342,6 +367,44 @@ if (!token) {
     const candidateAvatar =
       viewer && viewer.type === "personal" ? viewer.profile?.avatar || "" : "";
     const cv = loadCandidateCv();
+    
+    // Tenta resolver o ownerId de várias formas
+    let resolvedOwnerId = (job.ownerId || "").toString().trim();
+    
+    // Se não tem ownerId, tenta extrair do publicId
+    if (!resolvedOwnerId && job.publicId) {
+      const parts = String(job.publicId).split(":");
+      if (parts.length >= 2 && parts[0] && parts[0] !== "anonimo") {
+        resolvedOwnerId = parts[0].trim();
+      }
+    }
+    
+    // Se ainda não encontrou, tenta resolver usando a função
+    if (!resolvedOwnerId) {
+      resolvedOwnerId = resolveOwnerId(job, job.publicId || job.id || "").trim();
+    }
+    
+    // Se ainda não encontrou, tenta buscar a vaga completa
+    if (!resolvedOwnerId && (job.id || job.publicId)) {
+      const fullJob = findJobByKey(job.id || job.publicId || "");
+      if (fullJob) {
+        resolvedOwnerId = (fullJob.ownerId || "").toString().trim();
+        if (!resolvedOwnerId && fullJob.publicId) {
+          const parts = String(fullJob.publicId).split(":");
+          if (parts.length >= 2 && parts[0] && parts[0] !== "anonimo") {
+            resolvedOwnerId = parts[0].trim();
+          }
+        }
+        if (!resolvedOwnerId) {
+          resolvedOwnerId = resolveOwnerId(fullJob, fullJob.publicId || fullJob.id || "").trim();
+        }
+      }
+    }
+    
+    // Debug: log para verificar o ownerId resolvido
+    console.log("[recordApplication] Job:", job);
+    console.log("[recordApplication] Resolved ownerId:", resolvedOwnerId);
+    
     const entry = {
       id: `app_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
       jobId: job.id || null,
@@ -349,8 +412,8 @@ if (!token) {
       title: job.title || "Vaga",
       area: job.area || "",
       type: job.type || "",
-      company: job.company || "",
-      ownerId: job.ownerId || resolveOwnerId(job, job.publicId || job.id || ""),
+      company: job.company || job.companyName || "",
+      ownerId: resolvedOwnerId,
       appliedAt: new Date().toISOString(),
       status: "Em analise",
       candidateId: candidateId,
@@ -358,16 +421,36 @@ if (!token) {
       avatar: candidateAvatar,
       cv,
     };
+    
+    // Salva a aplicação para o candidato
     const applications = loadApplications(candidateId);
     applications.push(entry);
     saveApplications(applications, candidateId);
     state.owner = candidateId;
     state.applications = applications;
 
-    if (entry.ownerId) {
+    // Salva a aplicação para a empresa se o ownerId foi encontrado
+    if (entry.ownerId && entry.ownerId !== "anonimo" && entry.ownerId !== "") {
       const companyEntries = loadApplications(entry.ownerId);
-      companyEntries.push(entry);
-      saveApplications(companyEntries, entry.ownerId);
+      // Verifica se já existe uma aplicação com o mesmo jobId e candidateId para evitar duplicatas
+      const existingIndex = companyEntries.findIndex(
+        (app) => app.jobId === entry.jobId && app.candidateId === entry.candidateId
+      );
+      if (existingIndex === -1) {
+        companyEntries.push(entry);
+        saveApplications(companyEntries, entry.ownerId);
+        console.log("[recordApplication] Aplicação salva para empresa:", entry.ownerId, entry);
+        // Dispara evento para atualizar a página de currículos se estiver aberta
+        try {
+          window.dispatchEvent(new CustomEvent("mapslink:application-saved", {
+            detail: { ownerId: entry.ownerId, application: entry }
+          }));
+        } catch {}
+      } else {
+        console.log("[recordApplication] Aplicação duplicada, não salvando novamente");
+      }
+    } else {
+      console.warn("[recordApplication] ownerId não encontrado ou inválido:", entry.ownerId);
     }
 
     try {

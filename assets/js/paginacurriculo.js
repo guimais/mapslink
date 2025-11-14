@@ -84,12 +84,16 @@ if (!token) {
 
   function refreshEntries() {
     if (!state.owner) {
+      console.log("[paginacurriculo] Sem owner, limpando entradas");
       state.entries = [];
       state.filtered = [];
       render();
       return;
     }
+    const key = storageKey(state.owner);
+    console.log("[paginacurriculo] Carregando aplicações para owner:", state.owner, "key:", key);
     state.entries = loadApplications(state.owner);
+    console.log("[paginacurriculo] Aplicações carregadas:", state.entries.length, state.entries);
     state.entriesMap = new Map(state.entries.map((entry) => [entry.id, entry]));
     applyFilters();
   }
@@ -441,6 +445,22 @@ if (!token) {
     }
   }
 
+  function handleApplicationSaved(event) {
+    if (!state.owner) {
+      console.log("[paginacurriculo] Evento recebido mas sem owner");
+      return;
+    }
+    const detail = event.detail || {};
+    console.log("[paginacurriculo] Evento application-saved recebido:", detail);
+    // Atualiza se a aplicação foi salva para esta empresa
+    if (detail.ownerId === state.owner) {
+      console.log("[paginacurriculo] Atualizando entradas para owner:", state.owner);
+      refreshEntries();
+    } else {
+      console.log("[paginacurriculo] ownerId não corresponde:", detail.ownerId, "!=", state.owner);
+    }
+  }
+
   function initListeners() {
     dom.search?.addEventListener("input", applyFilters);
     dom.start?.addEventListener("input", () => maskDate(dom.start));
@@ -470,6 +490,7 @@ if (!token) {
 
   function hydrate(session) {
     state.owner = session?.id || null;
+    console.log("[paginacurriculo] Hydrate - session:", session, "owner:", state.owner);
     applyAvatar(session?.profile?.avatar || "");
     refreshEntries();
   }
@@ -497,6 +518,7 @@ if (!token) {
     initListeners();
     initAuth();
     window.addEventListener("storage", handleStorageEvent);
+    window.addEventListener("mapslink:application-saved", handleApplicationSaved);
   }
 
   if (document.readyState === "loading") {
