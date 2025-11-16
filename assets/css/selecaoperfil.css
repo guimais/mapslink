@@ -225,19 +225,18 @@ h2,
   .nav-pilula {
     width: 92%;
     max-width: 1200px;
-    padding: 8px 16px;
+    padding: 0 18px;
     height: 56px;
     border-radius: 18px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
   .nav-logo {
-    max-height: calc(var(--nav-h) - 4px);
+    max-height: calc(var(--nav-h) - 2px);
     margin-right: 0;
   }
   .nav-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     padding: 6px;
     border-radius: 10px;
     transition:
@@ -320,7 +319,7 @@ h2,
     padding: 0 10px;
   }
   .nav-pilula {
-    padding: 6px 12px;
+    padding: 0 14px;
     height: 50px;
     border-radius: 16px;
   }

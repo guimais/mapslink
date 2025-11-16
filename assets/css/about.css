@@ -548,17 +548,18 @@ body {
   .nav-pilula {
     width: 92%;
     max-width: 1200px;
-    padding: 0 16px;
-    height: var(--nav-h);
+    padding: 0 18px;
+    height: 56px;
     border-radius: 18px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
   .nav-logo {
-    max-height: calc(var(--nav-h) - 8px);
+    max-height: calc(var(--nav-h) - 2px);
     margin-right: 0;
   }
   .nav-toggle {
     display: grid;
+    place-items: center;
     padding: 6px;
     border-radius: 10px;
     transition:
@@ -568,18 +569,20 @@ body {
   .nav-toggle:hover,
   .nav-toggle:focus-visible {
     background: rgba(16, 37, 105, 0.08);
+    color: var(--brand);
   }
   .nav-links {
-    position: fixed;
+    position: fixed !important;
     top: 0;
     right: -100%;
     width: 280px;
     height: 100vh;
     background: #ffffff;
+    display: flex !important;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 90px 0 40px;
+    padding: 88px 0 40px;
     gap: 0;
     box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
     transition: right 0.3s ease;
@@ -587,8 +590,11 @@ body {
     overflow-y: auto;
   }
   .nav-links.active,
-  .nav-links.is-open {
-    right: 0;
+  .nav-links.is-open,
+  .nav-pilula.is-open .nav-links,
+  .nav-links[data-nav-open="true"] {
+    right: 0 !important;
+    display: flex !important;
   }
   .nav-links li {
     width: 100%;
@@ -681,8 +687,8 @@ body {
     padding: 0 10px;
   }
   .nav-pilula {
-    padding: 0 12px;
-    height: calc(var(--nav-h) - 6px);
+    padding: 0 14px;
+    height: 50px;
     border-radius: 16px;
   }
   .nav-toggle {
@@ -710,6 +716,7 @@ body {
     width: 280px;
     height: 100vh;
     background: #ffffff;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
@@ -719,7 +726,6 @@ body {
     transition: right 0.3s ease;
     z-index: 1000;
     overflow-y: auto;
-    display: flex;
   }
   .nav-links.active,
   .nav-links.is-open,

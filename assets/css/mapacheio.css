@@ -710,18 +710,95 @@ fieldset.fp-section::before {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    top: 12px;
+    padding: 0 12px;
+  }
   .nav-pilula {
-    padding: 8px 16px;
-    height: 54px;
+    width: 92%;
+    max-width: 1200px;
+    padding: 0 18px;
+    height: 56px;
     border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
   .nav-logo {
-    height: 72px;
+    max-height: calc(var(--nav-h) - 2px);
+    margin-right: 0;
+  }
+  .nav-toggle {
+    display: grid;
+    place-items: center;
+    padding: 6px;
+    border-radius: 10px;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background: rgba(16, 37, 105, 0.08);
+    color: var(--brand);
   }
   .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
     width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
     padding: 88px 0 40px;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.16);
+    gap: 0;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  .nav-links.active,
+  .nav-links.is-open {
+    right: 0;
+  }
+  .nav-links li {
+    width: 100%;
+    border-bottom: 1px solid var(--surface);
+  }
+  .nav-links li:last-child {
+    border-bottom: none;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 18px 24px;
+    font-size: 16px;
+    border-radius: 0;
+    opacity: 1;
+    transform: none;
+  }
+  .nav-link:hover,
+  .nav-link:focus {
+    background: var(--surface);
+    color: var(--brand);
+  }
+  .nav-link.active {
+    background: rgba(16, 37, 105, 0.12);
+    box-shadow: none;
+    border-left: 4px solid var(--brand);
+  }
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+  }
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
   }
   .map-exit-control {
     width: 46px;
@@ -757,7 +834,7 @@ fieldset.fp-section::before {
     padding: 0 10px;
   }
   .nav-pilula {
-    padding: 6px 12px;
+    padding: 0 14px;
     height: 50px;
     border-radius: 16px;
   }
