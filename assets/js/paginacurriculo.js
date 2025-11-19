@@ -195,10 +195,41 @@ if (!token) {
     dateCell.appendChild(time);
 
     const statusCell = document.createElement("td");
-    const statusBadge = document.createElement("span");
-    statusBadge.className = statusClass(entry.status);
-    statusBadge.textContent = entry.status || "Em análise";
-    statusCell.appendChild(statusBadge);
+    const statusContainer = document.createElement("div");
+    statusContainer.className = "status-container";
+    
+    const currentStatus = entry.status || "Em análise";
+    const statusBadge = document.createElement("button");
+    statusBadge.type = "button";
+    statusBadge.className = statusClass(currentStatus) + " status-editable";
+    statusBadge.textContent = currentStatus;
+    statusBadge.dataset.entryId = entry.id;
+    statusBadge.title = "Clique para alterar o status";
+    
+    const statusDropdown = document.createElement("select");
+    statusDropdown.className = "status-select";
+    statusDropdown.dataset.entryId = entry.id;
+    statusDropdown.setAttribute("aria-label", "Alterar status da candidatura");
+    
+    const options = ["Em análise", "Aprovado", "Reprovada"];
+    options.forEach(opt => {
+      const option = document.createElement("option");
+      option.value = opt;
+      option.textContent = opt;
+      if (opt === currentStatus) {
+        option.selected = true;
+      }
+      statusDropdown.appendChild(option);
+    });
+    
+    statusDropdown.addEventListener("change", function() {
+      const newStatus = this.value;
+      updateApplicationStatus(entry.id, newStatus);
+    });
+    
+    statusContainer.appendChild(statusDropdown);
+    statusContainer.appendChild(statusBadge);
+    statusCell.appendChild(statusContainer);
 
     const actionCell = document.createElement("td");
     const button = document.createElement("button");
@@ -423,6 +454,42 @@ if (!token) {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  }
+
+  function updateApplicationStatus(entryId, newStatus) {
+    if (!state.owner || !entryId) return;
+    const entry = state.entries.find((e) => e.id === entryId);
+    if (!entry) return;
+    
+    entry.status = newStatus;
+    const key = storageKey(state.owner);
+    if (!key) return;
+    
+    try {
+      localStorage.setItem(key, JSON.stringify(state.entries));
+      state.entriesMap.set(entryId, entry);
+      
+      // Atualizar o badge visualmente
+      const row = document.querySelector(`tr[data-entry-id="${entryId}"]`);
+      if (row) {
+        const badge = row.querySelector(".status-editable");
+        const select = row.querySelector(".status-select");
+        if (badge) {
+          badge.className = statusClass(newStatus) + " status-editable";
+          badge.textContent = newStatus;
+        }
+        if (select) {
+          select.value = newStatus;
+        }
+      }
+      
+      applyFilters();
+      window.dispatchEvent(new CustomEvent("mapslink:application-saved", {
+        detail: { ownerId: state.owner, entryId }
+      }));
+    } catch (err) {
+      console.error("Erro ao atualizar status:", err);
+    }
   }
 
   function handleCvClick(event) {

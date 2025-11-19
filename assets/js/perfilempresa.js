@@ -11,6 +11,7 @@ if (!token) {
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const AVATAR_SELECTOR = ".empresa-hero-avatar img";
   const AVATAR_WRAPPER_SELECTOR = ".empresa-hero-avatar";
+  const APPLICATION_PREFIX = "mapslink:applications";
 
   function valueToString(value) {
     if (value === 0) return "0";
@@ -191,19 +192,7 @@ if (!token) {
     const agenda = query("#agenda-entrevistas .agenda-numero");
     setText(agenda, profile.agendaToday ?? "");
     storage.set("mapslink_agenda_hoje", profile.agendaToday ?? null);
-    const card = query("#curriculos-recebidos");
-    if (card) {
-      const badge = ensureBadge(card);
-      const amount = valueToString(profile.curriculos ?? "");
-      if (amount) {
-        badge.textContent = amount;
-        badge.style.display = "inline-block";
-      } else {
-        badge.textContent = "";
-        badge.style.display = "none";
-      }
-    }
-    storage.set("mapslink_curriculos_recebidos", profile.curriculos ?? null);
+    updateCurriculosCount(data);
   }
 
   const storage = {
@@ -242,6 +231,31 @@ if (!token) {
     return badge;
   }
 
+  function loadApplicationsCount(owner) {
+    if (!owner) return 0;
+    const key = `${APPLICATION_PREFIX}:${owner}`;
+    try {
+      const raw = localStorage.getItem(key);
+      const list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) return 0;
+      return list.filter((entry) => entry && entry.candidate).length;
+    } catch {
+      return 0;
+    }
+  }
+
+  function updateCurriculosCount(session) {
+    const owner = session?.id || null;
+    const count = loadApplicationsCount(owner);
+    const card = query("#curriculos-recebidos");
+    if (card) {
+      const badge = ensureBadge(card);
+      badge.textContent = valueToString(count);
+      badge.style.display = count > 0 ? "inline-block" : "none";
+    }
+    storage.set("mapslink_curriculos_recebidos", count);
+  }
+
   function hydrateFromStorage() {
     const agendaValue = storage.get("mapslink_agenda_hoje", null);
     setText(query("#agenda-entrevistas .agenda-numero"), agendaValue ?? "");
@@ -264,13 +278,22 @@ if (!token) {
     const auth = window.MapsAuth;
     if (!auth?.ready) {
       hydrateFromStorage();
+      const session = auth?.current ? auth.current() : null;
+      updateCurriculosCount(session);
       return;
     }
     auth.ready().then(() => {
-      hydrateFromAuth(auth.current());
+      const session = auth.current();
+      hydrateFromAuth(session);
       hydrateFromStorage();
+      updateCurriculosCount(session);
     });
-    if (auth.onSession) auth.onSession(hydrateFromAuth);
+    if (auth.onSession) {
+      auth.onSession((session) => {
+        hydrateFromAuth(session);
+        updateCurriculosCount(session);
+      });
+    }
   }
 
   function bindSearchHighlights() {
@@ -293,6 +316,32 @@ if (!token) {
     window.addEventListener("popstate", () => setActiveLink(location.href));
     initAuth();
     bindSearchHighlights();
+    
+    // Escutar mudanças no localStorage para atualizar o contador
+    window.addEventListener("storage", (event) => {
+      if (event.key && event.key.startsWith(APPLICATION_PREFIX)) {
+        const auth = window.MapsAuth;
+        const session = auth?.current ? auth.current() : null;
+        updateCurriculosCount(session);
+      }
+    });
+    
+    // Escutar evento customizado quando um currículo é salvo
+    window.addEventListener("mapslink:application-saved", () => {
+      const auth = window.MapsAuth;
+      const session = auth?.current ? auth.current() : null;
+      updateCurriculosCount(session);
+    });
+    
+    // Atualizar quando a página recebe foco novamente
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        const auth = window.MapsAuth;
+        const session = auth?.current ? auth.current() : null;
+        updateCurriculosCount(session);
+      }
+    });
+    
     window.MapsLink = Object.assign({}, window.MapsLink, {
       setAgendaHoje(value) {
         const num = Number(value);

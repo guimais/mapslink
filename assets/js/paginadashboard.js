@@ -8,6 +8,7 @@ if (!token) {
   window.__ml_dashboard_init__ = true;
 
   const JOBS_STORAGE = "mapslink:vagas";
+  const APPLICATION_PREFIX = "mapslink:applications";
   const EMPTY_IMAGE =
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
   const { normalizeText } = window.MapsUtils || {};
@@ -71,6 +72,17 @@ if (!token) {
     }
   }
 
+  function loadApplications(owner) {
+    if (!owner) return [];
+    try {
+      const raw = localStorage.getItem(`${APPLICATION_PREFIX}:${owner}`);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch {
+      return [];
+    }
+  }
+
   function summarizeJobs(jobs) {
     return jobs.reduce(
       (summary, job) => {
@@ -82,6 +94,20 @@ if (!token) {
         return summary;
       },
       { open: 0, reviewing: 0, closed: 0 },
+    );
+  }
+
+  function summarizeApplications(applications) {
+    return applications.reduce(
+      (summary, app) => {
+        const status = normalizeText(app?.status || "em análise");
+        if (status.includes("aprov")) summary.accepted += 1;
+        else if (status.includes("reprov")) summary.rejected += 1;
+        else summary.reviewing += 1;
+        summary.received += 1;
+        return summary;
+      },
+      { received: 0, accepted: 0, reviewing: 0, rejected: 0 },
     );
   }
 
@@ -435,29 +461,25 @@ if (!token) {
     );
 
     const owner = session?.id || null;
-    const summary = summarizeJobs(loadJobs(owner));
-    if (!stats.open && summary.open) stats.open = summary.open;
-    if (!stats.reviewing && summary.reviewing)
-      stats.reviewing = summary.reviewing;
-    if (!stats.closed && summary.closed) stats.closed = summary.closed;
+    
+    // Buscar dados reais do localStorage
+    const jobs = loadJobs(owner);
+    const applications = loadApplications(owner);
+    
+    // Resumir vagas
+    const jobSummary = summarizeJobs(jobs);
+    if (!stats.open && jobSummary.open) stats.open = jobSummary.open;
+    if (!stats.closed && jobSummary.closed) stats.closed = jobSummary.closed;
+    
+    // Resumir currículos
+    const appSummary = summarizeApplications(applications);
+    if (!stats.received && appSummary.received) stats.received = appSummary.received;
+    if (!stats.accepted && appSummary.accepted) stats.accepted = appSummary.accepted;
+    if (!stats.reviewing && appSummary.reviewing) stats.reviewing = appSummary.reviewing;
 
-    const derivedTotal = stats.accepted + stats.reviewing + stats.closed;
-    if (!stats.received && derivedTotal) stats.received = derivedTotal;
-    stats.received = Math.max(0, stats.received);
-
-    if (stats.received && !stats.accepted && stats.reviewing) {
-      const rest = stats.received - stats.reviewing - stats.closed;
-      stats.accepted = Math.max(0, rest);
-    }
-    if (stats.received && !stats.reviewing && stats.accepted) {
-      const rest = stats.received - stats.accepted - stats.closed;
-      stats.reviewing = Math.max(0, rest);
-    }
-    if (stats.received && !stats.closed) {
-      const rest = stats.received - stats.accepted - stats.reviewing;
-      stats.closed = Math.max(0, rest);
-    }
-
+    // Garantir consistência
+    stats.received = Math.max(stats.received, stats.accepted + stats.reviewing);
+    
     stats.interviews = stats.interviews || 0;
     return stats;
   }
@@ -493,6 +515,39 @@ if (!token) {
     applyStats(null);
     initAuth();
     window.addEventListener("resize", debounce(renderCharts, 120));
+    
+    // Listeners para atualizar quando dados mudarem
+    window.addEventListener("storage", (event) => {
+      if (event.key && (
+        event.key.startsWith(JOBS_STORAGE) || 
+        event.key.startsWith(APPLICATION_PREFIX)
+      )) {
+        const auth = window.MapsAuth;
+        const session = auth?.current ? auth.current() : null;
+        applyStats(session);
+      }
+    });
+    
+    window.addEventListener("mapslink:application-saved", () => {
+      const auth = window.MapsAuth;
+      const session = auth?.current ? auth.current() : null;
+      applyStats(session);
+    });
+    
+    window.addEventListener("mapslink:job-saved", () => {
+      const auth = window.MapsAuth;
+      const session = auth?.current ? auth.current() : null;
+      applyStats(session);
+    });
+    
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        const auth = window.MapsAuth;
+        const session = auth?.current ? auth.current() : null;
+        applyStats(session);
+      }
+    });
+    
     window.MapsDashboard = Object.assign({}, window.MapsDashboard, {
       setStats(partial) {
         if (!partial || typeof partial !== "object") return;
@@ -506,6 +561,11 @@ if (!token) {
       },
       setAvatar(src) {
         applyAvatar(src || "");
+      },
+      refresh() {
+        const auth = window.MapsAuth;
+        const session = auth?.current ? auth.current() : null;
+        applyStats(session);
       },
     });
   }

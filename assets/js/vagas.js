@@ -152,14 +152,79 @@ if (!token) {
     const statusClass = status.toLowerCase().includes("fech")
       ? "status status-fechada"
       : "status status-aberta";
-    tr.innerHTML = `
-      <td><span class="cell-text">${safe(job.title)}</span></td>
-      <td>${safe(job.area)}</td>
-      <td>${safe(job.type)}</td>
-      <td><time datetime="${safe(job.publishedAt)}">${formatDate(job.publishedAt)}</time></td>
-      <td><span class="${statusClass}">${safe(status)}</span></td>
-      <td><button type="button" class="job-action" data-action="remove" data-id="${safe(job.id)}">Remover</button></td>
-    `;
+    
+    // Título
+    const titleCell = document.createElement("td");
+    const titleSpan = document.createElement("span");
+    titleSpan.className = "cell-text";
+    titleSpan.textContent = safe(job.title || "");
+    titleCell.appendChild(titleSpan);
+    
+    // Área
+    const areaCell = document.createElement("td");
+    areaCell.textContent = safe(job.area || "");
+    
+    // Tipo
+    const typeCell = document.createElement("td");
+    typeCell.textContent = safe(job.type || "");
+    
+    // Data
+    const dateCell = document.createElement("td");
+    const time = document.createElement("time");
+    time.dateTime = job.publishedAt || "";
+    time.textContent = formatDate(job.publishedAt);
+    dateCell.appendChild(time);
+    
+    // Status (editável)
+    const statusCell = document.createElement("td");
+    const statusContainer = document.createElement("div");
+    statusContainer.className = "status-container";
+    
+    const statusBadge = document.createElement("button");
+    statusBadge.type = "button";
+    statusBadge.className = statusClass + " status-editable";
+    statusBadge.textContent = safe(status);
+    statusBadge.dataset.jobId = safe(job.id);
+    statusBadge.title = "Clique para alterar o status";
+    
+    const statusDropdown = document.createElement("select");
+    statusDropdown.className = "status-select";
+    statusDropdown.dataset.jobId = safe(job.id);
+    statusDropdown.setAttribute("aria-label", "Alterar status da vaga");
+    
+    const options = ["Aberta", "Fechada"];
+    const normalizedStatus = status.toLowerCase();
+    options.forEach(opt => {
+      const option = document.createElement("option");
+      option.value = opt;
+      option.textContent = opt;
+      if (opt.toLowerCase() === normalizedStatus || 
+          (opt === "Aberta" && !normalizedStatus.includes("fech") && !normalizedStatus.includes("encerr"))) {
+        option.selected = true;
+      }
+      statusDropdown.appendChild(option);
+    });
+    
+    statusDropdown.addEventListener("change", function() {
+      const newStatus = this.value;
+      updateJobStatus(safe(job.id), newStatus);
+    });
+    
+    statusContainer.appendChild(statusDropdown);
+    statusContainer.appendChild(statusBadge);
+    statusCell.appendChild(statusContainer);
+    
+    // Ações
+    const actionCell = document.createElement("td");
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "job-action";
+    removeBtn.setAttribute("data-action", "remove");
+    removeBtn.setAttribute("data-id", safe(job.id));
+    removeBtn.textContent = "Remover";
+    actionCell.appendChild(removeBtn);
+    
+    tr.append(titleCell, areaCell, typeCell, dateCell, statusCell, actionCell);
     return tr;
   }
 
@@ -200,6 +265,9 @@ if (!token) {
     state.jobs = [job, ...state.jobs];
     if (state.owner) {
       persistJobs();
+      window.dispatchEvent(new CustomEvent("mapslink:job-saved", {
+        detail: { ownerId: state.owner, jobId: job.id }
+      }));
     } else {
       state.unsyncedJobs = [job, ...state.unsyncedJobs];
     }
@@ -207,6 +275,43 @@ if (!token) {
     dom.form.reset();
     const firstInput = dom.form.querySelector("input");
     if (firstInput) firstInput.focus();
+  }
+
+  function updateJobStatus(jobId, newStatus) {
+    const job = state.jobs.find((j) => j.id === jobId);
+    if (!job) return;
+    
+    job.status = newStatus;
+    
+    // Atualizar o badge visualmente
+    const row = document.querySelector(`tr[data-job-id="${jobId}"]`);
+    if (row) {
+      const badge = row.querySelector(".status-editable");
+      const select = row.querySelector(".status-select");
+      if (badge) {
+        const newStatusClass = newStatus.toLowerCase().includes("fech")
+          ? "status status-fechada"
+          : "status status-aberta";
+        badge.className = newStatusClass + " status-editable";
+        badge.textContent = newStatus;
+      }
+      if (select) {
+        select.value = newStatus;
+      }
+    }
+    
+    if (state.owner) {
+      persistJobs();
+      syncPublicJobs();
+      window.dispatchEvent(new CustomEvent("mapslink:job-saved", {
+        detail: { ownerId: state.owner, jobId }
+      }));
+    } else {
+      const unsynced = state.unsyncedJobs.find((j) => j.id === jobId);
+      if (unsynced) {
+        unsynced.status = newStatus;
+      }
+    }
   }
 
   function handleTableClick(event) {
@@ -219,6 +324,9 @@ if (!token) {
     state.jobs = next;
     if (state.owner) {
       persistJobs();
+      window.dispatchEvent(new CustomEvent("mapslink:job-saved", {
+        detail: { ownerId: state.owner }
+      }));
     } else {
       state.pendingRemovals.add(id);
       state.unsyncedJobs = state.unsyncedJobs.filter((job) => job.id !== id);

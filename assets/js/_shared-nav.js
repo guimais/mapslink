@@ -59,8 +59,16 @@ window.injectSharedNav = function injectSharedNav() {
     const dataset = document.body?.dataset || {};
     const config = {};
     if (dataset.navOpenClass) config.openClass = dataset.navOpenClass;
+    const breakpoint = dataset.navBreakpoint
+      ? parseInt(dataset.navBreakpoint, 10) || DEFAULTS.breakpoint
+      : DEFAULTS.breakpoint;
     if (dataset.navOverlay !== undefined)
       config.overlay = truthy(dataset.navOverlay);
+    else {
+      // Criar overlay automaticamente em telas menores (mobile)
+      const isMobile = window.innerWidth < breakpoint;
+      config.overlay = isMobile;
+    }
     if (dataset.navLockScroll !== undefined)
       config.lockScroll = truthy(dataset.navLockScroll);
     if (dataset.navCloseOnLink !== undefined)
@@ -73,9 +81,7 @@ window.injectSharedNav = function injectSharedNav() {
       config.smoothScroll = truthy(dataset.navSmoothScroll);
     if (dataset.navShadow !== undefined)
       config.shadow = truthy(dataset.navShadow);
-    if (dataset.navBreakpoint)
-      config.breakpoint =
-        parseInt(dataset.navBreakpoint, 10) || DEFAULTS.breakpoint;
+    config.breakpoint = breakpoint;
     if (dataset.navActive) config.highlight = dataset.navActive;
     if (dataset.navIconOpen) config.iconOpen = dataset.navIconOpen;
     if (dataset.navIconClose) config.iconClose = dataset.navIconClose;
@@ -190,6 +196,18 @@ window.injectSharedNav = function injectSharedNav() {
 
   function handleResize() {
     if (!state.config.breakpoint) return;
+    const isMobile = window.innerWidth < state.config.breakpoint;
+    // Atualizar overlay se necessário
+    if (isMobile && !state.config.overlay) {
+      state.config.overlay = true;
+      ensureOverlay();
+    } else if (!isMobile && state.config.overlay && !document.body?.dataset?.navOverlay) {
+      state.config.overlay = false;
+      if (state.overlay && state.overlay.parentElement === document.body) {
+        state.overlay.remove();
+        state.overlay = null;
+      }
+    }
     if (window.innerWidth >= state.config.breakpoint) api.close();
   }
 

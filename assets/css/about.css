@@ -48,30 +48,27 @@ body {
 }
 
 .nav-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
   position: fixed;
   top: 16px;
   left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
   z-index: 1000;
 }
 
 .nav-pilula {
   background: var(--surface);
   border: 1px solid rgba(16, 37, 105, 0.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
   border-radius: 9999px;
+  height: var(--nav-h);
+  width: 92%;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 92%;
-  max-width: 1200px;
-  height: var(--nav-h);
   padding: 0 28px;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 }
 
 .nav-logo-link {
@@ -133,43 +130,9 @@ body {
 
 .nav-toggle {
   display: none;
-  appearance: none;
-  background: transparent;
-  border: 0;
   padding: 8px;
-  margin: 0;
-  cursor: pointer;
   border-radius: 10px;
-}
-
-.nav-toggle-box {
-  display: grid;
-  width: 28px;
-  height: 20px;
-  align-items: center;
-}
-
-.nav-toggle-line {
-  display: block;
-  height: 2px;
-  width: 100%;
-  background: #1a1a1a;
-  border-radius: 2px;
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.nav-pilula.is-open .nav-toggle-line:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
-}
-
-.nav-pilula.is-open .nav-toggle-line:nth-child(2) {
-  opacity: 0;
-}
-
-.nav-pilula.is-open .nav-toggle-line:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+  font-size: 24px;
 }
 
 [class^="ri-"],
@@ -572,13 +535,12 @@ body {
     color: var(--brand);
   }
   .nav-links {
-    position: fixed !important;
+    position: fixed;
     top: 0;
     right: -100%;
     width: 280px;
     height: 100vh;
     background: #ffffff;
-    display: flex !important;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
@@ -591,10 +553,8 @@ body {
   }
   .nav-links.active,
   .nav-links.is-open,
-  .nav-pilula.is-open .nav-links,
   .nav-links[data-nav-open="true"] {
-    right: 0 !important;
-    display: flex !important;
+    right: 0;
   }
   .nav-links li {
     width: 100%;
@@ -716,7 +676,6 @@ body {
     width: 280px;
     height: 100vh;
     background: #ffffff;
-    display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
@@ -729,7 +688,6 @@ body {
   }
   .nav-links.active,
   .nav-links.is-open,
-  .nav-pilula.is-open .nav-links,
   .nav-links[data-nav-open="true"] {
     right: 0;
   }

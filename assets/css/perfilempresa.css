@@ -44,7 +44,7 @@ h2,
 
 .nav-container{
   position:fixed;
-  top:20px;
+  top:16px;
   left:0;
   width:100%;
   display:flex;
@@ -53,20 +53,17 @@ h2,
 }
 
 .nav-pilula{
+  background:var(--surface);
+  border:1px solid rgba(16,37,105,.1);
+  border-radius:9999px;
+  height:var(--nav-h);
+  width:92%;
+  max-width:1200px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
-  width:92%;
-  max-width:1200px;
-  height:var(--nav-h);
-  min-height:var(--nav-h);
-  padding:12px 20px;
-  background:var(--surface);
-  border:1px solid rgba(16,37,105,.10);
+  padding:0 28px;
   box-shadow:0 6px 20px rgba(0,0,0,.06);
-  border-radius:9999px;
-  overflow:hidden;
 }
 
 .nav-logo-link{
@@ -148,20 +145,9 @@ h2,
 
 .nav-toggle{
   display:none;
-  align-items:center;
-  justify-content:center;
-  width:44px;
-  height:44px;
-  border-radius:9999px;
-  background:#ececec;
-  border:2px solid rgba(0,0,0,.35);
-  box-shadow:0 6px 14px rgba(0,0,0,.08);
-  flex:0 0 auto;
-}
-
-.nav-toggle i{
-  font-size:22px;
-  color:#1a1a1a;
+  padding:8px;
+  border-radius:10px;
+  font-size:24px;
 }
 
 .empresa-page{
@@ -251,7 +237,7 @@ h2,
 
 
 .card{
-  background:var(--surface);
+  background:var(--panel-bg);
   border:1px solid rgba(16,37,105,.10);
   border-radius:24px;
   padding:24px;
@@ -898,13 +884,12 @@ h2,
     color: var(--brand);
   }
   .nav-links {
-    position: fixed !important;
+    position: fixed;
     top: 0;
     right: -100%;
     width: 280px;
     height: 100vh;
     background: #ffffff;
-    display: flex !important;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
@@ -917,10 +902,8 @@ h2,
   }
   .nav-links.active,
   .nav-links.is-open,
-  .nav-pilula.is-open .nav-links,
   .nav-links[data-nav-open="true"] {
-    right: 0 !important;
-    display: flex !important;
+    right: 0;
   }
   .nav-links li {
     width: 100%;
@@ -1026,13 +1009,12 @@ h2,
     color: var(--brand);
   }
   .nav-links {
-    position: fixed !important;
+    position: fixed;
     top: 0;
     right: -100%;
     width: 280px;
     height: 100vh;
     background: #ffffff;
-    display: flex !important;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
@@ -1045,10 +1027,8 @@ h2,
   }
   .nav-links.active,
   .nav-links.is-open,
-  .nav-pilula.is-open .nav-links,
   .nav-links[data-nav-open="true"] {
-    right: 0 !important;
-    display: flex !important;
+    right: 0;
   }
   .nav-links li {
     width: 100%;
@@ -1169,7 +1149,6 @@ h2,
   }
   .nav-links.active,
   .nav-links.is-open,
-  .nav-pilula.is-open .nav-links,
   .nav-links[data-nav-open="true"] {
     right: 0;
   }
