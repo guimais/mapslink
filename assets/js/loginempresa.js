@@ -48,7 +48,6 @@
 .has-error{border-color:#dc2626!important;box-shadow:0 0 0 2px rgba(220,38,38,.15);}
 .field-error{display:block;min-height:16px;font-size:13px;color:#dc2626;opacity:0;transform:translateY(-4px);transition:opacity .18s ease,transform .18s ease;}
 .field-error.show{opacity:1;transform:translateY(0);}
-.caps-lock-warning{margin-top:6px;font-size:13px;font-weight:500;color:#f59e0b;display:none;}
 .is-shaking{animation:ml-shake .4s cubic-bezier(.36,.07,.19,.97);}
 @keyframes ml-shake{10%,90%{transform:translateX(-1px);}20%,80%{transform:translateX(2px);}30%,50%,70%{transform:translateX(-4px);}40%,60%{transform:translateX(4px);}}
 .is-pressed{transform:scale(.96);transition:transform .12s ease;}
@@ -241,33 +240,6 @@
       state.elements;
     setFieldError(identifier, identifierError, "");
     setFieldError(password, passwordError, "");
-  }
-
-  function ensureCapsLockWarning() {
-    const { password } = state.elements;
-    if (!password) return;
-    let warning = document.getElementById("capsLockWarning");
-    if (!warning) {
-      warning = document.createElement("div");
-      warning.id = "capsLockWarning";
-      warning.className = "caps-lock-warning";
-      warning.textContent = "Caps Lock ativado";
-      const container =
-        password.closest(".input-wrapper") ||
-        password.parentElement ||
-        password;
-      container.appendChild(warning);
-    }
-    state.elements.capsWarning = warning;
-    warning.style.display = "none";
-    warning.setAttribute("aria-hidden", "true");
-  }
-
-  function updateCapsWarning(show) {
-    const { capsWarning } = state.elements;
-    if (!capsWarning) return;
-    capsWarning.style.display = show ? "block" : "none";
-    capsWarning.setAttribute("aria-hidden", show ? "false" : "true");
   }
 
   function animateFormError() {
@@ -463,7 +435,6 @@
     state.elements = elements;
     state.identifierType = detectIdentifierType(elements.identifier.value);
 
-    ensureCapsLockWarning();
     setIdentifierIcon(state.identifierType);
 
     elements.toggle.addEventListener("click", () => {
@@ -499,11 +470,7 @@
     elements.identifier.addEventListener("blur", validateIdentifier);
 
     elements.password.addEventListener("input", validatePassword);
-    elements.password.addEventListener("keyup", (event) => {
-      if (!event.getModifierState) return;
-      updateCapsWarning(event.getModifierState("CapsLock"));
-    });
-    elements.password.addEventListener("blur", () => updateCapsWarning(false));
+    elements.password.addEventListener("blur", () => {});
 
     elements.form.addEventListener("submit", handleSubmit);
 
