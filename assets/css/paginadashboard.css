@@ -704,36 +704,30 @@ h2,
     padding: 16px;
   }
 
-  .chart-title {
-    font-size: 20px;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-
-  .nav-link {
-    min-height: 48px;
-  }
 }
+
+.nav-link {
+  min-height: 48px;
+}
+
 
 @media (max-width: 600px) {
   .dashboard {
-    padding: 80px 12px 32px;
+    padding: 80px 6px 32px;
 
   }
 
   .dash-cards {
-    gap: 10px;
+    gap: 8px;
   }
 
   .dash-card {
     flex-direction: row;
     align-items: center;
     text-align: left;
-    padding: 12px;
-
-    gap: 12px;
+    padding: 10px;
+    gap: 10px;
     flex: 1 1 100%;
-
     max-width: 100%;
   }
 
@@ -753,16 +747,16 @@ h2,
 
 @media (max-width: 400px) {
   .dashboard {
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 4px;
+    padding-right: 4px;
   }
 
   .dash-cards {
-    gap: 8px;
+    gap: 6px;
   }
 
   .dash-card {
-    padding: 10px;
+    padding: 8px;
     gap: 8px;
   }
 }
