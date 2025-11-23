@@ -39,42 +39,23 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
   <script defer src="../assets/js/shared-nav.js"></script>
   <script defer src="../assets/js/main.js"></script>
-</head>
+  <button type="submit" class="btn">
+    <i class="ri-mail-send-line" aria-hidden="true"></i>
+    Enviar link de Recuperação
+  </button>
+  </form>
 
-<body data-page="esqueceusenha">
-  <main class="forgot">
-    <section class="forgot-wrap" role="region" aria-labelledby="title-forgot">
-      <div class="card">
-        <a href="../index.html" class="brand brand-card">
-          <img src="../assets/images/Logo Certa - Fundo png.png" alt="Maps Link" class="brand-logo" />
-        </a>
-        <i class="ri-lock-password-line card-icon" aria-hidden="true"></i>
-        <h1 id="title-forgot" class="card-title">Esqueceu sua senha?</h1>
-        <p class="card-sub">
-          Informe seu e-mail cadastrado e enviaremos um link para redefinição.
-        </p>
+  <div class="links">
+    <a href="loginpessoal.html" class="link"><i class="ri-arrow-left-line"></i> Login pessoal</a>
+    <a href="loginempresa.html" class="link"><i class="ri-arrow-left-line"></i> Login empresarial</a>
+  </div>
+  </div>
 
-        <form class="form" id="forgotForm" novalidate>
-          <label for="email" class="label">E-mail</label>
-          <input type="email" id="email" name="email" class="input" placeholder="seu@email.com" autocomplete="email"
-            required />
-          <button type="submit" class="btn">
-            <i class="ri-mail-send-line" aria-hidden="true"></i>
-            Enviar link de Recuperação
-          </button>
-        </form>
-
-        <div class="links">
-          <a href="loginpessoal.html" class="link"><i class="ri-arrow-left-line"></i> Login pessoal</a>
-          <a href="loginempresa.html" class="link"><i class="ri-arrow-left-line"></i> Login empresarial</a>
-        </div>
-      </div>
-
-      <div class="status" aria-live="polite" aria-atomic="true" id="statusArea"></div>
-    </section>
+  <div class="status" aria-live="polite" aria-atomic="true" id="statusArea"></div>
+  </section>
   </main>
 
   <script defer src="../assets/js/esqueceusenha.js"></script>
-</body>
+  </body>
 
 </html>

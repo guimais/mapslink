@@ -41,122 +41,41 @@
   <link rel="stylesheet" href="assets/css/paginainicial.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
   <script defer src="./assets/js/shared-nav.js"></script>
-  <script defer src="./assets/js/main.js"></script>
-</head>
+  <h2 class="titulo-sobre" id="titulo-sobre">SOBRE:</h2>
+  </div>
 
-<body data-page="home" data-nav-active="index.html">
-  <header class="nav-container nav-fixed" role="banner">
-    <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
-      <a href="index.html" class="nav-logo-link" aria-label="PÃ¡gina inicial">
-        <img src="assets/images/Logo Certa - Fundo png.png" alt="Logo pÃ­lula Maps Link" class="nav-logo" loading="lazy"
-          decoding="async" />
-      </a>
-      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu"
-        aria-haspopup="true" type="button">
-        <i class="ri-menu-line" aria-hidden="true"></i>
-      </button>
-      <ul class="nav-links" id="navMenu" role="navigation" aria-label="SeÃ§Ãµes do site">
-        <li>
-          <a class="nav-link active" href="index.html" aria-current="page">Inicio</a>
-        </li>
-        <li><a class="nav-link" href="pages/paginamapav4.html">Mapa</a></li>
-        <li>
-          <a class="nav-link" href="pages/selecaoperfil.html">Perfil</a>
-        </li>
-        <li><a class="nav-link" href="pages/paginaplanos.html">Planos</a></li>
-        <li><a class="nav-link" href="pages/about.html">Sobre</a></li>
-        <li><a class="nav-link" href="pages/contact.html">Contato</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main id="home" class="container" role="main" aria-labelledby="titulo-principal">
-    <section class="hero">
-      <div class="hero__text">
-        <h1 id="titulo-principal" class="hero__title">
-          Encontre seu próximo emprego
-        </h1>
-        <p class="hero__subtitle">
-          Descubra vagas e empresas na sua região de um jeito
-          fácil e inovador.
-        </p>
-        <div class="hero__actions" role="group" aria-label="Ações principais">
-          <a class="btn" href="pages/paginamapav4.html">Explore o mapa</a>
-          <a class="btn btn--light" href="pages/about.html">Sobre nós</a>
-        </div>
+  <div class="cards-sobre" role="list" aria-label="Benef&iacute;cios do Maps Link">
+    <div class="card-sobre" role="listitem">
+      <div class="icone-sobre" aria-hidden="true">
+        <i class="ri-archive-drawer-line"></i>
       </div>
-      <div class="hero__logo" aria-hidden="true">
-        <img src="assets/images/Logo Certa - Fundo png.png" alt="MAPS LINK" />
-      </div>
-    </section>
-
-    <section class="icons-section" aria-label="Funcionalidades">
-      <div class="icons-container">
-        <ul class="icons-list" role="list">
-          <li class="icon-pill" role="listitem" aria-label="Vagas">
-            <i class="ri-briefcase-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="Tecnologia">
-            <i class="ri-cpu-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="Explorar">
-            <i class="ri-compass-3-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="LocalizaÃ§Ã£o">
-            <i class="ri-map-pin-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="UsuÃ¡rios">
-            <i class="ri-user-3-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="FinanÃ§as">
-            <i class="ri-money-dollar-circle-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="OrganizaÃ§Ã£o">
-            <i class="ri-clipboard-line" aria-hidden="true"></i>
-          </li>
-          <li class="icon-pill" role="listitem" aria-label="Dispositivos">
-            <i class="ri-smartphone-line" aria-hidden="true"></i>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <div id="sobre" class="segundo-subtitulo" aria-labelledby="titulo-sobre">
-      <h2 class="titulo-sobre" id="titulo-sobre">SOBRE:</h2>
+      <p class="texto-sobre">
+        Encontre vagas de emprego relevantes para suas habilidades e
+        área de atuação, de forma rápida e
+        organizada.
+      </p>
     </div>
 
-    <div class="cards-sobre" role="list" aria-label="Benef&iacute;cios do Maps Link">
-      <div class="card-sobre" role="listitem">
-        <div class="icone-sobre" aria-hidden="true">
-          <i class="ri-archive-drawer-line"></i>
-        </div>
-        <p class="texto-sobre">
-          Encontre vagas de emprego relevantes para suas habilidades e
-          área de atuação, de forma rápida e
-          organizada.
-        </p>
+    <div class="card-sobre" role="listitem">
+      <div class="icone-sobre" aria-hidden="true">
+        <i class="ri-map-pin-2-line"></i>
       </div>
-
-      <div class="card-sobre" role="listitem">
-        <div class="icone-sobre" aria-hidden="true">
-          <i class="ri-map-pin-2-line"></i>
-        </div>
-        <p class="texto-sobre">
-          Descubra empresas contratando na sua cidade e região
-          através de um mapa interativo e intuitivo.
-        </p>
-      </div>
-
-      <div class="card-sobre" role="listitem">
-        <div class="icone-sobre" aria-hidden="true">
-          <i class="ri-briefcase-3-line"></i>
-        </div>
-        <p class="texto-sobre">
-          Receba sugestões de vagas e empresas que correspondem ao seu
-          perfil profissional e interesses.
-        </p>
-      </div>
+      <p class="texto-sobre">
+        Descubra empresas contratando na sua cidade e região
+        através de um mapa interativo e intuitivo.
+      </p>
     </div>
+
+    <div class="card-sobre" role="listitem">
+      <div class="icone-sobre" aria-hidden="true">
+        <i class="ri-briefcase-3-line"></i>
+      </div>
+      <p class="texto-sobre">
+        Receba sugestões de vagas e empresas que correspondem ao seu
+        perfil profissional e interesses.
+      </p>
+    </div>
+  </div>
   </main>
 
   <div class="home-anchors" aria-hidden="true" hidden>
@@ -166,6 +85,6 @@
   </div>
 
   <script defer src="assets/js/paginainicial.js"></script>
-</body>
+  </body>
 
 </html>
