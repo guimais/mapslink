@@ -6,18 +6,18 @@
 
     if (scriptSrc) {
       try {
- 
+
         if (relativePath.startsWith("assets/")) {
-      
+
           return new URL("../" + relativePath.replace(/^assets\//, ""), scriptSrc).href;
         }
 
-   
+
         if (relativePath.startsWith("../")) {
           return new URL("../" + relativePath, scriptSrc).href;
         }
 
-        
+
         if (relativePath.startsWith("pages/")) {
           return new URL("../../" + relativePath, scriptSrc).href;
         }
@@ -28,7 +28,7 @@
       }
     }
 
-    
+
     const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
     const base = isPages ? "../" : "";
 
@@ -114,7 +114,7 @@
               <span><i class="ri-mail-send-line" aria-hidden="true"></i> <a href="mailto:contato@mapslink.com">contato@mapslink.com</a></span>
               <span><i class="ri-phone-line" aria-hidden="true"></i> <a href="tel:+55(19)99740-5660">+55(19)99740-5660</a></span>
               <span><i class="ri-map-pin-line" aria-hidden="true"></i> H11 - Campus I, PUC-Campinas, Av. Reitor Benedito José Barreto Fonseca - Parque das Universidades, Campinas - SP</span>
-              <span><i class="ri-customer-service-2-line" aria-hidden="true"></i> Atendimento: Seg a Sex, 09h - 17h (BRT)</span>
+              <span><i class="ri-customer-service-2-line" aria-hidden="true"></i> Atendimento: Seg. a Sex., 09h - 17h (BRT)</span>
             </div>
           </div>
         </div>
