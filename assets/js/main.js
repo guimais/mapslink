@@ -455,7 +455,7 @@
     function dispatchJobsEvent() {
       try {
         window.dispatchEvent(new CustomEvent(EVENT_NAME));
-      } catch {}
+      } catch { }
     }
 
     function enrichJob(job, meta, ownerId) {
@@ -559,9 +559,12 @@
     if (document.querySelector('script[data-site-footer="true"]')) return;
     const footerScript = document.createElement("script");
     footerScript.defer = true;
-    footerScript.src = script
-      ? new URL("./_shared-footer.js", script.src).href
-      : "assets/js/_shared-footer.js";
+    if (script && script.src) {
+      footerScript.src = new URL("./_shared-footer.js", script.src).href;
+    } else {
+      const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
+      footerScript.src = isPages ? "../assets/js/_shared-footer.js" : "assets/js/_shared-footer.js";
+    }
     footerScript.dataset.siteFooter = "true";
     (document.body || document.head || document.documentElement).appendChild(
       footerScript,

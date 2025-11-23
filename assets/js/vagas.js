@@ -441,7 +441,9 @@ if (!token) {
   async function loadCompanies() {
     if (Array.isArray(window.__companies) && window.__companies.length)
       return window.__companies;
-    const response = await fetch("/assets/data/companies.json", {
+    const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
+    const url = isPages ? "../assets/data/companies.json" : "assets/data/companies.json";
+    const response = await fetch(url, {
       cache: "no-store",
     });
     if (!response.ok) throw new Error("Falha ao carregar companies.json");

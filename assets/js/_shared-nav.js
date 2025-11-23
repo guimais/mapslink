@@ -74,8 +74,14 @@ window.injectSharedNav = function injectSharedNav() {
       currentScript ||
       document.querySelector('script[src*="_shared-nav.js"]') ||
       document.currentScript;
-    const baseSrc = navScript?.src || "assets/js/_shared-nav.js";
-    footerScript.src = new URL("./_shared-footer.js", baseSrc).href;
+
+    if (navScript && navScript.src) {
+      footerScript.src = new URL("./_shared-footer.js", navScript.src).href;
+    } else {
+      const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
+      footerScript.src = isPages ? "../assets/js/_shared-footer.js" : "assets/js/_shared-footer.js";
+    }
+
     footerScript.dataset.siteFooter = "true";
     (document.head || document.body || document.documentElement).appendChild(
       footerScript,
@@ -168,7 +174,7 @@ window.injectSharedNav = function injectSharedNav() {
     state.changeListeners.forEach((listener) => {
       try {
         listener(open);
-      } catch {}
+      } catch { }
     });
   }
 
