@@ -235,13 +235,20 @@ window.injectSharedNav = function injectSharedNav() {
     window.removeEventListener("scroll", updateShadow);
   }
 
-  let lastTouchToggle = 0;
+  let lastPointerWasTouch = false;
 
-  function handleToggle(event) {
-    if (event.type === "touchstart") {
-      lastTouchToggle = Date.now();
+  function handlePointerToggle(event) {
+    lastPointerWasTouch = event.pointerType === "touch";
+    event.preventDefault();
+    event.stopPropagation();
+    api.toggle();
+  }
+
+  function handleClickToggle(event) {
+    if (lastPointerWasTouch) {
+      lastPointerWasTouch = false;
+      return;
     }
-    if (event.type === "click" && Date.now() - lastTouchToggle < 350) return;
     event.preventDefault();
     event.stopPropagation();
     api.toggle();
@@ -261,8 +268,15 @@ window.injectSharedNav = function injectSharedNav() {
       lockScroll(false);
       updateShadow();
       if (!state.initialized) {
-        toggle.addEventListener("click", handleToggle);
-        toggle.addEventListener("touchstart", handleToggle, { passive: false });
+        if (window.PointerEvent) {
+          toggle.addEventListener("pointerup", handlePointerToggle, {
+            passive: false,
+          });
+        }
+        toggle.addEventListener("click", handleClickToggle);
+        toggle.addEventListener("touchstart", handlePointerToggle, {
+          passive: false,
+        });
         bindLinks();
         bindGlobalEvents();
         state.initialized = true;
