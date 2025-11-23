@@ -305,16 +305,18 @@ window.injectSharedNav = function injectSharedNav() {
       updateShadow();
       if (!state.initialized) {
         const supportsPointer = Boolean(window.PointerEvent);
-        if (supportsPointer) {
-          toggle.addEventListener("pointerup", handlePointerToggle, {
-            passive: false,
-          });
-        } else {
-          toggle.addEventListener("touchstart", handlePointerToggle, {
-            passive: false,
-          });
+        if (toggle) {
+          if (supportsPointer) {
+            toggle.addEventListener("pointerup", handlePointerToggle, {
+              passive: false,
+            });
+          } else {
+            toggle.addEventListener("touchstart", handlePointerToggle, {
+              passive: false,
+            });
+          }
+          toggle.addEventListener("click", handleClickToggle);
         }
-        toggle.addEventListener("click", handleClickToggle);
         bindLinks();
         bindGlobalEvents();
         state.initialized = true;

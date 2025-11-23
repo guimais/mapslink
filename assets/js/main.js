@@ -5,9 +5,13 @@
     Array.from(document.scripts).find((s) =>
       (s.src || "").includes("/main.js"),
     );
-  const usersUrl = script
-    ? new URL("../data/users.json", script.src).href
-    : "assets/data/users.json";
+  const usersUrl = (() => {
+    if (script && script.src) {
+      return new URL("../data/users.json", script.src).href;
+    }
+    const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
+    return isPages ? "../assets/data/users.json" : "assets/data/users.json";
+  })();
   const USERS_KEY = "mapslink:users";
   const SESSION_KEY = "mapslink:session";
   const watchers = new Set();
