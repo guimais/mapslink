@@ -8,6 +8,7 @@ window.injectSharedNav = function injectSharedNav() {
 };
 
 (() => {
+  const currentScript = document.currentScript;
   const DEFAULTS = {
     openClass: "is-open",
     altOpenClass: "active",
@@ -38,6 +39,9 @@ window.injectSharedNav = function injectSharedNav() {
     originalOverflow: "",
   };
 
+  let suppressClick = false;
+  let suppressTimer = null;
+
   function truthy(value) {
     if (typeof value === "string") return /^(1|true|yes)$/i.test(value);
     return Boolean(value);
@@ -53,6 +57,29 @@ window.injectSharedNav = function injectSharedNav() {
     if (!config.altOpenClass && config.openClass !== "active")
       config.altOpenClass = "active";
     return config;
+  }
+
+  function ensureFooterScript() {
+    const body = document.body;
+    const page = (body?.dataset?.page || "").toLowerCase();
+    if (page === "mapacheio") return;
+    if (
+      document.querySelector('script[data-site-footer="true"]') ||
+      document.querySelector('.site-footer[data-component="site-footer"]')
+    )
+      return;
+    const footerScript = document.createElement("script");
+    footerScript.defer = true;
+    const navScript =
+      currentScript ||
+      document.querySelector('script[src*="_shared-nav.js"]') ||
+      document.currentScript;
+    const baseSrc = navScript?.src || "assets/js/_shared-nav.js";
+    footerScript.src = new URL("./_shared-footer.js", baseSrc).href;
+    footerScript.dataset.siteFooter = "true";
+    (document.head || document.body || document.documentElement).appendChild(
+      footerScript,
+    );
   }
 
   function configFromBody() {
@@ -235,20 +262,23 @@ window.injectSharedNav = function injectSharedNav() {
     window.removeEventListener("scroll", updateShadow);
   }
 
-  let lastPointerWasTouch = false;
+  function preventDoubleClick() {
+    suppressClick = true;
+    clearTimeout(suppressTimer);
+    suppressTimer = setTimeout(() => {
+      suppressClick = false;
+    }, 400);
+  }
 
   function handlePointerToggle(event) {
-    lastPointerWasTouch = event.pointerType === "touch";
     event.preventDefault();
     event.stopPropagation();
+    preventDoubleClick();
     api.toggle();
   }
 
   function handleClickToggle(event) {
-    if (lastPointerWasTouch) {
-      lastPointerWasTouch = false;
-      return;
-    }
+    if (suppressClick && event.detail !== 0) return;
     event.preventDefault();
     event.stopPropagation();
     api.toggle();
@@ -268,15 +298,17 @@ window.injectSharedNav = function injectSharedNav() {
       lockScroll(false);
       updateShadow();
       if (!state.initialized) {
-        if (window.PointerEvent) {
+        const supportsPointer = Boolean(window.PointerEvent);
+        if (supportsPointer) {
           toggle.addEventListener("pointerup", handlePointerToggle, {
+            passive: false,
+          });
+        } else {
+          toggle.addEventListener("touchstart", handlePointerToggle, {
             passive: false,
           });
         }
         toggle.addEventListener("click", handleClickToggle);
-        toggle.addEventListener("touchstart", handlePointerToggle, {
-          passive: false,
-        });
         bindLinks();
         bindGlobalEvents();
         state.initialized = true;
@@ -346,6 +378,7 @@ window.injectSharedNav = function injectSharedNav() {
   function init() {
     const config = mergeConfig(configFromBody());
     api.init(config);
+    ensureFooterScript();
   }
 
   if (document.readyState === "loading") {
