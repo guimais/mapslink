@@ -384,7 +384,11 @@ window.injectSharedNav = function injectSharedNav() {
   function init() {
     const config = mergeConfig(configFromBody());
     api.init(config);
-    ensureFooterScript();
+    try {
+      ensureFooterScript();
+    } catch (e) {
+      console.warn("MapsLink: Failed to load footer script", e);
+    }
   }
 
   if (document.readyState === "loading") {
