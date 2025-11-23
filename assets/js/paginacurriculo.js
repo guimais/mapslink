@@ -1,4 +1,4 @@
-const token = localStorage.getItem("jwt_token");
+﻿const token = localStorage.getItem("jwt_token");
 if (!token) {
   window.location.href = "loginempresa.html";
 }
@@ -51,7 +51,7 @@ if (!token) {
     const safe = { ...entry };
     safe.id = safe.id || `app_${index}_${Date.now().toString(36)}`;
     safe.candidate = candidateName;
-    safe.status = safe.status || "Em análise";
+    safe.status = safe.status || "Em anÃ¡lise";
     safe.appliedAt =
       safe.appliedAt || safe.createdAt || new Date().toISOString();
     safe.avatar = safe.avatar || "";
@@ -91,9 +91,18 @@ if (!token) {
       return;
     }
     const key = storageKey(state.owner);
-    console.log("[paginacurriculo] Carregando aplicações para owner:", state.owner, "key:", key);
+    console.log(
+      "[paginacurriculo] Carregando aplicaÃ§Ãµes para owner:",
+      state.owner,
+      "key:",
+      key,
+    );
     state.entries = loadApplications(state.owner);
-    console.log("[paginacurriculo] Aplicações carregadas:", state.entries.length, state.entries);
+    console.log(
+      "[paginacurriculo] AplicaÃ§Ãµes carregadas:",
+      state.entries.length,
+      state.entries,
+    );
     state.entriesMap = new Map(state.entries.map((entry) => [entry.id, entry]));
     applyFilters();
   }
@@ -152,13 +161,13 @@ if (!token) {
     if (!entry?.cv?.dataUrl) return;
     const blob = dataUrlToBlob(entry.cv.dataUrl);
     if (!blob) {
-      alert("Não foi possível abrir este currículo.");
+      alert("NÃ£o foi possÃ­vel abrir este currÃ­culo.");
       return;
     }
     const url = URL.createObjectURL(blob);
     const win = window.open(url, "_blank", "noopener");
     if (!win) {
-      alert("Permita pop-ups para visualizar o currículo.");
+      alert("Permita pop-ups para visualizar o currÃ­culo.");
       URL.revokeObjectURL(url);
       return;
     }
@@ -197,22 +206,22 @@ if (!token) {
     const statusCell = document.createElement("td");
     const statusContainer = document.createElement("div");
     statusContainer.className = "status-container";
-    
-    const currentStatus = entry.status || "Em análise";
+
+    const currentStatus = entry.status || "Em anÃ¡lise";
     const statusBadge = document.createElement("button");
     statusBadge.type = "button";
     statusBadge.className = statusClass(currentStatus) + " status-editable";
     statusBadge.textContent = currentStatus;
     statusBadge.dataset.entryId = entry.id;
     statusBadge.title = "Clique para alterar o status";
-    
+
     const statusDropdown = document.createElement("select");
     statusDropdown.className = "status-select";
     statusDropdown.dataset.entryId = entry.id;
     statusDropdown.setAttribute("aria-label", "Alterar status da candidatura");
-    
-    const options = ["Em análise", "Aprovado", "Reprovada"];
-    options.forEach(opt => {
+
+    const options = ["Em anÃ¡lise", "Aprovado", "Reprovada"];
+    options.forEach((opt) => {
       const option = document.createElement("option");
       option.value = opt;
       option.textContent = opt;
@@ -221,12 +230,12 @@ if (!token) {
       }
       statusDropdown.appendChild(option);
     });
-    
-    statusDropdown.addEventListener("change", function() {
+
+    statusDropdown.addEventListener("change", function () {
       const newStatus = this.value;
       updateApplicationStatus(entry.id, newStatus);
     });
-    
+
     statusContainer.appendChild(statusDropdown);
     statusContainer.appendChild(statusBadge);
     statusCell.appendChild(statusContainer);
@@ -238,9 +247,9 @@ if (!token) {
     button.dataset.viewCv = entry.id || "";
     if (hasCv) {
       button.textContent = "Ver CV";
-      button.title = (entry.cv && entry.cv.name) || "Visualizar currículo";
+      button.title = (entry.cv && entry.cv.name) || "Visualizar currÃ­culo";
     } else {
-      button.textContent = "CV indisponível";
+      button.textContent = "CV indisponÃ­vel";
       button.disabled = true;
     }
     actionCell.appendChild(button);
@@ -432,7 +441,7 @@ if (!token) {
 
   function exportData() {
     if (!state.filtered.length) {
-      alert("Não há candidaturas para exportar.");
+      alert("NÃ£o hÃ¡ candidaturas para exportar.");
       return;
     }
     const header = ["Nome", "Vaga", "Data", "Status"];
@@ -440,7 +449,7 @@ if (!token) {
       `"${entry.candidate || ""}"`,
       `"${entry.title || ""}"`,
       `"${formatDate(entry.appliedAt).text}"`,
-      `"${entry.status || "Em análise"}"`,
+      `"${entry.status || "Em anÃ¡lise"}"`,
     ]);
     const csv = [header.join(";"), ...rows.map((row) => row.join(";"))].join(
       "\n",
@@ -460,16 +469,15 @@ if (!token) {
     if (!state.owner || !entryId) return;
     const entry = state.entries.find((e) => e.id === entryId);
     if (!entry) return;
-    
+
     entry.status = newStatus;
     const key = storageKey(state.owner);
     if (!key) return;
-    
+
     try {
       localStorage.setItem(key, JSON.stringify(state.entries));
       state.entriesMap.set(entryId, entry);
-      
-      // Atualizar o badge visualmente
+
       const row = document.querySelector(`tr[data-entry-id="${entryId}"]`);
       if (row) {
         const badge = row.querySelector(".status-editable");
@@ -482,11 +490,13 @@ if (!token) {
           select.value = newStatus;
         }
       }
-      
+
       applyFilters();
-      window.dispatchEvent(new CustomEvent("mapslink:application-saved", {
-        detail: { ownerId: state.owner, entryId }
-      }));
+      window.dispatchEvent(
+        new CustomEvent("mapslink:application-saved", {
+          detail: { ownerId: state.owner, entryId },
+        }),
+      );
     } catch (err) {
       console.error("Erro ao atualizar status:", err);
     }
@@ -499,7 +509,7 @@ if (!token) {
     if (!id) return;
     const entry = state.entries.find((item) => item.id === id);
     if (!entry || !entry.cv) {
-      alert("Currículo não disponível para este candidato.");
+      alert("CurrÃ­culo nÃ£o disponÃ­vel para este candidato.");
       return;
     }
     openCv(entry);
@@ -519,12 +529,19 @@ if (!token) {
     }
     const detail = event.detail || {};
     console.log("[paginacurriculo] Evento application-saved recebido:", detail);
-    // Atualiza se a aplicação foi salva para esta empresa
     if (detail.ownerId === state.owner) {
-      console.log("[paginacurriculo] Atualizando entradas para owner:", state.owner);
+      console.log(
+        "[paginacurriculo] Atualizando entradas para owner:",
+        state.owner,
+      );
       refreshEntries();
     } else {
-      console.log("[paginacurriculo] ownerId não corresponde:", detail.ownerId, "!=", state.owner);
+      console.log(
+        "[paginacurriculo] ownerId nÃ£o corresponde:",
+        detail.ownerId,
+        "!=",
+        state.owner,
+      );
     }
   }
 
@@ -557,7 +574,12 @@ if (!token) {
 
   function hydrate(session) {
     state.owner = session?.id || null;
-    console.log("[paginacurriculo] Hydrate - session:", session, "owner:", state.owner);
+    console.log(
+      "[paginacurriculo] Hydrate - session:",
+      session,
+      "owner:",
+      state.owner,
+    );
     applyAvatar(session?.profile?.avatar || "");
     refreshEntries();
   }
@@ -585,7 +607,10 @@ if (!token) {
     initListeners();
     initAuth();
     window.addEventListener("storage", handleStorageEvent);
-    window.addEventListener("mapslink:application-saved", handleApplicationSaved);
+    window.addEventListener(
+      "mapslink:application-saved",
+      handleApplicationSaved,
+    );
   }
 
   if (document.readyState === "loading") {

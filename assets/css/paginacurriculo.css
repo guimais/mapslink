@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --radius-lg: 24px;
 
   --radius-md: 16px;
@@ -369,7 +369,6 @@ h2,
   border-color: rgba(0, 0, 0, 0.12);
 }
 
-/* Estilos para status editável */
 .status-container {
   position: relative;
   display: inline-flex;
@@ -437,7 +436,11 @@ h2,
   position: absolute;
   inset: -2px;
   border-radius: 22px;
-  background: linear-gradient(135deg, rgba(16, 37, 105, 0.08), rgba(16, 37, 105, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(16, 37, 105, 0.08),
+    rgba(16, 37, 105, 0.02)
+  );
   opacity: 0;
   transition: opacity 0.25s ease;
   pointer-events: none;
@@ -1082,3 +1085,4 @@ h2,
   transform: scale(0.965);
   filter: brightness(0.98) saturate(0.98);
 }
+

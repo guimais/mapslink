@@ -1,12 +1,12 @@
-# 🌍 MapsLink
+﻿# 🌍 MapsLink
 
 **MapsLink** is an interactive web platform designed to help users discover **companies, job opportunities, and events directly on a map**, starting with **Campinas (SP, Brazil)** and expanding to broader regions.
 
-It connects people and businesses using geolocation, dynamic filtering, and a clean, responsive interface — built with performance, simplicity, and modular structure in mind.
+It connects people and businesses using geolocation, dynamic filtering, and a clean, responsive interface â€” built with performance, simplicity, and modular structure in mind.
 
 ---
 
-## 🏗️ Project Overview
+## 🗺️ Project Overview
 
 MapsLink is a fully front-end project built for academic and professional development. It explores **web mapping**, **data visualization**, and **user-centered design**, combining technical skills with practical use cases and intuitive interaction.
 
@@ -14,7 +14,7 @@ MapsLink is a fully front-end project built for academic and professional develo
 
 ## 🚀 Features
 
-- 📍 **Interactive Map** – view companies by location using map markers
+- 🗺️ **Interactive Map** – view companies by location using map markers
 - 🔎 **Real-Time Filters** – filter by city, sector, or keyword dynamically
 - 🧭 **Sticky Navigation** – consistent top navigation across all pages
 - 👥 **Company & User Dashboards** – separate profiles for both user types
@@ -44,24 +44,24 @@ MapsLink is a fully front-end project built for academic and professional develo
 
 ```
 mapslink/
-├─ index.html
-├─ pages/
-│  ├─ paginamapav4.html
-│  ├─ mapacheio.html
-│  ├─ vagas.html
-│  ├─ paginacurriculo.html
-│  ├─ perfilusuario.html
-│  ├─ perfilempresa.html
-│  ├─ agenda.html
-│  ├─ ...
-├─ assets/
-│  ├─ css/           # One CSS per page
-│  ├─ js/            # One JS per page + shared
-│  ├─ data/          # JSON files
-│  └─ images/        # Icons, logos, and illustrations
-├─ manifest.json     # PWA configuration
-├─ README.md
-└─ LICENSE
+├── index.html
+├── pages/
+│   ├── paginamapav4.html
+│   ├── mapacheio.html
+│   ├── vagas.html
+│   ├── paginacurriculo.html
+│   ├── perfilusuario.html
+│   ├── perfilempresa.html
+│   ├── agenda.html
+│   ├── ...
+├── assets/
+│   ├── css/           # One CSS per page
+│   ├── js/            # One JS per page + shared
+│   ├── data/          # JSON files
+│   └── images/        # Icons, logos, and illustrations
+├── manifest.json     # PWA configuration
+├── README.md
+└── LICENSE
 ```
 
 > Design tokens, color palettes, layout system, and typography are shared across all pages.
@@ -92,7 +92,7 @@ http://localhost:8000
 
 ---
 
-## 🗺️ Roadmap
+## 🛣️ Roadmap
 
 - [x] Modular HTML/CSS/JS structure
 - [x] Sticky navbar + navigation flow
@@ -126,7 +126,7 @@ Fonts:
 
 ---
 
-## 🧭 Architecture Overview
+## 🧩 Architecture Overview
 
 1. **Frontend:** static multi-page app with modular HTML/CSS/JS.
 2. **Map Module:** loads and displays `companies.json` markers with filters.
@@ -200,7 +200,40 @@ GitHub Pages deployment coming soon...
 ## 📄 License
 
 Licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
+---
+
+## 🚦 Requisitos Rápidos
+
+- Navegador moderno (Chrome/Edge/Firefox/Safari)
+- Servidor estático simples (Python `http.server`, `npx http-server` ou equivalente)
+- Acesso a internet para CDNs (Leaflet, Remix Icon, Google Fonts)
 
 ---
 
-> _“MapsLink connects more than places — it connects people, ideas, and opportunities.”_
+## 🚀 GitHub Pages
+
+Publicação rápida no GitHub Pages:
+
+1. No GitHub, acesse **Settings > Pages**.
+2. Em **Source**, escolha **Deploy from a branch**.
+3. Selecione a branch (`main`) e a pasta **/** (root). Salve.
+4. Aguarde o build automático. A URL ficará em `https://<seu-usuario>.github.io/<seu-repo>/`.
+5. Para updates: `git push origin main` (o Pages reconstrói automaticamente).
+
+URLs e testes locais:
+
+- Preview local: `http://localhost:8000`
+- Manifest/PWA: `http://localhost:8000/manifest.json`
+- Dados: `http://localhost:8000/assets/data/companies.json`
+
+Checklist de publicação:
+
+- [ ] Conferir navegação principal e links relativos entre páginas.
+- [ ] Verificar mapa/Leaflet carregando (CDN liberada).
+- [ ] Rodar Lighthouse (PWA + A11y) e ajustar se necessário.
+- [ ] Atualizar badges de status/licença se alterar o fluxo de deploy.
+---
+
+> _MapsLink connects more than places -- it connects people, ideas, and opportunities._
+
+

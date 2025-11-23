@@ -1,4 +1,4 @@
-const token = localStorage.getItem("jwt_token");
+﻿const token = localStorage.getItem("jwt_token");
 if (!token) {
   window.location.href = "loginempresa.html";
 }
@@ -23,10 +23,10 @@ if (!token) {
   const BAR_ITEMS = [
     { key: "received", label: "Recebidos" },
     { key: "accepted", label: "Aceitos" },
-    { key: "reviewing", label: "Em análise" },
+    { key: "reviewing", label: "Em anÃ¡lise" },
   ];
   const DONUT_ITEMS = [
-    { key: "reviewing", label: "Em análise", color: "#a5b4fc" },
+    { key: "reviewing", label: "Em anÃ¡lise", color: "#a5b4fc" },
     { key: "open", label: "Aberta", color: "#1e90ff" },
     { key: "closed", label: "Fechada", color: "#ef4444" },
   ];
@@ -100,7 +100,7 @@ if (!token) {
   function summarizeApplications(applications) {
     return applications.reduce(
       (summary, app) => {
-        const status = normalizeText(app?.status || "em análise");
+        const status = normalizeText(app?.status || "em anÃ¡lise");
         if (status.includes("aprov")) summary.accepted += 1;
         else if (status.includes("reprov")) summary.rejected += 1;
         else summary.reviewing += 1;
@@ -153,7 +153,7 @@ if (!token) {
     if (!fallback) return;
     if (show) {
       fallback.textContent =
-        message || "Sem dados suficientes para exibir o gráfico.";
+        message || "Sem dados suficientes para exibir o grÃ¡fico.";
       fallback.style.display = "block";
       fallback.setAttribute("aria-hidden", "false");
     } else {
@@ -260,7 +260,7 @@ if (!token) {
     toggleFallback(
       canvas,
       total <= 0,
-      "Cadastre currículos para visualizar este gráfico.",
+      "Cadastre currÃ­culos para visualizar este grÃ¡fico.",
     );
     if (total <= 0) {
       configureCanvas(canvas, measureBarCanvas(canvas));
@@ -336,7 +336,7 @@ if (!token) {
       (sum, item) => sum + (Number(item.value) || 0),
       0,
     );
-    toggleFallback(canvas, total <= 0, "Abra vagas para gerar este gráfico.");
+    toggleFallback(canvas, total <= 0, "Abra vagas para gerar este grÃ¡fico.");
 
     const legend = canvas
       .closest(".chart-with-legend")
@@ -461,25 +461,24 @@ if (!token) {
     );
 
     const owner = session?.id || null;
-    
-    // Buscar dados reais do localStorage
+
     const jobs = loadJobs(owner);
     const applications = loadApplications(owner);
-    
-    // Resumir vagas
+
     const jobSummary = summarizeJobs(jobs);
     if (!stats.open && jobSummary.open) stats.open = jobSummary.open;
     if (!stats.closed && jobSummary.closed) stats.closed = jobSummary.closed;
-    
-    // Resumir currículos
-    const appSummary = summarizeApplications(applications);
-    if (!stats.received && appSummary.received) stats.received = appSummary.received;
-    if (!stats.accepted && appSummary.accepted) stats.accepted = appSummary.accepted;
-    if (!stats.reviewing && appSummary.reviewing) stats.reviewing = appSummary.reviewing;
 
-    // Garantir consistência
+    const appSummary = summarizeApplications(applications);
+    if (!stats.received && appSummary.received)
+      stats.received = appSummary.received;
+    if (!stats.accepted && appSummary.accepted)
+      stats.accepted = appSummary.accepted;
+    if (!stats.reviewing && appSummary.reviewing)
+      stats.reviewing = appSummary.reviewing;
+
     stats.received = Math.max(stats.received, stats.accepted + stats.reviewing);
-    
+
     stats.interviews = stats.interviews || 0;
     return stats;
   }
@@ -515,31 +514,31 @@ if (!token) {
     applyStats(null);
     initAuth();
     window.addEventListener("resize", debounce(renderCharts, 120));
-    
-    // Listeners para atualizar quando dados mudarem
+
     window.addEventListener("storage", (event) => {
-      if (event.key && (
-        event.key.startsWith(JOBS_STORAGE) || 
-        event.key.startsWith(APPLICATION_PREFIX)
-      )) {
+      if (
+        event.key &&
+        (event.key.startsWith(JOBS_STORAGE) ||
+          event.key.startsWith(APPLICATION_PREFIX))
+      ) {
         const auth = window.MapsAuth;
         const session = auth?.current ? auth.current() : null;
         applyStats(session);
       }
     });
-    
+
     window.addEventListener("mapslink:application-saved", () => {
       const auth = window.MapsAuth;
       const session = auth?.current ? auth.current() : null;
       applyStats(session);
     });
-    
+
     window.addEventListener("mapslink:job-saved", () => {
       const auth = window.MapsAuth;
       const session = auth?.current ? auth.current() : null;
       applyStats(session);
     });
-    
+
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
         const auth = window.MapsAuth;
@@ -547,7 +546,7 @@ if (!token) {
         applyStats(session);
       }
     });
-    
+
     window.MapsDashboard = Object.assign({}, window.MapsDashboard, {
       setStats(partial) {
         if (!partial || typeof partial !== "object") return;

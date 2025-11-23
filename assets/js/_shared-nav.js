@@ -1,4 +1,4 @@
-const NAV_HTML = ``;
+﻿const NAV_HTML = ``;
 
 window.injectSharedNav = function injectSharedNav() {
   if (!NAV_HTML) return;
@@ -65,7 +65,6 @@ window.injectSharedNav = function injectSharedNav() {
     if (dataset.navOverlay !== undefined)
       config.overlay = truthy(dataset.navOverlay);
     else {
-      // Criar overlay automaticamente em telas menores (mobile)
       const isMobile = window.innerWidth < breakpoint;
       config.overlay = isMobile;
     }
@@ -197,11 +196,14 @@ window.injectSharedNav = function injectSharedNav() {
   function handleResize() {
     if (!state.config.breakpoint) return;
     const isMobile = window.innerWidth < state.config.breakpoint;
-    // Atualizar overlay se necessário
     if (isMobile && !state.config.overlay) {
       state.config.overlay = true;
       ensureOverlay();
-    } else if (!isMobile && state.config.overlay && !document.body?.dataset?.navOverlay) {
+    } else if (
+      !isMobile &&
+      state.config.overlay &&
+      !document.body?.dataset?.navOverlay
+    ) {
       state.config.overlay = false;
       if (state.overlay && state.overlay.parentElement === document.body) {
         state.overlay.remove();

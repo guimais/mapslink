@@ -27,7 +27,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at 12% 6%,
       rgba(148, 163, 255, 0.28) 0%,
       rgba(148, 163, 255, 0) 45%

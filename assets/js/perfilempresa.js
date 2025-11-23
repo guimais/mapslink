@@ -316,8 +316,7 @@ if (!token) {
     window.addEventListener("popstate", () => setActiveLink(location.href));
     initAuth();
     bindSearchHighlights();
-    
-    // Escutar mudanças no localStorage para atualizar o contador
+
     window.addEventListener("storage", (event) => {
       if (event.key && event.key.startsWith(APPLICATION_PREFIX)) {
         const auth = window.MapsAuth;
@@ -325,15 +324,13 @@ if (!token) {
         updateCurriculosCount(session);
       }
     });
-    
-    // Escutar evento customizado quando um currículo é salvo
+
     window.addEventListener("mapslink:application-saved", () => {
       const auth = window.MapsAuth;
       const session = auth?.current ? auth.current() : null;
       updateCurriculosCount(session);
     });
-    
-    // Atualizar quando a página recebe foco novamente
+
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
         const auth = window.MapsAuth;
@@ -341,7 +338,7 @@ if (!token) {
         updateCurriculosCount(session);
       }
     });
-    
+
     window.MapsLink = Object.assign({}, window.MapsLink, {
       setAgendaHoje(value) {
         const num = Number(value);
