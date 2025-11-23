@@ -202,37 +202,37 @@ GitHub Pages deployment coming soon...
 Licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
 ---
 
-## 🚦 Requisitos Rápidos
+## 🚦 Quick Requirements
 
-- Navegador moderno (Chrome/Edge/Firefox/Safari)
-- Servidor estático simples (Python `http.server`, `npx http-server` ou equivalente)
-- Acesso a internet para CDNs (Leaflet, Remix Icon, Google Fonts)
+- Modern browser (Chrome/Edge/Firefox/Safari)
+- Simple static server (Python `http.server`, `npx http-server` or equivalent)
+- Internet access for CDNs (Leaflet, Remix Icon, Google Fonts)
 
 ---
 
 ## 🚀 GitHub Pages
 
-Publicação rápida no GitHub Pages:
+Quick publishing on GitHub Pages:
 
-1. No GitHub, acesse **Settings > Pages**.
-2. Em **Source**, escolha **Deploy from a branch**.
-3. Selecione a branch (`main`) e a pasta **/** (root). Salve.
-4. Aguarde o build automático. A URL ficará em `https://<seu-usuario>.github.io/<seu-repo>/`.
-5. Para updates: `git push origin main` (o Pages reconstrói automaticamente).
+1. On GitHub, go to **Settings > Pages**.
+2. In **Source**, choose **Deploy from a branch**.
+3. Select the branch (`main`) and the **/** (root) folder. Save.
+4. Wait for the automatic build. The URL will be at `https://<your-username>.github.io/<your-repo>/`.
+5. For updates: `git push origin main` (Pages rebuilds automatically).
 
-URLs e testes locais:
+URLs and local tests:
 
-- Preview local: `http://localhost:8000`
+- Local preview: `http://localhost:8000`
 - Manifest/PWA: `http://localhost:8000/manifest.json`
-- Dados: `http://localhost:8000/assets/data/companies.json`
+- Data: `http://localhost:8000/assets/data/companies.json`
 
-Checklist de publicação:
+Publishing checklist:
 
-- [ ] Conferir navegação principal e links relativos entre páginas.
-- [ ] Verificar mapa/Leaflet carregando (CDN liberada).
-- [ ] Rodar Lighthouse (PWA + A11y) e ajustar se necessário.
-- [ ] Atualizar badges de status/licença se alterar o fluxo de deploy.
----
+- [ ] Check main navigation and relative links between pages.
+- [ ] Verify map/Leaflet loading (CDN allowed).
+- [ ] Run Lighthouse (PWA + A11y) and adjust if needed.
+- [ ] Update status/license badges if the deploy flow changes.
+
 
 > _MapsLink connects more than places -- it connects people, ideas, and opportunities._
 
