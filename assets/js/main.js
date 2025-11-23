@@ -587,10 +587,10 @@
     const footerScript = document.createElement("script");
     footerScript.defer = true;
     if (script && script.src) {
-      footerScript.src = new URL("./_shared-footer.js", script.src).href;
+      footerScript.src = new URL("./shared-footer.js", script.src).href;
     } else {
       const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
-      footerScript.src = isPages ? "../assets/js/_shared-footer.js" : "assets/js/_shared-footer.js";
+      footerScript.src = isPages ? "../assets/js/shared-footer.js" : "assets/js/shared-footer.js";
     }
     footerScript.dataset.siteFooter = "true";
     (document.body || document.head || document.documentElement).appendChild(
