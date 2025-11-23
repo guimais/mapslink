@@ -1,35 +1,51 @@
 (() => {
   const currentScript = document.currentScript;
 
+  function resolvePath(relativePath) {
+    const scriptSrc = currentScript && currentScript.src ? currentScript.src : null;
+
+    if (scriptSrc) {
+      try {
+ 
+        if (relativePath.startsWith("assets/")) {
+      
+          return new URL("../" + relativePath.replace(/^assets\//, ""), scriptSrc).href;
+        }
+
+   
+        if (relativePath.startsWith("../")) {
+          return new URL("../" + relativePath, scriptSrc).href;
+        }
+
+        
+        if (relativePath.startsWith("pages/")) {
+          return new URL("../../" + relativePath, scriptSrc).href;
+        }
+
+        return new URL(relativePath, scriptSrc).href;
+      } catch (e) {
+        console.warn("MapsLink: Path resolution failed", e);
+      }
+    }
+
+    
+    const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
+    const base = isPages ? "../" : "";
+
+    if (relativePath.startsWith("assets/")) {
+      return base + relativePath;
+    }
+    if (relativePath.startsWith("../")) {
+      return relativePath;
+    }
+    return base + relativePath;
+  }
+
   function renderFooter() {
     if (window.location.pathname.endsWith("/pages/esqueceusenha.html")) return;
     const body = document.body;
     if (!body) return;
-    if (document.querySelector('.site-footer[data-component="site-footer"]'))
-      return;
-
-    const pageId = (body.dataset.page || "").toLowerCase();
-
-    function resolvePath(relativePath) {
-      if (window.MapsUtils?.resolvePath) {
-        let clean = relativePath;
-        if (clean.startsWith("../")) clean = clean.substring(3);
-        return window.MapsUtils.resolvePath(clean);
-      }
-
-      const scriptSrc = currentScript && currentScript.src ? currentScript.src : null;
-
-      if (!scriptSrc) {
-        const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
-        const base = isPages ? "../assets/" : "assets/";
-        return base + relativePath.replace(/^assets\//, "");
-      }
-      try {
-        return new URL("../" + relativePath.replace(/^assets\//, ""), scriptSrc).href;
-      } catch (e) {
-        return relativePath;
-      }
-    }
+    if (document.querySelector('.site-footer[data-component="site-footer"]')) return;
 
     const homeHref = resolvePath("../index.html");
     const pageBase = resolvePath("../pages/");
@@ -116,7 +132,7 @@
     `;
 
     const anchorParent = currentScript?.parentNode;
-    if (anchorParent) {
+    if (anchorParent && anchorParent !== document.head) {
       anchorParent.insertBefore(footer, currentScript);
     } else {
       body.appendChild(footer);

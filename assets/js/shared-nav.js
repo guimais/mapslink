@@ -71,20 +71,16 @@ window.injectSharedNav = function injectSharedNav() {
     const footerScript = document.createElement("script");
     footerScript.defer = true;
 
-    if (window.MapsUtils?.resolvePath) {
-      footerScript.src = window.MapsUtils.resolvePath("assets/js/_shared-footer.js");
-    } else {
-      const navScript =
-        currentScript ||
-        document.querySelector('script[src*="_shared-nav.js"]') ||
-        document.currentScript;
+    const navScript =
+      currentScript ||
+      document.querySelector('script[src*="shared-nav.js"]') ||
+      document.currentScript;
 
-      if (navScript && navScript.src) {
-        footerScript.src = new URL("./_shared-footer.js", navScript.src).href;
-      } else {
-        const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
-        footerScript.src = isPages ? "../assets/js/_shared-footer.js" : "assets/js/_shared-footer.js";
-      }
+    if (navScript && navScript.src) {
+      footerScript.src = new URL("./shared-footer.js", navScript.src).href;
+    } else {
+      const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
+      footerScript.src = isPages ? "../assets/js/shared-footer.js" : "assets/js/shared-footer.js";
     }
 
     footerScript.dataset.siteFooter = "true";
