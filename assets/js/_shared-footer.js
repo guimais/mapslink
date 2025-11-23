@@ -9,20 +9,22 @@
       return;
 
     const pageId = (body.dataset.page || "").toLowerCase();
-    if (pageId === "edicaoperfil" || pageId === "edicaoperfilempresa") return;
-    const navActive = (body.dataset.navActive || "").toLowerCase();
-    const scriptSrc = currentScript && currentScript.src ? currentScript.src : null;
-
 
     function resolvePath(relativePath) {
-      if (!scriptSrc) {
+      if (window.MapsUtils?.resolvePath) {
+        let clean = relativePath;
+        if (clean.startsWith("../")) clean = clean.substring(3);
+        return window.MapsUtils.resolvePath(clean);
+      }
 
+      const scriptSrc = currentScript && currentScript.src ? currentScript.src : null;
+
+      if (!scriptSrc) {
         const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
         const base = isPages ? "../assets/" : "assets/";
         return base + relativePath.replace(/^assets\//, "");
       }
       try {
-        
         return new URL("../" + relativePath.replace(/^assets\//, ""), scriptSrc).href;
       } catch (e) {
         return relativePath;

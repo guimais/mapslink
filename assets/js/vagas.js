@@ -111,7 +111,7 @@ if (!token) {
         const key = storageKey();
         if (!state.jobs.length) localStorage.removeItem(key);
         else localStorage.setItem(key, JSON.stringify(state.jobs));
-      } catch {}
+      } catch { }
     }
     syncPublicJobs();
   }
@@ -436,79 +436,64 @@ if (!token) {
         .catch(() => hydrateFromAuth(null));
     }
     if (typeof auth.onSession === "function") auth.onSession(hydrateFromAuth);
-  }
 
-  async function loadCompanies() {
-    if (Array.isArray(window.__companies) && window.__companies.length)
-      return window.__companies;
-    const isPages = window.location.pathname.includes("/pages/") || window.location.pathname.includes("\\pages\\");
-    const url = isPages ? "../assets/data/companies.json" : "assets/data/companies.json";
-    const response = await fetch(url, {
-      cache: "no-store",
-    });
-    if (!response.ok) throw new Error("Falha ao carregar companies.json");
-    const data = await response.json();
-    window.__companies = Array.isArray(data) ? data : [];
-    return window.__companies;
-  }
+    function collectJobs(list) {
+      window.__jobs = [];
+      list.forEach((company) => {
+        (company.jobs || []).forEach((job) => {
+          window.__jobs.push({
+            ...job,
+            company: company.name,
+            city: company.city,
+            sector: company.sector,
+          });
+        });
+      });
+    }
 
-  function collectJobs(list) {
-    window.__jobs = [];
-    list.forEach((company) => {
-      (company.jobs || []).forEach((job) => {
-        window.__jobs.push({
+    function filterJobs(filters) {
+      if (
+        !window.MapsFilters ||
+        typeof window.MapsFilters.filterCompanies !== "function"
+      )
+        return [];
+      const companies = window.MapsFilters.filterCompanies(
+        window.__companies || [],
+        filters,
+      );
+      return companies.flatMap((company) =>
+        (company.jobs || []).map((job) => ({
           ...job,
           company: company.name,
           city: company.city,
           sector: company.sector,
-        });
-      });
-    });
-  }
-
-  function filterJobs(filters) {
-    if (
-      !window.MapsFilters ||
-      typeof window.MapsFilters.filterCompanies !== "function"
-    )
-      return [];
-    const companies = window.MapsFilters.filterCompanies(
-      window.__companies || [],
-      filters,
-    );
-    return companies.flatMap((company) =>
-      (company.jobs || []).map((job) => ({
-        ...job,
-        company: company.name,
-        city: company.city,
-        sector: company.sector,
-      })),
-    );
-  }
-
-  async function bootstrapFilters() {
-    try {
-      const companies = await loadCompanies();
-      collectJobs(companies);
-      window.filterJobs = filterJobs;
-    } catch (error) {
-      console.warn("Erro ao carregar jobs:", error);
+        })),
+      );
     }
-  }
 
-  function init() {
-    initDom();
-    setAvatar("");
-    setCompanyName("");
-    renderJobs();
-    bindEvents();
-    initAuth();
-    bootstrapFilters();
-  }
+    async function bootstrapFilters() {
+      try {
+        const companies = await loadCompanies();
+        collectJobs(companies);
+        window.filterJobs = filterJobs;
+      } catch (error) {
+        console.warn("Erro ao carregar jobs:", error);
+      }
+    }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
-})();
+    function init() {
+      initDom();
+      setAvatar("");
+      setCompanyName("");
+      renderJobs();
+      bindEvents();
+      initAuth();
+      bootstrapFilters();
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+      init();
+    }
+  }) ();
