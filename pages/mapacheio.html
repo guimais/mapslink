@@ -8,46 +8,52 @@
   <link rel="manifest" href="../manifest.json" />
   <link href="../assets/css/main.css" rel="stylesheet" />
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/logo-icon-192.png" />
-  <meta name="description" content="Um projeto academico de mapeamento, chamado maps link" />
+  <meta name="description" content="Mapa completo do MapsLink" />
   <link rel="canonical" href="https://mapslink.app/pages/mapacheio.html" />
   <meta name="robots" content="index,follow" />
   <meta name="author" content="MapsLink" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="MapsLink" />
-  <meta property="og:title" content="Maps Link - Mapa Cheio" />
-  <meta property="og:description" content="Um projeto academico de mapeamento, chamado maps link" />
+  <meta property="og:title" content="MapsLink - Mapa Completo" />
+  <meta property="og:description" content="Mapa completo do MapsLink" />
   <meta property="og:url" content="https://mapslink.app/pages/mapacheio.html" />
   <meta property="og:image" content="https://mapslink.app/assets/images/logo-icon-512.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Maps Link - Mapa Cheio" />
-  <meta name="twitter:description" content="Um projeto academico de mapeamento, chamado maps link" />
+  <meta name="twitter:title" content="MapsLink - Mapa Completo" />
+  <meta name="twitter:description" content="Mapa completo do MapsLink" />
   <meta name="twitter:image" content="https://mapslink.app/assets/images/logo-icon-512.png" />
-  <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Maps Link - Mapa Cheio",
-        "description": "Um projeto academico de mapeamento, chamado maps link",
-        "url": "https://mapslink.app/pages/mapacheio.html",
-        "inLanguage": "pt-BR"
-      }
-    </script>
-  <a href="../index.html" class="nav-logo-link" aria-label="Pagina inicial Maps Link">
-    <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo Maps Link" class="nav-logo" />
-  </a>
-  <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
-    <i class="ri-menu-line" aria-hidden="true"></i>
-  </button>
-  <ul class="nav-links" id="navMenu">
-    <li><a class="nav-link" href="../index.html">Inicio</a></li>
-    <li><a class="nav-link" href="paginamapav4.html">Mapa</a></li>
-    <li><a class="nav-link" href="selecaoperfil.html">Perfil</a></li>
-    <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
-    <li><a class="nav-link" href="about.html">Sobre</a></li>
-    <li><a class="nav-link" href="contact.html">Contato</a></li>
-  </ul>
-  </nav>
+
+  <title>MapsLink - Mapa Completo</title>
+  <link rel="stylesheet" href="../assets/css/mapacheio.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <script defer src="../assets/js/shared-nav.js"></script>
+  <script defer src="../assets/js/main.js"></script>
+</head>
+
+<body data-page="mapacheio">
+  <header class="nav-container nav-fixed" role="banner">
+    <nav class="nav-pilula" aria-label="Menu principal" role="navigation">
+      <a href="../index.html" class="nav-logo-link" aria-label="Página inicial">
+        <img src="../assets/images/Logo Certa - Fundo png.png" alt="Logo pílula MapsLink" class="nav-logo"
+          loading="lazy" decoding="async" />
+      </a>
+      <button class="nav-toggle" aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu"
+        aria-haspopup="true" type="button">
+        <i class="ri-menu-line" aria-hidden="true"></i>
+      </button>
+      <ul class="nav-links" id="navMenu" role="navigation" aria-label="Seções do site">
+        <li><a class="nav-link" href="../index.html">Início</a></li>
+        <li><a class="nav-link" href="paginamapav4.html">Mapa</a></li>
+        <li><a class="nav-link" href="selecaoperfil.html">Perfil</a></li>
+        <li><a class="nav-link" href="paginaplanos.html">Planos</a></li>
+        <li><a class="nav-link" href="about.html">Sobre</a></li>
+        <li><a class="nav-link" href="contact.html">Contato</a></li>
+      </ul>
+    </nav>
   </header>
 
   <main id="maps-page" role="main">
@@ -81,6 +87,6 @@
   <script defer src="../assets/js/filters.js"></script>
   <script defer src="../assets/js/maps-data.js"></script>
   <script defer src="../assets/js/mapacheio.js"></script>
-  </body>
+</body>
 
 </html>
