@@ -299,12 +299,10 @@ h2,
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.38) 14%,
-    transparent 28%
-  );
+  background: linear-gradient(120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.38) 14%,
+      transparent 28%);
   transform: translateX(-120%);
   transition: transform 0.6s;
 }
@@ -318,6 +316,7 @@ h2,
     opacity: 0;
     transform: translateY(10px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -389,13 +388,7 @@ h2,
 .empresa-page {
   padding-top: calc(24px + var(--nav-h) + 44px);
   padding-bottom: 96px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(16, 37, 105, 0.05) 0%,
-      rgba(15, 23, 42, 0) 26%
-    ),
-    var(--bg);
+  background: var(--bg);
 }
 
 .empresa-hero {
@@ -404,11 +397,9 @@ h2,
   padding: 34px 36px;
   border-radius: var(--radius-lg);
   background:
-    radial-gradient(
-      circle at 18% 24%,
+    radial-gradient(circle at 18% 24%,
       rgba(255, 255, 255, 0.12),
-      transparent 42%
-    ),
+      transparent 42%),
     linear-gradient(135deg, rgba(19, 43, 112, 0.94), rgba(10, 27, 74, 0.92));
   color: #f8fafc;
   display: grid;
@@ -738,12 +729,10 @@ h2,
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.35) 15%,
-    transparent 30%
-  );
+  background: linear-gradient(120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 15%,
+      transparent 30%);
   transform: translateX(-120%);
   transition: transform 0.6s ease;
 }
@@ -860,10 +849,12 @@ h2,
     border-radius: 18px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
+
   .nav-logo {
     max-height: calc(var(--nav-h) - 2px);
     margin-right: 0;
   }
+
   .nav-toggle {
     display: grid;
     place-items: center;
@@ -873,11 +864,13 @@ h2,
       background-color 0.2s ease,
       color 0.2s ease;
   }
+
   .nav-toggle:hover,
   .nav-toggle:focus-visible {
     background: rgba(16, 37, 105, 0.08);
     color: var(--brand);
   }
+
   .nav-links {
     position: fixed;
     top: 0;
@@ -896,6 +889,7 @@ h2,
     z-index: 1000;
     overflow-y: auto;
   }
+
   .nav-links.active,
   .nav-links.is-open,
   .nav-pilula.is-open .nav-links,
@@ -903,13 +897,16 @@ h2,
     right: 0;
     display: flex;
   }
+
   .nav-links li {
     width: 100%;
     border-bottom: 1px solid var(--surface);
   }
+
   .nav-links li:last-child {
     border-bottom: none;
   }
+
   .nav-link {
     display: flex;
     align-items: center;
@@ -919,16 +916,19 @@ h2,
     opacity: 1;
     transform: none;
   }
+
   .nav-link:hover,
   .nav-link:focus {
     background: var(--surface);
     color: var(--brand);
   }
+
   .nav-link.active {
     background: rgba(16, 37, 105, 0.12);
     box-shadow: none;
     border-left: 4px solid var(--brand);
   }
+
   .nav-overlay {
     position: fixed;
     inset: 0;
@@ -938,6 +938,7 @@ h2,
     transition: opacity 0.3s ease;
     z-index: 999;
   }
+
   .nav-overlay.active {
     opacity: 1;
     visibility: visible;
@@ -948,12 +949,15 @@ h2,
   .empresa-layout {
     grid-template-columns: 1fr;
   }
+
   .empresa-sidebar {
     order: 2;
   }
+
   .empresa-content {
     order: 1;
   }
+
   .empresa-hero {
     padding: 28px 26px;
   }
@@ -963,26 +967,32 @@ h2,
   .empresa-page {
     padding-top: calc(16px + var(--nav-h) + 34px);
   }
+
   .empresa-hero {
     gap: 24px;
   }
+
   .empresa-hero-main {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .empresa-hero-avatar {
     width: 82px;
     height: 82px;
     border-radius: 9999px;
   }
+
   .empresa-hero-actions {
     width: 100%;
     align-items: flex-start;
   }
+
   .empresa-switch-btn {
     width: 100%;
     justify-content: center;
   }
+
   .empresa-layout {
     gap: 32px;
   }
@@ -994,30 +1004,38 @@ h2,
     width: calc(100% + 16px);
     min-height: calc(100vh - 200px);
   }
+
   .empresa-content,
   .empresa-grid {
     gap: 28px;
   }
+
   .empresa-layout {
     column-gap: 96px;
   }
+
   .card h2 {
     font-size: 32px;
   }
+
   .card p {
     font-size: 18px;
     line-height: 1.7;
   }
+
   .card-title {
     font-size: 28px;
   }
+
   .card-icon {
     width: 52px;
     height: 52px;
   }
+
   .card-icon i {
     font-size: 26px;
   }
+
   .card-agenda .sub {
     font-size: 22px;
   }
@@ -1028,12 +1046,15 @@ h2,
     max-width: 1200px;
     padding: 0 28px;
   }
+
   .empresa-page {
     padding-top: calc(24px + var(--nav-h) + 32px);
   }
+
   .empresa-layout {
     column-gap: 64px;
   }
+
   .empresa-hero {
     padding: 30px 28px;
   }
@@ -1045,9 +1066,11 @@ h2,
     padding: 0 24px;
     gap: 36px;
   }
+
   .empresa-grid {
     grid-template-columns: 1fr;
   }
+
   .empresa-sidebar {
     position: relative;
     width: 100%;
@@ -1059,33 +1082,41 @@ h2,
     top: 12px;
     padding: 0 12px;
   }
+
   .empresa-page {
     padding-top: calc(12px + var(--nav-h) + 14px);
   }
+
   .empresa-layout {
     padding: 0 16px;
     gap: 32px;
   }
+
   .empresa-grid {
     gap: 24px;
   }
+
   .empresa-hero {
     padding: 26px 24px;
     border-radius: 24px;
   }
+
   .card,
   .card-wide {
     padding: 28px 24px;
   }
+
   .card-wide {
     flex-direction: column;
     align-items: flex-start;
     gap: 18px;
   }
+
   .card-action {
     width: 100%;
     justify-content: center;
   }
+
   .empresa-sidebar-card {
     padding: 22px 20px;
   }
@@ -1096,23 +1127,29 @@ h2,
     top: 10px;
     padding: 0 10px;
   }
+
   .nav-pilula {
     padding: 0 14px;
     height: 50px;
     border-radius: 16px;
   }
+
   .nav-toggle {
     display: flex;
   }
+
   .empresa-page {
     padding-top: calc(10px + var(--nav-h) + 10px);
   }
+
   .empresa-layout {
     padding: 0 12px;
   }
+
   .empresa-hero {
     padding: 22px 20px;
   }
+
   .card,
   .card-wide {
     padding: 24px 20px;
@@ -1123,22 +1160,28 @@ h2,
   .nav-links {
     padding-top: 68px;
   }
+
   .nav-pilula {
     padding: 6px 10px;
     height: 48px;
   }
+
   .empresa-layout {
     gap: 28px;
   }
+
   .empresa-hero {
     padding: 20px 18px;
   }
+
   .empresa-hero h1 {
     font-size: 28px;
   }
+
   .empresa-hero p {
     font-size: 15px;
   }
+
   .card,
   .card-wide {
     padding: 22px 18px;
@@ -1149,36 +1192,45 @@ h2,
   html {
     font-size: 17px;
   }
+
   .nav-container {
     top: 24px;
   }
+
   .nav-pilula {
     width: 92%;
     max-width: 1200px;
     padding: 0 28px;
     height: var(--nav-h);
   }
+
   .nav-link {
     font-size: 16px;
     padding: 12px 18px;
   }
+
   .empresa-page {
     max-width: 1320px;
     margin: 0 auto;
     padding-top: calc(36px + var(--nav-h) + 48px);
   }
+
   .empresa-layout {
     column-gap: 96px;
   }
+
   .empresa-hero {
     padding: 36px 40px;
   }
+
   .empresa-hero h1 {
     font-size: 42px;
   }
+
   .empresa-hero p {
     font-size: 18px;
   }
+
   .empresa-grid {
     gap: 32px;
   }
@@ -1192,9 +1244,11 @@ h2,
     align-items: center;
     justify-content: center;
   }
+
   .nav-link {
     min-height: 48px;
   }
+
   .botao,
   .card-action .botao {
     min-height: 48px;
