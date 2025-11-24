@@ -298,7 +298,7 @@ h2,
   border-radius: 24px;
   padding: 26px 24px 28px;
   overflow: auto;
-  z-index: 1500;
+  z-index: 9999;
   backdrop-filter: blur(6px);
 }
 

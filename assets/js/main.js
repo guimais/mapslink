@@ -46,6 +46,12 @@
       .toLowerCase();
   }
 
+  
+  window.MapsUtils = Object.assign(window.MapsUtils || {}, {
+    resolvePath,
+    normalizeText: normalizeTextValue,
+  });
+
   function storageCandidates() {
     const list = [];
     function tryAdd(label, getter, flag) {
