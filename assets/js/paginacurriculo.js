@@ -84,25 +84,13 @@ if (!token) {
 
   function refreshEntries() {
     if (!state.owner) {
-      console.log("[paginacurriculo] Sem owner, limpando entradas");
       state.entries = [];
       state.filtered = [];
       render();
       return;
     }
     const key = storageKey(state.owner);
-    console.log(
-      "[paginacurriculo] Carregando aplicaÃ§Ãµes para owner:",
-      state.owner,
-      "key:",
-      key,
-    );
     state.entries = loadApplications(state.owner);
-    console.log(
-      "[paginacurriculo] AplicaÃ§Ãµes carregadas:",
-      state.entries.length,
-      state.entries,
-    );
     state.entriesMap = new Map(state.entries.map((entry) => [entry.id, entry]));
     applyFilters();
   }
@@ -524,24 +512,11 @@ if (!token) {
 
   function handleApplicationSaved(event) {
     if (!state.owner) {
-      console.log("[paginacurriculo] Evento recebido mas sem owner");
       return;
     }
     const detail = event.detail || {};
-    console.log("[paginacurriculo] Evento application-saved recebido:", detail);
     if (detail.ownerId === state.owner) {
-      console.log(
-        "[paginacurriculo] Atualizando entradas para owner:",
-        state.owner,
-      );
       refreshEntries();
-    } else {
-      console.log(
-        "[paginacurriculo] ownerId nÃ£o corresponde:",
-        detail.ownerId,
-        "!=",
-        state.owner,
-      );
     }
   }
 
@@ -574,12 +549,6 @@ if (!token) {
 
   function hydrate(session) {
     state.owner = session?.id || null;
-    console.log(
-      "[paginacurriculo] Hydrate - session:",
-      session,
-      "owner:",
-      state.owner,
-    );
     applyAvatar(session?.profile?.avatar || "");
     refreshEntries();
   }

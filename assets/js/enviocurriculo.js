@@ -399,10 +399,6 @@ if (!token) {
         }
       }
     }
-
-    console.log("[recordApplication] Job:", job);
-    console.log("[recordApplication] Resolved ownerId:", resolvedOwnerId);
-
     const entry = {
       id: `app_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
       jobId: job.id || null,
@@ -435,11 +431,6 @@ if (!token) {
       if (existingIndex === -1) {
         companyEntries.push(entry);
         saveApplications(companyEntries, entry.ownerId);
-        console.log(
-          "[recordApplication] AplicaÃ§Ã£o salva para empresa:",
-          entry.ownerId,
-          entry,
-        );
         try {
           window.dispatchEvent(
             new CustomEvent("mapslink:application-saved", {
@@ -447,10 +438,6 @@ if (!token) {
             }),
           );
         } catch {}
-      } else {
-        console.log(
-          "[recordApplication] AplicaÃ§Ã£o duplicada, nÃ£o salvando novamente",
-        );
       }
     } else {
       console.warn(
@@ -616,3 +603,4 @@ if (!token) {
 
   init();
 })();
+
