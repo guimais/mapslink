@@ -1,10 +1,10 @@
 {
   "name": "MapsLink",
   "short_name": "MapsLink",
-  "description": "Conectando profissionais e empresas através de um mapa interativo e inteligente.",
+  "description": "Conectando profissionais e empresas atraves de um mapa interativo e inteligente.",
   "lang": "pt-BR",
   "dir": "ltr",
-  "start_url": "/index.html?source=pwa",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
@@ -28,13 +28,13 @@
   ],
   "screenshots": [
     {
-      "src": "assets/images/3d_avatar_21.png",
+      "src": "assets/images/candidate-avatar.png",
       "sizes": "220x220",
       "type": "image/png",
       "label": "Tela inicial do MapsLink"
     },
     {
-      "src": "assets/images/image 4.png",
+      "src": "assets/images/mapslink-preview.png",
       "sizes": "137x137",
       "type": "image/png",
       "label": "Mapa interativo de empresas"
@@ -42,10 +42,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Abrir Mapa",
+      "name": "Abrir mapa",
       "short_name": "Mapa",
       "description": "Ver empresas e vagas no mapa interativo",
-      "url": "/pages/paginamapav4.html",
+      "url": "/mapa",
       "icons": [
         {
           "src": "assets/images/logo-icon-192.png",
@@ -55,10 +55,10 @@
       ]
     },
     {
-      "name": "Ver Vagas",
+      "name": "Ver vagas",
       "short_name": "Vagas",
-      "description": "Navegar pelas oportunidades dispon��veis",
-      "url": "/pages/vagas.html",
+      "description": "Navegar pelas oportunidades disponiveis",
+      "url": "/vagas",
       "icons": [
         {
           "src": "assets/images/logo-icon-192.png",
@@ -78,11 +78,11 @@
   "protocol_handlers": [
     {
       "protocol": "web+mapslink",
-      "url": "/pages/paginamapav4.html?q=%s"
+      "url": "/mapa?q=%s"
     }
   ],
   "share_target": {
-    "action": "/pages/contact.html",
+    "action": "/contato",
     "method": "POST",
     "enctype": "application/x-www-form-urlencoded",
     "params": {
