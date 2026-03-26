@@ -44,6 +44,7 @@ export function JobsPage() {
     <main className="section">
       <div className="site-shell">
         <SectionHeading
+          className="jobs-page__heading"
           eyebrow="Vagas"
           title="Um painel para comparar oportunidades com mais contexto."
           description="Filtre por modelo de trabalho, veja skills pedidas e envie sua candidatura sem sair do fluxo."

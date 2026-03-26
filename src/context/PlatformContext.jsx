@@ -2,9 +2,27 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { companies as seedCompanies, flattenJobs } from "../data/companies";
 import { initialAgenda, initialApplications } from "../data/platformSeeds";
 
+const DATA_VERSION = 2;
+const VERSION_KEY = "mapslink:spa:version";
 const COMPANIES_KEY = "mapslink:spa:companies";
 const APPLICATIONS_KEY = "mapslink:spa:applications";
 const CONTACTS_KEY = "mapslink:spa:contacts";
+
+function resetStorageIfStale() {
+  try {
+    const stored = Number(window.localStorage.getItem(VERSION_KEY));
+    if (stored !== DATA_VERSION) {
+      window.localStorage.removeItem(COMPANIES_KEY);
+      window.localStorage.removeItem(APPLICATIONS_KEY);
+      window.localStorage.removeItem(CONTACTS_KEY);
+      window.localStorage.setItem(VERSION_KEY, String(DATA_VERSION));
+    }
+  } catch {
+    // ignore
+  }
+}
+
+resetStorageIfStale();
 
 const PlatformContext = createContext(null);
 

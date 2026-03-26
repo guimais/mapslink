@@ -14,7 +14,7 @@ export function RegisterCandidatePage() {
     headline: "",
     specialty: "",
     location: "Campinas, SP",
-    availability: "Hibrido",
+    availability: "Híbrido",
     skills: "",
     bio: "",
   });
@@ -34,7 +34,7 @@ export function RegisterCandidatePage() {
       <div className="site-shell auth-grid auth-grid--wide">
         <div className="auth-copy">
           <span className="eyebrow">Cadastro de candidato</span>
-          <h1>Monte um perfil rapido para entrar no radar das empresas.</h1>
+          <h1>Monte um perfil para entrar no radar das empresas.</h1>
         </div>
 
         <form className="panel auth-card auth-card--wide" onSubmit={handleSubmit}>
@@ -62,7 +62,7 @@ export function RegisterCandidatePage() {
             <label className="field">
               <span>Disponibilidade</span>
               <select value={form.availability} onChange={(event) => setForm((current) => ({ ...current, availability: event.target.value }))}>
-                <option>Hibrido</option>
+                <option>Híbrido</option>
                 <option>Remoto</option>
                 <option>Presencial</option>
               </select>

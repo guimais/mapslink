@@ -30,12 +30,13 @@ export function MapPage() {
     filteredCompanies.find((company) => company.id === selectedCompany?.id) ?? filteredCompanies[0] ?? null;
 
   return (
-    <main className="section">
+    <main className="section map-page">
       <div className="site-shell">
         <SectionHeading
+          className="map-page__heading"
           eyebrow="Mapa de oportunidades"
-          title="Descubra empresas por localizacao, area e modelo de trabalho."
-          description="Tudo o que aparece aqui ja esta em componentes React: filtros, mapa, cards e interacoes."
+          title="Descubra empresas por localização, área e modelo de trabalho."
+          description="Tudo o que aparece aqui já está em componentes React: filtros, mapa, cards e interações."
         />
 
         <div className="map-layout">
@@ -125,6 +126,65 @@ export function MapPage() {
                 </div>
 
                 <p>{activeCompany.description}</p>
+
+                <div className="company-panel__details">
+                  <div className="company-panel__stats">
+                    <div className="company-panel__stat">
+                      <span>Localização</span>
+                      <strong>
+                        {activeCompany.city}, {activeCompany.state}
+                      </strong>
+                    </div>
+                    <div className="company-panel__stat">
+                      <span>Fundação</span>
+                      <strong>{activeCompany.founded}</strong>
+                    </div>
+                    <div className="company-panel__stat">
+                      <span>Status</span>
+                      <strong>{activeCompany.hiring ? "Contratando agora" : "Banco de talentos"}</strong>
+                    </div>
+                    <div className="company-panel__stat">
+                      <span>Vagas abertas</span>
+                      <strong>{activeCompany.jobs.length}</strong>
+                    </div>
+                  </div>
+
+                  <div className="company-panel__jobs">
+                    <h4>Vagas em destaque</h4>
+                    {activeCompany.jobs.length ? (
+                      <ul className="company-panel__jobs-list">
+                        {activeCompany.jobs.slice(0, 3).map((job) => (
+                          <li key={job.id} className="company-panel__job-item">
+                            <strong>{job.title}</strong>
+                            <span>
+                              {job.mode} | {job.level} | {job.salary}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="company-panel__empty">
+                        Sem vagas abertas no momento. Esta empresa segue no radar para futuras oportunidades.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="company-panel__topics">
+                    <h4>Competências e temas</h4>
+                    <div className="company-panel__topics-list">
+                      {activeCompany.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="company-panel__contact">
+                    <span>{activeCompany.address}</span>
+                    <a href={activeCompany.website} target="_blank" rel="noreferrer">
+                      Visitar site
+                    </a>
+                  </div>
+                </div>
 
                 <div className="company-panel__footer">
                   <Link className="button button--primary" to={`/empresa/${activeCompany.slug}`}>

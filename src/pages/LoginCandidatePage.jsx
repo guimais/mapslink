@@ -26,7 +26,7 @@ export function LoginCandidatePage() {
           <span className="eyebrow">Candidato</span>
           <h1>Entre para acompanhar vagas e candidaturas.</h1>
           <p>
-            Conta de teste pronta: <strong>gelado@gmail.com</strong> / <strong>Senha@123</strong>
+            Conta de teste: <strong>gelado@gmail.com</strong> / <strong>Senha@123</strong>
           </p>
         </div>
 

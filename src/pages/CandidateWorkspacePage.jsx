@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { SectionHeading } from "../components/SectionHeading";
 import { useAuth } from "../context/AuthContext";
 import { usePlatform } from "../context/PlatformContext";
+
+function getStatusClass(status = "") {
+  const s = status.toLowerCase();
+  if (s.includes("agendada") || s.includes("aprovad")) return "job-badge--success";
+  if (s.includes("recusad") || s.includes("encerrad")) return "job-badge--danger";
+  return "job-badge--soft";
+}
 
 export function CandidateWorkspacePage() {
   const { currentUser, updateCurrentUser } = useAuth();
   const { companies, applications, jobs } = usePlatform();
-  const [status, setStatus] = useState("");
+  const [saveStatus, setSaveStatus] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
   const [form, setForm] = useState({
     headline: currentUser.profile.headline,
     location: currentUser.profile.location,
@@ -16,132 +23,235 @@ export function CandidateWorkspacePage() {
   });
 
   const myApplications = applications
-    .filter((application) => application.candidateId === currentUser.id)
-    .map((application) => ({
-      ...application,
-      job: jobs.find((job) => job.id === application.jobId),
-    }));
+    .filter((a) => a.candidateId === currentUser.id)
+    .map((a) => ({ ...a, job: jobs.find((j) => j.id === a.jobId) }));
 
-  const recommendedCompanies = companies.filter((company) =>
-    company.tags.some((tag) => currentUser.profile.skills.includes(tag)),
+  const recommendedCompanies = companies.filter((c) =>
+    c.tags.some((tag) => currentUser.profile.skills.includes(tag)),
   );
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    updateCurrentUser({
-      profile: {
-        ...currentUser.profile,
-        headline: form.headline,
-        location: form.location,
-        availability: form.availability,
-        bio: form.bio,
-      },
-    });
-    setStatus("Perfil atualizado com sucesso.");
+  function handleSubmit(e) {
+    e.preventDefault();
+    updateCurrentUser({ profile: { ...currentUser.profile, ...form } });
+    setSaveStatus("Perfil atualizado com sucesso.");
+    setEditOpen(false);
   }
 
-  return (
-    <main className="section">
-      <div className="site-shell workspace-stack">
-        <SectionHeading
-          eyebrow="Espaco do candidato"
-          title={`Ola, ${currentUser.name.split(" ")[0]}.`}
-          description="Seu perfil, radar de empresas e candidaturas agora vivem em uma unica aplicacao React."
-        />
+  const completion = currentUser.profile.completion;
 
-        <div className="workspace-grid">
-          <section className="panel profile-summary">
-            <div className="profile-summary__top">
-              <img src={currentUser.avatar} alt={currentUser.name} width="76" height="76" loading="lazy" />
-              <div>
-                <h3>{currentUser.name}</h3>
-                <p>{currentUser.profile.specialty}</p>
+  return (
+    <main>
+      {/* Hero */}
+      <section className="cand-hero">
+        <div className="site-shell cand-hero__inner">
+          <div className="cand-hero__left">
+            <div className="cand-hero__avatar-wrap">
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="cand-hero__avatar"
+                width="96"
+                height="96"
+                loading="lazy"
+              />
+              <span className="cand-hero__online" aria-hidden="true" />
+            </div>
+            <div className="cand-hero__info">
+              <div className="cand-hero__name-row">
+                <h1 className="cand-hero__name">{currentUser.name}</h1>
+                {currentUser.profile.availability && (
+                  <span className="cand-hero__avail">
+                    <span className="material-symbols-outlined" aria-hidden="true">schedule</span>
+                    {currentUser.profile.availability}
+                  </span>
+                )}
+              </div>
+              <p className="cand-hero__headline">{currentUser.profile.headline}</p>
+              <div className="cand-hero__meta">
+                <span>
+                  <span className="material-symbols-outlined" aria-hidden="true">work</span>
+                  {currentUser.profile.specialty}
+                </span>
+                <span>
+                  <span className="material-symbols-outlined" aria-hidden="true">location_on</span>
+                  {currentUser.profile.location}
+                </span>
+                <span>
+                  <span className="material-symbols-outlined" aria-hidden="true">history</span>
+                  {currentUser.profile.experience}
+                </span>
               </div>
             </div>
-            <div className="metric-grid">
-              <div>
-                <strong>{currentUser.profile.completion}%</strong>
-                <span>perfil completo</span>
-              </div>
-              <div>
+          </div>
+
+          <div className="cand-hero__right">
+            <div className="cand-hero__stats">
+              <div className="cand-hero__stat">
                 <strong>{myApplications.length}</strong>
                 <span>candidaturas</span>
               </div>
-              <div>
+              <div className="cand-hero__stat">
                 <strong>{currentUser.profile.interviewsToday}</strong>
                 <span>entrevistas hoje</span>
               </div>
+              <div className="cand-hero__stat">
+                <strong>{completion}%</strong>
+                <span>perfil completo</span>
+              </div>
             </div>
-            <p>{currentUser.profile.headline}</p>
-            <div className="meta-pills">
-              {currentUser.profile.skills.map((skill) => (
-                <span key={skill}>{skill}</span>
-              ))}
+            <div className="cand-hero__progress" title={`${completion}% completo`}>
+              <div className="cand-hero__progress-bar" style={{ width: `${completion}%` }} />
             </div>
-          </section>
-
-          <section className="panel">
-            <h3>Editar perfil</h3>
-            <form className="stack-form" onSubmit={handleSubmit}>
-              <label className="field">
-                <span>Headline</span>
-                <input value={form.headline} onChange={(event) => setForm((current) => ({ ...current, headline: event.target.value }))} />
-              </label>
-              <label className="field">
-                <span>Localizacao</span>
-                <input value={form.location} onChange={(event) => setForm((current) => ({ ...current, location: event.target.value }))} />
-              </label>
-              <label className="field">
-                <span>Disponibilidade</span>
-                <input value={form.availability} onChange={(event) => setForm((current) => ({ ...current, availability: event.target.value }))} />
-              </label>
-              <label className="field">
-                <span>Bio</span>
-                <textarea rows="4" value={form.bio} onChange={(event) => setForm((current) => ({ ...current, bio: event.target.value }))} />
-              </label>
-              <button type="submit" className="button button--primary">
-                Salvar
-              </button>
-              {status ? <div className="notice">{status}</div> : null}
-            </form>
-          </section>
+            <button
+              type="button"
+              className="button button--ghost cand-hero__edit-btn"
+              onClick={() => setEditOpen((v) => !v)}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">
+                {editOpen ? "close" : "edit"}
+              </span>
+              {editOpen ? "Fechar edição" : "Editar perfil"}
+            </button>
+          </div>
         </div>
+      </section>
 
-        <div className="workspace-grid">
-          <section className="panel">
-            <h3>Radar de empresas</h3>
-            <div className="stack-list">
-              {recommendedCompanies.slice(0, 4).map((company) => (
-                <article className="mini-card" key={company.id}>
-                  <div className="brand-chip">{company.name.slice(0, 2).toUpperCase()}</div>
-                  <div>
-                    <strong>{company.name}</strong>
-                    <p>{company.headline}</p>
-                  </div>
-                  <Link className="button button--ghost" to={`/empresa/${company.slug}`}>
-                    Ver empresa
-                  </Link>
-                </article>
-              ))}
+      {/* Edit panel */}
+      {editOpen && (
+        <section className="section section--muted">
+          <div className="site-shell">
+            <div className="panel cand-edit-panel">
+              <h2 className="cand-edit-panel__title">Editar perfil</h2>
+              <form className="cand-edit-form" onSubmit={handleSubmit}>
+                <div className="cand-edit-form__row">
+                  <label className="field">
+                    <span>Headline</span>
+                    <input
+                      value={form.headline}
+                      onChange={(e) => setForm((c) => ({ ...c, headline: e.target.value }))}
+                    />
+                  </label>
+                  <label className="field">
+                    <span>Localização</span>
+                    <input
+                      value={form.location}
+                      onChange={(e) => setForm((c) => ({ ...c, location: e.target.value }))}
+                    />
+                  </label>
+                </div>
+                <label className="field">
+                  <span>Disponibilidade</span>
+                  <input
+                    value={form.availability}
+                    onChange={(e) => setForm((c) => ({ ...c, availability: e.target.value }))}
+                  />
+                </label>
+                <label className="field">
+                  <span>Bio</span>
+                  <textarea
+                    rows="4"
+                    value={form.bio}
+                    onChange={(e) => setForm((c) => ({ ...c, bio: e.target.value }))}
+                  />
+                </label>
+                <div className="cand-edit-form__footer">
+                  <button type="submit" className="button button--primary">
+                    <span className="material-symbols-outlined" aria-hidden="true">save</span>
+                    Salvar alterações
+                  </button>
+                  {saveStatus && <div className="notice">{saveStatus}</div>}
+                </div>
+              </form>
             </div>
-          </section>
+          </div>
+        </section>
+      )}
 
-          <section className="panel">
-            <h3>Minhas candidaturas</h3>
-            <div className="stack-list">
-              {myApplications.map((application) => (
-                <article className="mini-card" key={application.id}>
-                  <div>
-                    <strong>{application.job?.title ?? "Vaga"}</strong>
-                    <p>{application.job?.companyName ?? "Empresa"}</p>
-                  </div>
-                  <span className="job-badge">{application.status}</span>
-                </article>
-              ))}
+      {/* Body */}
+      <section className="section">
+        <div className="site-shell cand-body-grid">
+          {/* About card */}
+          <div className="panel cand-about-card">
+            <h2 className="cand-section-title">
+              <span className="material-symbols-outlined" aria-hidden="true">person</span>
+              Sobre
+            </h2>
+            <p className="cand-about-card__bio">{currentUser.profile.bio}</p>
+
+            <div className="cand-about-card__block">
+              <h3>Skills</h3>
+              <div className="cand-skills-pills">
+                {currentUser.profile.skills.map((skill) => (
+                  <span key={skill} className="cand-skill-pill">{skill}</span>
+                ))}
+              </div>
             </div>
-          </section>
+
+            <div className="cand-about-card__block cand-about-card__modes">
+              <h3>Modelos desejados</h3>
+              <div className="meta-pills">
+                {(currentUser.profile.desiredModes ?? []).map((m) => (
+                  <span key={m}>{m}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="cand-side">
+            <section className="panel cand-applications-card">
+              <h2 className="cand-section-title">
+                <span className="material-symbols-outlined" aria-hidden="true">send</span>
+                Minhas candidaturas
+                {myApplications.length > 0 && (
+                  <span className="cand-section-count">{myApplications.length}</span>
+                )}
+              </h2>
+              {myApplications.length ? (
+                <div className="cand-applications-list">
+                  {myApplications.map((a) => (
+                    <article className="cand-application-item" key={a.id}>
+                      <div className="cand-application-item__info">
+                        <strong>{a.job?.title ?? "Vaga"}</strong>
+                        <span>{a.job?.companyName ?? "Empresa"}</span>
+                      </div>
+                      <span className={`job-badge ${getStatusClass(a.status)}`}>{a.status}</span>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p className="cand-empty">
+                  Nenhuma candidatura ainda.{" "}
+                  <Link to="/vagas">Explorar vagas →</Link>
+                </p>
+              )}
+            </section>
+
+            <section className="panel cand-radar-card">
+              <h2 className="cand-section-title">
+                <span className="material-symbols-outlined" aria-hidden="true">radar</span>
+                Radar de empresas
+              </h2>
+              <div className="cand-radar-list">
+                {recommendedCompanies.slice(0, 4).map((company) => (
+                  <article className="cand-radar-item" key={company.id}>
+                    <div className="brand-chip brand-chip--sm">
+                      {company.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="cand-radar-item__info">
+                      <strong>{company.name}</strong>
+                      <span>{company.city} · {company.sector}</span>
+                    </div>
+                    <Link className="button button--ghost" to={`/empresa/${company.slug}`}>
+                      Ver
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            </section>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }

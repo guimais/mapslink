@@ -24,9 +24,9 @@ export function LoginCompanyPage() {
       <div className="site-shell auth-grid">
         <div className="auth-copy">
           <span className="eyebrow">Empresa</span>
-          <h1>Gerencie vagas, pipeline e agenda com uma base React real.</h1>
+          <h1>Gerencie vagas, candidatos e o fluxo de contratação da sua empresa.</h1>
           <p>
-            Conta de teste pronta: <strong>talentos@neuralworks.ai</strong> / <strong>Empresa@123</strong>
+            Conta de teste: <strong>talentos@neuralworks.ai</strong> / <strong>Empresa@123</strong>
           </p>
         </div>
 

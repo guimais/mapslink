@@ -6,7 +6,7 @@ export function ForgotPasswordPage() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setStatus(`Se existir uma conta para ${email}, enviaremos o link de recuperacao.`);
+    setStatus(`Se existir uma conta para ${email}, enviaremos o link de recuperação.`);
     setEmail("");
   }
 
@@ -14,8 +14,8 @@ export function ForgotPasswordPage() {
     <main className="section auth-section">
       <div className="site-shell auth-grid">
         <div className="auth-copy">
-          <span className="eyebrow">Recuperacao</span>
-          <h1>Recupere o acesso sem sair do novo fluxo.</h1>
+          <span className="eyebrow">Recuperação</span>
+          <h1>Recupere o acesso à sua conta com seu e-mail.</h1>
         </div>
 
         <form className="panel auth-card" onSubmit={handleSubmit}>

@@ -9,7 +9,7 @@ export function ProfileChoicePage() {
         <SectionHeading
           eyebrow="Escolha seu fluxo"
           title="Entradas diferentes para necessidades diferentes."
-          description="A proposta continua a mesma: um caminho para quem busca vagas e outro para quem esta contratando."
+          description="Um caminho para quem busca vagas e outro para quem está contratando."
           align="center"
         />
 
@@ -35,7 +35,7 @@ export function ProfileChoicePage() {
               <BuildingIcon />
             </span>
             <h3>Sou empresa</h3>
-            <p>Quero publicar vagas, enxergar candidatos e organizar meu fluxo de contratacao.</p>
+            <p>Quero publicar vagas, enxergar candidatos e organizar meu fluxo de contratação.</p>
             <div className="choice-actions">
               <Link className="button button--primary" to="/login/empresa">
                 Entrar
